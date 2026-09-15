@@ -1,0 +1,90 @@
+{
+  "site": {
+    "title": "Ahmadreza Taheri — IT Systems Integration",
+    "tagline": "80 years of computing in 90 seconds",
+    "description": "Portfolio of Ahmadreza Taheri, IT systems integration apprentice at Stadtverwaltung Trier. An interactive operating system in the browser.",
+    "author": "Ahmadreza Taheri"
+  },
+  "nav": {
+    "journey": "The Journey",
+    "desktop": "Desktop",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact",
+    "imprint": "Imprint",
+    "privacy": "Privacy",
+    "language": "Language",
+    "skipToDesktop": "Skip to Desktop",
+    "skipToContent": "Skip to content"
+  },
+  "boot": {
+    "start": "Starting AhmadOS",
+    "loading": "Loading component",
+    "ready": "System ready",
+    "welcome": "Welcome",
+    "lines": {
+      "kernel": "Kernel loaded",
+      "memory": "Memory checked",
+      "filesystem": "Filesystem mounted",
+      "network": "Network initialised",
+      "display": "Display ready",
+      "input": "Input devices detected",
+      "done": "All components compiled"
+    }
+  },
+  "journey": {
+    "progressLabel": "Progress through the eras",
+    "eraOf": "Era {current} of {total}",
+    "scrollHint": "Scroll to begin",
+    "puzzleOptional": "Optional — you can skip at any time",
+    "skipPuzzle": "Skip puzzle",
+    "solved": "Solved",
+    "skipped": "Skipped"
+  },
+  "eras": {
+    "eniac": {
+      "name": "ENIAC and punch cards",
+      "description": "Computing without a screen: 18,000 tubes, lamps as the only output, and programs punched into cardboard."
+    },
+    "batch": {
+      "name": "Mainframes and batch processing",
+      "description": "The first operating system appears, because humans are far too slow to hand out machine time by hand."
+    },
+    "unix": {
+      "name": "UNIX",
+      "description": "Green phosphor, a blinking cursor — and for the first time a person can talk to the machine directly."
+    },
+    "dos": {
+      "name": "IBM PC and MS-DOS",
+      "description": "The computer moves into the office, and everything has to fit into 640 kilobytes of memory."
+    },
+    "macintosh": {
+      "name": "Macintosh",
+      "description": "An arrow on the screen changes everything: windows, icons, menus, and a mouse in your hand."
+    },
+    "win95": {
+      "name": "Windows 95 and dial-up",
+      "description": "Start menu, taskbar, and a modem screeching its way onto the internet."
+    },
+    "cloud": {
+      "name": "Cloud, containers and AI",
+      "description": "The machine is everywhere and nowhere: dashboards, containers, and rules that decide where packets may go."
+    }
+  },
+  "ui": {
+    "close": "Close",
+    "minimize": "Minimise",
+    "maximize": "Maximise",
+    "open": "Open",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "locked": "Locked"
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "English",
+    "fa": "فارسی"
+  }
+}

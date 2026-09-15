@@ -1,0 +1,90 @@
+{
+  "site": {
+    "title": "Ahmadreza Taheri — IT-Systemintegration",
+    "tagline": "80 Jahre Computergeschichte in 90 Sekunden",
+    "description": "Portfolio von Ahmadreza Taheri, Auszubildender Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Ein interaktives Betriebssystem im Browser.",
+    "author": "Ahmadreza Taheri"
+  },
+  "nav": {
+    "journey": "Die Reise",
+    "desktop": "Desktop",
+    "about": "Über mich",
+    "projects": "Projekte",
+    "skills": "Fähigkeiten",
+    "contact": "Kontakt",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "language": "Sprache",
+    "skipToDesktop": "Direkt zum Desktop",
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "boot": {
+    "start": "AhmadOS wird gestartet",
+    "loading": "Lade Komponente",
+    "ready": "System bereit",
+    "welcome": "Willkommen",
+    "lines": {
+      "kernel": "Kernel geladen",
+      "memory": "Speicher geprüft",
+      "filesystem": "Dateisystem eingehängt",
+      "network": "Netzwerk initialisiert",
+      "display": "Grafikausgabe bereit",
+      "input": "Eingabegeräte erkannt",
+      "done": "Alle Komponenten kompiliert"
+    }
+  },
+  "journey": {
+    "progressLabel": "Fortschritt durch die Epochen",
+    "eraOf": "Epoche {current} von {total}",
+    "scrollHint": "Scrollen, um zu beginnen",
+    "puzzleOptional": "Optional — du kannst jederzeit überspringen",
+    "skipPuzzle": "Rätsel überspringen",
+    "solved": "Gelöst",
+    "skipped": "Übersprungen"
+  },
+  "eras": {
+    "eniac": {
+      "name": "ENIAC und Lochkarten",
+      "description": "Rechnen ohne Bildschirm: 18.000 Röhren, Lampen als einzige Ausgabe und Programme aus Löchern in Pappe."
+    },
+    "batch": {
+      "name": "Großrechner und Stapelverarbeitung",
+      "description": "Das erste Betriebssystem entsteht, weil Menschen zu langsam sind, um Rechenzeit sinnvoll zu verteilen."
+    },
+    "unix": {
+      "name": "UNIX",
+      "description": "Grüner Phosphor, ein blinkender Cursor — und zum ersten Mal darf der Mensch direkt mit dem System sprechen."
+    },
+    "dos": {
+      "name": "IBM PC und MS-DOS",
+      "description": "Der Computer zieht ins Büro ein, und alles muss in 640 Kilobyte Arbeitsspeicher passen."
+    },
+    "macintosh": {
+      "name": "Macintosh",
+      "description": "Ein Pfeil auf dem Bildschirm verändert alles: Fenster, Symbole, Menüs und die Maus in der Hand."
+    },
+    "win95": {
+      "name": "Windows 95 und Einwahl",
+      "description": "Startmenü, Taskleiste und ein Modem, das sich kreischend ins Internet verbindet."
+    },
+    "cloud": {
+      "name": "Cloud, Container und KI",
+      "description": "Der Rechner ist überall und nirgends: Dashboards, Container und Regeln, die den Weg der Pakete bestimmen."
+    }
+  },
+  "ui": {
+    "close": "Schließen",
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "open": "Öffnen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "retry": "Erneut versuchen",
+    "locked": "Gesperrt"
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "English",
+    "fa": "فارسی"
+  }
+}

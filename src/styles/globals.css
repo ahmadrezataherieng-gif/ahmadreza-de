@@ -1,0 +1,258 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   AhmadOS design tokens
+   --------------------------------------------------------------------------
+   This is the ONLY file in the project allowed to contain raw colour values.
+   Everything else reads tokens, either as Tailwind utilities (bg-surface,
+   text-muted, ...) or as var(--ao-*).
+
+   The --ao-color-* values below are only bootstrap defaults so the very first
+   paint is not unstyled. At runtime the theme store overwrites them as inline
+   custom properties on <html>, which outrank these :root declarations.
+   See src/lib/apply-theme.ts.
+   ========================================================================== */
+
+:root {
+  /* --- font stacks, provided by @fontsource (self-hosted, never a CDN) --- */
+  --ao-font-jetbrains: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --ao-font-inter: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ao-font-vazirmatn: 'Vazirmatn Variable', 'Vazirmatn', Tahoma, sans-serif;
+  --ao-font-vt323: 'VT323', 'JetBrains Mono', monospace;
+  --ao-font-pixel: 'Press Start 2P', 'JetBrains Mono', monospace;
+
+  /* --- theme-owned tokens: bootstrap values = the `modern` theme --- */
+  --ao-color-background: #0d1117;
+  --ao-color-surface: #161b22;
+  --ao-color-surface-elevated: #21262d;
+  --ao-color-border: #30363d;
+  --ao-color-text: #e6edf3;
+  --ao-color-text-muted: #8b949e;
+  --ao-color-accent: #22d3ee;
+  --ao-color-accent-muted: #0e7490;
+  --ao-color-warning: #f59e0b;
+  --ao-color-success: #3fb950;
+  --ao-color-error: #f85149;
+  --ao-color-glow: #22d3ee;
+  --ao-color-chrome: #161b22;
+  --ao-color-chrome-text: #e6edf3;
+
+  --ao-font-display: var(--ao-font-jetbrains);
+  --ao-font-body: var(--ao-font-inter);
+  --ao-font-mono: var(--ao-font-jetbrains);
+
+  --ao-radius-window: 10px;
+  --ao-radius-control: 6px;
+
+  --ao-shadow-window: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px #30363d;
+  --ao-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --ao-fx-scanlines: 0;
+  --ao-fx-phosphor: 0;
+  --ao-fx-pixelation: 0;
+  --ao-fx-dithering: 0;
+  --ao-fx-noise: 0;
+  --ao-fx-curvature: 0;
+
+  /* --- tokens that do NOT change per era --- */
+
+  /* Standard motion curve and durations. */
+  --ao-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ao-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
+  --ao-duration-fast: 120ms;
+  --ao-duration-base: 240ms;
+  --ao-theme-duration: 600ms;
+
+  /* Z-index scale. Anything stacked must use one of these. */
+  --ao-z-desktop: 0;
+  --ao-z-icons: 10;
+  --ao-z-windows: 100;
+  --ao-z-window-active: 200;
+  --ao-z-taskbar: 300;
+  --ao-z-modal: 400;
+  --ao-z-cursor: 500;
+
+  /* Layout metrics. */
+  --ao-taskbar-height: 40px;
+}
+
+/* --------------------------------------------------------------------------
+   Expose the tokens to Tailwind.
+   `@theme inline` keeps the generated utilities pointing at var(--ao-*) rather
+   than at a resolved colour, which is what makes a live theme swap possible.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --color-background: var(--ao-color-background);
+  --color-surface: var(--ao-color-surface);
+  --color-elevated: var(--ao-color-surface-elevated);
+  --color-edge: var(--ao-color-border);
+  --color-ink: var(--ao-color-text);
+  --color-muted: var(--ao-color-text-muted);
+  --color-accent: var(--ao-color-accent);
+  --color-accent-muted: var(--ao-color-accent-muted);
+  --color-warning: var(--ao-color-warning);
+  --color-success: var(--ao-color-success);
+  --color-error: var(--ao-color-error);
+  --color-glow: var(--ao-color-glow);
+  --color-chrome: var(--ao-color-chrome);
+  --color-chrome-ink: var(--ao-color-chrome-text);
+
+  --font-display: var(--ao-font-display);
+  --font-body: var(--ao-font-body);
+  --font-mono: var(--ao-font-mono);
+
+  --radius-window: var(--ao-radius-window);
+  --radius-control: var(--ao-radius-control);
+
+  --shadow-window: var(--ao-shadow-window);
+  --shadow-bevel: var(--ao-shadow-inset);
+
+  --ease-ao: var(--ao-ease);
+  --ease-snap: var(--ao-ease-snap);
+}
+
+/* Tailwind v4 has no `z-index` theme namespace, so the stacking scale stays a
+   plain custom property set. Use it as `z-[var(--ao-z-taskbar)]`. */
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+html {
+  background-color: var(--ao-color-background);
+  color: var(--ao-color-text);
+  /* Lenis drives scrolling; native smooth scrolling would fight it. */
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: var(--ao-color-background);
+  color: var(--ao-color-text);
+  font-family: var(--ao-font-body);
+  transition:
+    background-color var(--ao-theme-duration) var(--ao-ease),
+    color var(--ao-theme-duration) var(--ao-ease);
+  min-height: 100dvh;
+}
+
+/* Persian renders in Vazirmatn regardless of the era's Latin font choice. */
+html[lang^='fa'] body {
+  font-family: var(--ao-font-vazirmatn);
+}
+
+/* Elements that follow the theme should opt in via this class so the cross-fade
+   is consistent everywhere. */
+.ao-themed {
+  transition:
+    background-color var(--ao-theme-duration) var(--ao-ease),
+    border-color var(--ao-theme-duration) var(--ao-ease),
+    color var(--ao-theme-duration) var(--ao-ease),
+    box-shadow var(--ao-theme-duration) var(--ao-ease);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* ==========================================================================
+   Era rendering effects
+   Driven purely by the --ao-fx-* intensities, so every era gets them for free.
+   ========================================================================== */
+
+.ao-fx-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: var(--ao-z-cursor);
+}
+
+.ao-fx-scanlines {
+  position: absolute;
+  inset: 0;
+  opacity: calc(var(--ao-fx-scanlines) * 0.5);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0px,
+    rgba(0, 0, 0, 0.5) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  transition: opacity var(--ao-theme-duration) var(--ao-ease);
+}
+
+.ao-fx-noise {
+  position: absolute;
+  inset: 0;
+  opacity: calc(var(--ao-fx-noise) * 0.14);
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.8) 0.5px,
+    transparent 0.5px
+  );
+  background-size: 3px 3px;
+  transition: opacity var(--ao-theme-duration) var(--ao-ease);
+}
+
+.ao-fx-vignette {
+  position: absolute;
+  inset: 0;
+  opacity: var(--ao-fx-curvature);
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  transition: opacity var(--ao-theme-duration) var(--ao-ease);
+}
+
+/* Phosphor bloom on text, intensity-driven. */
+.ao-glow {
+  text-shadow:
+    0 0 calc(var(--ao-fx-phosphor) * 6px) var(--ao-color-glow),
+    0 0 calc(var(--ao-fx-phosphor) * 18px) var(--ao-color-glow);
+  transition: text-shadow var(--ao-theme-duration) var(--ao-ease);
+}
+
+/* 1-bit / 8-bit eras render bitmap-crisp. */
+[data-theme='era1984'] img,
+[data-theme='era1981'] img {
+  image-rendering: pixelated;
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--ao-color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visually hidden but available to screen readers and to search engines. */
+.ao-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
