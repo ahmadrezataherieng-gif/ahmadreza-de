@@ -1,0 +1,13 @@
+# Cloudflare redirect rules.
+#
+# Next copies everything in public/ into the static export, so this file ends up
+# at out/_redirects, which is where Workers static assets expects it. Cloudflare
+# consumes it; it is never served to visitors.
+#
+# Syntax: [source] [destination] [status]
+
+# German is the default locale and lives at the root path. /de would be a
+# duplicate of /, so it is never generated - send anyone who guesses it home.
+# This replaces what used to be an nginx rule.
+/de     /   301
+/de/*   /   301

@@ -1,0 +1,23 @@
+# Cloudflare response headers.
+#
+# Next copies everything in public/ into the static export, so this file ends up
+# at out/_headers, which is where Workers static assets expects it. Cloudflare
+# consumes it; it is never served to visitors.
+#
+# No Content-Security-Policy yet. It arrives in Phase 11, once the Gemini proxy
+# endpoint is the only external origin and we can write a policy that is
+# actually complete instead of one that silently breaks the site.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Hashed build output is immutable by construction, so it can be cached forever.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted font files are equally content-addressed.
+/_next/static/media/*
+  Cache-Control: public, max-age=31536000, immutable

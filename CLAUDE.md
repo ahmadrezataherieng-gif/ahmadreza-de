@@ -80,7 +80,44 @@ everyone. The mapping lives in `src/content/eras.ts`; the state lives in
 | Smooth scroll | Lenis |
 | State | zustand (+ `persist` for unlocks) |
 | Fonts | `@fontsource*` packages, **self-hosted** |
-| Hosting | nginx on a self-administered VPS |
+| Hosting | **Cloudflare Workers with static assets**, GitHub-connected |
+| AI (Phase 8) | **Google Gemini**, behind a server-side Cloudflare proxy |
+
+### Deployment — Cloudflare, not a VPS
+
+The site deploys to **Cloudflare Workers with static assets**, connected to the
+public GitHub repo through Workers Builds. It is **not** a Cloudflare Pages
+project: Cloudflare folded Pages into Workers during 2026, and while Pages is
+still supported, all new investment goes to Workers and a new account may not
+show a Pages tab at all.
+
+Earlier drafts of this project specified nginx on a self-managed VPS. That is
+reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
+
+- `wrangler.jsonc` — `assets.directory: "./out"`, no Worker script, so this
+  stays a pure static deploy. `html_handling: "auto-trailing-slash"` matches
+  `trailingSlash: true`; `not_found_handling: "404-page"` serves Next's
+  `404.html` with a real 404 status.
+- `public/_headers` — security headers. Next copies `public/` verbatim into the
+  export, so these land at `out/_headers`, where Cloudflare reads them. No
+  Content-Security-Policy yet; that arrives in Phase 11 once every external
+  origin is known.
+- `public/_redirects` — `301 /de/ → /`. This is what used to be an nginx rule.
+- Custom domain is **ahmadreza.de**. Workers custom domains require the zone's
+  nameservers to be managed by Cloudflare — a CNAME from an external DNS
+  provider is not enough, unlike Pages.
+- `npm run build` must keep producing nothing but a static `out/` directory.
+  Nothing in the application code may know it is running on Cloudflare.
+
+### The Gemini API key — absolute rule
+
+Phase 8's assistant uses the Google Gemini API through a server-side Cloudflare
+function. **The API key lives only in a Cloudflare environment variable.** It
+must never appear in client-side code, in a `NEXT_PUBLIC_*` variable, in a
+committed `.env`, or in any other committed file. **The GitHub repository is
+public**, so a key that is pushed once is compromised immediately, is billable,
+and survives in the git history after deletion. If it ever lands in a commit,
+rotate it rather than trying to rewrite history.
 
 ### Fonts — legal requirement, not a preference
 
@@ -131,8 +168,8 @@ Rules of thumb:
 - `en` at `/en`, `fa` at `/fa` with `dir="rtl"`.
 - Implemented with an **optional catch-all segment** `app/[[...locale]]`, not
   middleware: `output: 'export'` produces plain files and never runs middleware.
-- `/de` is deliberately **not generated** — it would duplicate `/`. nginx should
-  `301 /de/ → /`.
+- `/de` is deliberately **not generated** — it would duplicate `/`. The
+  `301 /de/ → /` lives in `public/_redirects`.
 - `generateStaticParams` in `app/[[...locale]]/layout.tsx` produces `/`, `/en`,
   `/fa`. Correct `lang`, `dir`, `canonical` and `hreflang` (including
   `x-default`) are emitted statically for SEO.

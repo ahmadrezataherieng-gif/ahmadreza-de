@@ -1,5 +1,5 @@
 /** Canonical origin of the production site. Used for metadata and sitemap. */
-export const SITE_URL = 'https://ahmadreza-taheri.de';
+export const SITE_URL = 'https://ahmadreza.de';
 
 export const SITE_AUTHOR = 'Ahmadreza Taheri';
 

@@ -20,19 +20,73 @@ optimisation. All three are fine for a portfolio.
 
 ---
 
-## 2. Self-hosted VPS, not a CDN platform
+## 2. Cloudflare, not a self-managed VPS
 
-**Decision:** nginx on a VPS that Ahmadreza administers himself.
+**Superseded an earlier decision.** This project originally specified nginx on a
+VPS that Ahmadreza would administer himself. That is reversed. Do not
+reintroduce nginx, systemd units or server backups anywhere in this repository.
 
-**Why:** two reasons, both load-bearing.
+**Decision:** deploy to **Cloudflare Workers with static assets**, connected to
+the public GitHub repository through Workers Builds.
 
-1. **GDPR cleanliness.** No third-party edge network sees visitor IPs, so there
-   is nothing to disclose, no processing agreement to chase, and no US transfer
-   question to answer in the Datenschutzerklärung.
-2. **It is itself the portfolio.** Configuring nginx, TLS, systemd units and
-   backups is exactly the *Fachinformatiker für Systemintegration* skill set the
-   site is meant to demonstrate. Deploying to a one-click platform would hide
-   the most relevant evidence.
+**Why:**
+
+- Free, with unlimited bandwidth.
+- Served from a global edge network, which is faster than a low-cost
+  single-region VPS for visitors anywhere.
+- Automatic TLS, with no certificate renewal to own.
+- It can host the Phase 8 server-side Gemini proxy on the same free plan. That
+  removed the only reason a server was needed at all — see entry 5.
+
+**Trade-off, stated honestly:** Cloudflare is a US company, and its edge sees
+visitor IP addresses. That makes it a processor which **must be disclosed in the
+Datenschutzerklärung** in Phase 11. This is a real cost that the VPS plan did
+not have, and it is accepted knowingly.
+
+**Exit cost:** low, and deliberately kept low. The build output is a plain
+static directory. Moving to German hosting later means pointing a web server at
+`out/` and re-expressing two small files — a few hours of work, not a rewrite.
+Nothing in the application code knows it is on Cloudflare.
+
+---
+
+## 2a. Workers with static assets, not Pages
+
+**Decision:** `wrangler.jsonc` with an `assets.directory` of `./out`, and no
+Worker script. Not a Cloudflare Pages project.
+
+**Why:** Cloudflare folded Pages into Workers during 2026. Pages continues to be
+supported, but all new investment, optimisation and feature work goes to
+Workers, and Cloudflare now tells new projects to start there. A Cloudflare
+account created in September 2026 may not show a Pages tab at all, so writing a
+Pages-only configuration would risk documenting a product the account cannot
+reach.
+
+Workers static assets covers everything this site needs:
+
+| Need | Supported |
+|---|---|
+| GitHub-connected automatic builds | yes, via Workers Builds |
+| `_headers` and `_redirects` files | yes, natively, read from the assets directory |
+| Custom domain | yes |
+| Custom 404 with a real 404 status | yes, `not_found_handling: "404-page"` |
+
+**One caveat that has to be handled in Phase 13:** unlike Pages, Workers custom
+domains only work for zones whose **nameservers Cloudflare manages**. A CNAME
+from an external DNS provider is not sufficient. `ahmadreza.de` has to be moved
+onto Cloudflare nameservers.
+
+**Pages alternative, if the dashboard turns out to offer it and it is
+preferred:** the same `public/_headers` and `public/_redirects` files work
+unchanged on Pages, since the syntax is shared. Only `wrangler.jsonc` would
+become unnecessary. The configuration was written so that this fallback costs
+one deleted file.
+
+**`html_handling` and `not_found_handling`:** `auto-trailing-slash` matches
+`trailingSlash: true`, under which the export is directory-based
+(`out/en/index.html`). `404-page` serves Next's own `404.html` with a genuine
+404 status rather than a soft 404, which would otherwise pollute the search
+results this site exists to win.
 
 ---
 
@@ -61,17 +115,28 @@ against their will.
 
 ---
 
-## 5. The AI assistant needs a server-side proxy
+## 5. The AI assistant is Google Gemini behind a Cloudflare proxy
 
-**Decision:** the Phase 8 assistant talks to a small Node service on the VPS,
-which holds the API key and forwards to the model provider. The static site
-never contains the key.
+**Decision:** the Phase 8 assistant uses the **Google Gemini API**. The browser
+never talks to Google directly. It calls a small server-side function on
+Cloudflare, which holds the key and forwards the request.
 
-**Why:** anything shipped to the browser is public. An API key in a static
-bundle is a key that has been given away, and it is billable. The proxy is also
-where rate limiting, abuse protection and prompt handling belong. This is the
-one part of the site that is not static, and it is deliberately kept as small as
-possible.
+**The key rule, and it is absolute:** the Gemini API key lives **only** in a
+Cloudflare environment variable (a Worker secret). It must never appear in
+client-side code, in the repository, in `.env` files that are committed, in
+`NEXT_PUBLIC_*` variables, or in any other committed file.
+
+**Why that rule is not negotiable here:** anything shipped to the browser is
+public, and **the GitHub repository is public**. A key committed once is a key
+that has been given away the moment it is pushed, is billable, and stays in the
+git history after it is deleted. Rotate immediately if it ever lands in a
+commit.
+
+**Why a proxy at all:** besides hiding the key, the proxy is the only sensible
+place for rate limiting, abuse protection and prompt construction. It is the one
+part of the site that is not static, and it is deliberately kept as small as
+possible. Cloudflare's free plan hosts it alongside the static assets, which is
+what removed the last reason to run a server of our own — see entry 2.
 
 ---
 
@@ -112,8 +177,8 @@ cannot place German at `/`. The alternative — a pass-through root layout plus 
 `[locale]` segment — generates `/de`, `/en`, `/fa` and leaves `/` to a server
 redirect, which loses the root URL as the canonical German page. An optional
 catch-all keeps `<html lang>` and `dir` statically correct for every locale
-*and* puts German at `/`. `/de` is deliberately not generated; nginx should
-`301 /de/ → /`.
+*and* puts German at `/`. `/de` is deliberately not generated; the `301 /de/ → /`
+lives in `public/_redirects`.
 
 ---
 

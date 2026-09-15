@@ -10,12 +10,12 @@ Last updated: 2026-09-15
 - [ ] **Phase 5** — Puzzle engine and the seven puzzles
 - [ ] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [ ] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
-- [ ] **Phase 8** — AI assistant app and the Node API proxy on the VPS
+- [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
 - [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
-- [ ] **Phase 13** — VPS deployment: nginx, TLS, systemd, backups
+- [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
 
 ## What exists after Phase 2
 

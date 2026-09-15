@@ -1,0 +1,37 @@
+{
+  // Cloudflare Workers with static assets.
+  //
+  // There is no Worker script: `main` is deliberately absent, so this deploys
+  // as a pure static site. `npm run build` still produces nothing but the
+  // static `out` directory, and the site remains portable to any plain web
+  // server if we ever move off Cloudflare.
+  //
+  // Pages is the older product. Cloudflare still supports it but directs all
+  // new investment at Workers, and a Cloudflare account created in 2026 may not
+  // show a Pages tab at all. See DECISIONS.md entry 2.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ahmadreza-de",
+  "compatibility_date": "2026-09-15",
+
+  "assets": {
+    // Next.js `output: 'export'` writes here. `_headers` and `_redirects` are
+    // copied in from `public/` by the build and are read by Cloudflare rather
+    // than served to visitors.
+    "directory": "./out",
+
+    // The export is directory-based (`/en/index.html`) because
+    // `trailingSlash: true`. auto-trailing-slash resolves both `/en` and `/en/`
+    // to that file.
+    "html_handling": "auto-trailing-slash",
+
+    // Serve Next's own `404.html` with a real 404 status. Not
+    // "single-page-application": this site has genuinely distinct URLs per
+    // locale and a soft 404 would poison the search results we are optimising
+    // for.
+    "not_found_handling": "404-page"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
