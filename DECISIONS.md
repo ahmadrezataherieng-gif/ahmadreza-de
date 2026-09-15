@@ -544,3 +544,76 @@ section's progress stopped at 0.84 at the bottom of the page.
   portrait.**
 - **A year that is really "today" is a message** (`eras.cloud.yearLabel`,
   `Era.yearLabelKey`), not a hardcoded year that ages.
+
+---
+
+## 31. The site teaches one mechanical truth per era
+
+**Decision:** beyond introducing Ahmadreza, the journey teaches how computers
+actually work. Each era carries exactly one truth that a visitor can still use
+today, and the era copy, the puzzle and the success message all serve it:
+
+| Era | Truth |
+|---|---|
+| 1946 | Text is numbers. Every character is a pattern of on and off. |
+| 1956 | A computer hates waiting. Scheduling is why operating systems exist. |
+| 1971 | A filesystem is a tree, and every file has a path. |
+| 1981 | Memory is finite, and that limit shapes what software can do. |
+| 1984 | Pointing is easier than remembering. |
+| 1995 | A network needs addresses. |
+| Today | Programs run isolated from each other, in many places at once. |
+
+**Why:** a history tour is forgettable; a truth you can use is not. It also
+reframes the site for a recruiter. The portfolio does not just claim that
+Ahmadreza understands systems, it demonstrates that he can explain them.
+
+**Where it lives:** `eras.<id>.description` became the truth, replacing Phase 2
+placeholder lines that wandered into trivia (one claimed "18,000 tubes" against
+the 17,468 shown on the same page). Copy tightened in the same pass: the ENIAC
+body now ends on holes and lamps as patterns of on and off; the UNIX screen now
+explains the tree and the path; the 1995 body names addresses; today's body names
+isolation. The 1956, 1981 and 1984 copy already served their truth and stayed.
+
+---
+
+## 32. One verified insider detail per era
+
+**Decision:** `eras.<id>.insider` holds one detail only a real user of the system
+would know. Each was checked against a source before it was written:
+
+| Era | Detail | Source |
+|---|---|---|
+| 1946 | A diagonal felt-tip line across the top of a card deck, so a dropped deck could be re-sorted | University of Miami, "Punched Cards" (rabbit.eng.miami.edu/info/card.html); Hackaday, "Punch Cards" (2016) |
+| 1956 | IBM 704 console sense switches, read by a running program with FORTRAN's `IF (SENSE SWITCH i)` | Wikipedia, "Sense switch"; *The FORTRAN Automatic Coding System for the IBM 704* (1957, Computer History Museum archive) |
+| 1971 | The directory command was `chdir` up to the Sixth Edition; `cd` arrived with the Seventh Edition (1979) | Sixth and Seventh Edition `sh(1)` manual pages, TUHS source tree |
+| 1981 | F3 recalled the previous DOS command line | Computer Hope, "F3" and "View command history and repeat DOS commands" |
+| 1984 | Susan Kare took the ⌘ symbol from Swedish signs marking places of interest | folklore.org, "Swedish Campground" (Andy Hertzfeld) |
+| 1995 | `winipcfg` showed IP settings on Windows 95/98/Me; `ipconfig` was the NT tool | Computer Hope, "winipcfg command" |
+| Today | On Linux only root may bind ports below 1024, hence containers on 8080 | Linux `ip(7)` and `capabilities(7)` (CAP_NET_BIND_SERVICE) |
+
+**Why:** it rewards the visitor who was there, and it is exactly the kind of
+detail that falls apart if invented. The 1971 entry is worded to what the primary
+sources prove. The First Edition manual page could not be retrieved, so the claim
+names the Sixth and Seventh Editions rather than 1971 itself.
+
+**The 1946 puzzle's historical note** is held to the same standard: on 9 September
+1947 operators of the Harvard Mark II found a moth in relay #70 of panel F and
+taped it into the logbook as the "first actual case of bug being found". The
+logbook is at the Smithsonian's National Museum of American History. The word
+"bug" for a fault is older than the moth — the entry was a joke on it — and the
+copy says so rather than repeating the myth.
+
+---
+
+## 33. Two viewing modes, one set of scenes
+
+**Decision:** the visitor chooses guided (watch every puzzle solve itself as they
+scroll) or interactive (play). There is one implementation of every era and every
+puzzle; the mode is a single persisted flag that only the puzzle layer reads.
+
+**Why:** two implementations would drift apart within a phase and double every
+future change, and the era visuals are already the most intricate code in the
+project. Making guided mode a *playback of the same puzzle* - its own reducer
+driven by a script instead of by input - means a fix to a puzzle fixes both modes
+by construction. The engine that makes this true is recorded with the puzzle
+work, in entries 35 and 36.

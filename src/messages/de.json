@@ -40,12 +40,14 @@
     "puzzleOptional": "Optional — du kannst jederzeit überspringen",
     "skipPuzzle": "Rätsel überspringen",
     "solved": "Gelöst",
-    "skipped": "Übersprungen"
+    "skipped": "Übersprungen",
+    "truthLabel": "Was bis heute gilt",
+    "insiderLabel": "Insider"
   },
   "eras": {
     "eniac": {
       "name": "ENIAC und Lochkarten",
-      "description": "Rechnen ohne Bildschirm: 18.000 Röhren, Lampen als einzige Ausgabe und Programme aus Löchern in Pappe.",
+      "description": "Text ist Zahlen. Jedes Zeichen ist ein Muster aus an und aus.",
       "visual": {
         "stats": [
           {
@@ -61,15 +63,16 @@
             "label": "Additionen pro Sekunde"
           }
         ],
-        "body": "Programmieren hieß, die Maschine physisch neu zu verkabeln. Kein Bildschirm, keine Tastatur, kein Betriebssystem — ein zimmergroßer Rechner, der für jede neue Aufgabe von Hand umgebaut wurde.",
+        "body": "Programmieren hieß, die Maschine von Hand neu zu verkabeln. Kein Bildschirm, keine Tastatur: Eingaben kamen als Löcher in Lochkarten, Ergebnisse als Lampen. Loch oder kein Loch, an oder aus — jede Zahl und jeder Buchstabe war nur ein Muster daraus.",
         "panelLabel": "Anzeigetafel mit Röhrenlampen",
         "cardLabel": "IBM-Lochkarte, 80 Spalten",
         "cardCaption": "Gestanzt: {text}"
-      }
+      },
+      "insider": "Wer mit Lochkarten programmierte, zog mit dem Filzstift eine schräge Linie über die Oberkante des Stapels. Fiel er herunter, zeigte die Linie, welche Karte wohin gehörte."
     },
     "batch": {
       "name": "Großrechner und Stapel­verarbeitung",
-      "description": "Das erste Betriebssystem entsteht, weil Menschen zu langsam sind, um Rechenzeit sinnvoll zu verteilen.",
+      "description": "Ein Computer hasst Warten. Genau dafür gibt es Betriebssysteme: Sie entscheiden, wer als Nächstes rechnen darf.",
       "visual": {
         "paperLabel": "Endlospapier aus dem Drucker",
         "printed": [
@@ -91,33 +94,35 @@
           "Gilt weithin als das erste",
           "Betriebssystem ueberhaupt."
         ]
-      }
+      },
+      "insider": "Die IBM 704 hatte Sense Switches: Kippschalter an der Konsole, die ein laufendes Programm abfragen konnte. In FORTRAN hieß das IF (SENSE SWITCH 3) — so steuerte der Operator ein Programm, ohne es anzuhalten."
     },
     "unix": {
       "name": "UNIX",
-      "description": "Grüner Phosphor, ein blinkender Cursor — und zum ersten Mal darf der Mensch direkt mit dem System sprechen.",
+      "description": "Ein Dateisystem ist ein Baum. Jede Datei hat einen Pfad, der von der Wurzel / zu ihr führt.",
       "visual": {
         "screenLabel": "Bildschirm eines Terminals",
         "banner": "UNIX Time-Sharing System",
         "loginLine": "login: ahmadreza",
         "lines": [
-          "Mehrbenutzerfaehig. Multitasking.",
-          "In einer portablen Sprache geschrieben --",
-          "zum ersten Mal konnte ein Betriebssystem",
-          "zwischen Maschinen wandern.",
+          "Alles ist eine Datei, und alle",
+          "Dateien haengen an einem Baum.",
           "",
-          "Kleine Programme, die je eine Sache tun,",
-          "ueber Pipes miteinander verbunden.",
+          "Die Wurzel heisst /. Jede Datei hat",
+          "einen Pfad, der von dort zu ihr fuehrt:",
+          "/home/ahmadreza/notes.txt",
           "",
-          "Jeder Befehl, der heute in einem Terminal",
-          "getippt wird, stammt hiervon ab."
+          "Mehrbenutzerfaehig und portabel --",
+          "jedes Terminal von heute stammt",
+          "hiervon ab."
         ],
         "prompt": "$"
-      }
+      },
+      "insider": "Bis zur Sixth Edition hieß der Befehl zum Verzeichniswechsel chdir. Das kurze cd kam erst 1979 mit der Seventh Edition."
     },
     "dos": {
       "name": "IBM PC und MS-DOS",
-      "description": "Der Computer zieht ins Büro ein, und alles muss in 640 Kilobyte Arbeitsspeicher passen.",
+      "description": "Speicher ist endlich. Diese Grenze bestimmt, was Software kann.",
       "visual": {
         "screenLabel": "Bildschirm eines IBM PC",
         "biosLine": "IBM Personal Computer",
@@ -186,11 +191,12 @@
         ],
         "dirFooter": "8 Datei(en)      942.080 Bytes",
         "body": "Computer kommen auf die Schreibtische. Ein Programm zur Zeit, ein Bildschirm, alles getippt. 640 Kilobyte Arbeitsspeicher — von denen, entgegen dem berühmten Zitat, das niemand wirklich belegen kann, jeder wusste, dass sie nicht lange reichen würden."
-      }
+      },
+      "insider": "F3 holte in MS-DOS die zuletzt getippte Befehlszeile zurück. Wer das wusste, tippte einen langen Befehl nie zweimal."
     },
     "macintosh": {
       "name": "Macintosh",
-      "description": "Ein Pfeil auf dem Bildschirm verändert alles: Fenster, Symbole, Menüs und die Maus in der Hand.",
+      "description": "Zeigen ist leichter als Erinnern. Auf dieser Idee beruht jede Oberfläche seither.",
       "visual": {
         "body": "1984, der Apple Macintosh. Der erste Massencomputer mit Maus und grafischer Oberfläche. Statt Befehle auswendig zu lernen, konnte man etwas sehen und darauf zeigen. Fenster, Symbole, Menüs, Zeiger — das Vokabular, das jede Oberfläche bis heute spricht.",
         "screenLabel": "Bildschirm eines Macintosh mit Menüleiste, Fenster und Mauszeiger",
@@ -215,13 +221,14 @@
           "Papierkorb"
         ],
         "pointerCaption": "Zum ersten Mal: zeigen statt tippen."
-      }
+      },
+      "insider": "Das Zeichen ⌘ auf der Befehlstaste stammt von Susan Kare. Sie fand es in einem Symbolbuch: In Schweden markiert es auf Schildern Sehenswürdigkeiten."
     },
     "win95": {
       "name": "Windows 95 und Einwahl",
-      "description": "Startmenü, Taskleiste und ein Modem, das sich kreischend ins Internet verbindet.",
+      "description": "Ein Netzwerk braucht Adressen. Ohne sie findet eine Maschine keine andere.",
       "visual": {
-        "body": "1995, Windows 95 und das Modem. Taskleiste und Startmenü — ein Ort, an dem man alles auf dem Rechner findet. Und das Internet kommt in die Wohnungen: 56 Kilobit pro Sekunde, die Telefonleitung besetzt, die Verbindung hörbar. Der Computer war keine einsame Maschine mehr, sondern ein Knoten in einem Netz.",
+        "body": "1995, Windows 95 und das Modem. Taskleiste und Startmenü — ein Ort für alles auf dem Rechner. Und das Internet kommt in die Wohnungen: 56 Kilobit pro Sekunde, die Telefonleitung besetzt. Damit sich zwei Rechner finden, braucht jeder eine Adresse. Der Computer war keine einsame Maschine mehr, sondern ein Knoten in einem Netz.",
         "screenLabel": "Windows-95-Desktop, der sich per Modem mit dem Internet verbindet",
         "infoTitle": "Info.txt - Editor",
         "start": "Start",
@@ -260,13 +267,14 @@
         ],
         "counter": "Besucher: 000042",
         "status": "Dokument: Übermittelt"
-      }
+      },
+      "insider": "Wer unter Windows 95 seine IP-Adresse sehen wollte, tippte unter Start › Ausführen winipcfg. Das heutige ipconfig gab es dort nicht."
     },
     "cloud": {
       "name": "Cloud, Container und KI",
-      "description": "Der Rechner ist überall und nirgends: Dashboards, Container und Regeln, die den Weg der Pakete bestimmen.",
+      "description": "Programme laufen voneinander isoliert, an vielen Orten zugleich.",
       "visual": {
-        "body": "Heute. Der Computer ist keine einzelne Maschine mehr. Code läuft in Containern auf Servern, die niemand je sieht, in vielen Rechenzentren zugleich. Und zum ersten Mal lässt sich ein Problem in gewöhnlicher Sprache beschreiben — und beantworten. Achtzig Jahre vom Umstecken von Kabeln bis hierher.",
+        "body": "Heute. Der Computer ist keine einzelne Maschine mehr. Code läuft in Containern, voneinander abgeschottet, auf Servern, die niemand je sieht — in vielen Rechenzentren zugleich. Und zum ersten Mal lässt sich ein Problem in gewöhnlicher Sprache beschreiben und beantworten. Achtzig Jahre vom Umstecken von Kabeln bis hierher.",
         "dashboardLabel": "Dashboard einer verteilten Anwendung mit Containern, Deployment, Metriken und Regionen",
         "containersTitle": "Container",
         "containers": [
@@ -321,7 +329,8 @@
           "Deshalb läuft er überall gleich: auf deinem Laptop und in jedem Rechenzentrum."
         ]
       },
-      "yearLabel": "Heute"
+      "yearLabel": "Heute",
+      "insider": "Ports unter 1024 darf unter Linux nur root öffnen. Deshalb lauschen so viele Container auf Port 8080 statt auf 80."
     }
   },
   "ui": {

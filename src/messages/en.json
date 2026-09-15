@@ -40,12 +40,14 @@
     "puzzleOptional": "Optional — you can skip at any time",
     "skipPuzzle": "Skip puzzle",
     "solved": "Solved",
-    "skipped": "Skipped"
+    "skipped": "Skipped",
+    "truthLabel": "Still true today",
+    "insiderLabel": "Insider"
   },
   "eras": {
     "eniac": {
       "name": "ENIAC and punch cards",
-      "description": "Computing without a screen: 18,000 tubes, lamps as the only output, and programs punched into cardboard.",
+      "description": "Text is numbers. Every character is a pattern of on and off.",
       "visual": {
         "stats": [
           {
@@ -61,15 +63,16 @@
             "label": "additions per second"
           }
         ],
-        "body": "Programming meant physically rewiring the machine. No screen, no keyboard, no operating system — a room-sized calculator rebuilt by hand for every new problem.",
+        "body": "Programming meant rewiring the machine by hand. No screen, no keyboard: input came as holes in punch cards, results as lamps. Hole or no hole, on or off — every number and every letter was just a pattern of the two.",
         "panelLabel": "Indicator panel of vacuum-tube lamps",
         "cardLabel": "IBM punch card, 80 columns",
         "cardCaption": "Punched: {text}"
-      }
+      },
+      "insider": "Anyone programming with punch cards drew a diagonal line across the top of the deck with a felt-tip pen. If the deck was dropped, the line showed which card went where."
     },
     "batch": {
       "name": "Mainframes and batch processing",
-      "description": "The first operating system appears, because humans are far too slow to hand out machine time by hand.",
+      "description": "A computer hates waiting. That is exactly why operating systems exist: they decide who gets to compute next.",
       "visual": {
         "paperLabel": "Continuous-feed paper from the printer",
         "printed": [
@@ -90,33 +93,35 @@
           "Widely considered the first",
           "operating system."
         ]
-      }
+      },
+      "insider": "The IBM 704 had sense switches: toggle switches on the console that a running program could read. In FORTRAN that was IF (SENSE SWITCH 3) — the operator could steer a program without stopping it."
     },
     "unix": {
       "name": "UNIX",
-      "description": "Green phosphor, a blinking cursor — and for the first time a person can talk to the machine directly.",
+      "description": "A filesystem is a tree. Every file has a path leading to it from the root, /.",
       "visual": {
         "screenLabel": "Screen of a terminal",
         "banner": "UNIX Time-Sharing System",
         "loginLine": "login: ahmadreza",
         "lines": [
-          "Multi-user. Multitasking.",
-          "Written in a portable language --",
-          "for the first time an operating system",
-          "could move between machines.",
+          "Everything is a file, and every",
+          "file hangs off a single tree.",
           "",
-          "Small programs that each do one thing,",
-          "piped together.",
+          "The root is called /. Every file has",
+          "a path leading to it from there:",
+          "/home/ahmadreza/notes.txt",
           "",
-          "Every command typed in a terminal",
-          "today descends from this."
+          "Multi-user and portable --",
+          "every terminal today descends",
+          "from this."
         ],
         "prompt": "$"
-      }
+      },
+      "insider": "Up to the Sixth Edition, the command for changing directory was called chdir. The short cd only arrived in 1979 with the Seventh Edition."
     },
     "dos": {
       "name": "IBM PC and MS-DOS",
-      "description": "The computer moves into the office, and everything has to fit into 640 kilobytes of memory.",
+      "description": "Memory is finite. That limit shapes what software can do.",
       "visual": {
         "screenLabel": "Screen of an IBM PC",
         "biosLine": "IBM Personal Computer",
@@ -185,11 +190,12 @@
         ],
         "dirFooter": "8 File(s)        942,080 Bytes",
         "body": "Computers arrive on desks. One program at a time, one screen, everything typed. 640 kilobytes of memory — which, contrary to the famous quote nobody can actually source, everyone knew would not be enough for long."
-      }
+      },
+      "insider": "In MS-DOS, F3 brought back the last command line you typed. If you knew that, you never typed a long command twice."
     },
     "macintosh": {
       "name": "Macintosh",
-      "description": "An arrow on the screen changes everything: windows, icons, menus, and a mouse in your hand.",
+      "description": "Pointing is easier than remembering. Every interface since rests on that idea.",
       "visual": {
         "body": "1984, the Apple Macintosh. The first mass-market computer with a mouse and a graphical interface. Instead of memorising commands, you could see something and point at it. Windows, icons, menus, pointer — the vocabulary every interface still speaks today.",
         "screenLabel": "Macintosh screen with a menu bar, a window and a mouse pointer",
@@ -214,13 +220,14 @@
           "Trash"
         ],
         "pointerCaption": "For the first time: point, not type."
-      }
+      },
+      "insider": "The ⌘ symbol on the Command key is Susan Kare's. She found it in a book of symbols: in Sweden it marks places of interest on signs."
     },
     "win95": {
       "name": "Windows 95 and dial-up",
-      "description": "Start menu, taskbar, and a modem screeching its way onto the internet.",
+      "description": "A network needs addresses. Without them, a machine cannot find another machine.",
       "visual": {
-        "body": "1995, Windows 95 and the modem. The taskbar and the start menu — one place to find everything on the machine. And the internet arrives in homes: 56 kbit per second, the phone line occupied, the connection audible. The computer stopped being a solitary machine and became a node in a network.",
+        "body": "1995, Windows 95 and the modem. The taskbar and the start menu — one place for everything on the machine. And the internet arrives in homes: 56 kbit per second, the phone line occupied. For two computers to find each other, each needs an address. The computer stopped being a solitary machine and became a node in a network.",
         "screenLabel": "Windows 95 desktop connecting to the internet over a modem",
         "infoTitle": "Info.txt - Notepad",
         "start": "Start",
@@ -259,13 +266,14 @@
         ],
         "counter": "Visitors: 000042",
         "status": "Document: Done"
-      }
+      },
+      "insider": "To see your IP address on Windows 95, you typed winipcfg into Start › Run. Today's ipconfig did not exist there."
     },
     "cloud": {
       "name": "Cloud, containers and AI",
-      "description": "The machine is everywhere and nowhere: dashboards, containers, and rules that decide where packets may go.",
+      "description": "Programs run isolated from each other, in many places at once.",
       "visual": {
-        "body": "Today. The computer is no longer a single machine. Code runs in containers on servers nobody ever sees, in many data centres at once. And for the first time, a problem can be described in ordinary language and answered. Eighty years from rewiring cables by hand to this.",
+        "body": "Today. The computer is no longer a single machine. Code runs in containers, sealed off from each other, on servers nobody ever sees — in many data centres at once. And for the first time, a problem can be described in ordinary language and answered. Eighty years from rewiring cables by hand to this.",
         "dashboardLabel": "Dashboard of a distributed application with containers, deployment, metrics and regions",
         "containersTitle": "Containers",
         "containers": [
@@ -320,7 +328,8 @@
           "That is why it runs the same everywhere: on your laptop and in any data centre."
         ]
       },
-      "yearLabel": "Today"
+      "yearLabel": "Today",
+      "insider": "On Linux, only root may open ports below 1024. That is why so many containers listen on port 8080 instead of 80."
     }
   },
   "ui": {

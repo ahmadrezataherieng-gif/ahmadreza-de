@@ -11,6 +11,58 @@ Every technical decision is subordinate to those two goals. When a choice trades
 a nice interaction against discoverability or against a recruiter's time, the
 recruiter wins.
 
+## The purpose beyond the portfolio
+
+Most people use computers every day without knowing how they work. **This site
+teaches that, through history, while introducing Ahmadreza.** It is not a museum
+of anecdotes: every era carries **one mechanical truth** about computing that the
+visitor can still use today.
+
+| Era | The one truth |
+|---|---|
+| 1946 | Text is numbers. Every character is a pattern of on and off. |
+| 1956 | A computer hates waiting. Scheduling is why operating systems exist. |
+| 1971 | A filesystem is a tree, and every file has a path. |
+| 1981 | Memory is finite, and that limit shapes what software can do. |
+| 1984 | Pointing is easier than remembering. That is the whole idea behind every interface since. |
+| 1995 | A network needs addresses. Without them a machine cannot find another machine. |
+| Today | Programs run isolated from each other, in many places at once. |
+
+Rules that follow from it:
+
+- **The era copy, the puzzle and the success message all serve that era's one
+  truth.** If copy wanders into trivia that does not serve it, cut it.
+- The truth lives in `eras.<id>.description` in `messages/`. It is shown in the
+  era's puzzle segment and in the static SEO list, so it is always in the HTML.
+- **Every era has one insider detail** (`eras.<id>.insider`): something only a
+  real user of that system would know — a shortcut, a quirk, a trick of the
+  period. It rewards the knowledgeable without confusing anyone else. **It must
+  be factually true and sourced.** Never invent period detail. The sources for
+  the current seven are recorded in DECISIONS.md entry 32.
+
+## Two viewing modes, one codebase
+
+The visitor chooses how to experience the journey:
+
+- **Guided** — the visitor watches. Every puzzle solves itself on screen: a
+  simulated pointer moves, clicks and types at a readable pace, driven by scroll
+  progress. The visitor only scrolls. For someone with two minutes.
+- **Interactive** — the visitor plays. Puzzles wait for real input, with a
+  two-step help (hint, then full answer). For someone with fifteen minutes.
+
+**The architectural rule, never violate it: ONE set of scenes with a mode flag,
+NOT two implementations.** Never duplicate an era or a puzzle per mode. If you
+find yourself writing the same scene twice, stop and restructure.
+
+- The mode is a single persisted value in the unlock store. Only the puzzle layer
+  reads it; **era visuals never know which mode is active.**
+- The choice is made on the landing page, survives a reload, and can be switched
+  at any time from a persistent control without losing scroll position.
+- Guided mode offers "I'll try this one myself" on each puzzle, which switches
+  that puzzle — and from then on the mode — to interactive.
+- Skipping is always possible in both modes; `prefers-reduced-motion` renders
+  finished frames in both.
+
 ## The concept: "AhmadOS — 80 Years in 90 Seconds"
 
 Three acts.
@@ -53,7 +105,7 @@ Keep the two in sync.
 
 ## The optional-puzzle rule — never violate it
 
-- Puzzles are **optional** and **never block progress**.
+- Puzzles are **optional** and **never block progress**, in both viewing modes.
 - A **Skip** control is always visible.
 - A **Skip to Desktop** control is available at every point in Act 1.
 - Returning visitors go **straight to the desktop**.
