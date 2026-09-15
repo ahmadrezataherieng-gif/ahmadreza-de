@@ -145,6 +145,7 @@ src/
     ui/                     generic primitives (Button, Panel, LanguageSwitcher)
     os/                     OS shell: Desktop, Taskbar, WindowManager, BootScreen
     journey/                Act 1 era sections and scroll machinery
+      eras/                 one component per era visual, plus registry.ts
     apps/                   one folder per application
     theme/                  theme application and era rendering effects
   lib/                      helpers: cn(), themes, routing, constants, hooks
@@ -237,6 +238,46 @@ useThemeStore.getState().setTheme('era1984');
 - `prefers-reduced-motion` disables Lenis entirely and renders the eras as a
   plain vertical document. ScrollTrigger still runs there, because it only
   observes scroll position and creates no motion of its own.
+- The resolver calls the stores **only when the era changes**, never per frame —
+  per-frame calls made the persisted unlock store write `localStorage` 60 times
+  a second.
+- The theme reference line is 80% down the viewport when stages are pinned (the
+  outgoing era has already faded) and the centre in document flow.
+
+### Era visuals (Phase 3 onwards)
+
+Each era is `src/components/journey/eras/Era*.tsx`, wired up in
+`eras/registry.ts` with its pinned scroll length and `startAt` threshold.
+
+- **Pinning is CSS `position: sticky`**, never ScrollTrigger `pin` — pin-spacers
+  break the resolver's `offsetTop` measurements. Pinning only applies at
+  `min-width: 768px` and `min-height: 600px` with motion allowed; below that, eras
+  flow as ordinary blocks so nothing is clipped on phones.
+- **Scrubbed motion** reads `--era-progress` (0..1, registered with `@property`),
+  which the resolver writes on each section. Write the effect as `calc()`/`clamp()`
+  over that variable in `globals.css`. Animate only `transform`, `opacity` and
+  `filter`. No per-frame JS, no React state, no GSAP timelines per era.
+- **One-shot motion** (printing, counters) is a CSS animation paused until
+  `[data-started='true']`, which the resolver sets once and never clears.
+- **Never use `steps(n, end)` with a forwards fill.** Float rounding can finish at
+  progress 0.99999…, which freezes on the second-to-last step. Use `jump-none`.
+- **Never put a CSS animation on the same property you scrub** on one element:
+  the animation overrides the declared value. Nest them.
+- **Printed text** goes through `lib/typeset.ts` + `PrintedLine`: deterministic
+  imperfection (never `Math.random` — hydration), Persian printed word by word
+  (per-letter spans break Arabic-script joining), `dir="auto"` per line, the
+  printout `aria-hidden` with the same text once in an `ao-sr-only` block.
+- **Machine output is LTR in every locale.** Terminal and DOS blocks pin
+  `dir="ltr"`; prose follows the page direction. Directional motion must flip in
+  RTL (see `.ao-card-slide`).
+- **No raster assets.** SVG, CSS, or — only if genuinely necessary — a small canvas.
+- **No audio** until the Phase 9 audio layer; `soundProfile` stays unused.
+- Every scrubbed or one-shot effect needs a matching rule in the
+  `prefers-reduced-motion: reduce` block that resolves it to its finished state.
+- Call `ScrollTrigger.refresh()` after anything that changes layout height. Font
+  swap-in is already handled via `document.fonts.ready`.
+- Fixed journey controls carry `.ao-chrome-backdrop` so they stay legible over
+  every era, including the paper-white one.
 
 ## Coding conventions — enforce these
 

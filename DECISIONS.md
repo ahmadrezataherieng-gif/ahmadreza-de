@@ -209,3 +209,180 @@ touch but not in-page anchors or anything else that scrolls programmatically.
 One cheap call per frame covers every case, and `ScrollTrigger.update()` bails
 out early when the position has not changed. Programmatic scrolling still has to
 go through `src/lib/lenis-controller.ts`.
+
+---
+
+## 11. Eras pin with CSS `position: sticky`, not ScrollTrigger `pin`
+
+**Decision:** each era is a tall `<section>` (its height sets the scroll
+distance) containing a `position: sticky` stage one viewport tall. ScrollTrigger
+does no pinning.
+
+**Why:** ScrollTrigger's `pin` wraps the element in a pin-spacer and pads it.
+That silently changes `offsetTop` and `offsetHeight` - the exact measurements
+the era resolver (entry 9) depends on - and reintroduces the class of layout bug
+entry 9 was written to kill. Sticky gives the identical visual result with no DOM
+mutation, and the browser composites it.
+
+Pinning is gated by a media query
+(`min-width: 768px`, `min-height: 600px`, `prefers-reduced-motion: no-preference`).
+Outside it, eras are ordinary blocks in document flow. On a 380px phone a pinned
+stage would clip text that does not fit one viewport; flowing is the adaptation,
+not a fallback.
+
+---
+
+## 12. Scrubbed visuals read one registered custom property: `--era-progress`
+
+**Decision:** the resolver writes `--era-progress` (0..1) onto each era section.
+Every scrubbed effect - the punch card sliding in, lamp intensity, the paper
+feed, the CRT power-on - is a `calc()`/`clamp()` expression over that variable
+in `globals.css`. No React state, no GSAP timeline.
+
+**Why:**
+
+- A React state update per frame would re-render the journey 60 times a second.
+- A per-era GSAP timeline would be a second source of truth about progress,
+  alongside the resolver.
+- One style write per era per frame, skipped when the rounded value is
+  unchanged, costs almost nothing, and the effects use only `transform`,
+  `opacity` and `filter`, so they stay on the compositor.
+
+`--era-progress` is registered with `@property` as a `<number>`. Unregistered,
+it is an untyped string, and multiplying it inside `calc()` for `transform` is
+not reliably valid.
+
+Progress means different things by layout. Pinned: how far through the sticky
+travel the page is. In flow: how far the section has arrived, reaching 1 as its
+top nears the top of the viewport, so reveals finish as the era comes into view.
+
+---
+
+## 13. One-shot animations start from `data-started`, set once and never cleared
+
+**Decision:** printing, the POST counter and the beep are CSS animations with
+`animation-play-state: paused`. The resolver sets `data-started="true"` on a
+section once its progress passes that era's `startAt` threshold
+(`src/components/journey/eras/registry.ts`). It never removes the attribute.
+
+**Why:** no JS timers and nothing to clean up. Never clearing it means a
+printout that has begun always finishes, even if the visitor scrolls on. Pausing
+when the era loses focus would leave half-printed screens behind. `startAt`
+exists for UNIX, whose screen must be lit (progress 0.3) before anything prints.
+
+---
+
+## 14. Stepped animations use `jump-none`, never `steps(n, end)`
+
+**Decision:** `ao-strike` uses `steps(2, jump-none)`. The POST counter uses
+`steps(frames, jump-none)`, with one frame per displayed value.
+
+**Why - found in the browser, not theorised:** for some `animation-delay`
+values, a finished animation's computed progress is `0.9999999999999953`
+rather than `1`. `steps(2, end)` maps that to the second-to-last step, so
+individual glyphs in the DOS listing stayed frozen at 50% opacity forever, with
+play state `finished`. The POST counter had the same flaw and could stop at
+576K instead of 640K OK. With `jump-none`, the end value is itself one of the
+steps, so float rounding cannot fall short of it. Treat any new
+`steps(…, end)` combined with a forwards fill as a bug.
+
+---
+
+## 15. Printed text is per-glyph spans with deterministic imperfection
+
+**Decision:** `src/lib/typeset.ts` turns text into glyphs carrying a delay, an
+ink density and a horizontal jitter, all derived from a hash of position, never
+`Math.random`. `PrintedLine` renders one span per glyph; CSS does all the motion.
+
+**Why deterministic:** server HTML and first client render must match, or React
+throws a hydration mismatch. A visitor who scrolls back up should also see the
+same page.
+
+**Persian prints word by word.** Wrapping each letter of a joining script in its
+own span breaks the contextual shaping that connects the letters.
+`printUnit(locale)` switches to `'word'` for `fa`.
+
+**Every printed line carries `dir="auto"`.** Each glyph is an inline-block, which
+bidi treats as a neutral object, so a Latin line inside the Persian page
+("GM-NAA I/O ..... 1956") laid its words out right to left. Resolving direction
+per line from its first strong character fixes it.
+
+**Accessibility:** each printout is `aria-hidden`, and the same text is repeated
+once in an `ao-sr-only` block. Split into strike units, it reads badly aloud.
+
+**Cost:** roughly 1,100 spans across four eras. The German HTML is 221 kB raw
+but 26.6 kB gzipped, and the spans add no JS. Watch this in Phase 4.
+
+---
+
+## 16. The theme reference line is 80% down the viewport when pinned
+
+**Decision:** in pinned layouts an era owns the theme once its section crosses
+80% of the viewport height. In document flow the line stays at the centre. It is
+still the single resolver from entry 9; only the reference line moved.
+
+**Why:** with the centre line, the 1971 monitor slid in wearing the paper-white
+1956 theme - a big white bezel instead of the beat of darkness that era needs.
+When pinned, the outgoing era has already faded to its bare background
+(`.ao-era-exit`) by the time the next stage arrives, so switching early re-tints
+nothing but that background. In document flow nothing fades out, so an early
+switch would visibly re-skin the previous era; the centre is the fair line there.
+
+---
+
+## 17. The resolver touches the stores only when the era changes
+
+**Decision:** `activate()` runs when the resolved era differs from the last one,
+not on every frame.
+
+**Why - a Phase 2 performance bug found here:** the resolver called
+`setActiveEra`, `setTheme` and `markEraVisited` on every scroll frame.
+`markEraVisited` created a new state object each time, and the persisted unlock
+store wrote `localStorage` on every one of those - about 60 synchronous storage
+writes a second while scrolling.
+
+---
+
+## 18. Act 1 renders its first era's tokens into the static HTML
+
+**Decision:** `Journey` emits a `<style>` with `:root{…}` built from
+`themeToCssVars()` for the first era's theme.
+
+**Why:** the bootstrap values in `globals.css` are the `modern` desktop palette.
+Without this, the entry page's very first paint was the cyan desktop,
+cross-fading to 1946 only after hydration. The values are generated from
+`themes.ts`, so nothing is hardcoded. Once the theme store writes inline
+properties on `<html>`, those win on specificity.
+
+---
+
+## 19. The CRT is one shared component; flicker lives on an inner layer
+
+**Decision:** 1971 and 1981 both render into `CrtMonitor`; only 1971 runs the
+power-on (`powerOn`). The flicker animation sits on an inner element, never on
+the element whose opacity is scrubbed.
+
+**Why:** one monitor whose phosphor changes colour with the theme reads as the
+technology upgrading, which is the brief for that handoff. The flicker placement
+is a correctness fix. A CSS animation on `opacity` overrides a declared
+`opacity`, so with both on one element the scrubbed power-on was ignored and the
+screen was always lit.
+
+---
+
+## 20. Era copy follows period constraints
+
+- The 1956 printout and the 1971/1981 screens spell German umlauts as
+  ue/oe/ae. Line printers and early terminals had no umlauts, so this is
+  period-correct, not a typo. Prose outside the machines uses real umlauts.
+- The DOS listing is in `messages/` like all copy, and its file sizes add up to
+  the footer total (942.080 bytes). It will be checked by exactly the kind of
+  person this site is trying to impress.
+- The punch card uses the real IBM zone/digit encoding
+  (`src/lib/punch-card.ts`), so the card genuinely spells what its caption says.
+- The ASCII-art year is hardcoded in `EraDos.tsx`. It is a decorative rendering
+  of a year, and years are exempt from localization.
+- Long German titles carry a soft hyphen in the message
+  (`Stapel­verarbeitung`). CSS `hyphens: auto` depends on a hyphenation
+  dictionary that browsers do not all ship, and without one the word broke
+  mid-word with no hyphen.

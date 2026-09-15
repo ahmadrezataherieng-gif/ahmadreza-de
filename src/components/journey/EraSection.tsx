@@ -1,47 +1,42 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import type { CSSProperties } from 'react';
 import type { Era } from '@/content/eras';
+import { EraPlaceholder } from '@/components/journey/eras/EraPlaceholder';
+import { eraStaging } from '@/components/journey/eras/registry';
 
 interface EraSectionProps {
   era: Era;
-  /** Element id used by ScrollTrigger and by the progress rail's anchors. */
+  /** Element id used by the resolver and by the progress rail's anchors. */
   sectionId: string;
 }
 
 /**
- * One full-viewport act of the journey.
+ * One act of the journey: a tall `<section>` that supplies scroll distance and a
+ * sticky stage inside it that holds the era's visual.
  *
- * Phases 3 and 4 replace the body of this component with each era's real visual
- * (lamp panel, teletype, CRT, ...). For now it carries only the name, year and
- * placeholder line, which is enough to prove the theme engine switches.
+ * The section is the element the resolver measures and writes to. It receives
+ * `--era-progress` every frame and `data-started` once; everything inside reads
+ * those through CSS. Pinning is layout only - which era owns the theme is still
+ * decided by the single resolver in Journey.tsx.
  */
 export function EraSection({ era, sectionId }: EraSectionProps) {
-  const t = useTranslations('eras');
+  const staging = eraStaging[era.id];
+  const headingId = `${sectionId}-heading`;
+  const Visual = staging.Visual;
 
   return (
     <section
       id={sectionId}
       data-era={era.id}
       data-era-index={era.index}
-      aria-labelledby={`${sectionId}-heading`}
-      className="ao-themed relative flex min-h-dvh w-full flex-col items-center justify-center px-6 py-24"
+      data-start-at={staging.startAt}
+      aria-labelledby={headingId}
+      className="ao-era-section ao-themed w-full"
+      style={{ '--era-length': staging.length } as CSSProperties}
     >
-      <div className="flex w-full max-w-3xl flex-col gap-6">
-        <p className="ao-glow font-mono text-sm tracking-[0.35em] text-muted uppercase">
-          {era.year}
-        </p>
-
-        <h2
-          id={`${sectionId}-heading`}
-          className="ao-glow font-display text-3xl leading-tight text-ink sm:text-5xl"
-        >
-          {t(era.nameKey)}
-        </h2>
-
-        <p className="max-w-2xl font-body text-base leading-relaxed text-muted sm:text-lg">
-          {t(era.descriptionKey)}
-        </p>
+      <div className="ao-era-stage w-full" data-era-stage="">
+        {Visual ? <Visual headingId={headingId} /> : <EraPlaceholder era={era} headingId={headingId} />}
       </div>
     </section>
   );

@@ -45,19 +45,148 @@
   "eras": {
     "eniac": {
       "name": "ENIAC und Lochkarten",
-      "description": "Rechnen ohne Bildschirm: 18.000 Röhren, Lampen als einzige Ausgabe und Programme aus Löchern in Pappe."
+      "description": "Rechnen ohne Bildschirm: 18.000 Röhren, Lampen als einzige Ausgabe und Programme aus Löchern in Pappe.",
+      "visual": {
+        "stats": [
+          {
+            "value": "27",
+            "label": "Tonnen"
+          },
+          {
+            "value": "17.468",
+            "label": "Elektronenröhren"
+          },
+          {
+            "value": "ca. 5.000",
+            "label": "Additionen pro Sekunde"
+          }
+        ],
+        "body": "Programmieren hieß, die Maschine physisch neu zu verkabeln. Kein Bildschirm, keine Tastatur, kein Betriebssystem — ein zimmergroßer Rechner, der für jede neue Aufgabe von Hand umgebaut wurde.",
+        "panelLabel": "Anzeigetafel mit Röhrenlampen",
+        "cardLabel": "IBM-Lochkarte, 80 Spalten",
+        "cardCaption": "Gestanzt: {text}"
+      }
     },
     "batch": {
-      "name": "Großrechner und Stapelverarbeitung",
-      "description": "Das erste Betriebssystem entsteht, weil Menschen zu langsam sind, um Rechenzeit sinnvoll zu verteilen."
+      "name": "Großrechner und Stapel­verarbeitung",
+      "description": "Das erste Betriebssystem entsteht, weil Menschen zu langsam sind, um Rechenzeit sinnvoll zu verteilen.",
+      "visual": {
+        "paperLabel": "Endlospapier aus dem Drucker",
+        "printed": [
+          "GM-NAA I/O ..... 1956",
+          "",
+          "Davor lief genau ein Job.",
+          "Dann kam ein Mensch herein, setzte",
+          "die Maschine zurueck und legte den",
+          "naechsten Job ein.",
+          "",
+          "Rechenzeit war mehr wert als",
+          "Menschenzeit. Also musste das",
+          "Warten aufhoeren.",
+          "",
+          "Das Betriebssystem wurde geboren,",
+          "um Jobs ohne Menschen dazwischen",
+          "hintereinander auszufuehren.",
+          "",
+          "Gilt weithin als das erste",
+          "Betriebssystem ueberhaupt."
+        ]
+      }
     },
     "unix": {
       "name": "UNIX",
-      "description": "Grüner Phosphor, ein blinkender Cursor — und zum ersten Mal darf der Mensch direkt mit dem System sprechen."
+      "description": "Grüner Phosphor, ein blinkender Cursor — und zum ersten Mal darf der Mensch direkt mit dem System sprechen.",
+      "visual": {
+        "screenLabel": "Bildschirm eines Terminals",
+        "banner": "UNIX Time-Sharing System",
+        "loginLine": "login: ahmadreza",
+        "lines": [
+          "Mehrbenutzerfaehig. Multitasking.",
+          "In einer portablen Sprache geschrieben --",
+          "zum ersten Mal konnte ein Betriebssystem",
+          "zwischen Maschinen wandern.",
+          "",
+          "Kleine Programme, die je eine Sache tun,",
+          "ueber Pipes miteinander verbunden.",
+          "",
+          "Jeder Befehl, der heute in einem Terminal",
+          "getippt wird, stammt hiervon ab."
+        ],
+        "prompt": "$"
+      }
     },
     "dos": {
       "name": "IBM PC und MS-DOS",
-      "description": "Der Computer zieht ins Büro ein, und alles muss in 640 Kilobyte Arbeitsspeicher passen."
+      "description": "Der Computer zieht ins Büro ein, und alles muss in 640 Kilobyte Arbeitsspeicher passen.",
+      "visual": {
+        "screenLabel": "Bildschirm eines IBM PC",
+        "biosLine": "IBM Personal Computer",
+        "memoryOk": "640K OK",
+        "beepLabel": "BEEP",
+        "prompt": "C:\\>",
+        "dirCommand": "DIR",
+        "dirVolume": "Datentraeger in Laufwerk C: ist AHMADOS",
+        "dirRows": [
+          {
+            "name": "CV",
+            "ext": "PDF",
+            "size": "212.992",
+            "date": "15.09.26",
+            "time": "09:14"
+          },
+          {
+            "name": "TRIER",
+            "ext": "TXT",
+            "size": "1.024",
+            "date": "01.08.24",
+            "time": "08:00"
+          },
+          {
+            "name": "NETZWERK",
+            "ext": "CFG",
+            "size": "4.096",
+            "date": "12.03.26",
+            "time": "14:27"
+          },
+          {
+            "name": "LINUX",
+            "ext": "SH",
+            "size": "2.048",
+            "date": "03.11.25",
+            "time": "22:41"
+          },
+          {
+            "name": "TICKETS",
+            "ext": "DAT",
+            "size": "65.536",
+            "date": "14.09.26",
+            "time": "16:03"
+          },
+          {
+            "name": "DEUTSCH",
+            "ext": "LNG",
+            "size": "8.192",
+            "date": "01.01.20",
+            "time": "00:01"
+          },
+          {
+            "name": "FARSI",
+            "ext": "LNG",
+            "size": "8.192",
+            "date": "01.01.87",
+            "time": "00:01"
+          },
+          {
+            "name": "AHMADOS",
+            "ext": "SYS",
+            "size": "640.000",
+            "date": "15.09.26",
+            "time": "10:32"
+          }
+        ],
+        "dirFooter": "8 Datei(en)      942.080 Bytes",
+        "body": "Computer kommen auf die Schreibtische. Ein Programm zur Zeit, ein Bildschirm, alles getippt. 640 Kilobyte Arbeitsspeicher — von denen, entgegen dem berühmten Zitat, das niemand wirklich belegen kann, jeder wusste, dass sie nicht lange reichen würden."
+      }
     },
     "macintosh": {
       "name": "Macintosh",

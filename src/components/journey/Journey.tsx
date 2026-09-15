@@ -12,6 +12,8 @@ import { useThemeStore } from '@/store/theme-store';
 import { useUnlockStore } from '@/store/unlock-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { setActiveLenis } from '@/lib/lenis-controller';
+import { themeToCssVars } from '@/lib/apply-theme';
+import { getTheme } from '@/lib/themes';
 
 import { EraSection } from '@/components/journey/EraSection';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
@@ -21,6 +23,18 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 gsap.registerPlugin(ScrollTrigger);
 
 const sectionId = (eraIndex: number) => `era-${eraIndex}`;
+
+/**
+ * The first era's tokens as a stylesheet, rendered into the static HTML.
+ *
+ * The global bootstrap values are the `modern` desktop palette. Without this,
+ * Act 1's very first paint would be the cyan desktop, cross-fading to 1946 only
+ * after hydration. Values come from themes.ts, so nothing is hardcoded here;
+ * once the theme store writes inline properties on <html>, those win.
+ */
+const FIRST_ERA_CSS = `:root{${Object.entries(themeToCssVars(getTheme(eras[0].themeId)))
+  .map(([name, value]) => `${name}:${value}`)
+  .join(';')}}`;
 
 /**
  * Act 1 — the scroll-driven trip through seven eras of computing.
@@ -92,29 +106,99 @@ export function Journey() {
      * position instead makes the answer a pure function of where the page is,
      * so it is correct on load, after a resize and after a font swap alike.
      */
-    let bounds: Array<{ eraId: EraId; top: number; bottom: number }> = [];
+    interface EraBounds {
+      eraId: EraId;
+      section: HTMLElement;
+      top: number;
+      height: number;
+      /** Whether the stage is sticky at this viewport size (CSS decides). */
+      pinned: boolean;
+      startAt: number;
+      /** Last progress written, so unchanged frames cost no style write. */
+      lastProgress: number;
+    }
+
+    let bounds: EraBounds[] = [];
+    let activeEraId: EraId | null = null;
 
     const measure = () => {
       bounds = eras.flatMap((era) => {
-        const element = document.getElementById(sectionId(era.index));
-        if (!element) return [];
+        const section = document.getElementById(sectionId(era.index));
+        if (!section) return [];
+        const stage = section.querySelector<HTMLElement>('[data-era-stage]');
         return [
           {
             eraId: era.id,
-            top: element.offsetTop,
-            bottom: element.offsetTop + element.offsetHeight,
+            section,
+            top: section.offsetTop,
+            height: section.offsetHeight,
+            pinned: stage !== null && getComputedStyle(stage).position === 'sticky',
+            startAt: Number(section.dataset.startAt ?? '0'),
+            lastProgress: Number.NaN,
           },
         ];
       });
     };
 
+    /**
+     * Progress through one era, 0..1.
+     *
+     * Pinned: how far through the sticky travel the page is, which is exactly
+     * the span over which the stage stays on screen.
+     * In document flow (phones, short viewports, reduced motion): how far the
+     * section has arrived, reaching 1 once its top is near the top of the
+     * viewport - so scrubbed reveals complete as the era comes into view
+     * rather than after it has already scrolled half away.
+     */
+    const progressOf = (entry: EraBounds, scrollY: number, viewport: number) => {
+      const raw = entry.pinned
+        ? (scrollY - entry.top) / Math.max(1, entry.height - viewport)
+        : (scrollY + viewport - entry.top) / Math.max(1, viewport * 0.9);
+      return Math.min(1, Math.max(0, raw));
+    };
+
     const resolve = () => {
       if (bounds.length === 0) return;
-      const centre = window.scrollY + window.innerHeight / 2;
+      const scrollY = window.scrollY;
+      const viewport = window.innerHeight;
+
+      // The reference line an era must cross to own the theme.
+      // Pinned: 80% down the viewport. By the time the next stage slides in, the
+      // outgoing era has faded to its bare background (`.ao-era-exit`), so
+      // switching early re-tints nothing but that background - and the incoming
+      // era arrives already in its own colours. Without this the 1971 monitor
+      // slid in wearing the paper-white 1956 theme instead of arriving dark.
+      // In document flow nothing fades out, so the fair line is the centre.
+      const line = scrollY + viewport * (bounds[0].pinned ? 0.8 : 0.5);
+
       const hit =
-        bounds.find((entry) => centre >= entry.top && centre < entry.bottom) ??
-        (centre < bounds[0].top ? bounds[0] : bounds[bounds.length - 1]);
-      activate(hit.eraId);
+        bounds.find((entry) => line >= entry.top && line < entry.top + entry.height) ??
+        (line < bounds[0].top ? bounds[0] : bounds[bounds.length - 1]);
+
+      // Only a change of era touches the stores. Doing it every frame re-set
+      // zustand state 60 times a second, and the persisted unlock store wrote
+      // localStorage on each of those.
+      if (hit.eraId !== activeEraId) {
+        activeEraId = hit.eraId;
+        activate(hit.eraId);
+      }
+
+      for (const entry of bounds) {
+        const progress = progressOf(entry, scrollY, viewport);
+        const rounded = Math.round(progress * 1000) / 1000;
+        if (rounded !== entry.lastProgress) {
+          entry.lastProgress = rounded;
+          entry.section.style.setProperty('--era-progress', String(rounded));
+        }
+        // Set once, never cleared: a printout that has begun always finishes.
+        if (
+          entry.eraId === hit.eraId &&
+          progress >= entry.startAt &&
+          entry.section.dataset.started !== 'true'
+        ) {
+          entry.section.dataset.started = 'true';
+        }
+      }
     };
 
     const context = gsap.context(() => {
@@ -138,15 +222,33 @@ export function Journey() {
     resolve();
     const refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
 
+    // Web fonts swap in after first paint and change line heights - the teletype
+    // printout and the DOS listing both grow when their faces arrive. Every era
+    // bound is stale after that, so re-measure.
+    let cancelled = false;
+    void document.fonts.ready.then(() => {
+      if (!cancelled) ScrollTrigger.refresh();
+    });
+
     return () => {
+      cancelled = true;
       cancelAnimationFrame(refreshFrame);
       context.revert();
     };
   }, [markEraVisited, setActiveEra, setProgress, setTheme]);
 
+  /* --- reduced motion changes whether stages pin, so heights change ------ */
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(frame);
+  }, [reducedMotion]);
+
   return (
     <div ref={containerRef} className="ao-themed relative w-full">
-      <header className="ao-themed fixed top-4 start-4 z-[var(--ao-z-modal)]">
+      <style>{FIRST_ERA_CSS}</style>
+      {/* Phones: the switcher sits at the bottom so "Skip to Desktop" - the one
+          control a recruiter must always find - never shares its row. */}
+      <header className="ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
         <LanguageSwitcher />
       </header>
 

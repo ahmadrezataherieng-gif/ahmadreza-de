@@ -45,19 +45,147 @@
   "eras": {
     "eniac": {
       "name": "ENIAC and punch cards",
-      "description": "Computing without a screen: 18,000 tubes, lamps as the only output, and programs punched into cardboard."
+      "description": "Computing without a screen: 18,000 tubes, lamps as the only output, and programs punched into cardboard.",
+      "visual": {
+        "stats": [
+          {
+            "value": "27",
+            "label": "tonnes"
+          },
+          {
+            "value": "17,468",
+            "label": "vacuum tubes"
+          },
+          {
+            "value": "ca. 5,000",
+            "label": "additions per second"
+          }
+        ],
+        "body": "Programming meant physically rewiring the machine. No screen, no keyboard, no operating system — a room-sized calculator rebuilt by hand for every new problem.",
+        "panelLabel": "Indicator panel of vacuum-tube lamps",
+        "cardLabel": "IBM punch card, 80 columns",
+        "cardCaption": "Punched: {text}"
+      }
     },
     "batch": {
       "name": "Mainframes and batch processing",
-      "description": "The first operating system appears, because humans are far too slow to hand out machine time by hand."
+      "description": "The first operating system appears, because humans are far too slow to hand out machine time by hand.",
+      "visual": {
+        "paperLabel": "Continuous-feed paper from the printer",
+        "printed": [
+          "GM-NAA I/O ..... 1956",
+          "",
+          "Before it, exactly one job ran.",
+          "Then a human walked in, reset the",
+          "machine and loaded the next one.",
+          "",
+          "Computer time was worth more than",
+          "human time. So the waiting had to",
+          "stop.",
+          "",
+          "The operating system was born to",
+          "run jobs back to back with no",
+          "person in between.",
+          "",
+          "Widely considered the first",
+          "operating system."
+        ]
+      }
     },
     "unix": {
       "name": "UNIX",
-      "description": "Green phosphor, a blinking cursor — and for the first time a person can talk to the machine directly."
+      "description": "Green phosphor, a blinking cursor — and for the first time a person can talk to the machine directly.",
+      "visual": {
+        "screenLabel": "Screen of a terminal",
+        "banner": "UNIX Time-Sharing System",
+        "loginLine": "login: ahmadreza",
+        "lines": [
+          "Multi-user. Multitasking.",
+          "Written in a portable language --",
+          "for the first time an operating system",
+          "could move between machines.",
+          "",
+          "Small programs that each do one thing,",
+          "piped together.",
+          "",
+          "Every command typed in a terminal",
+          "today descends from this."
+        ],
+        "prompt": "$"
+      }
     },
     "dos": {
       "name": "IBM PC and MS-DOS",
-      "description": "The computer moves into the office, and everything has to fit into 640 kilobytes of memory."
+      "description": "The computer moves into the office, and everything has to fit into 640 kilobytes of memory.",
+      "visual": {
+        "screenLabel": "Screen of an IBM PC",
+        "biosLine": "IBM Personal Computer",
+        "memoryOk": "640K OK",
+        "beepLabel": "BEEP",
+        "prompt": "C:\\>",
+        "dirCommand": "DIR",
+        "dirVolume": "Volume in drive C is AHMADOS",
+        "dirRows": [
+          {
+            "name": "CV",
+            "ext": "PDF",
+            "size": "212.992",
+            "date": "15.09.26",
+            "time": "09:14"
+          },
+          {
+            "name": "TRIER",
+            "ext": "TXT",
+            "size": "1.024",
+            "date": "01.08.24",
+            "time": "08:00"
+          },
+          {
+            "name": "NETZWERK",
+            "ext": "CFG",
+            "size": "4.096",
+            "date": "12.03.26",
+            "time": "14:27"
+          },
+          {
+            "name": "LINUX",
+            "ext": "SH",
+            "size": "2.048",
+            "date": "03.11.25",
+            "time": "22:41"
+          },
+          {
+            "name": "TICKETS",
+            "ext": "DAT",
+            "size": "65.536",
+            "date": "14.09.26",
+            "time": "16:03"
+          },
+          {
+            "name": "DEUTSCH",
+            "ext": "LNG",
+            "size": "8.192",
+            "date": "01.01.20",
+            "time": "00:01"
+          },
+          {
+            "name": "FARSI",
+            "ext": "LNG",
+            "size": "8.192",
+            "date": "01.01.87",
+            "time": "00:01"
+          },
+          {
+            "name": "AHMADOS",
+            "ext": "SYS",
+            "size": "640.000",
+            "date": "15.09.26",
+            "time": "10:32"
+          }
+        ],
+        "dirFooter": "8 File(s)        942,080 Bytes",
+        "body": "Computers arrive on desks. One program at a time, one screen, everything typed. 640 kilobytes of memory — which, contrary to the famous quote nobody can actually source, everyone knew would not be enough for long."
+      }
     },
     "macintosh": {
       "name": "Macintosh",

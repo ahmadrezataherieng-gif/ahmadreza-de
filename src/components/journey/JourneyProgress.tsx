@@ -18,7 +18,7 @@ export function JourneyProgress({ sectionId }: { sectionId: (eraIndex: number) =
   return (
     <nav
       aria-label={t('progressLabel')}
-      className="ao-themed fixed top-1/2 end-4 z-[var(--ao-z-taskbar)] hidden -translate-y-1/2 flex-col items-end gap-3 md:flex"
+      className="ao-themed ao-chrome-backdrop fixed top-1/2 end-4 z-[var(--ao-z-taskbar)] hidden -translate-y-1/2 flex-col items-end gap-3 rounded-control border border-edge px-2.5 py-3 md:flex"
     >
       <span className="font-mono text-[10px] tracking-widest text-muted">
         {t('eraOf', { current: activeIndex, total: eras.length })}

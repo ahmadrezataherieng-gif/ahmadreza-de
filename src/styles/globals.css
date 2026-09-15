@@ -1,5 +1,22 @@
 @import 'tailwindcss';
 
+/* --------------------------------------------------------------------------
+   Registered custom properties.
+
+   `--era-progress` is written once per frame by the journey resolver and is
+   then read inside calc() to drive every scrubbed era visual. Registering it as
+   a real <number> rather than leaving it an untyped string is what makes those
+   calc() expressions valid in `transform`, `opacity` and `filter`, and it means
+   the value interpolates instead of snapping if it is ever transitioned.
+
+   It inherits, so an era section sets it once and its whole subtree can read it.
+   -------------------------------------------------------------------------- */
+@property --era-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 /* ==========================================================================
    AhmadOS design tokens
    --------------------------------------------------------------------------
@@ -255,4 +272,507 @@ html.lenis body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Persian has no glyphs in the retro Latin faces. Put Vazirmatn into every stack
+   for that locale, so era fonts fall back to it instead of to a system font.
+   The theme engine's --ao-font-display/body/mono reference these, so they pick
+   the change up without the theme knowing about locales. */
+html[lang^='fa'] {
+  --ao-font-jetbrains: 'JetBrains Mono', 'Vazirmatn Variable', monospace;
+  --ao-font-inter: 'Vazirmatn Variable', 'Inter', system-ui, sans-serif;
+  --ao-font-vt323: 'VT323', 'Vazirmatn Variable', monospace;
+  --ao-font-pixel: 'Press Start 2P', 'Vazirmatn Variable', monospace;
+}
+
+/* ==========================================================================
+   Act 1 era visuals (Phase 3)
+
+   Everything here animates transform, opacity or filter only. Nothing in this
+   block triggers layout, because it runs on every frame of a scroll.
+
+   Scrubbed motion is driven by --era-progress inside calc(). One-shot motion
+   (printing, the POST counter) is a paused CSS animation that the resolver starts
+   by setting data-started="true" on the section, once, and never unsets - so a
+   printout that has begun always finishes. No JS timers anywhere.
+   ========================================================================== */
+
+/* --- layout: document flow by default, pinned where there is room --------- */
+
+/* Default: each era is an ordinary block at least one viewport tall. This is
+   what phones and reduced-motion visitors get - nothing is clipped, and every
+   era is a fully composed frame. */
+.ao-era-section {
+  position: relative;
+  min-height: 100dvh;
+}
+
+.ao-era-stage {
+  position: relative;
+  min-height: 100dvh;
+}
+
+/* Wide, tall viewports with motion allowed: the tall outer section provides the
+   scroll distance and the sticky inner stage is what the visitor sees.
+
+   CSS sticky rather than ScrollTrigger's `pin`: pinning inserts a pin-spacer
+   element, which would invalidate the offsetTop measurements the era resolver
+   depends on (DECISIONS.md, entry 9). */
+@media (min-width: 768px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .ao-era-section {
+    height: calc(var(--era-length, 2) * 100dvh);
+  }
+
+  .ao-era-stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* An era dims out over the last stretch of its pin, so the next one reads as
+     replacing it rather than cutting in. Entrances are each era's own job. */
+  .ao-era-exit {
+    opacity: clamp(0, calc((1 - var(--era-progress)) * 7 + 0.05), 1);
+  }
+
+  /* The punch card is already feeding in on arrival and seats fully a quarter of
+     the way through the pin. Pinned layouts only: in document flow it would
+     just render offset until hydration. */
+  .ao-card-slide {
+    --slide-from: 14%;
+    transform: translateX(
+      calc((1 - clamp(0, var(--era-progress) * 4, 1)) * var(--slide-from))
+    );
+    opacity: clamp(0, calc(0.6 + var(--era-progress) * 3), 1);
+  }
+
+  /* It feeds in from the far edge of the reading direction. In RTL a positive
+     translateX would push it across the text column instead. The card element
+     itself is dir="ltr", so the page direction is read from an ancestor. */
+  [dir='rtl'] .ao-card-slide {
+    --slide-from: -14%;
+  }
+
+  /* The paper feeds upward with the scroll, then accelerates off the top in the
+     last fifth of the pin to reveal the screen that replaces it. Pinned layouts
+     only: in document flow the page itself already moves the paper. */
+  .ao-paper-feed {
+    transform: translateY(
+      calc(
+        24% - var(--era-progress) * 44% -
+          max(0%, (var(--era-progress) - 0.8) * 420%)
+      )
+    );
+  }
+}
+
+/* --- 1946: brushed metal and vacuum-tube lamps ---------------------------- */
+
+.ao-metal-grain {
+  background-image: repeating-linear-gradient(
+    92deg,
+    color-mix(in srgb, var(--ao-color-surface-elevated) 55%, transparent) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+.ao-metal-seams {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ao-color-border) 35%, transparent) 0 1px,
+    transparent 1px 92px
+  );
+}
+
+.ao-metal-pool {
+  background: radial-gradient(
+    ellipse 70% 55% at 72% 38%,
+    color-mix(in srgb, var(--ao-color-glow) 16%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes ao-lamp {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: scale(0.82);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ao-lamp {
+  border-radius: 9999px;
+  background: var(--ao-color-accent);
+  box-shadow:
+    0 0 4px var(--ao-color-glow),
+    0 0 10px var(--ao-color-glow);
+  /* Per-lamp duration and delay come from inline custom properties, so 120
+     lamps pulse out of phase without a single JS timer. */
+  animation: ao-lamp var(--lamp-duration, 2s) ease-in-out var(--lamp-delay, 0s)
+    infinite;
+}
+
+/* Activity intensifies as the computation runs: one composited filter on the
+   whole grid, not 120 property writes. */
+.ao-lamp-grid {
+  filter: brightness(calc(0.55 + var(--era-progress) * 0.85));
+}
+
+/* --- 1956: continuous-feed paper ------------------------------------------ */
+
+.ao-paper {
+  background-color: var(--ao-color-surface);
+  /* Paper grain: two offset dot fields in the ink colour at very low alpha. */
+  background-image:
+    radial-gradient(
+      color-mix(in srgb, var(--ao-color-text) 5%, transparent) 0.6px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      color-mix(in srgb, var(--ao-color-text) 4%, transparent) 0.5px,
+      transparent 0.6px
+    );
+  background-size:
+    4px 4px,
+    7px 7px;
+  background-position:
+    0 0,
+    2px 3px;
+}
+
+/* Faint alternating green bars, from the theme's success token rather than a
+   hardcoded green. Bar height matches two printed lines. */
+.ao-greenbar {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ao-color-success) 11%, transparent) 0 3em,
+    transparent 3em 6em
+  );
+}
+
+/* Tractor-feed sprocket holes: the page colour showing through the strip. */
+.ao-sprockets {
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    var(--ao-color-background) 0 3.5px,
+    color-mix(in srgb, var(--ao-color-border) 70%, transparent) 3.6px 4.4px,
+    transparent 4.5px
+  );
+  background-size: 100% 22px;
+}
+
+
+/* --- shared: mechanical printing ------------------------------------------ */
+
+@keyframes ao-strike {
+  from {
+    opacity: 0;
+    transform: translate(var(--strike-jitter, 0), -0.12em);
+  }
+  to {
+    opacity: var(--strike-ink, 1);
+    transform: translate(var(--strike-jitter, 0), 0);
+  }
+}
+
+/* Each glyph (a character, or a whole word for scripts that join) is its own
+   span with a staggered delay. Uneven ink and horizontal jitter are per-glyph
+   custom properties - that is what stops it reading as a smooth modern typing
+   animation. Stepped timing makes each strike land rather than fade.
+
+   `jump-none`, not `end`: a finished animation's progress can round to
+   0.9999999999999953 for some delays, and steps(2, end) maps that to the second
+   step - leaving the glyph frozen at half opacity forever. jump-none makes the
+   final state one of the steps, so rounding cannot fall short of it. */
+.ao-type > span {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  animation: ao-strike 80ms steps(2, jump-none) var(--strike-delay, 0s) both;
+  animation-play-state: paused;
+}
+
+[data-started='true'] .ao-type > span {
+  animation-play-state: running;
+}
+
+.ao-type > span[data-overstruck='true'] {
+  position: relative;
+}
+
+/* An occasional glyph struck twice, slightly off-register. */
+.ao-type > span[data-overstruck='true']::after {
+  content: attr(data-glyph);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  transform: translate(0.055em, 0.02em);
+  opacity: 0.5;
+}
+
+/* --- 1971: CRT ------------------------------------------------------------ */
+
+/* The monitor itself: a rounded bezel around a dark glass. */
+.ao-crt-bezel {
+  background: color-mix(in srgb, var(--ao-color-surface-elevated) 80%, var(--ao-color-background));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--ao-color-border) 60%, transparent),
+    0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.ao-crt-glass {
+  background: var(--ao-color-background);
+  box-shadow: inset 0 0 calc(40px + var(--ao-fx-phosphor) * 60px)
+    color-mix(in srgb, var(--ao-color-glow) 14%, transparent);
+}
+
+/* Power-on, cut out of --era-progress with clamp(), so the whole sequence is
+   scrubbed by scroll position and holds no state of its own:
+     0.00-0.06  darkness
+     0.06-0.16  a horizontal line expands vertically into a full screen
+     0.14-0.30  the phosphor warms up */
+.ao-crt-beam {
+  background: color-mix(in srgb, var(--ao-color-glow) 38%, var(--ao-color-background));
+  box-shadow: 0 0 24px var(--ao-color-glow);
+  transform: scaleY(clamp(0.006, calc((var(--era-progress) - 0.06) * 10), 1));
+  /* Appears as a bright line, stays lit while it opens, then gives way to the
+     warming phosphor. */
+  opacity: clamp(
+    0,
+    min(calc((var(--era-progress) - 0.03) * 30), calc(1 - (var(--era-progress) - 0.16) * 7)),
+    1
+  );
+}
+
+.ao-crt-screen {
+  opacity: clamp(0, calc((var(--era-progress) - 0.14) * 7), 1);
+  filter: brightness(clamp(0.3, calc(0.3 + (var(--era-progress) - 0.14) * 5), 1));
+}
+
+/* Scanlines, bloom, barrel curvature and corner vignetting, all tuned off the
+   shared --ao-fx-* tokens so the Time Machine re-skins them for free. */
+.ao-crt-scanlines {
+  opacity: calc(var(--ao-fx-scanlines) * 0.55);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+.ao-crt-curve {
+  background: radial-gradient(
+    ellipse 115% 125% at center,
+    transparent 0 60%,
+    rgba(0, 0, 0, calc(0.25 + var(--ao-fx-curvature) * 0.7)) 100%
+  );
+}
+
+.ao-crt-bloom {
+  text-shadow:
+    0 0 calc(var(--ao-fx-phosphor) * 4px) var(--ao-color-glow),
+    0 0 calc(var(--ao-fx-phosphor) * 14px)
+      color-mix(in srgb, var(--ao-color-glow) 55%, transparent);
+}
+
+@keyframes ao-crt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 0.975;
+  }
+  48% {
+    opacity: 0.94;
+  }
+  49% {
+    opacity: 0.99;
+  }
+  72% {
+    opacity: 0.965;
+  }
+}
+
+.ao-crt-flicker {
+  animation: ao-crt-flicker 7s linear infinite;
+}
+
+@keyframes ao-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.ao-cursor {
+  animation: ao-cursor-blink 1.06s steps(1, end) infinite;
+}
+
+/* A prompt only appears once the text above it has printed. */
+.ao-late {
+  opacity: 0;
+}
+
+[data-started='true'] .ao-late {
+  animation: ao-cursor-reveal 1ms linear var(--late-delay, 0s) both;
+}
+
+/* The cursor only appears once the text above it has printed. */
+.ao-cursor-late {
+  opacity: 0;
+}
+
+[data-started='true'] .ao-cursor-late {
+  animation:
+    ao-cursor-reveal 1ms linear var(--cursor-delay, 0s) both,
+    ao-cursor-blink 1.06s steps(1, end) var(--cursor-delay, 0s) infinite;
+}
+
+@keyframes ao-cursor-reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- 1981: IBM PC POST ---------------------------------------------------- */
+
+/* The memory counter is a column of values in a one-line window, stepped
+   upward. steps() on a transform gives a genuine tick; a continuous translate
+   would read as a scroll. */
+@keyframes ao-post-count {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--post-steps) * -1lh));
+  }
+}
+
+/* --post-frames is --post-steps + 1: with jump-none every value, first and last
+   included, is a frame - so float rounding at the end cannot stop the count one
+   short of 640K. */
+.ao-post-counter {
+  animation: ao-post-count 1.5s steps(var(--post-frames), jump-none) 0.3s both;
+  animation-play-state: paused;
+}
+
+[data-started='true'] .ao-post-counter {
+  animation-play-state: running;
+}
+
+@keyframes ao-beep {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ao-beep {
+  opacity: 0;
+  animation: ao-beep 380ms steps(3, end) 1.9s both;
+  animation-play-state: paused;
+}
+
+[data-started='true'] .ao-beep {
+  animation-play-state: running;
+}
+
+/* Pixel geometry authored at 1x and scaled by integer factors only. */
+.ao-pixelated {
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+}
+
+/* --- journey chrome ------------------------------------------------------- */
+
+/* Fixed controls sit over every era, including the paper-white 1956 one, so
+   they carry their own backdrop instead of trusting the page behind them. */
+.ao-chrome-backdrop {
+  background: color-mix(in srgb, var(--ao-color-background) 82%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ==========================================================================
+   Reduced motion: a static, fully composed frame of every era.
+
+   Not "the animation, faster". Every reveal resolves to its finished state and
+   all text is present. The pinning media query above already excludes reduced
+   motion, so the stages are ordinary blocks here.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ao-type > span {
+    opacity: var(--strike-ink, 1);
+    transform: none;
+    animation: none;
+  }
+
+  .ao-type > span[data-overstruck='true']::after {
+    content: none;
+  }
+
+  .ao-lamp {
+    animation: none;
+    opacity: 0.85;
+    transform: none;
+  }
+
+  .ao-lamp-grid {
+    filter: none;
+  }
+
+  .ao-crt-beam {
+    opacity: 0;
+  }
+
+  .ao-crt-screen {
+    opacity: 1;
+    filter: none;
+  }
+
+  .ao-crt-flicker,
+  .ao-cursor {
+    animation: none;
+  }
+
+  .ao-late,
+  [data-started='true'] .ao-late,
+  .ao-cursor-late,
+  [data-started='true'] .ao-cursor-late {
+    animation: none;
+    opacity: 1;
+  }
+
+  .ao-post-counter,
+  [data-started='true'] .ao-post-counter {
+    animation: none;
+    /* Land on the final value, not the first. */
+    transform: translateY(calc(var(--post-steps) * -1lh));
+  }
+
+  .ao-beep,
+  [data-started='true'] .ao-beep {
+    animation: none;
+    opacity: 1;
+  }
 }

@@ -20,7 +20,7 @@ export function SkipToDesktop({ onSkip }: { onSkip?: () => void }) {
   };
 
   return (
-    <div className="ao-themed fixed top-4 end-4 z-[var(--ao-z-modal)]">
+    <div className="ao-themed ao-chrome-backdrop fixed top-4 end-4 z-[var(--ao-z-modal)] rounded-control">
       <Button variant="ghost" size="sm" onClick={handleClick}>
         {t('skipToDesktop')}
       </Button>
