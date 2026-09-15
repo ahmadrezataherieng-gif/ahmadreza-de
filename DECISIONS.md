@@ -386,3 +386,161 @@ screen was always lit.
   (`Stapel­verarbeitung`). CSS `hyphens: auto` depends on a hyphenation
   dictionary that browsers do not all ship, and without one the word broke
   mid-word with no hyphen.
+
+---
+
+## 21. Pixel-font strings are checked against the font's cmap, not its CSS
+
+**Decision:** `scripts/check-pixel-font.mjs` (`npm run check:pixel-font`) reads
+the Press Start 2P WOFF's `cmap` table with `node:zlib` and fails if any message
+key rendered in that face uses a character without a glyph. Persian is never set
+in the pixel face: for `fa`, `--ao-font-pixel` resolves to Vazirmatn first.
+
+**Why:** a CSS `unicode-range` only says which code points a file is *served*
+for. U+2011 sat inside the declared range, had no glyph, and rendered as a stray
+fallback in Phase 3. The script confirmed that finding (U+2011: no glyph) and
+also that arrows, check marks and block characters are missing - which is why
+no pixel-font copy uses them. When adding a pixel-font key, add it to
+`PIXEL_KEYS` in the script. If a character is missing, change the copy.
+
+---
+
+## 22. One set of scroll cues for every UI state change
+
+**Decision:** `.ao-cue` shows an element between `--on` and `--off` (era
+progress) with a steep 40x ramp. `.ao-path` moves a pointer along three straight
+segments, each over its own progress window, with unitless coordinates
+multiplied by `--ux`/`--uy`.
+
+**Why:** menus opening, items highlighting, dialog lines appearing and log
+lines typing are all "this is visible from here to there". Encoding that once
+kept eras 5-7 free of bespoke keyframes. The unit multiplier lets one rule drive
+an SVG pointer (user units, 1984) and an HTML pointer (container units, 1995).
+
+---
+
+## 23. Reduced motion pins `--era-progress` to 1 for Phase 4 stages
+
+**Decision:** Phase 4 stages carry `.ao-final-frame`. Under
+`prefers-reduced-motion: reduce`, that class sets `--era-progress: 1` on the
+stage, overriding the value the resolver writes on the section. Elements that
+are transient in the animation but carry text the static frame must show - the
+1984 pull-down menu, the 1995 start menu and its highlighted item, the
+Convergence log - opt back in with `.ao-rm-show`.
+
+**Why:** every scrubbed element is already a function of `--era-progress`, so
+one declaration resolves a whole stage to its finished frame. The alternative -
+one reduced-motion override per effect, as in Phase 3 - scales badly and is
+easy to forget. Verified in headless Chrome with the media query emulated: zero
+invisible text across eras 5-7 and the Convergence in de, en and fa.
+
+---
+
+## 24. The 1984 screen is SVG pixel art built from ASCII bitmaps
+
+**Decision:** icons and the pointer are ASCII bitmaps in `src/lib/pixel-art.ts`.
+`bitmapPath()` merges horizontal runs into one `<path>` per colour. The screen is
+a 320x214 grid drawn at exactly 320px or 640px wide. All shading is SVG
+patterns (a 2x2 dither, title-bar stripes). There is no grey.
+
+**Why:** readable, diffable pixel art; one short path per icon instead of up to
+256 rects; integer scaling only, so pixels stay square. The SVG root carries
+`direction="ltr"`. Inherited `rtl` on the Persian page makes every label's `x`
+its right edge, and the menu labels spilled out of their boxes.
+
+---
+
+## 25. The 1995 scene is laid out in container-query units
+
+**Decision:** on wide screens `.ao-w95-scene` is a size container. Windows are
+positioned and sized in `cqw`/`cqh`, text sizes are `--w95-*` variables in
+`cqh`, and the pointer path is in the same units. A portrait container query
+re-anchors the windows for tablets. On phones the same markup simply stacks.
+
+**Why:** the composition has to hold from a 768px portrait tablet to a 4K
+monitor, and the pointer has to land on real elements at every size. Viewport
+units would break inside the padded stage; pixels would break everywhere. The
+`--w95-*` variables are declared on descendants, not on the container itself -
+container units on the container resolve against *its* ancestor, not itself.
+
+Bevels stay static `box-shadow` stacks from the theme. The pressed Start button
+is a second, already-sunken layer whose opacity is scrubbed.
+
+---
+
+## 26. The Convergence reuses era components under scoped themes
+
+**Decision:** the seven chips render real pieces of the era components (lamps,
+paper, `CrtMonitor`, `MacScreen`, `W95Window`, `Sparkline`). Each keeps its own
+era's palette via `[data-theme-scope="eraNNNN"]` rules, generated from
+`themeToCssVars()` into a `<style>` block.
+
+**Why:** the brief asked for recognisable elements, not new art, and it is
+cheaper. The page is in the `modern` theme during the Convergence, so without
+scoping every chip would have rendered in modern colours. This is the theme
+engine applied to a subtree - exactly what the Phase 9 Time Machine needs.
+
+Chips are small subsets on purpose. Reusing whole era components would have
+duplicated ~1,100 printed-glyph spans and blown the HTML budget. `MacScreen` and
+the punch card use `useId()` for SVG pattern ids, because the same pattern would
+otherwise be defined twice on one page.
+
+Positions are container units over one progress value: chips travel from a ring
+to dock slots with a smoothstep, and each boot-log line reveals as its chip
+docks. Landscape and portrait coordinate sets swap via a container query. No
+GSAP timeline.
+
+---
+
+## 27. The Convergence pins at every width
+
+**Decision:** unlike the eras, the Convergence section is tall and its stage
+sticky at all viewport widths whenever motion is allowed.
+
+**Why:** in document flow its progress would reach 1 as it arrived, and a phone
+visitor would only ever see the end state. Its content is designed to fit one
+viewport even at 380px (log on top, chips below), so pinning costs nothing there.
+
+---
+
+## 28. Journey completion is recorded at the empty desktop, or at the page end
+
+**Decision:** the resolver calls `completeJourney()` once - when the
+Convergence's progress reaches 0.98, or when the page is scrolled to its end.
+
+**Why:** reaching the empty desktop is finishing the journey, just as Skip to
+Desktop is, and Phase 6 needs that flag for returning visitors. The page-end
+condition exists because in reduced-motion document flow on a phone, the last
+section's progress stopped at 0.84 at the bottom of the page.
+
+---
+
+## 29. Bidi rules learned in Phase 4
+
+- Use `:dir(rtl)`, not `[dir='rtl'] .x`, for anything inside a block that pins
+  `dir="ltr"`. The attribute selector matches the page's rtl through the pinned
+  block, so the Convergence log's typing cover would have wiped the wrong way.
+- Wrap Persian runs inside LTR machine output in `<bdi>`. Otherwise trailing
+  punctuation ("...") lands at the wrong end of the line.
+- Positions that must avoid the progress rail flip with direction. In RTL the
+  rail is on the left, so the Convergence log moves right.
+
+---
+
+## 30. Other traps found while verifying Phase 4
+
+- **Never put a CSS opacity animation on an element that also has an opacity
+  attribute.** The breathing halo in the Cloud map overrode its 0.12 opacity
+  and became a bright blob. Put the resting opacity on a wrapper.
+- **`truncate` sets `white-space: nowrap`,** which collapses aligned terminal
+  columns even inside a `pre` parent. Use `overflow-hidden text-ellipsis`.
+- **tailwind-merge only replaces what the override names.** A `titleClassName`
+  without an `lg:` size left the shared `lg:text-4xl` in place, and "Macintosh"
+  broke mid-word in the pixel face.
+- **The fixed chrome's backdrop uses the surface token, not the background
+  token.** On the 1995 teal desktop, a background-tinted backdrop left muted text
+  at ~2.5:1.
+- **Anything that must avoid the rail ends at 84cqw in landscape and 80cqw in
+  portrait.**
+- **A year that is really "today" is a message** (`eras.cloud.yearLabel`,
+  `Era.yearLabelKey`), not a hardcoded year that ages.

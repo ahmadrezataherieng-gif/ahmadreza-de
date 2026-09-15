@@ -190,15 +190,138 @@
     },
     "macintosh": {
       "name": "Macintosh",
-      "description": "Ein Pfeil auf dem Bildschirm verändert alles: Fenster, Symbole, Menüs und die Maus in der Hand."
+      "description": "Ein Pfeil auf dem Bildschirm verändert alles: Fenster, Symbole, Menüs und die Maus in der Hand.",
+      "visual": {
+        "body": "1984, der Apple Macintosh. Der erste Massencomputer mit Maus und grafischer Oberfläche. Statt Befehle auswendig zu lernen, konnte man etwas sehen und darauf zeigen. Fenster, Symbole, Menüs, Zeiger — das Vokabular, das jede Oberfläche bis heute spricht.",
+        "screenLabel": "Bildschirm eines Macintosh mit Menüleiste, Fenster und Mauszeiger",
+        "menu": [
+          "Ablage",
+          "Bearbeiten",
+          "Spezial"
+        ],
+        "menuItems": [
+          "Neu",
+          "Öffnen",
+          "Schließen"
+        ],
+        "windowTitle": "Portfolio",
+        "icons": [
+          "Vita",
+          "Projekte",
+          "Netzwerk"
+        ],
+        "desktopIcons": [
+          "System",
+          "Papierkorb"
+        ],
+        "pointerCaption": "Zum ersten Mal: zeigen statt tippen."
+      }
     },
     "win95": {
       "name": "Windows 95 und Einwahl",
-      "description": "Startmenü, Taskleiste und ein Modem, das sich kreischend ins Internet verbindet."
+      "description": "Startmenü, Taskleiste und ein Modem, das sich kreischend ins Internet verbindet.",
+      "visual": {
+        "body": "1995, Windows 95 und das Modem. Taskleiste und Startmenü — ein Ort, an dem man alles auf dem Rechner findet. Und das Internet kommt in die Wohnungen: 56 Kilobit pro Sekunde, die Telefonleitung besetzt, die Verbindung hörbar. Der Computer war keine einsame Maschine mehr, sondern ein Knoten in einem Netz.",
+        "screenLabel": "Windows-95-Desktop, der sich per Modem mit dem Internet verbindet",
+        "infoTitle": "Info.txt - Editor",
+        "start": "Start",
+        "banner": "AhmadOS 95",
+        "startItems": [
+          "Programme",
+          "Dokumente",
+          "Einstellungen",
+          "DFÜ-Netzwerk",
+          "Beenden..."
+        ],
+        "clock": "10:32",
+        "dialTitle": "Verbindung mit Internet",
+        "dialSteps": [
+          "Modem wird initialisiert...",
+          "Wählt 0651 19411...",
+          "Überprüfe Benutzername und Kennwort...",
+          "Verbunden mit 56.000 bps"
+        ],
+        "hops": [
+          "Dieser PC",
+          "Modem",
+          "Telefonnetz",
+          "Provider",
+          "Internet"
+        ],
+        "nodeCaption": "Aus einer einzelnen Maschine wird ein Knoten im Netz.",
+        "trayLabel": "Netzwerkstatus",
+        "browserTitle": "Browser - Willkommen",
+        "address": "http://www.ahmadreza.de/",
+        "pageHeading": "Willkommen auf meiner Homepage!",
+        "pageLines": [
+          "Diese Seite ist im Aufbau.",
+          "Links: Lebenslauf | Projekte | Kontakt",
+          "Zuletzt aktualisiert: 24.08.1995"
+        ],
+        "counter": "Besucher: 000042",
+        "status": "Dokument: Übermittelt"
+      }
     },
     "cloud": {
       "name": "Cloud, Container und KI",
-      "description": "Der Rechner ist überall und nirgends: Dashboards, Container und Regeln, die den Weg der Pakete bestimmen."
+      "description": "Der Rechner ist überall und nirgends: Dashboards, Container und Regeln, die den Weg der Pakete bestimmen.",
+      "visual": {
+        "body": "Heute. Der Computer ist keine einzelne Maschine mehr. Code läuft in Containern auf Servern, die niemand je sieht, in vielen Rechenzentren zugleich. Und zum ersten Mal lässt sich ein Problem in gewöhnlicher Sprache beschreiben — und beantworten. Achtzig Jahre vom Umstecken von Kabeln bis hierher.",
+        "dashboardLabel": "Dashboard einer verteilten Anwendung mit Containern, Deployment, Metriken und Regionen",
+        "containersTitle": "Container",
+        "containers": [
+          {
+            "name": "portfolio-web",
+            "replicas": "3/3"
+          },
+          {
+            "name": "auth-service",
+            "replicas": "2/2"
+          },
+          {
+            "name": "metrics",
+            "replicas": "2/2"
+          },
+          {
+            "name": "ai-proxy",
+            "replicas": "1/1"
+          }
+        ],
+        "running": "Running",
+        "pending": "Pending",
+        "deployTitle": "Deployment",
+        "deploySteps": [
+          "Build",
+          "Test",
+          "Deploy"
+        ],
+        "deployRef": "main @ ea736fc",
+        "deployDone": "Live in 4 Regionen",
+        "metricsTitle": "Anfragen pro Sekunde",
+        "metricLabel": "p95 Latenz",
+        "metricValue": "42 ms",
+        "regionsTitle": "Regionen",
+        "regions": [
+          "Frankfurt",
+          "Amsterdam",
+          "Virginia",
+          "Singapur"
+        ],
+        "terminalTitle": "Terminal",
+        "terminal": [
+          "$ kubectl get pods -A",
+          "portfolio-web-7d9f   Running   fra",
+          "portfolio-web-2b41   Running   ams",
+          "ai-proxy-5c2b        Running   iad"
+        ],
+        "promptLabel": "Frage an die KI",
+        "prompt": "Was ist ein Container?",
+        "response": [
+          "Ein Container bündelt ein Programm mit allem, was es zum Laufen braucht.",
+          "Deshalb läuft er überall gleich: auf deinem Laptop und in jedem Rechenzentrum."
+        ]
+      },
+      "yearLabel": "Heute"
     }
   },
   "ui": {
@@ -215,5 +338,41 @@
     "de": "Deutsch",
     "en": "English",
     "fa": "فارسی"
+  },
+  "convergence": {
+    "title": "Die Konvergenz: achtzig Jahre werden zu AhmadOS",
+    "intro": "Kompiliere 80 Jahre Computergeschichte...",
+    "components": [
+      {
+        "label": "Lochkarten",
+        "status": "OK"
+      },
+      {
+        "label": "Stapelverarbeitung",
+        "status": "OK"
+      },
+      {
+        "label": "UNIX-Shell",
+        "status": "OK"
+      },
+      {
+        "label": "Kommandozeile",
+        "status": "OK"
+      },
+      {
+        "label": "Grafische Fenster",
+        "status": "OK"
+      },
+      {
+        "label": "Netzwerk-Stack",
+        "status": "OK"
+      },
+      {
+        "label": "Cloud und KI",
+        "status": "OK"
+      }
+    ],
+    "welcome": "Willkommen bei AhmadOS v1.0",
+    "desktopLabel": "Leerer AhmadOS-Desktop"
   }
 }

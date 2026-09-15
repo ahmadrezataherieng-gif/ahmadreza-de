@@ -2,7 +2,6 @@
 
 import type { CSSProperties } from 'react';
 import type { Era } from '@/content/eras';
-import { EraPlaceholder } from '@/components/journey/eras/EraPlaceholder';
 import { eraStaging } from '@/components/journey/eras/registry';
 
 interface EraSectionProps {
@@ -36,7 +35,7 @@ export function EraSection({ era, sectionId }: EraSectionProps) {
       style={{ '--era-length': staging.length } as CSSProperties}
     >
       <div className="ao-era-stage w-full" data-era-stage="">
-        {Visual ? <Visual headingId={headingId} /> : <EraPlaceholder era={era} headingId={headingId} />}
+        <Visual headingId={headingId} />
       </div>
     </section>
   );

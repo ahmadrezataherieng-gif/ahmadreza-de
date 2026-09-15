@@ -13,9 +13,10 @@ import { useUnlockStore } from '@/store/unlock-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { setActiveLenis } from '@/lib/lenis-controller';
 import { themeToCssVars } from '@/lib/apply-theme';
-import { getTheme } from '@/lib/themes';
+import { getTheme, type ThemeId } from '@/lib/themes';
 
 import { EraSection } from '@/components/journey/EraSection';
+import { CONVERGENCE_ID, Convergence } from '@/components/journey/Convergence';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
@@ -57,6 +58,7 @@ export function Journey() {
   const setProgress = useJourneyStore((state) => state.setProgress);
   const setTheme = useThemeStore((state) => state.setTheme);
   const markEraVisited = useUnlockStore((state) => state.markEraVisited);
+  const completeJourney = useUnlockStore((state) => state.completeJourney);
 
   /* --- smooth scrolling ------------------------------------------------- */
   useEffect(() => {
@@ -88,12 +90,12 @@ export function Journey() {
     const container = containerRef.current;
     if (!container) return;
 
-    const activate = (eraId: EraId) => {
-      const era = eras.find((candidate) => candidate.id === eraId);
-      if (!era) return;
-      setActiveEra(era.id);
-      setTheme(era.themeId);
-      markEraVisited(era.id);
+    const activate = (entry: EraBounds) => {
+      setTheme(entry.themeId);
+      // The Convergence is not an era: the rail stays on the last one.
+      if (entry.eraId === null) return;
+      setActiveEra(entry.eraId);
+      markEraVisited(entry.eraId);
     };
 
     /*
@@ -107,7 +109,11 @@ export function Journey() {
      * so it is correct on load, after a resize and after a font swap alike.
      */
     interface EraBounds {
-      eraId: EraId;
+      /** Stable key for change detection: an era id, or the Convergence. */
+      key: string;
+      /** Null for the Convergence, which owns a theme but is not an era. */
+      eraId: EraId | null;
+      themeId: ThemeId;
       section: HTMLElement;
       top: number;
       height: number;
@@ -119,25 +125,38 @@ export function Journey() {
     }
 
     let bounds: EraBounds[] = [];
-    let activeEraId: EraId | null = null;
+    let activeKey: string | null = null;
+    let journeyCompleted = false;
+
+    const boundsFor = (
+      section: HTMLElement,
+      key: string,
+      eraId: EraId | null,
+      themeId: ThemeId,
+    ): EraBounds => {
+      const stage = section.querySelector<HTMLElement>('[data-era-stage]');
+      return {
+        key,
+        eraId,
+        themeId,
+        section,
+        top: section.offsetTop,
+        height: section.offsetHeight,
+        pinned: stage !== null && getComputedStyle(stage).position === 'sticky',
+        startAt: Number(section.dataset.startAt ?? '0'),
+        lastProgress: Number.NaN,
+      };
+    };
 
     const measure = () => {
       bounds = eras.flatMap((era) => {
         const section = document.getElementById(sectionId(era.index));
-        if (!section) return [];
-        const stage = section.querySelector<HTMLElement>('[data-era-stage]');
-        return [
-          {
-            eraId: era.id,
-            section,
-            top: section.offsetTop,
-            height: section.offsetHeight,
-            pinned: stage !== null && getComputedStyle(stage).position === 'sticky',
-            startAt: Number(section.dataset.startAt ?? '0'),
-            lastProgress: Number.NaN,
-          },
-        ];
+        return section ? [boundsFor(section, era.id, era.id, era.themeId)] : [];
       });
+      const convergence = document.getElementById(CONVERGENCE_ID);
+      if (convergence) {
+        bounds.push(boundsFor(convergence, CONVERGENCE_ID, null, 'modern'));
+      }
     };
 
     /**
@@ -178,9 +197,9 @@ export function Journey() {
       // Only a change of era touches the stores. Doing it every frame re-set
       // zustand state 60 times a second, and the persisted unlock store wrote
       // localStorage on each of those.
-      if (hit.eraId !== activeEraId) {
-        activeEraId = hit.eraId;
-        activate(hit.eraId);
+      if (hit.key !== activeKey) {
+        activeKey = hit.key;
+        activate(hit);
       }
 
       for (const entry of bounds) {
@@ -192,11 +211,22 @@ export function Journey() {
         }
         // Set once, never cleared: a printout that has begun always finishes.
         if (
-          entry.eraId === hit.eraId &&
+          entry.key === hit.key &&
           progress >= entry.startAt &&
           entry.section.dataset.started !== 'true'
         ) {
           entry.section.dataset.started = 'true';
+        }
+
+        // Reaching the empty desktop is finishing the journey, exactly as the
+        // Skip control is. Once, so the persisted store is not rewritten.
+        // In document flow the last section cannot always scroll far enough
+        // for its progress to reach 1, so the bottom of the page counts too.
+        const atPageEnd =
+          scrollY + viewport >= document.documentElement.scrollHeight - 2;
+        if (!journeyCompleted && entry.eraId === null && (progress >= 0.98 || atPageEnd)) {
+          journeyCompleted = true;
+          completeJourney();
         }
       }
     };
@@ -235,7 +265,7 @@ export function Journey() {
       cancelAnimationFrame(refreshFrame);
       context.revert();
     };
-  }, [markEraVisited, setActiveEra, setProgress, setTheme]);
+  }, [completeJourney, markEraVisited, setActiveEra, setProgress, setTheme]);
 
   /* --- reduced motion changes whether stages pin, so heights change ------ */
   useEffect(() => {
@@ -258,6 +288,8 @@ export function Journey() {
       {eras.map((era) => (
         <EraSection key={era.id} era={era} sectionId={sectionId(era.index)} />
       ))}
+
+      <Convergence />
 
       <p className="ao-sr-only">{t('scrollHint')}</p>
     </div>

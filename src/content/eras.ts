@@ -59,6 +59,11 @@ export interface Era {
   index: number;
   /** Displayed as-is; not localized, years are years. */
   year: string;
+  /**
+   * For an era that is not a year - "today" - an i18n key under `eras` whose
+   * value is shown instead of `year`. A hardcoded year here would age.
+   */
+  yearLabelKey?: string;
   themeId: ThemeId;
   /** i18n keys under the `eras` namespace. */
   nameKey: string;
@@ -142,6 +147,7 @@ export const eras: readonly Era[] = [
     id: 'cloud',
     index: 7,
     year: '2024',
+    yearLabelKey: 'cloud.yearLabel',
     themeId: 'era2024',
     nameKey: 'cloud.name',
     descriptionKey: 'cloud.description',

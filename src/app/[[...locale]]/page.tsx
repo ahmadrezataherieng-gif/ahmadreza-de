@@ -32,7 +32,7 @@ export default async function HomePage({
           {eras.map((era) => (
             <li key={era.id}>
               <strong>
-                {era.year} — {tEras(era.nameKey)}
+                {era.yearLabelKey ? tEras(era.yearLabelKey) : era.year} — {tEras(era.nameKey)}
               </strong>{' '}
               {tEras(era.descriptionKey)}
             </li>

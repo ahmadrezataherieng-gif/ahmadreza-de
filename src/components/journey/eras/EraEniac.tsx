@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { useId, type CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { EraTitle } from '@/components/journey/eras/EraTitle';
@@ -9,6 +9,9 @@ import { CARD_COLUMNS, CARD_ROWS, encodeCard, rowIndex } from '@/lib/punch-card'
 
 /** What the holes in the card actually spell. Encoded, not drawn. */
 const CARD_TEXT = 'AHMADREZA TAHERI';
+
+/** Vertical distance between card rows, in columns. */
+const ROW_PITCH = 2.4;
 
 const LAMP_COUNT = 120;
 const LAMPS_PER_ROW = 20;
@@ -214,7 +217,8 @@ function PunchCard({
   // 1 unit = 1 column. Height picked to hold 12 rows at the real aspect ratio.
   const width = CARD_COLUMNS;
   const height = 35;
-  const rowY = (rowLabel: number) => 5.5 + rowIndex(rowLabel) * 2.4;
+  const rowY = (rowLabel: number) => 5.5 + rowIndex(rowLabel) * ROW_PITCH;
+  const gridId = `${useId().replace(/[^a-zA-Z0-9]/g, '')}-card-grid`;
 
   return (
     // Phones crop to the first 40 columns at twice the size. The name is punched
@@ -250,20 +254,22 @@ function PunchCard({
           ))}
         </g>
 
-        {/* Unpunched positions: the faint printed digit grid. */}
-        <g fill="var(--ao-color-border)" opacity="0.45">
-          {CARD_ROWS.map((rowLabel) =>
-            Array.from({ length: CARD_COLUMNS }, (_, index) => (
-              <rect
-                key={`${rowLabel}-${index}`}
-                x={index + 0.3}
-                y={rowY(rowLabel)}
-                width="0.4"
-                height="1.5"
-              />
-            )),
-          )}
-        </g>
+        {/* Unpunched positions: the faint printed digit grid. One pattern tile
+            per column and row pitch, not 960 separate rects - the page's HTML
+            weight is a tracked budget, and this grid alone was ~45 kB of it. */}
+        <defs>
+          <pattern id={gridId} x="0" y={rowY(CARD_ROWS[0])} width="1" height={ROW_PITCH} patternUnits="userSpaceOnUse">
+            <rect x="0.3" y="0" width="0.4" height="1.5" fill="var(--ao-color-border)" />
+          </pattern>
+        </defs>
+        <rect
+          x="0"
+          y={rowY(CARD_ROWS[0])}
+          width={CARD_COLUMNS}
+          height={CARD_ROWS.length * ROW_PITCH}
+          fill={`url(#${gridId})`}
+          opacity="0.45"
+        />
 
         {/* Punched holes: rectangular, as a keypunch cut them. */}
         <g fill="var(--ao-color-background)">

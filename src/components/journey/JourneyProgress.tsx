@@ -12,6 +12,7 @@ import { cn } from '@/lib/cn';
  */
 export function JourneyProgress({ sectionId }: { sectionId: (eraIndex: number) => string }) {
   const t = useTranslations('journey');
+  const tEras = useTranslations('eras');
   const activeEraId = useJourneyStore((state) => state.activeEraId);
   const activeIndex = eras.find((era) => era.id === activeEraId)?.index ?? 1;
 
@@ -47,7 +48,7 @@ export function JourneyProgress({ sectionId }: { sectionId: (eraIndex: number) =
                     isActive ? 'text-accent opacity-100' : 'text-muted opacity-0 group-hover:opacity-100',
                   )}
                 >
-                  {era.year}
+                  {era.yearLabelKey ? tEras(era.yearLabelKey) : era.year}
                 </span>
                 <span
                   className={cn(

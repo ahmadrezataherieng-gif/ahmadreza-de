@@ -189,15 +189,138 @@
     },
     "macintosh": {
       "name": "Macintosh",
-      "description": "An arrow on the screen changes everything: windows, icons, menus, and a mouse in your hand."
+      "description": "An arrow on the screen changes everything: windows, icons, menus, and a mouse in your hand.",
+      "visual": {
+        "body": "1984, the Apple Macintosh. The first mass-market computer with a mouse and a graphical interface. Instead of memorising commands, you could see something and point at it. Windows, icons, menus, pointer — the vocabulary every interface still speaks today.",
+        "screenLabel": "Macintosh screen with a menu bar, a window and a mouse pointer",
+        "menu": [
+          "File",
+          "Edit",
+          "Special"
+        ],
+        "menuItems": [
+          "New",
+          "Open",
+          "Close"
+        ],
+        "windowTitle": "Portfolio",
+        "icons": [
+          "CV",
+          "Projects",
+          "Network"
+        ],
+        "desktopIcons": [
+          "System",
+          "Trash"
+        ],
+        "pointerCaption": "For the first time: point, not type."
+      }
     },
     "win95": {
       "name": "Windows 95 and dial-up",
-      "description": "Start menu, taskbar, and a modem screeching its way onto the internet."
+      "description": "Start menu, taskbar, and a modem screeching its way onto the internet.",
+      "visual": {
+        "body": "1995, Windows 95 and the modem. The taskbar and the start menu — one place to find everything on the machine. And the internet arrives in homes: 56 kbit per second, the phone line occupied, the connection audible. The computer stopped being a solitary machine and became a node in a network.",
+        "screenLabel": "Windows 95 desktop connecting to the internet over a modem",
+        "infoTitle": "Info.txt - Notepad",
+        "start": "Start",
+        "banner": "AhmadOS 95",
+        "startItems": [
+          "Programs",
+          "Documents",
+          "Settings",
+          "Dial-Up Networking",
+          "Shut Down..."
+        ],
+        "clock": "10:32",
+        "dialTitle": "Connect to Internet",
+        "dialSteps": [
+          "Initialising modem...",
+          "Dialling 0651 19411...",
+          "Verifying user name and password...",
+          "Connected at 56,000 bps"
+        ],
+        "hops": [
+          "This PC",
+          "Modem",
+          "Phone network",
+          "Provider",
+          "Internet"
+        ],
+        "nodeCaption": "A single machine becomes a node in a network.",
+        "trayLabel": "Network status",
+        "browserTitle": "Browser - Welcome",
+        "address": "http://www.ahmadreza.de/",
+        "pageHeading": "Welcome to my homepage!",
+        "pageLines": [
+          "This page is under construction.",
+          "Links: CV | Projects | Contact",
+          "Last updated: 24/08/1995"
+        ],
+        "counter": "Visitors: 000042",
+        "status": "Document: Done"
+      }
     },
     "cloud": {
       "name": "Cloud, containers and AI",
-      "description": "The machine is everywhere and nowhere: dashboards, containers, and rules that decide where packets may go."
+      "description": "The machine is everywhere and nowhere: dashboards, containers, and rules that decide where packets may go.",
+      "visual": {
+        "body": "Today. The computer is no longer a single machine. Code runs in containers on servers nobody ever sees, in many data centres at once. And for the first time, a problem can be described in ordinary language and answered. Eighty years from rewiring cables by hand to this.",
+        "dashboardLabel": "Dashboard of a distributed application with containers, deployment, metrics and regions",
+        "containersTitle": "Containers",
+        "containers": [
+          {
+            "name": "portfolio-web",
+            "replicas": "3/3"
+          },
+          {
+            "name": "auth-service",
+            "replicas": "2/2"
+          },
+          {
+            "name": "metrics",
+            "replicas": "2/2"
+          },
+          {
+            "name": "ai-proxy",
+            "replicas": "1/1"
+          }
+        ],
+        "running": "Running",
+        "pending": "Pending",
+        "deployTitle": "Deployment",
+        "deploySteps": [
+          "Build",
+          "Test",
+          "Deploy"
+        ],
+        "deployRef": "main @ ea736fc",
+        "deployDone": "Live in 4 regions",
+        "metricsTitle": "Requests per second",
+        "metricLabel": "p95 latency",
+        "metricValue": "42 ms",
+        "regionsTitle": "Regions",
+        "regions": [
+          "Frankfurt",
+          "Amsterdam",
+          "Virginia",
+          "Singapore"
+        ],
+        "terminalTitle": "Terminal",
+        "terminal": [
+          "$ kubectl get pods -A",
+          "portfolio-web-7d9f   Running   fra",
+          "portfolio-web-2b41   Running   ams",
+          "ai-proxy-5c2b        Running   iad"
+        ],
+        "promptLabel": "Ask the AI",
+        "prompt": "What is a container?",
+        "response": [
+          "A container bundles a program with everything it needs to run.",
+          "That is why it runs the same everywhere: on your laptop and in any data centre."
+        ]
+      },
+      "yearLabel": "Today"
     }
   },
   "ui": {
@@ -214,5 +337,41 @@
     "de": "Deutsch",
     "en": "English",
     "fa": "فارسی"
+  },
+  "convergence": {
+    "title": "The Convergence: eighty years become AhmadOS",
+    "intro": "Compiling 80 years of computing...",
+    "components": [
+      {
+        "label": "Punch cards",
+        "status": "OK"
+      },
+      {
+        "label": "Batch processing",
+        "status": "OK"
+      },
+      {
+        "label": "UNIX shell",
+        "status": "OK"
+      },
+      {
+        "label": "Command line",
+        "status": "OK"
+      },
+      {
+        "label": "Graphical windows",
+        "status": "OK"
+      },
+      {
+        "label": "Network stack",
+        "status": "OK"
+      },
+      {
+        "label": "Cloud and AI",
+        "status": "OK"
+      }
+    ],
+    "welcome": "Welcome to AhmadOS v1.0",
+    "desktopLabel": "Empty AhmadOS desktop"
   }
 }

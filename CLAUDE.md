@@ -134,9 +134,17 @@ Installed families:
 - `@fontsource/vt323` — retro terminal eras
 - `@fontsource/press-start-2p` — 8-bit and pixel-art eras
 
+**Press Start 2P has only ~220 glyphs.** Before any string is set in it, it must
+pass `npm run check:pixel-font`, which reads the font's real glyph table (a CSS
+`unicode-range` is not proof of a glyph). Add every new pixel-font message key
+to `PIXEL_KEYS` in `scripts/check-pixel-font.mjs`. If a character is missing,
+change the copy — never accept a fallback glyph. Persian is never set in the
+pixel face; for `fa`, the pixel stack resolves to Vazirmatn.
+
 ## Folder structure — what belongs where
 
 ```
+scripts/                    project checks (check-pixel-font.mjs)
 src/
   app/
     layout.tsx              pass-through root layout (no <html> here)
@@ -144,7 +152,7 @@ src/
   components/
     ui/                     generic primitives (Button, Panel, LanguageSwitcher)
     os/                     OS shell: Desktop, Taskbar, WindowManager, BootScreen
-    journey/                Act 1 era sections and scroll machinery
+    journey/                Act 1 era sections and scroll machinery; Convergence.tsx (Act 2)
       eras/                 one component per era visual, plus registry.ts
     apps/                   one folder per application
     theme/                  theme application and era rendering effects
@@ -276,8 +284,41 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
   `prefers-reduced-motion: reduce` block that resolves it to its finished state.
 - Call `ScrollTrigger.refresh()` after anything that changes layout height. Font
   swap-in is already handled via `document.fonts.ready`.
-- Fixed journey controls carry `.ao-chrome-backdrop` so they stay legible over
-  every era, including the paper-white one.
+- Fixed journey controls carry `.ao-chrome-backdrop` (surface token) so they stay
+  legible over every era, including paper-white 1956, grey 1984 and teal 1995.
+  Anything laid out beside the progress rail ends at 84cqw landscape / 80cqw
+  portrait, and moves away from the left edge in RTL, where the rail sits.
+
+### Phase 4 patterns — use these, don't reinvent them
+
+- **HTML weight is a tracked budget** (reported every phase). No per-letter
+  elements outside the Phase 3 printers: animate a cover over a single text node
+  instead (`.ao-wipe`, `.ao-conv-line-cover`). Prefer SVG patterns to repeated
+  elements; ASCII bitmaps in `lib/pixel-art.ts` become one path per colour.
+- **UI state over scroll** uses `.ao-cue` (`--on`/`--off` in era progress).
+  Pointers use `.ao-path` (three segments, `--ux`/`--uy` units).
+- **Reduced motion for new stages:** put `.ao-final-frame` on the stage; it pins
+  `--era-progress` to 1. Transient elements whose text must still show in the
+  static frame add `.ao-rm-show`.
+- **Scaled compositions** (1995 desktop, the Convergence) are size containers laid
+  out in `cqw`/`cqh`, with a portrait container query. Container units declared
+  on the container itself resolve against its ancestor — declare size variables
+  on descendants.
+- **Theme a subtree** with `[data-theme-scope="eraNNNN"]` rules generated from
+  `themeToCssVars()`, as the Convergence chips do. Never hand-write colours.
+- **SVG pattern ids** come from `useId()` — the same component can render twice.
+- **Bidi:** use `:dir(rtl)`, not `[dir='rtl'] .x`, inside `dir="ltr"` blocks;
+  wrap Persian runs in LTR machine output in `<bdi>`; physical SVG layouts set
+  `direction="ltr"`.
+- **Never combine an opacity animation with an opacity attribute** on one
+  element, and never use `truncate` where spaces must survive.
+- **Mount points** — keep them, replace their children:
+  `data-puzzle-mount="unix-filesystem"` (Phase 5, 1971 screen),
+  `data-shell-mount="ahmados"` (Phase 6, end of the Convergence),
+  `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt).
+- **The Convergence** is not an era: the resolver gives it the `modern` theme,
+  keeps the rail on era 7, and calls `completeJourney()` when it reaches the
+  empty desktop or the page end.
 
 ## Coding conventions — enforce these
 
@@ -308,6 +349,7 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out
 npm run lint
+npm run check:pixel-font   # every Press Start 2P string has real glyphs
 ```
 
 `npm run build` must finish with zero TypeScript errors, zero build errors, and
