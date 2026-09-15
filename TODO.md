@@ -2,10 +2,31 @@
 
 Things that need a decision from Ahmadreza before the phase that depends on them.
 
-## Content
+## Assets Ahmadreza owes
 
-- Real German copy for the seven eras. Everything in `src/messages/` is
-  placeholder text right now.
+- **Portrait photo.** Portrait orientation, **4:5, exactly 1200 × 1500 px**
+  (2x the largest display size, 600 × 750 CSS px). Progressive JPEG, ideally
+  under 250 kB, face in the upper third, plain or softly blurred background.
+  Put it at `public/images/portrait.jpg`, then set `PORTRAIT.available = true` in
+  `src/content/profile.ts`. The layout reserves exactly this box, so nothing
+  shifts when it arrives.
+- **Résumé PDF.** Put it at `public/files/ahmadreza-taheri-lebenslauf.pdf`, then
+  set `RESUME.available = true` in `src/content/profile.ts`. Until then the
+  control shows "Lebenslauf folgt in Kürze" and is not a link. Decide whether you
+  want one German PDF for all languages or one per language.
+
+## Copy to confirm
+
+- **Landing role line** (`landing.role`): "Fachinformatiker für
+  Systemintegration in Ausbildung bei der Stadtverwaltung Trier". Draft; finalise
+  the exact wording, and check the English and Persian versions.
+- **Landing facts** (`landing.facts`): Systemintegration · Stadtverwaltung Trier ·
+  Netzwerke · Linux · Deutsch · Englisch · Persisch. Drafted from what the site
+  already says about you; confirm or replace, and say whether English really is
+  a working language for you.
+- **Era copy.** The seven truths and insider details were written in Phase 5 and
+  are sourced (DECISIONS.md 32), but the remaining era prose is still a draft in
+  German, English and Persian.
 - Which projects, skills and CV entries go into `src/content/`.
 
 ## Phase 8 — AI assistant

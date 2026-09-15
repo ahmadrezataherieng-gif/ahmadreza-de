@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -20,6 +21,8 @@ import { CONVERGENCE_ID, Convergence } from '@/components/journey/Convergence';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { viewHref } from '@/lib/routing';
+import type { Locale } from '@/lib/i18n-config';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,6 +57,8 @@ export function Journey() {
   const reducedMotion = useReducedMotion();
 
   const t = useTranslations('journey');
+  const tNav = useTranslations('nav');
+  const locale = useLocale() as Locale;
   const setActiveEra = useJourneyStore((state) => state.setActiveEra);
   const setProgress = useJourneyStore((state) => state.setProgress);
   const setTheme = useThemeStore((state) => state.setTheme);
@@ -278,7 +283,14 @@ export function Journey() {
       <style>{FIRST_ERA_CSS}</style>
       {/* Phones: the switcher sits at the bottom so "Skip to Desktop" - the one
           control a recruiter must always find - never shares its row. */}
-      <header className="ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
+      <header className="ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] flex items-center gap-1 rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
+        <Link
+          href={viewHref(locale, 'landing')}
+          className="ao-themed rounded-control px-2 py-1 font-mono text-xs text-muted hover:text-ink"
+        >
+          {tNav('home')}
+        </Link>
+        <span className="h-4 w-px bg-edge" aria-hidden="true" />
         <LanguageSwitcher />
       </header>
 

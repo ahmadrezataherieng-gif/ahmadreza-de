@@ -1347,3 +1347,33 @@ html[lang^='fa'] {
     opacity: 1;
   }
 }
+
+/* ==========================================================================
+   Landing page (Phase 5)
+   ========================================================================== */
+
+/* Two faint pools of accent light behind the content - depth without a
+   picture, in the modern palette. */
+.ao-landing-glow {
+  background:
+    radial-gradient(
+      ellipse 60% 50% at 80% 10%,
+      color-mix(in srgb, var(--ao-color-accent) 10%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 45% at 5% 95%,
+      color-mix(in srgb, var(--ao-color-accent-muted) 18%, transparent),
+      transparent 70%
+    );
+}
+
+/* The portrait placeholder: a fine grid, so an empty frame still looks
+   deliberate rather than broken. */
+.ao-portrait-placeholder {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ao-color-border) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ao-color-border) 55%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}

@@ -204,6 +204,7 @@ src/
   components/
     ui/                     generic primitives (Button, Panel, LanguageSwitcher)
     os/                     OS shell: Desktop, Taskbar, WindowManager, BootScreen
+    landing/                the landing page (server-rendered; client islands only)
     journey/                Act 1 era sections and scroll machinery; Convergence.tsx (Act 2)
       eras/                 one component per era visual, plus registry.ts
     apps/                   one folder per application
@@ -225,16 +226,45 @@ Rules of thumb:
 
 ## Routing and i18n
 
-- `de` is the default locale and is served at the **root path** `/`.
-- `en` at `/en`, `fa` at `/fa` with `dir="rtl"`.
-- Implemented with an **optional catch-all segment** `app/[[...locale]]`, not
-  middleware: `output: 'export'` produces plain files and never runs middleware.
+- `de` is the default locale and is served **without a prefix**; `en` at `/en`,
+  `fa` at `/fa` with `dir="rtl"`.
+- Two views per locale: the **landing page** at `/` (`/en/`, `/fa/`) and the
+  **journey** at `/journey/` (`/en/journey/`, `/fa/journey/`).
+- All of it is one **optional catch-all segment** `app/[[...locale]]`, not
+  middleware: `output: 'export'` never runs middleware, and the catch-all is the
+  only segment that knows the locale early enough for a static `lang` and `dir`.
+  `matchSegments()` in `src/lib/routing.ts` turns segments into `{ locale, view }`
+  or null; `viewHref(locale, view)` builds links.
+- `dynamicParams = false`: only generated routes exist, so stray URLs are a clean
+  404. `/favicon.ico` is a static route handler (`app/favicon.ico/route.ts`) that
+  serves `public/favicon.svg`, and `_redirects` 301s it to the SVG in production.
 - `/de` is deliberately **not generated** — it would duplicate `/`. The
   `301 /de/ → /` lives in `public/_redirects`.
-- `generateStaticParams` in `app/[[...locale]]/layout.tsx` produces `/`, `/en`,
-  `/fa`. Correct `lang`, `dir`, `canonical` and `hreflang` (including
-  `x-default`) are emitted statically for SEO.
-- Helpers for building locale-aware hrefs live in `src/lib/routing.ts`.
+- `canonical` and `hreflang` (including `x-default`) are emitted per view.
+- **Each view gets only its message namespaces** (`VIEW_NAMESPACES` in the
+  layout). Everything handed to the client provider is serialised into the HTML,
+  so add a namespace there when a view starts using it — and never add `puzzles`,
+  which loads with the puzzle chunk.
+
+## The landing page
+
+`src/components/landing/`. Present-day Ahmadreza, in the `modern` theme; the page
+a recruiter judges in three seconds and Google reads first.
+
+- A **server component with real HTML text**. Client islands only: the language
+  switcher and the two mode buttons (which are real links, so they work without
+  JavaScript). **Never import journey code here** — the journey is behind
+  `JourneyLoader`'s dynamic import precisely so the landing page ships no GSAP,
+  Lenis or era.
+- Contents: name (the strongest element), role line, facts, the two mode buttons
+  as the primary call to action, a discreet résumé control, the language
+  switcher, and a restrained timeline hint that does not reveal any era.
+- **Assets still owed** are declared in `src/content/profile.ts` with an
+  `available` flag: the portrait (4:5, 1200 × 1500 px, `public/images/portrait.jpg`
+  — the one allowed raster asset) and the résumé PDF
+  (`public/files/ahmadreza-taheri-lebenslauf.pdf`). While `available` is false
+  the page renders a same-size placeholder and a disabled résumé control, never
+  a broken link. Flip the flag when the file lands.
 
 ## The theme engine
 

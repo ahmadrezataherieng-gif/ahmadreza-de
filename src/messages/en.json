@@ -16,7 +16,8 @@
     "privacy": "Privacy",
     "language": "Language",
     "skipToDesktop": "Skip to Desktop",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "home": "Home"
   },
   "boot": {
     "start": "Starting AhmadOS",
@@ -382,5 +383,51 @@
     ],
     "welcome": "Welcome to AhmadOS v1.0",
     "desktopLabel": "Empty AhmadOS desktop"
+  },
+  "landing": {
+    "eyebrow": "Portfolio",
+    "firstName": "Ahmadreza",
+    "lastName": "Taheri",
+    "role": "IT specialist for systems integration in training at Stadtverwaltung Trier",
+    "factsLabel": "At a glance",
+    "facts": [
+      {
+        "value": "Systems integration",
+        "label": "Apprenticeship as IT specialist"
+      },
+      {
+        "value": "Stadtverwaltung Trier",
+        "label": "Training company"
+      },
+      {
+        "value": "Networks · Linux",
+        "label": "Focus"
+      },
+      {
+        "value": "German · English · Persian",
+        "label": "Languages"
+      }
+    ],
+    "chooseTitle": "How would you like to take the journey?",
+    "chooseLead": "80 years of computing history — and, along the way, how computers still work today.",
+    "guidedTitle": "Watch",
+    "guidedText": "You scroll, and every puzzle solves itself in front of you.",
+    "guidedTime": "about 2 minutes",
+    "interactiveTitle": "Play",
+    "interactiveText": "Seven small puzzles, each with a hint and an answer.",
+    "interactiveTime": "about 15 minutes",
+    "lastChosen": "Last chosen",
+    "resume": "Résumé (PDF)",
+    "resumePending": "Résumé coming soon",
+    "portraitAlt": "Portrait of Ahmadreza Taheri",
+    "photoPlaceholder": "Portrait coming soon",
+    "photoDimensions": "{width} × {height} px",
+    "hint": "80 years in 90 seconds",
+    "journeyTitle": "The Journey"
+  },
+  "mode": {
+    "label": "Mode",
+    "guided": "Watch",
+    "interactive": "Play"
   }
 }

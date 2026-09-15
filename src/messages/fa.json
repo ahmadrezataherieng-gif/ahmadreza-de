@@ -16,7 +16,8 @@
     "privacy": "حریم خصوصی",
     "language": "زبان",
     "skipToDesktop": "رفتن مستقیم به میزکار",
-    "skipToContent": "پرش به محتوا"
+    "skipToContent": "پرش به محتوا",
+    "home": "صفحهٔ اصلی"
   },
   "boot": {
     "start": "در حال راه‌اندازی AhmadOS",
@@ -383,5 +384,51 @@
     ],
     "welcome": "به AhmadOS v1.0 خوش آمدید",
     "desktopLabel": "میزکار خالی AhmadOS"
+  },
+  "landing": {
+    "eyebrow": "نمونه‌کار",
+    "firstName": "احمدرضا",
+    "lastName": "طاهری",
+    "role": "کارآموز کارشناس فناوری اطلاعات در رشتهٔ یکپارچه‌سازی سامانه‌ها در شهرداری تریر",
+    "factsLabel": "در یک نگاه",
+    "facts": [
+      {
+        "value": "یکپارچه‌سازی سامانه‌ها",
+        "label": "کارآموزی کارشناس فناوری اطلاعات"
+      },
+      {
+        "value": "شهرداری تریر",
+        "label": "محل کارآموزی"
+      },
+      {
+        "value": "شبکه · لینوکس",
+        "label": "زمینه‌های اصلی"
+      },
+      {
+        "value": "آلمانی · انگلیسی · فارسی",
+        "label": "زبان‌ها"
+      }
+    ],
+    "chooseTitle": "سفر را چگونه می‌خواهید تجربه کنید؟",
+    "chooseLead": "هشتاد سال تاریخ رایانه — و در این میان، اینکه رایانه‌ها امروز چگونه کار می‌کنند.",
+    "guidedTitle": "تماشا",
+    "guidedText": "شما صفحه را می‌پیمایید و هر معما جلوی چشمتان حل می‌شود.",
+    "guidedTime": "حدود ۲ دقیقه",
+    "interactiveTitle": "خودتان حل کنید",
+    "interactiveText": "هفت معمای کوچک، هر کدام با راهنما و پاسخ.",
+    "interactiveTime": "حدود ۱۵ دقیقه",
+    "lastChosen": "آخرین انتخاب",
+    "resume": "رزومه (PDF)",
+    "resumePending": "رزومه به‌زودی",
+    "portraitAlt": "چهرهٔ احمدرضا طاهری",
+    "photoPlaceholder": "عکس به‌زودی",
+    "photoDimensions": "{width} × {height} px",
+    "hint": "هشتاد سال در نود ثانیه",
+    "journeyTitle": "سفر"
+  },
+  "mode": {
+    "label": "حالت",
+    "guided": "تماشا",
+    "interactive": "خودتان حل کنید"
   }
 }

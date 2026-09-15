@@ -12,6 +12,18 @@ import {
 import { STORAGE_KEYS } from '@/lib/constants';
 
 /**
+ * How the visitor experiences the puzzles.
+ *   guided       - watch: every puzzle plays itself as the page scrolls
+ *   interactive  - play: puzzles wait for real input
+ * One flag over one set of scenes; only the puzzle layer reads it. See
+ * DECISIONS.md entries 33 and 36.
+ */
+export type JourneyMode = 'guided' | 'interactive';
+
+/** What a visitor gets before choosing: the mode that asks nothing of them. */
+export const DEFAULT_MODE: JourneyMode = 'guided';
+
+/**
  * Progress through Act 1.
  *
  * Phase 5 calls `solvePuzzle` / `skipPuzzle`; nothing here blocks anyone.
@@ -27,7 +39,10 @@ interface UnlockState {
   skippedEras: EraId[];
   /** True once the visitor has reached the desktop at least once. */
   hasCompletedJourney: boolean;
+  /** Chosen viewing mode, or null until the visitor chooses one. */
+  mode: JourneyMode | null;
 
+  setMode: (mode: JourneyMode) => void;
   solvePuzzle: (eraId: EraId) => void;
   skipPuzzle: (eraId: EraId) => void;
   markEraVisited: (eraId: EraId) => void;
@@ -50,6 +65,11 @@ export const useUnlockStore = create<UnlockState>()(
       visitedEras: [],
       skippedEras: [],
       hasCompletedJourney: false,
+      mode: null,
+
+      setMode: (mode) => {
+        if (get().mode !== mode) set({ mode });
+      },
 
       solvePuzzle: (eraId) => {
         const era = eras.find((candidate) => candidate.id === eraId);
@@ -107,6 +127,7 @@ export const useUnlockStore = create<UnlockState>()(
         visitedEras: state.visitedEras,
         skippedEras: state.skippedEras,
         hasCompletedJourney: state.hasCompletedJourney,
+        mode: state.mode,
       }),
     },
   ),

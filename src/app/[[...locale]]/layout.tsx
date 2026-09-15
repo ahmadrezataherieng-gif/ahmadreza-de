@@ -16,25 +16,38 @@ import '@/styles/globals.css';
 
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
-import { dirForLocale, htmlLang, locales, type Locale } from '@/lib/i18n-config';
-import { localeFromSegments } from '@/lib/routing';
+import { dirForLocale, htmlLang } from '@/lib/i18n-config';
+import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
 import { SITE_URL } from '@/lib/constants';
 
 type LayoutParams = { locale?: string[] };
 
 /**
- * German is generated at `/`, the other locales at `/en` and `/fa`.
- * `/de` is deliberately NOT generated: it would be a duplicate of `/`.
- * nginx should 301 `/de/` to `/`.
+ * Only generated routes exist. Without this, any URL under the catch-all -
+ * browsers ask for `/favicon.ico` on their own - rendered the layout and threw,
+ * which was a 500 in dev. Now such a request is a plain 404.
+ */
+export const dynamicParams = false;
+
+/**
+ * `/`, `/journey`, and the same under `/en` and `/fa`.
+ * `/de` is deliberately not generated: it would duplicate `/`, and
+ * `public/_redirects` 301s it home.
  */
 export function generateStaticParams(): LayoutParams[] {
-  return [
-    { locale: [] },
-    ...locales
-      .filter((locale) => locale !== 'de')
-      .map((locale) => ({ locale: [locale] })),
-  ];
+  return allRouteSegments().map((segments) => ({ locale: segments }));
 }
+
+/**
+ * Message namespaces each view actually renders. Everything handed to the
+ * client provider is serialised into the page's HTML, so the landing page does
+ * not carry the journey's copy, and neither carries the puzzles' - those load
+ * with the puzzle chunk when a puzzle opens.
+ */
+const VIEW_NAMESPACES: Record<View, readonly string[]> = {
+  landing: ['site', 'nav', 'languages', 'landing', 'mode'],
+  journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'mode'],
+};
 
 export async function generateMetadata({
   params,
@@ -42,32 +55,37 @@ export async function generateMetadata({
   params: Promise<LayoutParams>;
 }): Promise<Metadata> {
   const { locale: segments } = await params;
-  const locale = localeFromSegments(segments);
+  const match = matchSegments(segments);
+  if (!match) return {};
+  const { locale, view } = match;
   const t = await getTranslations({ locale, namespace: 'site' });
+  const tLanding = await getTranslations({ locale, namespace: 'landing' });
+
+  const title = view === 'landing' ? t('title') : `${tLanding('journeyTitle')} — ${t('author')}`;
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: {
-      default: t('title'),
-      template: `%s — ${t('author')}`,
-    },
+    title,
     description: t('description'),
     alternates: {
-      canonical: locale === 'de' ? '/' : `/${locale}/`,
+      canonical: viewHref(locale, view),
       languages: {
-        'de-DE': '/',
-        en: '/en/',
-        'fa-IR': '/fa/',
-        'x-default': '/',
+        'de-DE': viewHref('de', view),
+        en: viewHref('en', view),
+        'fa-IR': viewHref('fa', view),
+        'x-default': viewHref('de', view),
       },
     },
+    icons: {
+      icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    },
     openGraph: {
-      type: 'website',
+      type: view === 'landing' ? 'profile' : 'website',
       locale: htmlLang[locale],
-      title: t('title'),
+      title,
       description: t('description'),
       siteName: t('author'),
-      url: locale === 'de' ? '/' : `/${locale}/`,
+      url: viewHref(locale, view),
     },
   };
 }
@@ -80,15 +98,15 @@ export default async function LocaleLayout({
   params: Promise<LayoutParams>;
 }) {
   const { locale: segments } = await params;
+  const match = matchSegments(segments);
+  if (!match) notFound();
 
-  // A non-empty first segment that is not a known locale is a 404, not German.
-  if (segments && segments.length > 0 && !isKnownLocale(segments[0])) {
-    notFound();
-  }
-
-  const locale = localeFromSegments(segments);
+  const { locale, view } = match;
   setRequestLocale(locale);
-  const messages = await getMessages({ locale });
+  const allMessages = await getMessages({ locale });
+  const messages = Object.fromEntries(
+    Object.entries(allMessages).filter(([namespace]) => VIEW_NAMESPACES[view].includes(namespace)),
+  );
 
   return (
     <html lang={htmlLang[locale]} dir={dirForLocale(locale)} suppressHydrationWarning>
@@ -96,7 +114,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
             {children}
-            <EraEffectsLayer />
+            {view === 'journey' && <EraEffectsLayer />}
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
@@ -104,6 +122,3 @@ export default async function LocaleLayout({
   );
 }
 
-function isKnownLocale(value: string): value is Locale {
-  return (locales as readonly string[]).includes(value);
-}

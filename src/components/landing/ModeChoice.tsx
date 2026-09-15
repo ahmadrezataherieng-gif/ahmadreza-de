@@ -1,0 +1,82 @@
+'use client';
+
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
+import { useUnlockStore, type JourneyMode } from '@/store/unlock-store';
+import { cn } from '@/lib/cn';
+
+/**
+ * The two ways into the journey, as the landing page's primary call to action.
+ *
+ * Each is a real link to the journey, so it works before hydration and without
+ * JavaScript; clicking it also stores the chosen mode. Neither is styled as the
+ * lesser option - they differ only in how much time the visitor has.
+ */
+export function ModeChoice({ journeyHref }: { journeyHref: string }) {
+  const t = useTranslations('landing');
+  const storedMode = useUnlockStore((state) => state.mode);
+  const setMode = useUnlockStore((state) => state.setMode);
+
+  // The persisted mode only exists after hydration; until then render as if
+  // nothing was chosen, so server and client markup agree.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const lastChosen = hydrated ? storedMode : null;
+
+  const options: Array<{ mode: JourneyMode; title: string; text: string; time: string }> = [
+    { mode: 'guided', title: t('guidedTitle'), text: t('guidedText'), time: t('guidedTime') },
+    { mode: 'interactive', title: t('interactiveTitle'), text: t('interactiveText'), time: t('interactiveTime') },
+  ];
+
+  return (
+    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {options.map((option) => (
+        <li key={option.mode}>
+          <Link
+            href={journeyHref}
+            onClick={() => setMode(option.mode)}
+            className={cn(
+              'ao-themed group relative flex h-full flex-col gap-2 rounded-window border bg-surface p-5 transition-colors',
+              'hover:border-accent hover:bg-elevated focus-visible:border-accent',
+              lastChosen === option.mode ? 'border-accent' : 'border-edge',
+            )}
+          >
+            <span className="flex items-center justify-between gap-3">
+              <span className="font-display text-xl font-bold text-ink">{option.title}</span>
+              <ModeGlyph mode={option.mode} />
+            </span>
+            <span className="font-body text-sm leading-snug text-muted">{option.text}</span>
+            <span className="mt-auto flex items-center justify-between gap-2 pt-2 font-mono text-[11px] tracking-wide text-accent uppercase">
+              {option.time}
+              {lastChosen === option.mode && <span className="text-muted normal-case">{t('lastChosen')}</span>}
+            </span>
+            <span
+              className="absolute end-4 bottom-4 translate-x-0 text-accent opacity-0 transition-all group-hover:opacity-100 rtl:-scale-x-100"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 16 10" className="h-2.5 w-4">
+                <path d="M0 5h14M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ModeGlyph({ mode }: { mode: JourneyMode }) {
+  return (
+    <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 text-accent" aria-hidden="true">
+      {mode === 'guided' ? (
+        // Play: watch it happen.
+        <path d="M6 4l10 6-10 6z" fill="currentColor" />
+      ) : (
+        // Pointer: do it yourself.
+        <path d="M4 2l11 7-5 1 3 6-2 1-3-6-4 3z" fill="currentColor" />
+      )}
+    </svg>
+  );
+}

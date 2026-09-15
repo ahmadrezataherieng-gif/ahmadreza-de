@@ -617,3 +617,61 @@ project. Making guided mode a *playback of the same puzzle* - its own reducer
 driven by a script instead of by input - means a fix to a puzzle fixes both modes
 by construction. The engine that makes this true is recorded with the puzzle
 work, in entries 35 and 36.
+
+---
+
+## 34. The landing page takes `/`; the journey moves to `/journey/`
+
+**Decision:** two views per locale under the existing optional catch-all:
+`/` (landing) and `/journey/`. `matchSegments()` resolves segments to a locale and
+a view; `dynamicParams = false` makes anything else a 404. The journey is loaded
+through `JourneyLoader`, a client component whose `dynamic()` import puts the
+whole journey into its own chunk. Each view's client provider receives only the
+message namespaces it renders.
+
+**Why not a separate route folder:** an optional catch-all cannot have child
+segments, and a sibling `[locale]` route would collide with it. Keeping one
+catch-all preserves decision 8 — German at the root, with a correct static
+`lang` and `dir` for every page — at the cost of a small dispatch in `page.tsx`.
+
+**Why the dynamic import:** both views come from one route file, and a static
+import would ship GSAP, Lenis and all seven eras to the landing page. With it,
+the landing page loads no journey code at all (verified in the export: no
+ScrollTrigger in any script the landing HTML references), while the journey is
+still server-rendered into its own HTML for crawlers.
+
+**Measured on the export:**
+
+| | HTML gzipped | JS referenced, gzipped |
+|---|---|---|
+| Landing `/` | 6.1 kB | 176 kB, no GSAP |
+| Journey `/journey/` | 35.8 kB | 240 kB |
+
+Next's route report dropped from 194 kB to 134 kB First Load JS.
+
+**Why per-view message namespaces:** the client provider serialises every message
+it is given into the HTML. The landing page would otherwise carry the journey's
+copy, and after Phase 5 both pages would carry seven puzzles' worth of text.
+
+**Slug:** `journey` in every locale. A localised slug (`/reise/`) would read
+better in German, but it would complicate hreflang pairs and every href helper
+for a URL visitors rarely type — they arrive through the landing page's buttons.
+
+---
+
+## 35. The favicon is SVG, and `/favicon.ico` is a static route
+
+**Decision:** `public/favicon.svg` is linked from every page's metadata.
+`app/favicon.ico/route.ts` is a `force-static` route handler that serves the same
+SVG, and `_redirects` 301s `/favicon.ico` to `/favicon.svg` on Cloudflare.
+
+**Why:** browsers request `/favicon.ico` on their own. It fell into the locale
+catch-all and returned 500 in dev; `dynamicParams = false` alone did not stop
+that (the dev server still threw "handler is not a function"). A static route
+takes precedence over the catch-all in dev and is written out as a file by the
+export. The redirect gives production the correct content type. An `.ico` file
+would have been a raster asset, which the project does not allow.
+
+The SVG hardcodes two colours - the modern theme's background and text - because
+a static asset cannot read CSS custom properties. It is monochrome and switches
+ink with `prefers-color-scheme`.

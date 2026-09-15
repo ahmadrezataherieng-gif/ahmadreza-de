@@ -11,3 +11,7 @@
 # This replaces what used to be an nginx rule.
 /de     /   301
 /de/*   /   301
+
+# Browsers request /favicon.ico on their own even when the page links an SVG
+# icon. Point them at the one real icon instead of the 404 page.
+/favicon.ico  /favicon.svg  301

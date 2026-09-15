@@ -1,18 +1,67 @@
-import { defaultLocale, isLocale, type Locale } from '@/lib/i18n-config';
+import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config';
 
 /**
  * URL shape.
  *
- * German is the default locale and is served at the root path, so it carries no
- * prefix. English and Persian are prefixed. This is expressed with an optional
- * catch-all route segment (`app/[[...locale]]`) rather than middleware, because
- * `output: 'export'` produces plain files and never runs middleware.
+ * German is the default locale and is served without a prefix; English and
+ * Persian are prefixed. Every locale has two views:
+ *
+ *   /             /en/            /fa/             the landing page
+ *   /journey/     /en/journey/    /fa/journey/     Act 1 and the Convergence
+ *
+ * All of it is one optional catch-all segment (`app/[[...locale]]`) rather than
+ * middleware, because `output: 'export'` produces plain files and never runs
+ * middleware, and because the catch-all is the only segment that knows the
+ * locale early enough to emit a correct static `lang` and `dir`.
  */
+
+export const views = ['landing', 'journey'] as const;
+export type View = (typeof views)[number];
+
+/** URL path of each view, without the locale prefix. */
+const VIEW_PATHS: Record<View, string> = {
+  landing: '/',
+  journey: '/journey',
+};
+
+const JOURNEY_SEGMENT = 'journey';
+
+export interface RouteMatch {
+  locale: Locale;
+  view: View;
+}
+
+/**
+ * Resolve the catch-all segments into a locale and a view, or null for a URL
+ * that is not a page (a stray `favicon.ico`, `/de/`, `/en/nonsense/`).
+ */
+export function matchSegments(segments: string[] | undefined): RouteMatch | null {
+  const parts = segments ?? [];
+  let rest = parts;
+  let locale: Locale = defaultLocale;
+
+  // `/de` is never a URL: German lives at the root. `_redirects` 301s it.
+  if (parts[0] !== undefined && parts[0] !== defaultLocale && isLocale(parts[0])) {
+    locale = parts[0];
+    rest = parts.slice(1);
+  }
+
+  if (rest.length === 0) return { locale, view: 'landing' };
+  if (rest.length === 1 && rest[0] === JOURNEY_SEGMENT) return { locale, view: 'journey' };
+  return null;
+}
+
+/** Every page the static export must generate, as catch-all params. */
+export function allRouteSegments(): string[][] {
+  return locales.flatMap((locale) => {
+    const prefix = locale === defaultLocale ? [] : [locale];
+    return [prefix, [...prefix, JOURNEY_SEGMENT]];
+  });
+}
 
 /** Read the locale out of the optional catch-all segment. */
 export function localeFromSegments(segments: string[] | undefined): Locale {
-  const first = segments?.[0];
-  return isLocale(first) ? first : defaultLocale;
+  return matchSegments(segments)?.locale ?? defaultLocale;
 }
 
 /** Path prefix for a locale: '' for German, '/en' and '/fa' otherwise. */
@@ -20,12 +69,17 @@ export function localePrefix(locale: Locale): string {
   return locale === defaultLocale ? '' : `/${locale}`;
 }
 
-/** Build an in-app href for a locale. `path` is locale-independent, e.g. '/impressum'. */
+/** Build an in-app href for a locale. `path` is locale-independent, e.g. '/journey'. */
 export function localeHref(locale: Locale, path = '/'): string {
   const normalised = path === '/' ? '/' : path.replace(/\/$/, '');
   const prefix = localePrefix(locale);
   if (normalised === '/') return prefix === '' ? '/' : `${prefix}/`;
   return `${prefix}${normalised}/`;
+}
+
+/** The href of a view in a locale, with the trailing slash the export uses. */
+export function viewHref(locale: Locale, view: View): string {
+  return localeHref(locale, VIEW_PATHS[view]);
 }
 
 /** Strip the locale prefix from a pathname, yielding the locale-independent path. */

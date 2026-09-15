@@ -16,7 +16,8 @@
     "privacy": "Datenschutz",
     "language": "Sprache",
     "skipToDesktop": "Direkt zum Desktop",
-    "skipToContent": "Zum Inhalt springen"
+    "skipToContent": "Zum Inhalt springen",
+    "home": "Startseite"
   },
   "boot": {
     "start": "AhmadOS wird gestartet",
@@ -383,5 +384,51 @@
     ],
     "welcome": "Willkommen bei AhmadOS v1.0",
     "desktopLabel": "Leerer AhmadOS-Desktop"
+  },
+  "landing": {
+    "eyebrow": "Portfolio",
+    "firstName": "Ahmadreza",
+    "lastName": "Taheri",
+    "role": "Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier",
+    "factsLabel": "Auf einen Blick",
+    "facts": [
+      {
+        "value": "Systemintegration",
+        "label": "Ausbildung zum Fachinformatiker"
+      },
+      {
+        "value": "Stadtverwaltung Trier",
+        "label": "Ausbildungsbetrieb"
+      },
+      {
+        "value": "Netzwerke · Linux",
+        "label": "Schwerpunkte"
+      },
+      {
+        "value": "Deutsch · Englisch · Persisch",
+        "label": "Sprachen"
+      }
+    ],
+    "chooseTitle": "Wie möchtest du die Reise erleben?",
+    "chooseLead": "80 Jahre Computergeschichte — und dabei, wie Computer bis heute funktionieren.",
+    "guidedTitle": "Zuschauen",
+    "guidedText": "Du scrollst, jedes Rätsel löst sich vor deinen Augen.",
+    "guidedTime": "etwa 2 Minuten",
+    "interactiveTitle": "Selbst lösen",
+    "interactiveText": "Sieben kleine Rätsel, jedes mit Tipp und Lösung.",
+    "interactiveTime": "etwa 15 Minuten",
+    "lastChosen": "Zuletzt gewählt",
+    "resume": "Lebenslauf (PDF)",
+    "resumePending": "Lebenslauf folgt in Kürze",
+    "portraitAlt": "Porträt von Ahmadreza Taheri",
+    "photoPlaceholder": "Porträt folgt",
+    "photoDimensions": "{width} × {height} px",
+    "hint": "80 Jahre in 90 Sekunden",
+    "journeyTitle": "Die Reise"
+  },
+  "mode": {
+    "label": "Modus",
+    "guided": "Zuschauen",
+    "interactive": "Selbst lösen"
   }
 }
