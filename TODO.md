@@ -27,6 +27,15 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - **Era copy.** The seven truths and insider details were written in Phase 5 and
   are sourced (DECISIONS.md 32), but the remaining era prose is still a draft in
   German, English and Persian.
+- **Puzzle copy** (`puzzles.*` in all three message files): invitation, task,
+  hint, answer, success and skip for each of the seven puzzles, plus the mode
+  labels ("Zuschauen" / "Selbst lösen"). Drafted in Phase 5; German is the
+  source, English and Persian are translations to check. The 1946 "first bug"
+  note (Harvard Mark II logbook, 9 September 1947) is sourced in DECISIONS.md 32.
+- **Puzzle scenarios** are invented but technically exact: the home network
+  192.168.1.0/24 with router .1 and printer .20, the service `portfolio-web` on
+  TCP 443, and the file tree under `/home/ahmadreza`. Say if any of it should
+  mirror something real of yours instead.
 - Which projects, skills and CV entries go into `src/content/`.
 
 ## Phase 8 — AI assistant

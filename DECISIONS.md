@@ -675,3 +675,116 @@ would have been a raster asset, which the project does not allow.
 The SVG hardcodes two colours - the modern theme's background and text - because
 a static asset cannot read CSS custom properties. It is monochrome and switches
 ink with `prefers-color-scheme`.
+
+---
+
+## 36. The scroll-hold model: puzzles are played in a dialog over a held page
+
+**Decision:** every era section ends in a puzzle segment with its own scroll
+distance (`puzzleLength` in `eras/registry.ts`). In **guided** mode the puzzle
+plays inline in that segment and the page never stops. In **interactive** mode
+the segment shows an invitation; Start opens the puzzle in a modal dialog
+(`components/puzzles/HeldDialog.tsx`) and the page is held still behind it:
+
+| Requirement | How |
+|---|---|
+| The era holds still while playing | `holdScroll()` in `lenis-controller.ts`: `lenis.stop()` plus `html.ao-scroll-held { overflow: hidden }`. The scroll position is never changed, so releasing returns the visitor exactly where they were. `scrollbar-gutter: stable` keeps the page from shifting sideways when the scrollbar hides. |
+| Scroll doesn't drag the scene away | Wheel and touch go nowhere while held; the dialog itself scrolls (`data-lenis-prevent`, `overscroll-behavior: contain`). Verified: a 900 px wheel while held moves the page 0 px. |
+| Hold releases on solve and skip | The dialog holds on mount and releases in its unmount cleanup, whatever unmounted it. Continue and Skip unmount it and then scroll to the next section one frame later, when Lenis runs again. |
+| Never trapped | Skip and Close sit in the dialog's header, visible without scrolling it. Escape closes. The dialog is below the chrome's z-index and only the scenes container is `inert`, so Skip to Desktop and the mode switch stay clickable; both release the hold (`requestPuzzleRelease()`). |
+| Browser back | Opening pushes a same-URL history entry; Back pops it and closes the puzzle without leaving the journey. Closing from inside the page removes the entry again (deferred). Scroll restoration is a property of each history entry, so it is switched to `manual` on the entry the dialog was opened from, before pushing, and restored on return; otherwise going back jumped the page by hundreds of pixels (to the next era the visitor was heading for, or past content that had changed height). A development-mode remount reuses the entry instead of stacking a second one. |
+| Keyboard | Focus moves into the dialog (to the puzzle's `data-autofocus` element, even when the puzzle chunk arrives after the dialog opened), Tab is trapped, focus returns to Start on close. Keys never reach Lenis: it is stopped, and Lenis does not handle keys anyway. |
+
+**Why a dialog, not pinning the section in place:** a scroll-position lock on
+the pinned stage would need the resolver to ignore scroll while held, and on
+phones and under reduced motion there is no pinned stage to lock. A dialog is
+one mechanism for every layout, and it matches what a held state is: modal.
+
+**Why nothing blocks:** the invitation is scrolled past like any content. The
+hold exists only after an explicit Start, and every exit is one action away.
+
+---
+
+## 37. One puzzle engine; the mode is a presentation, not a code path
+
+**Decision:** a puzzle is a `PuzzleDefinition` — `initial`, a pure `reduce`,
+`isSolved`, and a `script` of steps (`point`, `act` with an optional `carry`,
+`type`) — plus one component that renders its state. `usePuzzleEngine`
+(`components/puzzles/engine.ts`) gives the component its state in one of three
+presentations:
+
+- `play` — the visitor's input dispatches to the reducer.
+- `guided` — the reducer is folded over the script up to a playhead mapped from
+  the segment's scroll progress (10 % to 82 %). Scrolling back un-does steps.
+  The fold is memoised on the number of committed steps, so it recomputes a
+  handful of times per puzzle, not per frame. Typing is previewed character by
+  character from the fractional step.
+- `final` — the whole script applied: the solved frame, used for reduced motion.
+
+`PuzzleShell` is the only component that reads the mode. It chooses the
+presentation, renders invitation, help, feedback, skip and success, and reports
+to the unlock store. Era visuals never see the mode; puzzle components never see
+it either — they see a presentation. The simulated pointer is an overlay
+(`PuzzleSurface`) that finds its target by `data-target`: a ring before 1984,
+the 1984 arrow bitmap from then on.
+
+**Consequences the user did not specify:**
+- Guided playback awards nothing. Only an interactive solve calls `solvePuzzle`.
+- The guided demonstration is `inert` and `aria-hidden`; screen readers get the
+  task, the answer and the success message as one summary instead.
+- "I'll try this one myself" sets the mode to interactive and opens that puzzle
+  at once.
+- Pinned and phone layouts give the puzzle segment a fixed height, so switching
+  mode does not move anything. Under reduced motion the segment is in document
+  flow and the two presentations differ in height, for every mounted puzzle
+  above the visitor too. `keepScrollAnchor()` (lenis-controller) records the
+  top of the puzzle segment or section under the viewport's middle, applies the
+  switch, and corrects the scroll two frames later, so the visitor's place stays
+  put on screen.
+- The resolver writes `--puzzle-progress` and `--section-progress` next to
+  `--era-progress`, and publishes the puzzle progress to a small store only in
+  0.5 % steps. `data-visual-share` keeps each visual's pinned travel exactly as
+  long as it was before puzzles existed.
+
+---
+
+## 38. Puzzle code and copy load on demand; the journey loads with `React.lazy`
+
+**Decision:**
+- `PuzzleSlot` renders an empty placeholder into the static HTML. Within one era
+  of the active one it mounts the shell (`next/dynamic`, `ssr: false`), which
+  loads the puzzle's own chunk (`puzzles/registry.ts`) and the locale's message
+  file (`PuzzleMessages`, a dynamic `import()` into a nested
+  `NextIntlClientProvider` that sees only `puzzles` and `mode`). The era's truth
+  and insider detail stay server-rendered in the same card.
+- `JourneyLoader` uses `React.lazy` + `Suspense` instead of `next/dynamic`.
+  In the app router, `next/dynamic` renders an extra server-only sibling (its
+  chunk preloader). That shifted React's `useId` tree position for everything
+  inside the journey, so every SVG pattern id mismatched on hydration (a console
+  error on every load since the landing page split). `React.lazy` renders the
+  same tree on both sides and still server-renders the journey.
+
+**Techniques worth knowing:**
+- Reordering list items moves DOM nodes and drops focus; the scheduling puzzle
+  puts focus back on the moved job's button in an effect.
+- Programmatic scrolls re-aim after they come to rest. Puzzles mount and era
+  content settles while the page moves past them, so a section top or the page
+  end measured at the start was up to ~360 px stale on arrival in document flow.
+  Corrections are applied only for drifts under 1.5 viewports, so a visitor who
+  scrolled elsewhere is never pulled back.
+- The journey observes every section's height and refreshes the resolver's
+  measurements when one changes. Several eras settle 20-70 px shorter on phones
+  after they first activate; without the refresh, the last puzzle's guided
+  playback stopped at 80 %.
+- The pointer overlay and the shell terminal scroll their own container by hand.
+  `scrollIntoView` would also scroll the document and tear the pinned stage.
+- The subnet check is real arithmetic in the order a network stack meets the
+  problems (`puzzles/ipv4.ts`); a wider mask that makes the PC think it is local
+  still fails, because the router's /24 cannot answer. Persian and Arabic-Indic
+  digits are converted as they are typed.
+- The 1981 and 2024 puzzles each contain a tempting wrong answer (unload the
+  network driver; open the catch-all rule) that is caught and explained rather
+  than accepted.
+- Drag and drop uses pointer events with pointer capture, so mouse and touch are
+  one code path; a press without movement is a click, which picks up. The
+  keyboard path is the same pick-up/drop model.

@@ -1,13 +1,13 @@
 # Project state
 
-Last updated: 2026-09-15
+Last updated: 2026-09-16
 
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
 - [x] **Phase 2** — Journey scaffold and unlock store
 - [x] **Phase 3** — Era visuals 1 to 4
 - [x] **Phase 4** — Era visuals 5 to 7 and the Convergence sequence
-- [ ] **Phase 5** — Puzzle engine and the seven puzzles
+- [x] **Phase 5** — Concept pass, landing page, puzzle engine and the seven puzzles
 - [ ] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [ ] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
@@ -16,6 +16,29 @@ Last updated: 2026-09-15
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
 - [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
+
+## What exists after Phase 5
+
+- **Concept:** every era states one mechanical truth and one sourced insider
+  detail, shown in the era's puzzle segment and in the static SEO list.
+- **Two viewing modes** over one set of scenes: guided (puzzles play themselves
+  as you scroll) and interactive (you play). The mode is one persisted value in
+  the unlock store, chosen on the landing page and switchable from the journey
+  chrome without losing position.
+- **Landing page** at `/` (`/en/`, `/fa/`): name, role, facts, the two mode
+  buttons, a discreet résumé control and a restrained timeline hint. The
+  journey moved to `/journey/`. Portrait and résumé are placeholders until the
+  assets arrive (TODO.md).
+- **Puzzle engine** (`src/components/puzzles/`): one shell, one reducer-based
+  engine with guided, play and final presentations, a held dialog for play,
+  two-step help, skip everywhere, lazy code and copy.
+- **Seven puzzles:** punch-card debugging (1946), shortest-job-first scheduling
+  (1956), a shell over a file tree (1971), fitting drivers into 640 K (1981),
+  drag and drop with mouse, touch and keyboard (1984), IPv4 subnetting (1995),
+  and a first-match firewall (today). Each interactive solve unlocks its app's
+  artifact.
+- `/favicon.ico` is a static route serving the SVG favicon.
+- Budgets after Phase 5: see the Phase 5 report and DECISIONS.md 34/38.
 
 ## What exists after Phase 4
 
@@ -64,13 +87,10 @@ Last updated: 2026-09-15
 - Unlock store with `localStorage` persistence, ready for Phase 5 to call.
 - UI primitives: `Button`, `Panel`, `LanguageSwitcher`.
 
-## Not built yet
+## Not built yet (after Phase 5)
 
-- Any puzzle. `solvePuzzle` / `skipPuzzle` exist but nothing calls them.
 - The desktop shell and every app. The journey records completion but there is
   no desktop to land on yet; returning visitors still see Act 1.
 - Audio. Every theme's `sound` profile is still unused.
-- A favicon. `/favicon.ico` currently hits the locale catch-all (500 in dev,
-  the 404 page in the export).
 - Legal pages, sitemap, JSON-LD, `llms.txt`.
 - Deployment.

@@ -395,12 +395,48 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 - **Never combine an opacity animation with an opacity attribute** on one
   element, and never use `truncate` where spaces must survive.
 - **Mount points** — keep them, replace their children:
-  `data-puzzle-mount="unix-filesystem"` (Phase 5, 1971 screen),
+  `data-puzzle-mount="unix-filesystem"` (1971 screen; unused - the puzzle
+  segment after each visual replaced it),
   `data-shell-mount="ahmados"` (Phase 6, end of the Convergence),
   `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt).
 - **The Convergence** is not an era: the resolver gives it the `modern` theme,
   keeps the rail on era 7, and calls `completeJourney()` when it reaches the
   empty desktop or the page end.
+
+### Puzzles (Phase 5)
+
+`src/components/puzzles/`. Read DECISIONS.md 36–38 before changing anything here.
+
+- **One engine, one shell.** A puzzle is a `PuzzleDefinition` (`initial`, pure
+  `reduce`, `isSolved`, `script`) plus one component that renders state from
+  `usePuzzleEngine`. It receives a *presentation* (`play`, `guided`, `final`),
+  never the mode. Only `PuzzleShell` reads the mode. Never write a guided and an
+  interactive version of anything.
+- Every element a script points at carries `data-target` (use `target(id)`).
+  Controls take `tabIndex={-1}` outside `play`; the shell also makes the guided
+  demonstration `inert`.
+- Guided playback never awards artifacts. Only an interactive solve calls
+  `solvePuzzle`.
+- **Scroll hold:** interactive puzzles are played in `HeldDialog`, which holds the
+  page through `holdScroll()`/`releaseScroll()` (lenis-controller), makes
+  `#journey-scenes` inert, traps focus, closes on Escape and on browser Back.
+  Anything outside the scenes that must work while held (Skip to Desktop, the
+  mode switch) calls `requestPuzzleRelease()` first. Keep the chrome above the
+  dialog's z-index.
+- Puzzle UI and the `puzzles` messages are **never** in the static HTML:
+  `PuzzleSlot` mounts the shell client-side within one era of the active one,
+  and `PuzzleMessages` loads the locale file into a nested provider.
+- Puzzle copy per puzzle: `title`, `invitation`, `task`, `hint`, `answer`,
+  `success` (which states the era's truth), `skip`. Machine text (shell output,
+  IP addresses, DOS errors) is English and LTR in every locale.
+- Wrong answers must fail for the real reason. Put domain logic in pure modules
+  (`ipv4.ts`, `shell-filesystem.ts`) and test it with plain node.
+- Scroll the puzzle's own containers by hand; never `scrollIntoView` inside the
+  journey, it scrolls the document too.
+- **Do not use `next/dynamic` for anything server-rendered inside the journey
+  tree** — its server-only preloader shifts `useId` and breaks hydration. Use
+  `React.lazy` (as `JourneyLoader` does); `next/dynamic` with `ssr: false` is fine
+  for client-only islands.
 
 ## Coding conventions — enforce these
 
