@@ -22,6 +22,12 @@ export interface EraStaging {
    * start. The UNIX screen must be lit before anything prints on it.
    */
   startAt: number;
+  /**
+   * Scroll distance of the era's puzzle segment, in viewport heights, added after
+   * the visual. Sized to the puzzle's guided script so playback reads at a calm
+   * pace: typing-heavy puzzles get more room than a two-click one.
+   */
+  puzzleLength: number;
 }
 
 /**
@@ -29,11 +35,11 @@ export interface EraStaging {
  * rather than in `content/eras.ts`.
  */
 export const eraStaging: Record<EraId, EraStaging> = {
-  eniac: { Visual: EraEniac, length: 2.2, startAt: 0 },
-  batch: { Visual: EraBatch, length: 2.6, startAt: 0 },
-  unix: { Visual: EraUnix, length: 3, startAt: 0.3 },
-  dos: { Visual: EraDos, length: 2.6, startAt: 0.02 },
-  macintosh: { Visual: EraMac, length: 2.8, startAt: 0 },
-  win95: { Visual: EraWin95, length: 3.2, startAt: 0 },
-  cloud: { Visual: EraCloud, length: 2.6, startAt: 0.72 },
+  eniac: { Visual: EraEniac, length: 2.2, startAt: 0, puzzleLength: 2 },
+  batch: { Visual: EraBatch, length: 2.6, startAt: 0, puzzleLength: 2.4 },
+  unix: { Visual: EraUnix, length: 3, startAt: 0.3, puzzleLength: 3 },
+  dos: { Visual: EraDos, length: 2.6, startAt: 0.02, puzzleLength: 2 },
+  macintosh: { Visual: EraMac, length: 2.8, startAt: 0, puzzleLength: 2.2 },
+  win95: { Visual: EraWin95, length: 3.2, startAt: 0, puzzleLength: 2.6 },
+  cloud: { Visual: EraCloud, length: 2.6, startAt: 0.72, puzzleLength: 2 },
 };

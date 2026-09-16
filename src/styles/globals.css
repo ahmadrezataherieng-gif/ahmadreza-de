@@ -337,8 +337,11 @@ html[lang^='fa'] {
 
   /* An era dims out over the last stretch of its pin, so the next one reads as
      replacing it rather than cutting in. Entrances are each era's own job. */
+  /* Reads --section-progress, not --era-progress: since Phase 5 the section
+     ends with a puzzle segment, and the finished visual must stay behind the
+     puzzle until the whole section is done. */
   .ao-era-exit {
-    opacity: clamp(0, calc((1 - var(--era-progress)) * 7 + 0.05), 1);
+    opacity: clamp(0, calc((1 - var(--section-progress)) * 7 + 0.05), 1);
   }
 
   /* The punch card is already feeding in on arrival and seats fully a quarter of
@@ -1376,4 +1379,199 @@ html[lang^='fa'] {
     linear-gradient(90deg, color-mix(in srgb, var(--ao-color-border) 55%, transparent) 1px, transparent 1px);
   background-size: 24px 24px;
   background-position: -1px -1px;
+}
+
+/* ==========================================================================
+   Puzzle segment (Phase 5)
+
+   Every era section ends in a puzzle segment: the era's one truth, its insider
+   detail, and the puzzle slot. It reads --puzzle-progress, which the resolver
+   writes alongside --era-progress.
+   ========================================================================== */
+
+@property --puzzle-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --section-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+/* No layout shift when a held puzzle hides the scrollbar. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* The page is held still while a puzzle is played. Native scrolling is blocked
+   here; Lenis is stopped separately (lenis-controller.ts). */
+html.ao-scroll-held,
+html.ao-scroll-held body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* --- layout: flow (reduced motion), sticky panel (phones), overlay (wide) -- */
+
+/* Default: an ordinary block after the visual - the reduced-motion document. */
+.ao-puzzle-layer {
+  position: relative;
+}
+
+.ao-puzzle-sticky {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 1rem 3rem;
+}
+
+.ao-puzzle-scrim {
+  display: none;
+}
+
+/* Phones and short viewports with motion allowed: the puzzle segment has its
+   own scroll distance and a sticky panel, so guided playback has room to read
+   even where the eras flow as a document. */
+@media (prefers-reduced-motion: no-preference) {
+  .ao-puzzle-layer {
+    height: calc(var(--puzzle-length, 2) * 100dvh);
+  }
+
+  .ao-puzzle-sticky {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    padding-top: 4rem;
+    padding-bottom: 4.5rem;
+    overflow: hidden;
+  }
+
+  /* A tall puzzle scrolls inside its own card, clipped at the card's edge, so
+     nothing slides under the phone's fixed chrome. */
+  .ao-puzzle-card {
+    max-height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* The sticky actions row supplies the bottom padding, so nothing peeks
+       out beneath it. */
+    padding-bottom: 0;
+  }
+}
+
+/* Wide, pinned: the puzzle layer lies over the pinned stage and fades in over
+   the finished visual once the visual's timeline is done. */
+@media (min-width: 768px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .ao-puzzle-layer {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    z-index: 1;
+    opacity: calc(
+      clamp(0, var(--puzzle-progress) * 25, 1) *
+        clamp(0, (1 - var(--section-progress)) * 7 + 0.05, 1)
+    );
+  }
+
+  .ao-puzzle-sticky {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    padding: 4.5rem 8rem 2rem 2rem;
+  }
+
+  [dir='rtl'] .ao-puzzle-sticky {
+    padding: 4.5rem 2rem 2rem 8rem;
+  }
+
+  .ao-puzzle-scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--ao-color-background) 84%, transparent);
+  }
+
+  .ao-puzzle-card {
+    max-height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 0;
+    transform: translateY(calc((1 - clamp(0, var(--puzzle-progress) * 12, 1)) * 1.5rem));
+  }
+}
+
+/* Wherever the puzzle card scrolls (the phone panel, the pinned card), its
+   actions stay on screen. Not in document flow: there the viewport is the
+   scroller, and the phone's bottom chrome would cover them. */
+@media (prefers-reduced-motion: no-preference) {
+  .ao-puzzle-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding-block: 0.5rem 1rem;
+    background: var(--ao-color-surface);
+  }
+}
+
+/* Press Start 2P reads at 8px; Persian falls back to Vazirmatn, which does not. */
+:lang(fa) .ao-pixel-label {
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+/* --- held puzzle dialog --------------------------------------------------- */
+
+.ao-puzzle-dialog-scrim {
+  background: color-mix(in srgb, var(--ao-color-background) 88%, transparent);
+}
+
+/* The 1984 puzzle window's title bar: the six-line stripe, drawn in tokens. */
+.ao-mac-titlebar {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--ao-color-text) 0 1px,
+    var(--ao-color-surface) 1px 3px
+  );
+  background-size: 100% 3px;
+  background-clip: content-box;
+  padding: 5px 4px;
+}
+
+/* --- guided playback ------------------------------------------------------- */
+
+/* The simulated hand moves between targets with a transition, so each scroll
+   step reads as a deliberate move rather than a jump. */
+.ao-guided-pointer {
+  transition: transform 420ms var(--ao-ease);
+}
+
+@keyframes ao-ring {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.5;
+  }
+}
+
+/* Before 1984 there was no mouse pointer: guided mode marks its "hand" with a
+   ring instead of an arrow. */
+.ao-guided-ring {
+  animation: ao-ring 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ao-guided-pointer {
+    transition: none;
+  }
+
+  .ao-guided-ring {
+    animation: none;
+  }
 }

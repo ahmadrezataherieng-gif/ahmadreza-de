@@ -11,6 +11,7 @@ import { eras, type EraId } from '@/content/eras';
 import { useJourneyStore } from '@/store/journey-store';
 import { useThemeStore } from '@/store/theme-store';
 import { useUnlockStore } from '@/store/unlock-store';
+import { usePuzzleProgressStore } from '@/store/puzzle-progress-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { setActiveLenis } from '@/lib/lenis-controller';
 import { themeToCssVars } from '@/lib/apply-theme';
@@ -20,6 +21,8 @@ import { EraSection } from '@/components/journey/EraSection';
 import { CONVERGENCE_ID, Convergence } from '@/components/journey/Convergence';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
+import { ModeSwitch } from '@/components/journey/ModeSwitch';
+import { JOURNEY_SCENES_ID } from '@/components/puzzles/hold';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
@@ -64,6 +67,7 @@ export function Journey() {
   const setTheme = useThemeStore((state) => state.setTheme);
   const markEraVisited = useUnlockStore((state) => state.markEraVisited);
   const completeJourney = useUnlockStore((state) => state.completeJourney);
+  const setPuzzleProgress = usePuzzleProgressStore((state) => state.setProgress);
 
   /* --- smooth scrolling ------------------------------------------------- */
   useEffect(() => {
@@ -125,8 +129,15 @@ export function Journey() {
       /** Whether the stage is sticky at this viewport size (CSS decides). */
       pinned: boolean;
       startAt: number;
-      /** Last progress written, so unchanged frames cost no style write. */
-      lastProgress: number;
+      /**
+       * Share of the pinned travel that belongs to the era's visual; the rest is
+       * its puzzle segment. 1 for the Convergence, which has no puzzle.
+       */
+      visualShare: number;
+      /** The puzzle segment, when it is in document flow (phones, reduced motion). */
+      layer: { top: number; height: number; sticky: boolean } | null;
+      /** Last values written, so unchanged frames cost no style write. */
+      last: { era: number; puzzle: number; section: number; published: number };
     }
 
     let bounds: EraBounds[] = [];
@@ -140,6 +151,10 @@ export function Journey() {
       themeId: ThemeId,
     ): EraBounds => {
       const stage = section.querySelector<HTMLElement>('[data-era-stage]');
+      const layerElement = section.querySelector<HTMLElement>('[data-puzzle-layer]');
+      const layerSticky = layerElement?.querySelector<HTMLElement>('[data-puzzle-sticky]');
+      const layerInFlow =
+        layerElement !== null && getComputedStyle(layerElement).position !== 'absolute';
       return {
         key,
         eraId,
@@ -149,7 +164,16 @@ export function Journey() {
         height: section.offsetHeight,
         pinned: stage !== null && getComputedStyle(stage).position === 'sticky',
         startAt: Number(section.dataset.startAt ?? '0'),
-        lastProgress: Number.NaN,
+        visualShare: Number(section.dataset.visualShare ?? '1'),
+        layer:
+          layerElement && layerInFlow
+            ? {
+                top: layerElement.getBoundingClientRect().top + window.scrollY,
+                height: layerElement.offsetHeight,
+                sticky: layerSticky !== null && layerSticky !== undefined && getComputedStyle(layerSticky).position === 'sticky',
+              }
+            : null,
+        last: { era: Number.NaN, puzzle: Number.NaN, section: Number.NaN, published: Number.NaN },
       };
     };
 
@@ -174,11 +198,31 @@ export function Journey() {
      * viewport - so scrubbed reveals complete as the era comes into view
      * rather than after it has already scrolled half away.
      */
+    const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
     const progressOf = (entry: EraBounds, scrollY: number, viewport: number) => {
-      const raw = entry.pinned
-        ? (scrollY - entry.top) / Math.max(1, entry.height - viewport)
-        : (scrollY + viewport - entry.top) / Math.max(1, viewport * 0.9);
-      return Math.min(1, Math.max(0, raw));
+      const section = clamp01(
+        entry.pinned
+          ? (scrollY - entry.top) / Math.max(1, entry.height - viewport)
+          : (scrollY + viewport - entry.top) / Math.max(1, viewport * 0.9),
+      );
+      if (entry.pinned) {
+        // One pinned travel, split: the visual keeps exactly the scroll distance
+        // it had before puzzles existed, and the puzzle segment follows it.
+        const share = entry.visualShare;
+        return {
+          section,
+          era: share >= 1 ? section : clamp01(section / share),
+          puzzle: share >= 1 ? 0 : clamp01((section - share) / (1 - share)),
+        };
+      }
+      const layer = entry.layer;
+      let puzzle = 0;
+      if (layer) {
+        puzzle = layer.sticky
+          ? clamp01((scrollY - layer.top) / Math.max(1, layer.height - viewport))
+          : clamp01((scrollY + viewport - layer.top) / Math.max(1, viewport * 0.9));
+      }
+      return { section, era: section, puzzle };
     };
 
     const resolve = () => {
@@ -208,11 +252,27 @@ export function Journey() {
       }
 
       for (const entry of bounds) {
-        const progress = progressOf(entry, scrollY, viewport);
-        const rounded = Math.round(progress * 1000) / 1000;
-        if (rounded !== entry.lastProgress) {
-          entry.lastProgress = rounded;
-          entry.section.style.setProperty('--era-progress', String(rounded));
+        const values = progressOf(entry, scrollY, viewport);
+        const progress = values.era;
+        const write = (name: '--era-progress' | '--puzzle-progress' | '--section-progress', field: 'era' | 'puzzle' | 'section') => {
+          const rounded = Math.round(values[field] * 1000) / 1000;
+          if (rounded !== entry.last[field]) {
+            entry.last[field] = rounded;
+            entry.section.style.setProperty(name, String(rounded));
+          }
+        };
+        write('--era-progress', 'era');
+        write('--puzzle-progress', 'puzzle');
+        write('--section-progress', 'section');
+
+        // Guided playback is React state, so the puzzle layer needs the number
+        // too - but only when it moves by half a percent, never per frame.
+        if (entry.eraId !== null) {
+          const published = Math.round(values.puzzle * 200) / 200;
+          if (published !== entry.last.published) {
+            entry.last.published = published;
+            setPuzzleProgress(entry.eraId, published);
+          }
         }
         // Set once, never cleared: a printout that has begun always finishes.
         if (
@@ -265,12 +325,34 @@ export function Journey() {
       if (!cancelled) ScrollTrigger.refresh();
     });
 
+    // Any section that changes height moves every boundary after it: an era's
+    // content settling on phones, a puzzle growing in document flow. Re-measure
+    // then, debounced, and only for real height changes.
+    const heights = new Map<Element, number>();
+    let resizeTimer = 0;
+    const resizeObserver = new ResizeObserver((entries) => {
+      let changed = false;
+      for (const entry of entries) {
+        const height = Math.round(entry.contentRect.height);
+        if (heights.get(entry.target) !== height) {
+          if (heights.has(entry.target)) changed = true;
+          heights.set(entry.target, height);
+        }
+      }
+      if (!changed) return;
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    for (const entry of bounds) resizeObserver.observe(entry.section);
+
     return () => {
       cancelled = true;
       cancelAnimationFrame(refreshFrame);
+      resizeObserver.disconnect();
+      window.clearTimeout(resizeTimer);
       context.revert();
     };
-  }, [completeJourney, markEraVisited, setActiveEra, setProgress, setTheme]);
+  }, [completeJourney, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
 
   /* --- reduced motion changes whether stages pin, so heights change ------ */
   useEffect(() => {
@@ -294,14 +376,27 @@ export function Journey() {
         <LanguageSwitcher />
       </header>
 
-      <SkipToDesktop />
+      <div className="fixed top-4 end-4 z-[var(--ao-z-modal)] flex items-center gap-2">
+        <ModeSwitch />
+        <SkipToDesktop />
+      </div>
       <JourneyProgress sectionId={sectionId} />
 
-      {eras.map((era) => (
-        <EraSection key={era.id} era={era} sectionId={sectionId(era.index)} />
-      ))}
+      {/* The scenes, separate from the chrome above: while a puzzle holds the
+          page, this container is made inert, and the chrome - Skip to Desktop
+          included - stays reachable. */}
+      <div id={JOURNEY_SCENES_ID}>
+        {eras.map((era) => (
+          <EraSection
+            key={era.id}
+            era={era}
+            sectionId={sectionId(era.index)}
+            nextSectionId={era.index < eras.length ? sectionId(era.index + 1) : CONVERGENCE_ID}
+          />
+        ))}
 
-      <Convergence />
+        <Convergence />
+      </div>
 
       <p className="ao-sr-only">{t('scrollHint')}</p>
     </div>

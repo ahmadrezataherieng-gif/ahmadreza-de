@@ -67,3 +67,26 @@ export function encodeCard(text: string): PunchedColumn[] {
     rows: punchesFor(character),
   }));
 }
+
+/**
+ * Read one column back. The inverse of `punchesFor`, strict enough to catch a
+ * misprint: a combination the code does not define reads as '?'.
+ */
+export function decodeColumn(rows: readonly number[]): string {
+  const punched = [...new Set(rows)];
+  if (punched.length === 0) return ' ';
+  if (punched.length === 1) {
+    const [only] = punched;
+    return only !== undefined && only >= 0 && only <= 9 ? String(only) : '?';
+  }
+  if (punched.length !== 2) return '?';
+
+  const zone = punched.find((row) => row === 12 || row === 11 || row === 0);
+  const digit = punched.find((row) => row !== zone);
+  if (zone === undefined || digit === undefined || digit < 1 || digit > 9) return '?';
+
+  if (zone === 12) return String.fromCharCode(64 + digit);
+  if (zone === 11) return String.fromCharCode(73 + digit);
+  // Zone 0 starts at digit 2: 0-1 is not a letter in this code.
+  return digit >= 2 ? String.fromCharCode(81 + digit) : '?';
+}

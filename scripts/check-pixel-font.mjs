@@ -31,6 +31,9 @@ const PIXEL_KEYS = [
   'eras.macintosh.visual.icons',
   'eras.macintosh.visual.desktopIcons',
   'eras.macintosh.visual.pointerCaption',
+  // Phase 5: the 1984 drag-and-drop puzzle labels its icons in the pixel face.
+  'puzzles.macintosh.items',
+  'puzzles.macintosh.window',
 ];
 const LOCALES = ['de', 'en'];
 

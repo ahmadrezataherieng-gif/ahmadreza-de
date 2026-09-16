@@ -429,5 +429,195 @@
     "label": "Mode",
     "guided": "Watch",
     "interactive": "Play"
+  },
+  "puzzles": {
+    "common": {
+      "start": "Start puzzle",
+      "tryMyself": "I'll try this one myself",
+      "skip": "Skip",
+      "close": "Close",
+      "continue": "Continue",
+      "hint": "Hint",
+      "answer": "Show answer",
+      "hintLabel": "Hint",
+      "answerLabel": "Answer",
+      "solved": "Solved",
+      "playAgain": "Play again",
+      "watching": "Playing for you",
+      "loading": "Loading puzzle …",
+      "dialogLabel": "Puzzle: {title}",
+      "optional": "Optional",
+      "taskLabel": "Task",
+      "helpLabel": "Help",
+      "summaryLabel": "What this demonstration shows"
+    },
+    "eniac": {
+      "title": "The first bug",
+      "invitation": "The card reads one letter wrong. Can you find the fault?",
+      "task": "The card should spell AHMADREZA, but one column is punched wrong. Punch and clear holes until the name is right.",
+      "hint": "Column 5 reads E instead of D. Compare its holes with the table: same zone, different digit.",
+      "answer": "In column 5, clear the hole in row 5 and punch row 4. Zone 12 plus digit 4 is D.",
+      "success": "AHMADREZA. Every character is just a pattern of hole and no hole, on and off. Your computer still stores that D as 01000100.",
+      "skip": "Skip the card",
+      "tableTitle": "IBM punch-card code",
+      "table": [
+        "A–I: zone 12 + digit 1–9",
+        "J–R: zone 11 + digit 1–9",
+        "S–Z: zone 0 + digit 2–9"
+      ],
+      "readsLabel": "The card reads",
+      "holeLabel": "Column {column}, row {row}: {state}",
+      "punched": "punched",
+      "blank": "not punched",
+      "bugNote": "The word is older than the story: on 9 September 1947, operators of the Harvard Mark II found a moth in relay 70 and taped it into the logbook as the “first actual case of bug being found”. The logbook is now at the Smithsonian."
+    },
+    "batch": {
+      "title": "The queue",
+      "invitation": "Four jobs are waiting for the machine. In which order does everyone wait the least?",
+      "task": "Order the jobs so that the total waiting time is as small as possible. Each job waits until every job ahead of it has finished.",
+      "hint": "Every minute at the front of the queue, everyone behind waits too. So what should run first?",
+      "answer": "Report (2), Inventory (5), Invoices (15), Payroll (30). Total waiting time: 31 minutes.",
+      "success": "31 minutes instead of 115: shortest job first. These are exactly the decisions an operating system makes, so the machine never waits on people.",
+      "skip": "Skip the queue",
+      "jobs": {
+        "payroll": "Payroll",
+        "inventory": "Inventory",
+        "invoices": "Invoices",
+        "report": "Report"
+      },
+      "runs": "runs {minutes} min",
+      "waits": "waits {minutes} min",
+      "total": "Total waiting time: {minutes} min",
+      "moveUp": "Move {job} forward",
+      "moveDown": "Move {job} back"
+    },
+    "unix": {
+      "title": "The hidden file",
+      "invitation": "Somewhere under /home is a hidden file. Can you find it with ls, cd and cat?",
+      "task": "Find the hidden file and read it with cat. Hidden files start with a dot and only show up with ls -a. Type help for all commands.",
+      "hint": "Go home with cd /home/ahmadreza and look around with ls. In the projects folder, ls -a helps.",
+      "answer": "cd /home/ahmadreza/projects, then ls -a, then cat .secret",
+      "success": "Found: /home/ahmadreza/projects/.secret. A filesystem is a tree, and a path is the directions from the root to the file.",
+      "skip": "Skip the terminal",
+      "inputLabel": "Enter a command",
+      "help": "Commands: pwd  ls  ls -a  cd <path>  cat <file>  clear",
+      "files": {
+        "motd": "Welcome. Type help.",
+        "notes": "The interesting stuff is in projects.",
+        "network": "192.168.1.0/24 -- my home network.",
+        "secret": "You found the path."
+      },
+      "errors": {
+        "noDir": "cd: {path}: No such file or directory",
+        "notDir": "cd: {path}: Not a directory",
+        "noFile": "cat: {path}: No such file or directory",
+        "isDir": "cat: {path}: Is a directory",
+        "lsNoFile": "ls: {path}: No such file or directory",
+        "unknown": "{command}: command not found"
+      }
+    },
+    "dos": {
+      "title": "640 kilobytes",
+      "invitation": "The word processor won't start: not enough memory. Can you make room without losing the printer?",
+      "task": "The word processor needs 384 K of free memory. Unload drivers until it starts. The letter still has to reach the network printer afterwards.",
+      "hint": "You are 88 K short. Which drivers do you not need to write and print a letter?",
+      "answer": "Unload the sound driver and the CD-ROM driver, keep the network driver, then start the word processor.",
+      "success": "The word processor runs, and the printer is reachable. Memory is finite: every driver took a share of the same 640 K, and programs still compete for memory today.",
+      "skip": "Skip memory",
+      "drivers": {
+        "dos": "MS-DOS",
+        "mouse": "Mouse driver",
+        "cdrom": "CD-ROM driver",
+        "network": "Network driver",
+        "sound": "Sound driver",
+        "screensaver": "Screen saver"
+      },
+      "fixed": "fixed",
+      "free": "Free: {kb} K",
+      "needs": "Word processor needs {kb} K",
+      "run": "Start word processor",
+      "tooBig": "Program too big to fit in memory",
+      "noNetwork": "The word processor runs, but without the network driver the letter cannot find a printer.",
+      "toggleLabel": "{driver}, {kb} K",
+      "memoryLabel": "Memory: {used} K of 640 K in use"
+    },
+    "macintosh": {
+      "title": "Tidy up",
+      "invitation": "For the first time, no command at all: can you tidy the desktop with just the pointer?",
+      "task": "Drag the CV into the Application folder and the old file into the Trash.",
+      "hint": "Press and hold an icon, drag it onto the target and let go. With the keyboard: Space picks up, arrow keys choose the target, Enter drops.",
+      "answer": "Drag CV onto Application, drag Old onto the Trash.",
+      "success": "Tidied up without a single command. Pointing is easier than remembering: in 1981 the same thing took COPY, DEL and a path you had to know by heart.",
+      "skip": "Skip the desktop",
+      "window": "Desktop",
+      "items": {
+        "vita": "CV",
+        "old": "Old",
+        "folder": "Application",
+        "trash": "Trash"
+      },
+      "pickUp": "Pick up {item}",
+      "dropOn": "Drop {item} on {target}",
+      "carrying": "You are holding {item}. Choose a target.",
+      "cancel": "Cancel drop",
+      "moved": "{item} is now in {target}.",
+      "wrongTrash": "You still need your CV. Not in the Trash.",
+      "wrongFolder": "The old file does not belong in the application.",
+      "keyboardHelp": "Keyboard: Space picks up, arrow keys choose, Enter drops, Esc cancels."
+    },
+    "win95": {
+      "title": "No connection",
+      "invitation": "The modem is connected, but the network does not answer. Is the address right?",
+      "task": "Set the IP address, subnet mask and gateway so the PC can reach the router. The router is 192.168.1.1 on network 192.168.1.0 with mask 255.255.255.0. The printer already uses 192.168.1.20.",
+      "hint": "The gateway has to be inside your own subnet. Compare the first three numbers of your address with the router's.",
+      "answer": "IP address 192.168.1.50, subnet mask 255.255.255.0, gateway 192.168.1.1.",
+      "success": "Connected. A network needs addresses: your own, the size of your network – the mask – and the door out, the gateway.",
+      "skip": "Skip the connection",
+      "dialogTitle": "TCP/IP Properties",
+      "ip": "IP address",
+      "mask": "Subnet mask",
+      "gateway": "Default gateway",
+      "connect": "Connect",
+      "errors": {
+        "invalidAddress": "“{value}” is not a valid IPv4 address.",
+        "invalidMask": "“{value}” is not a valid subnet mask: the ones must be contiguous from the left.",
+        "networkAddress": "{ip} is the network address. No device may use it.",
+        "broadcastAddress": "{ip} is the broadcast address. No device may use it.",
+        "gatewayOutside": "The gateway {gateway} is not in your subnet {network}. Your PC does not know how to reach it.",
+        "sameAsGateway": "The PC and the gateway have the same address, {ip}.",
+        "conflictRouter": "{ip} already belongs to the router.",
+        "conflictPrinter": "{ip} already belongs to the printer.",
+        "routerCannotReply": "The router sits on network 192.168.1.0/24. It cannot answer {ip}, because that address is outside its network.",
+        "noRouter": "No router answers at {gateway}. The router is 192.168.1.1."
+      }
+    },
+    "cloud": {
+      "title": "Unreachable",
+      "invitation": "portfolio-web is running, but nobody can reach it. Can you find the rule that blocks the way?",
+      "task": "The service listens on TCP port 443. The firewall checks its rules top to bottom, and the first match wins. Find the fault and open the right port without opening everything.",
+      "hint": "Which rule does a packet for port 443 hit first?",
+      "answer": "Rule 2 blocks port 443 before rule 3 is ever checked. Set rule 2 to ALLOW.",
+      "success": "Reachable, and everything else stays shut. Every service lives isolated behind its own port, and the firewall decides which door opens.",
+      "skip": "Skip the firewall",
+      "columns": {
+        "rule": "#",
+        "action": "Action",
+        "protocol": "Protocol",
+        "port": "Port",
+        "source": "Source"
+      },
+      "any": "any",
+      "test": "Test connection",
+      "probe": "Test: TCP port 443 from 203.0.113.7",
+      "blocked": "Blocked by rule {rule}.",
+      "wideOpen": "Reachable, but now every port is open to the whole internet.",
+      "actionLabel": "Rule {rule}: action",
+      "portLabel": "Rule {rule}: port",
+      "keywords": {
+        "allow": "ALLOW",
+        "deny": "DENY",
+        "tcp": "tcp"
+      }
+    }
   }
 }

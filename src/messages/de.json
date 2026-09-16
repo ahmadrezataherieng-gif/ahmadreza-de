@@ -430,5 +430,195 @@
     "label": "Modus",
     "guided": "Zuschauen",
     "interactive": "Selbst lösen"
+  },
+  "puzzles": {
+    "common": {
+      "start": "Rätsel starten",
+      "tryMyself": "Das probiere ich selbst",
+      "skip": "Überspringen",
+      "close": "Schließen",
+      "continue": "Weiter",
+      "hint": "Tipp",
+      "answer": "Lösung zeigen",
+      "hintLabel": "Tipp",
+      "answerLabel": "Lösung",
+      "solved": "Gelöst",
+      "playAgain": "Nochmal spielen",
+      "watching": "Wird vorgeführt",
+      "loading": "Rätsel wird geladen …",
+      "dialogLabel": "Rätsel: {title}",
+      "optional": "Optional",
+      "taskLabel": "Aufgabe",
+      "helpLabel": "Hilfe",
+      "summaryLabel": "Was hier vorgeführt wird"
+    },
+    "eniac": {
+      "title": "Der erste Bug",
+      "invitation": "Die Karte liest einen falschen Buchstaben. Findest du den Fehler?",
+      "task": "Die Karte soll AHMADREZA ergeben, doch eine Spalte ist falsch gestanzt. Stanze und entferne Löcher, bis der Name stimmt.",
+      "hint": "Spalte 5 zeigt E statt D. Vergleiche ihre Löcher mit der Tabelle: gleiche Zone, andere Ziffer.",
+      "answer": "In Spalte 5 das Loch in Zeile 5 entfernen und in Zeile 4 stanzen. Zone 12 plus Ziffer 4 ergibt D.",
+      "success": "AHMADREZA. Jedes Zeichen ist nur ein Muster aus Loch und kein Loch, an und aus. Dein Rechner speichert das D bis heute als 01000100.",
+      "skip": "Karte überspringen",
+      "tableTitle": "IBM-Lochkartencode",
+      "table": [
+        "A–I: Zone 12 + Ziffer 1–9",
+        "J–R: Zone 11 + Ziffer 1–9",
+        "S–Z: Zone 0 + Ziffer 2–9"
+      ],
+      "readsLabel": "Die Karte liest",
+      "holeLabel": "Spalte {column}, Zeile {row}: {state}",
+      "punched": "gestanzt",
+      "blank": "nicht gestanzt",
+      "bugNote": "Der Begriff ist älter als die Anekdote: Am 9. September 1947 fanden Techniker im Harvard Mark II eine Motte in Relais 70 und klebten sie ins Logbuch, als „first actual case of bug being found“. Das Logbuch liegt heute im Smithsonian."
+    },
+    "batch": {
+      "title": "Die Warteschlange",
+      "invitation": "Vier Jobs warten auf die Maschine. In welcher Reihenfolge warten alle am wenigsten?",
+      "task": "Ordne die Jobs so, dass die gesamte Wartezeit so klein wie möglich wird. Jeder Job wartet, bis alle vor ihm fertig sind.",
+      "hint": "Jede Minute am Anfang der Schlange warten alle anderen mit. Was sollte also zuerst laufen?",
+      "answer": "Bericht (2), Inventur (5), Rechnungen (15), Lohnabrechnung (30). Gesamtwartezeit: 31 Minuten.",
+      "success": "31 Minuten statt 115: der kürzeste Job zuerst. Genau solche Entscheidungen trifft ein Betriebssystem, damit die Maschine nie auf Menschen wartet.",
+      "skip": "Warteschlange überspringen",
+      "jobs": {
+        "payroll": "Lohnabrechnung",
+        "inventory": "Inventur",
+        "invoices": "Rechnungen",
+        "report": "Bericht"
+      },
+      "runs": "läuft {minutes} Min.",
+      "waits": "wartet {minutes} Min.",
+      "total": "Gesamtwartezeit: {minutes} Min.",
+      "moveUp": "{job} nach vorn",
+      "moveDown": "{job} nach hinten"
+    },
+    "unix": {
+      "title": "Die versteckte Datei",
+      "invitation": "Irgendwo unter /home liegt eine versteckte Datei. Findest du sie mit ls, cd und cat?",
+      "task": "Finde die versteckte Datei und lies sie mit cat. Versteckte Dateien beginnen mit einem Punkt und erscheinen nur bei ls -a. Tippe help für alle Befehle.",
+      "hint": "Geh mit cd /home/ahmadreza nach Hause und sieh dich mit ls um. Im Ordner projects hilft ls -a.",
+      "answer": "cd /home/ahmadreza/projects, dann ls -a, dann cat .secret",
+      "success": "Gefunden: /home/ahmadreza/projects/.secret. Ein Dateisystem ist ein Baum, und ein Pfad ist die Wegbeschreibung von der Wurzel bis zur Datei.",
+      "skip": "Terminal überspringen",
+      "inputLabel": "Befehl eingeben",
+      "help": "Befehle: pwd  ls  ls -a  cd <pfad>  cat <datei>  clear",
+      "files": {
+        "motd": "Willkommen. Tippe help.",
+        "notes": "Das Interessante liegt in projects.",
+        "network": "192.168.1.0/24 -- mein Heimnetz.",
+        "secret": "Du hast den Pfad gefunden."
+      },
+      "errors": {
+        "noDir": "cd: {path}: No such file or directory",
+        "notDir": "cd: {path}: Not a directory",
+        "noFile": "cat: {path}: No such file or directory",
+        "isDir": "cat: {path}: Is a directory",
+        "lsNoFile": "ls: {path}: No such file or directory",
+        "unknown": "{command}: command not found"
+      }
+    },
+    "dos": {
+      "title": "640 Kilobyte",
+      "invitation": "Die Textverarbeitung startet nicht: zu wenig Speicher. Machst du Platz, ohne den Drucker zu verlieren?",
+      "task": "Die Textverarbeitung braucht 384 K freien Speicher. Entlade Treiber, bis sie startet. Der Brief muss danach noch auf dem Netzwerkdrucker landen.",
+      "hint": "Dir fehlen 88 K. Welche Treiber brauchst du zum Schreiben und Drucken eines Briefs nicht?",
+      "answer": "Sound-Treiber und CD-ROM-Treiber entladen, den Netzwerktreiber behalten, dann die Textverarbeitung starten.",
+      "success": "Die Textverarbeitung läuft, und der Drucker ist erreichbar. Speicher ist endlich: Jeder Treiber belegte einen Teil derselben 640 K, und Programme konkurrieren bis heute um Speicher.",
+      "skip": "Speicher überspringen",
+      "drivers": {
+        "dos": "MS-DOS",
+        "mouse": "Maustreiber",
+        "cdrom": "CD-ROM-Treiber",
+        "network": "Netzwerktreiber",
+        "sound": "Sound-Treiber",
+        "screensaver": "Bildschirmschoner"
+      },
+      "fixed": "fest",
+      "free": "Frei: {kb} K",
+      "needs": "Textverarbeitung benötigt {kb} K",
+      "run": "Textverarbeitung starten",
+      "tooBig": "Program too big to fit in memory",
+      "noNetwork": "Die Textverarbeitung läuft, aber ohne Netzwerktreiber findet der Brief keinen Drucker.",
+      "toggleLabel": "{driver}, {kb} K",
+      "memoryLabel": "Arbeitsspeicher: {used} K von 640 K belegt"
+    },
+    "macintosh": {
+      "title": "Aufräumen",
+      "invitation": "Zum ersten Mal ganz ohne Befehl: Räumst du den Schreibtisch nur mit dem Zeiger auf?",
+      "task": "Zieh die Vita in den Ordner Bewerbung und die alte Datei in den Papierkorb.",
+      "hint": "Halte ein Symbol gedrückt, zieh es auf das Ziel und lass los. Mit der Tastatur: Leertaste nimmt auf, Pfeiltasten wählen das Ziel, Eingabe legt ab.",
+      "answer": "Vita auf Bewerbung ziehen, Alt auf den Papierkorb ziehen.",
+      "success": "Aufgeräumt, ohne einen einzigen Befehl. Zeigen ist leichter als Erinnern: 1981 hieß dasselbe noch COPY, DEL und ein Pfad, den man auswendig wissen musste.",
+      "skip": "Schreibtisch überspringen",
+      "window": "Schreibtisch",
+      "items": {
+        "vita": "Vita",
+        "old": "Alt",
+        "folder": "Bewerbung",
+        "trash": "Papierkorb"
+      },
+      "pickUp": "{item} aufnehmen",
+      "dropOn": "{item} auf {target} ablegen",
+      "carrying": "Du hältst {item}. Wähle ein Ziel.",
+      "cancel": "Ablegen abbrechen",
+      "moved": "{item} liegt jetzt in {target}.",
+      "wrongTrash": "Die Vita brauchst du noch. Nicht in den Papierkorb.",
+      "wrongFolder": "Die alte Datei gehört nicht zur Bewerbung.",
+      "keyboardHelp": "Tastatur: Leertaste nimmt auf, Pfeiltasten wählen, Eingabe legt ab, Esc bricht ab."
+    },
+    "win95": {
+      "title": "Keine Verbindung",
+      "invitation": "Das Modem ist verbunden, aber das Netz antwortet nicht. Stimmt die Adresse?",
+      "task": "Stelle IP-Adresse, Subnetzmaske und Gateway so ein, dass der PC den Router erreicht. Der Router hat 192.168.1.1 im Netz 192.168.1.0 mit der Maske 255.255.255.0. Der Drucker nutzt schon 192.168.1.20.",
+      "hint": "Das Gateway muss in deinem eigenen Subnetz liegen. Vergleiche die ersten drei Zahlen deiner Adresse mit denen des Routers.",
+      "answer": "IP-Adresse 192.168.1.50, Subnetzmaske 255.255.255.0, Gateway 192.168.1.1.",
+      "success": "Verbunden. Ein Netzwerk braucht Adressen: deine eigene, die Größe deines Netzes – die Maske – und die Tür nach draußen, das Gateway.",
+      "skip": "Verbindung überspringen",
+      "dialogTitle": "TCP/IP-Eigenschaften",
+      "ip": "IP-Adresse",
+      "mask": "Subnetzmaske",
+      "gateway": "Standard-Gateway",
+      "connect": "Verbinden",
+      "errors": {
+        "invalidAddress": "„{value}“ ist keine gültige IPv4-Adresse.",
+        "invalidMask": "„{value}“ ist keine gültige Subnetzmaske: Die Einsen müssen lückenlos vorn stehen.",
+        "networkAddress": "{ip} ist die Netzadresse. Die darf kein Gerät benutzen.",
+        "broadcastAddress": "{ip} ist die Broadcast-Adresse. Die darf kein Gerät benutzen.",
+        "gatewayOutside": "Das Gateway {gateway} liegt nicht in deinem Subnetz {network}. Dein PC weiß nicht, wie er es erreichen soll.",
+        "sameAsGateway": "PC und Gateway haben dieselbe Adresse {ip}.",
+        "conflictRouter": "{ip} gehört schon dem Router.",
+        "conflictPrinter": "{ip} gehört schon dem Drucker.",
+        "routerCannotReply": "Der Router sitzt im Netz 192.168.1.0/24. Er kann {ip} nicht antworten, weil die Adresse außerhalb seines Netzes liegt.",
+        "noRouter": "Unter {gateway} antwortet kein Router. Der Router hat 192.168.1.1."
+      }
+    },
+    "cloud": {
+      "title": "Nicht erreichbar",
+      "invitation": "portfolio-web läuft, aber niemand erreicht es. Findest du die Regel, die den Weg sperrt?",
+      "task": "Der Dienst lauscht auf TCP-Port 443. Die Firewall prüft ihre Regeln von oben nach unten, und die erste passende gilt. Finde den Fehler und öffne den richtigen Port, ohne alles zu öffnen.",
+      "hint": "Welche Regel trifft ein Paket für Port 443 als erste?",
+      "answer": "Regel 2 sperrt Port 443, bevor Regel 3 überhaupt geprüft wird. Stelle Regel 2 auf ALLOW.",
+      "success": "Erreichbar, und alles andere bleibt zu. Jeder Dienst lebt isoliert hinter seinem eigenen Port, und die Firewall entscheidet, welche Tür aufgeht.",
+      "skip": "Firewall überspringen",
+      "columns": {
+        "rule": "#",
+        "action": "Aktion",
+        "protocol": "Protokoll",
+        "port": "Port",
+        "source": "Quelle"
+      },
+      "any": "alle",
+      "test": "Verbindung testen",
+      "probe": "Test: TCP-Port 443 von 203.0.113.7",
+      "blocked": "Blockiert von Regel {rule}.",
+      "wideOpen": "Erreichbar, aber jetzt ist jeder Port für das ganze Internet offen.",
+      "actionLabel": "Regel {rule}: Aktion",
+      "portLabel": "Regel {rule}: Port",
+      "keywords": {
+        "allow": "ALLOW",
+        "deny": "DENY",
+        "tcp": "tcp"
+      }
+    }
   }
 }

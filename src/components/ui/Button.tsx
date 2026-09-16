@@ -1,6 +1,6 @@
 'use client';
 
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '@/lib/cn';
 
 export type ButtonVariant = 'primary' | 'ghost' | 'danger';
@@ -10,6 +10,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   children: ReactNode;
+  /** React 19 passes refs as a plain prop. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const VARIANTS: Record<ButtonVariant, string> = {
