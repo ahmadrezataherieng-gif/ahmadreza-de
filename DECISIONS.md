@@ -103,6 +103,11 @@ must be the German version. English and Persian are important but secondary.
 
 ## 4. Puzzles are optional, never blocking
 
+> **Amended by entry 39 (Phase 5.5A).** Play mode now gates each era on its
+> puzzle, with a one-click way through ("Lösung zeigen"). The rule became: *a
+> puzzle never blocks without a one-click way through; Zum Desktop is always
+> available.* The reasoning below still holds for Watch mode and for recruiters.
+
 **Decision:** every puzzle can be skipped, a "Skip to Desktop" control is visible
 at every point in Act 1, and returning visitors go straight to the desktop.
 
@@ -616,7 +621,7 @@ future change, and the era visuals are already the most intricate code in the
 project. Making guided mode a *playback of the same puzzle* - its own reducer
 driven by a script instead of by input - means a fix to a puzzle fixes both modes
 by construction. The engine that makes this true is recorded with the puzzle
-work, in entries 35 and 36.
+work, in entries 36 and 37.
 
 ---
 
@@ -767,6 +772,12 @@ the 1984 arrow bitmap from then on.
 **Techniques worth knowing:**
 - Reordering list items moves DOM nodes and drops focus; the scheduling puzzle
   puts focus back on the moved job's button in an effect.
+- Without Lenis (reduced motion) every programmatic scroll jumps; smooth
+  native scrolling was both wrong for those visitors and too slow to reach the
+  end of a long document-flow page.
+- Each era visual is its own stacking context (`isolation: isolate`): the 1995
+  scene's windows carry z-indexes that otherwise rose above the puzzle layer at
+  768 px portrait.
 - Programmatic scrolls re-aim after they come to rest. Puzzles mount and era
   content settles while the page moves past them, so a section top or the page
   end measured at the start was up to ~360 px stale on arrival in document flow.
@@ -788,3 +799,147 @@ the 1984 arrow bitmap from then on.
 - Drag and drop uses pointer events with pointer capture, so mouse and touch are
   one code path; a press without movement is a click, which picks up. The
   keyboard path is the same pick-up/drop model.
+
+---
+
+## 39. Play mode gates each era; "Lösung zeigen" is the one-click way through
+
+**Decision (Phase 5.5A):** in Play mode the visitor cannot scroll past an era's
+puzzle segment until the era is *passed*: solved, or its solution shown. Watch
+mode never gates. The per-puzzle Skip button is gone from Play mode; each puzzle
+offers "Hinweis" and "Lösung zeigen" from the first moment. Zum Desktop and the
+mode switch work at every point and are never blocked.
+
+- **A shown solution** plays the puzzle's own guided script inside the dialog,
+  driven by time instead of scroll (`revealSeconds` in `puzzles/registry.ts`),
+  then shows the success message and opens the gate. It awards no artifact and
+  no badge. Only a real solve awards the artifact.
+- **Passed eras persist** (`passedEras` in the unlock store, schema v2; a v1
+  store's solved eras are migrated as passed), so a reload never re-locks them.
+- **The gate is a layout limit, not a scroll fight.** `setScrollLimit()` in
+  `lenis-controller.ts` clips `#journey-scenes` to the gate line (`overflow:
+  clip`, which keeps sticky pinning) and makes every section below it inert. The
+  document simply ends there, so Lenis, native touch scrolling, the keyboard and
+  reduced motion (no Lenis) all meet the same end. Section positions do not
+  change, so the single resolver's measurements stay valid. Rejected: clamping
+  the scroll position every frame (jitters, fights touch momentum) and
+  unmounting later sections (shifts every measurement).
+- **Where the line lies** (`gateBottom` in `puzzles/gate.ts`): pinned stages at
+  85 % of the section's travel, before the segment starts fading; otherwise at
+  the end of the puzzle segment. A gated segment reserves `--ao-gate-cue` at its
+  foot (136 px, 216 px on phones, where the cue's text wraps above its buttons
+  and must clear the language bar), so the cue never covers the puzzle.
+- **Which era gates:** the first unpassed era whose line is still below the top
+  of the viewport. An era the visitor has scrolled past never pulls them back
+  (reload, Watch-to-Play switch further down). If the line is on screen - say,
+  switching back to Play while the end of the segment is visible - the page end
+  settles on it, a short upward correction rather than a skipped gate.
+- **Visible, never silent:** a lock cue sits at the page end with "Rätsel
+  öffnen" and "Lösung zeigen". It is outside the inert sections, so keyboard and
+  screen-reader users reach it right after the gated puzzle.
+- **Zum Desktop** suspends gates for the rest of the page visit
+  (`suspendGates`); otherwise the way back down to the desktop would close
+  again. The resolver's "page end = journey complete" rule ignores a page end
+  that is a gate.
+- The resolver only measures and ticks the gate module; it never learns the
+  mode. `PuzzleGate` (puzzle layer) configures it from the mode and passed eras.
+
+**Why:** the visitor who chose Play asked for a game; letting them scroll past
+every puzzle made that choice meaningless. A one-click reveal keeps the promise
+to recruiters: nobody is ever stuck.
+
+---
+
+## 40. Insider tricks work inside the puzzles; hidden "Legende" badges
+
+**Decision (Phase 5.5A):** where it can be done honestly, an era's insider
+detail is a working feature of its puzzle. Using it is never required; it awards
+a hidden per-era badge (`legendEras` in the unlock store, not displayed until the
+desktop exists). The insider note appears once the trick was used or the puzzle
+has ended (text-only eras show it from the start). Watch mode and "Lösung
+zeigen" demonstrate each trick once; neither awards a badge.
+
+| Era | Trick in the puzzle | Cue | Source |
+|---|---|---|---|
+| 1946 | The dropped card deck: swap cards until the felt-tip diagonal runs straight again | The broken line on the deck edge | As entry 32 |
+| 1956 | Sense switch 3: the running program reads it (`IF (SENSE SWITCH 3) 10, 20`) and prints each job's wait | The FORTRAN listing and the six console switches | As entry 32; the `IF (SENSE SWITCH i) n1, n2` form from the 1957 IBM 704 FORTRAN manual |
+| 1971 | `chdir` works as the Sixth Edition name of `cd` | The welcome message mentions the old names | As entry 32 |
+| 1981 | F3 brings back the previous line at a real `C:\>` prompt (`WP`, `DIR`, `CLS`; anything else is "Bad command or file name"); an on-screen F3 key for touch | The F3 keycap | As entry 32 |
+| 1995 | Start > Run: `winipcfg` shows the IP configuration; `ipconfig` is not found | The Run button | As entry 32; The TCP/IP Guide, "TCP/IP Configuration Utilities"; the error follows Microsoft's documented "Cannot find file … (or one of its components)" |
+| 1984 | **Text only** | - | See below |
+| Today | **Text only** | - | See below |
+
+- **1984:** the detail is the origin of the ⌘ glyph, not a shortcut. A working
+  shortcut for moving files in the 1984 Finder could not be sourced (Finder 1.0's
+  exact command-key equivalents were not verifiable, and cut and paste of files
+  arrived decades later), so nothing was invented.
+- **Today:** the low-port rule is true for Linux hosts, but modern container
+  runtimes lower `ip_unprivileged_port_start` inside containers, so a container
+  scenario would teach something misleading. Left as text.
+- **1981 framing:** the drivers in that puzzle (mouse, CD-ROM, network, sound)
+  belong to the late-1980s and early-1990s PC, when the 640 K limit bit hardest.
+  The task now says so ("einige Jahre nach 1981") instead of implying 1981.
+
+---
+
+## 41. German addresses the visitor as "Sie"; Persian uses "شما"
+
+**Decision (Phase 5.5A):** all German copy uses "Sie", natural rather than stiff;
+Persian uses the polite plural throughout (it already did); English stays
+neutral. The first readers are recruiters and public-sector employers.
+
+---
+
+## 42. The 1946 scene: the bug, and the name built from bits
+
+**Decision (Phase 5.5A):** the 1946 puzzle is staged on a deep black (`.ao-void`:
+a warm-to-cold radial falloff; the 1946 card and dialog turn black too). A moth
+crawls in from a corner - scrubbed by the segment's progress in Watch mode,
+timed in Play - and rests on the faulty column. Solving sends it away; the name
+AHMADREZA is then drawn as a 5x7 dot matrix, dot by dot, with each column's
+zone-digit code under its letter and the corrected D highlighted. The
+explanation (text is numbers) and the history of the word follow.
+
+**Historical accuracy:** the moth belongs to the Harvard Mark II, on 9 September
+1947 - a year after the era's date, and not in ENIAC. The copy says exactly
+that, and that "bug" already meant a fault (entry 32). Reduced motion shows the
+solved frame with no moth and all text present.
+
+---
+
+## 43. Landing page, Phase 5.5A
+
+- The résumé control appears twice - compact in the header, as a link under the
+  role - and both stay disabled until `RESUME.available`.
+- `EMAIL` in `content/profile.ts` holds a placeholder address with an
+  `available` flag. No mailto link is rendered until it is true, so the
+  placeholder can never be mailed or scraped.
+- Facts sit in a bold, scannable two-column grid. Polish without new weight: a
+  gradient on the first name, an accent rule, numbered accent-edged mode cards,
+  and an SVG-filter film grain (a data URI, not a raster file).
+- The Play card's copy describes the gates.
+
+---
+
+## 44. Verification lives in `scripts/verify/`; audit outcomes
+
+- `scripts/verify/cdp.mjs` and `journey.mjs` drive a local Chrome over the
+  DevTools protocol with Node built-ins only: landing, both modes, the gate
+  (scrollTo, wheel or touch swipe, keyboard), every puzzle by keyboard, the
+  tricks, reveal-without-artifact, reload persistence, mode switching, Zum
+  Desktop while gated. `CHROME_PATH` and `VERIFY_OUT` configure it; test hooks
+  are `data-action`, `data-mode-option` and `data-target` attributes.
+- **Machine text in code:** strings that are identical in every language and
+  belong to the simulated machine (the `WP` command, the `C:\>` prompt, DIR's
+  listing, key caps, the FORTRAN listing, a MAC address) are named constants in
+  the puzzle. Everything a visitor reads as prose stays in `messages/`.
+- **Removed:** the unused `data-puzzle-mount="unix-filesystem"`, and unused
+  message keys (`journey.puzzleOptional`, `skipPuzzle`, `solved`, `skipped`,
+  `insiderLabel`; `puzzles.common.answer`, `loading`, `helpLabel`, `skip`).
+- **Kept on purpose:** the `boot` and `ui` message namespaces and the unused
+  `nav` entries (desktop, about, projects, ...) are reserved for Phase 6, as is
+  the `Panel` primitive. `src/i18n/request.ts` keeps its default export because
+  next-intl requires it.
+- **Z-index:** the landing's decorative layers use a new `--ao-z-backdrop` step
+  instead of an ad-hoc `-z-10`.
+

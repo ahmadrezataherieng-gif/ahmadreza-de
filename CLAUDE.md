@@ -39,6 +39,12 @@ Rules that follow from it:
   period. It rewards the knowledgeable without confusing anyone else. **It must
   be factually true and sourced.** Never invent period detail. The sources for
   the current seven are recorded in DECISIONS.md entry 32.
+- **Where it can be done honestly, the insider detail is a working trick in the
+  puzzle** (DECISIONS.md 40): 1946 the deck's diagonal line, 1956 sense switch 3,
+  1971 `chdir`, 1981 F3, 1995 `winipcfg`. 1984 and today stay text. A trick is
+  never required, gets a subtle cue rather than an explanation, and earns a
+  hidden "Legende" badge (`legendEras`). The insider note appears once the trick
+  was used or the puzzle ended.
 
 ## Two viewing modes, one codebase
 
@@ -47,8 +53,10 @@ The visitor chooses how to experience the journey:
 - **Guided** — the visitor watches. Every puzzle solves itself on screen: a
   simulated pointer moves, clicks and types at a readable pace, driven by scroll
   progress. The visitor only scrolls. For someone with two minutes.
-- **Interactive** — the visitor plays. Puzzles wait for real input, with a
-  two-step help (hint, then full answer). For someone with fifteen minutes.
+- **Interactive (Play)** — the visitor plays. Each era's puzzle is a gate: the
+  page does not scroll past it until the puzzle is solved or its solution shown.
+  Every puzzle offers "Hinweis" and "Lösung zeigen" from the first moment. For
+  someone with fifteen minutes.
 
 **The architectural rule, never violate it: ONE set of scenes with a mode flag,
 NOT two implementations.** Never duplicate an era or a puzzle per mode. If you
@@ -60,8 +68,10 @@ find yourself writing the same scene twice, stop and restructure.
   at any time from a persistent control without losing scroll position.
 - Guided mode offers "I'll try this one myself" on each puzzle, which switches
   that puzzle — and from then on the mode — to interactive.
-- Skipping is always possible in both modes; `prefers-reduced-motion` renders
-  finished frames in both.
+- Watch mode never gates and keeps a Skip per puzzle. Play mode has no Skip:
+  "Lösung zeigen" plays the solution and opens the gate (without the artifact).
+  Switching to Watch removes every gate at once, without moving the page.
+- `prefers-reduced-motion` renders finished frames in both modes.
 
 ## The concept: "AhmadOS — 80 Years in 90 Seconds"
 
@@ -92,7 +102,7 @@ in Act 1 unlock extra apps.
 
 | # | Year | Subject | UI introduced | Puzzle | Teaches |
 |---|------|---------|---------------|--------|---------|
-| 1 | 1946 | ENIAC and punch cards | Blinking lamps only, no screen | Punch holes to encode a letter in binary | Binary and character encoding |
+| 1 | 1946 | ENIAC and punch cards | Blinking lamps only, no screen | A moth on a misencoded card: punch the fault out and the name is built from the bits | Binary and character encoding |
 | 2 | 1956 | Mainframes, the first OS, batch processing | A teletype printing text line by line onto paper | Reorder batch jobs to minimise total waiting time | Scheduling, and why operating systems exist |
 | 3 | 1971 | UNIX | Green phosphor CRT, scanlines, blinking cursor. **First era where the user can type.** | Navigate a simulated filesystem with `cd`/`ls`/`cat` to find a hidden file | The filesystem tree and paths |
 | 4 | 1981 | IBM PC and MS-DOS | `C:\>` prompt, amber on black | Fit a set of programs into 640 KB of memory | Memory constraints |
@@ -103,14 +113,20 @@ in Act 1 unlock extra apps.
 The canonical machine-readable version of this table is `src/content/eras.ts`.
 Keep the two in sync.
 
-## The optional-puzzle rule — never violate it
+## The puzzle rule — never violate it
 
-- Puzzles are **optional** and **never block progress**, in both viewing modes.
-- A **Skip** control is always visible.
-- A **Skip to Desktop** control is available at every point in Act 1.
+**A puzzle never blocks without a one-click way through. Zum Desktop is always
+available.**
+
+- Watch mode never gates. Play mode gates each era, and "Lösung zeigen" is always
+  one click away - in the puzzle and on the lock cue at the gate.
+- **Zum Desktop** and the mode switch work at every point in Act 1 and are never
+  blocked; both call `requestPuzzleRelease()`, and Zum Desktop suspends gates.
+- A gate is always visible (the lock cue), never a silent scroll stop, and never
+  traps keyboard or screen-reader users.
 - Returning visitors go **straight to the desktop**.
-- Solving a puzzle unlocks a bonus app. Skipping costs nothing else.
-- **Recruiters must never be gated behind a game.**
+- Solving a puzzle unlocks a bonus app. A shown solution opens the gate only.
+- **Recruiters must never be stuck behind a game.**
 
 ## The unlock mechanic
 
@@ -128,7 +144,7 @@ everyone. The mapping lives in `src/content/eras.ts`; the state lives in
 | Language | TypeScript, strict |
 | Styling | Tailwind CSS v4 (CSS-first config, no `tailwind.config.js`) |
 | i18n | next-intl v4, no middleware (static export) |
-| Animation | framer-motion (component-level), GSAP + ScrollTrigger (scroll) |
+| Animation | GSAP + ScrollTrigger (scroll); framer-motion installed for Phase 6, unused so far |
 | Smooth scroll | Lenis |
 | State | zustand (+ `persist` for unlocks) |
 | Fonts | `@fontsource*` packages, **self-hosted** |
@@ -197,6 +213,7 @@ pixel face; for `fa`, the pixel stack resolves to Vazirmatn.
 
 ```
 scripts/                    project checks (check-pixel-font.mjs)
+  verify/                   end-to-end browser checks over CDP (no dependencies)
 src/
   app/
     layout.tsx              pass-through root layout (no <html> here)
@@ -207,6 +224,7 @@ src/
     landing/                the landing page (server-rendered; client islands only)
     journey/                Act 1 era sections and scroll machinery; Convergence.tsx (Act 2)
       eras/                 one component per era visual, plus registry.ts
+    puzzles/                the puzzle engine, shell, gates and the seven puzzles
     apps/                   one folder per application
     theme/                  theme application and era rendering effects
   lib/                      helpers: cn(), themes, routing, constants, hooks
@@ -241,6 +259,9 @@ Rules of thumb:
 - `/de` is deliberately **not generated** — it would duplicate `/`. The
   `301 /de/ → /` lives in `public/_redirects`.
 - `canonical` and `hreflang` (including `x-default`) are emitted per view.
+- **Tone:** German addresses the visitor as **"Sie"** - natural, not stiff -
+  in every string, including puzzles and chrome. Persian uses the polite
+  **"شما"** throughout. English stays neutral. Never write "du" or "تو".
 - **Each view gets only its message namespaces** (`VIEW_NAMESPACES` in the
   layout). Everything handed to the client provider is serialised into the HTML,
   so add a namespace there when a view starts using it — and never add `puzzles`,
@@ -256,15 +277,18 @@ a recruiter judges in three seconds and Google reads first.
   JavaScript). **Never import journey code here** — the journey is behind
   `JourneyLoader`'s dynamic import precisely so the landing page ships no GSAP,
   Lenis or era.
-- Contents: name (the strongest element), role line, facts, the two mode buttons
-  as the primary call to action, a discreet résumé control, the language
-  switcher, and a restrained timeline hint that does not reveal any era.
+- Contents: name (the strongest element), role line, bold key facts, the two
+  mode cards as the primary call to action (the Play card must describe the
+  gates), the résumé control twice (header corner and under the role), an email
+  link, the language switcher, and a restrained timeline hint that does not
+  reveal any era.
 - **Assets still owed** are declared in `src/content/profile.ts` with an
   `available` flag: the portrait (4:5, 1200 × 1500 px, `public/images/portrait.jpg`
   — the one allowed raster asset) and the résumé PDF
   (`public/files/ahmadreza-taheri-lebenslauf.pdf`). While `available` is false
   the page renders a same-size placeholder and a disabled résumé control, never
-  a broken link. Flip the flag when the file lands.
+  a broken link. Flip the flag when the file lands. `EMAIL` works the same way:
+  no mailto link at all until its address is confirmed.
 
 ## The theme engine
 
@@ -395,8 +419,6 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 - **Never combine an opacity animation with an opacity attribute** on one
   element, and never use `truncate` where spaces must survive.
 - **Mount points** — keep them, replace their children:
-  `data-puzzle-mount="unix-filesystem"` (1971 screen; unused - the puzzle
-  segment after each visual replaced it),
   `data-shell-mount="ahmados"` (Phase 6, end of the Convergence),
   `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt).
 - **The Convergence** is not an era: the resolver gives it the `modern` theme,
@@ -405,7 +427,7 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 
 ### Puzzles (Phase 5)
 
-`src/components/puzzles/`. Read DECISIONS.md 36–38 before changing anything here.
+`src/components/puzzles/`. Read DECISIONS.md 36–40 before changing anything here.
 
 - **One engine, one shell.** A puzzle is a `PuzzleDefinition` (`initial`, pure
   `reduce`, `isSolved`, `script`) plus one component that renders state from
@@ -415,8 +437,14 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 - Every element a script points at carries `data-target` (use `target(id)`).
   Controls take `tabIndex={-1}` outside `play`; the shell also makes the guided
   demonstration `inert`.
-- Guided playback never awards artifacts. Only an interactive solve calls
-  `solvePuzzle`.
+- Guided playback and "Lösung zeigen" never award artifacts or badges. Only an
+  interactive solve calls `solvePuzzle`; a shown solution calls `revealPuzzle`,
+  which opens the gate only. Tricks are reported through the definition's
+  `usedTrick`, in play only.
+- **Gates** (`gate.ts`, `PuzzleGate.tsx`): the resolver calls `measureGates` and
+  `tickGate`; the page end is set with `setScrollLimit()` in lenis-controller.
+  Never clamp the scroll position by hand, never add a per-section trigger for
+  a gate, and keep the lock cue outside the inert sections.
 - **Scroll hold:** interactive puzzles are played in `HeldDialog`, which holds the
   page through `holdScroll()`/`releaseScroll()` (lenis-controller), makes
   `#journey-scenes` inert, traps focus, closes on Escape and on browser Back.
@@ -427,8 +455,10 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
   `PuzzleSlot` mounts the shell client-side within one era of the active one,
   and `PuzzleMessages` loads the locale file into a nested provider.
 - Puzzle copy per puzzle: `title`, `invitation`, `task`, `hint`, `answer`,
-  `success` (which states the era's truth), `skip`. Machine text (shell output,
-  IP addresses, DOS errors) is English and LTR in every locale.
+  `success` (which states the era's truth), `skip` (Watch mode). Machine text
+  (shell output, IP addresses, DOS replies) is English and LTR in every locale.
+- Test hooks: `data-action` on shell, cue and chrome controls, `data-target` on
+  everything a script points at. `scripts/verify/journey.mjs` relies on them.
 - Wrong answers must fail for the real reason. Put domain logic in pure modules
   (`ipv4.ts`, `shell-filesystem.ts`) and test it with plain node.
 - Scroll the puzzle's own containers by hand; never `scrollIntoView` inside the
@@ -447,8 +477,9 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
 - **Tailwind only**, apart from `src/styles/globals.css`. No CSS modules, no
   styled-components, no inline `style` objects for anything themeable.
 - **All user-facing text comes from `messages/`.** Never hardcode a string a
-  visitor can read. Years are the one exception — a year is a year in every
-  language.
+  visitor can read. Exceptions: years, and *machine text* that is identical in
+  every language (a command such as `WP`, the `C:\>` prompt, key caps, a
+  FORTRAN listing) - keep those as named constants with a comment.
 - **All colours read from design tokens.** Never write a hex value, an
   `rgb()`, or a Tailwind palette class (`bg-slate-800`) outside `globals.css`.
   Use the semantic classes: `bg-background`, `bg-surface`, `bg-elevated`,
@@ -468,7 +499,11 @@ npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out
 npm run lint
 npm run check:pixel-font   # every Press Start 2P string has real glyphs
+node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch]
 ```
+
+The verify script needs a running server (default `http://localhost:3001`,
+`--base` to change) and a local Chrome (`CHROME_PATH`).
 
 `npm run build` must finish with zero TypeScript errors, zero build errors, and
 all three locales generated. That is the definition of done for every phase.
