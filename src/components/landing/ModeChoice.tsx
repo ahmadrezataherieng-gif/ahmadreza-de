@@ -12,7 +12,9 @@ import { cn } from '@/lib/cn';
  *
  * Each is a real link to the journey, so it works before hydration and without
  * JavaScript; clicking it also stores the chosen mode. Neither is styled as the
- * lesser option - they differ only in how much time the visitor has.
+ * lesser option - they differ only in how much time the visitor has. The Play
+ * card's copy must describe the gates honestly: an era opens once its puzzle is
+ * solved or its solution shown.
  */
 export function ModeChoice({ journeyHref }: { journeyHref: string }) {
   const t = useTranslations('landing');
@@ -32,19 +34,29 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
 
   return (
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {options.map((option) => (
+      {options.map((option, index) => (
         <li key={option.mode}>
           <Link
             href={journeyHref}
             onClick={() => setMode(option.mode)}
             className={cn(
-              'ao-themed group relative flex h-full flex-col gap-2 rounded-window border bg-surface p-5 transition-colors',
+              'ao-themed group relative flex h-full flex-col gap-2 overflow-hidden rounded-window border bg-surface p-5 shadow-window transition-colors',
               'hover:border-accent hover:bg-elevated focus-visible:border-accent',
               lastChosen === option.mode ? 'border-accent' : 'border-edge',
             )}
           >
+            {/* A thin accent rule that grows on hover: the card's only motion. */}
+            <span
+              className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100 rtl:origin-right"
+              aria-hidden="true"
+            />
             <span className="flex items-center justify-between gap-3">
-              <span className="font-display text-xl font-bold text-ink">{option.title}</span>
+              <span className="flex items-baseline gap-2.5">
+                <span className="font-mono text-xs text-muted" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="font-display text-xl font-bold text-ink">{option.title}</span>
+              </span>
               <ModeGlyph mode={option.mode} />
             </span>
             <span className="font-body text-sm leading-snug text-muted">{option.text}</span>

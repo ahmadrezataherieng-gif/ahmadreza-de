@@ -24,3 +24,13 @@ export const RESUME = {
   href: '/files/ahmadreza-taheri-lebenslauf.pdf',
   available: false,
 } as const;
+
+/**
+ * The contact address. A placeholder until Ahmadreza confirms the real one;
+ * while `available` is false the page renders no mailto link at all, so the
+ * placeholder can never be mailed or scraped.
+ */
+export const EMAIL = {
+  address: 'kontakt@ahmadreza.de',
+  available: false,
+} as const;
