@@ -20,14 +20,64 @@ export function getActiveLenis(): Lenis | null {
   return activeLenis;
 }
 
-/** Jump or glide to a document position, through Lenis when it runs. */
+/**
+ * Called after anything here changes the page's height, so the journey can
+ * re-measure (ScrollTrigger.refresh). Set by the journey, which owns GSAP.
+ */
+let onLayoutChange: (() => void) | null = null;
+
+export function setLayoutChangeHandler(handler: (() => void) | null): void {
+  onLayoutChange = handler;
+}
+
+/**
+ * The scroll limit: the document ends at `bottom` (document px), and nothing
+ * after it can be reached or focused.
+ *
+ * It is a limit on layout, not a fight with the scroll position: the scenes
+ * container is clipped to `bottom`, so Lenis, native touch scrolling, the
+ * keyboard and reduced motion (no Lenis) all simply meet the end of the page.
+ * Section positions are unchanged, so the resolver's measurements stay valid.
+ * Sections below the limit are made inert, so focus and the accessibility tree
+ * end there too - the gate itself offers the way through.
+ */
+export function setScrollLimit(container: HTMLElement, bottom: number | null): void {
+  const top = container.getBoundingClientRect().top + window.scrollY;
+  if (bottom === null) {
+    container.style.removeProperty('height');
+    container.style.removeProperty('overflow');
+  } else {
+    container.style.height = `${Math.max(0, Math.round(bottom - top))}px`;
+    // clip, not hidden: no scroll container, so sticky stages still pin.
+    container.style.overflow = 'clip';
+  }
+  for (const child of Array.from(container.children)) {
+    if (!(child instanceof HTMLElement) || child.dataset.scrollLimitIgnore !== undefined) continue;
+    const below = bottom !== null && child.getBoundingClientRect().top + window.scrollY >= bottom - 1;
+    // Only undo what this function did; the held dialog manages its own inert.
+    if (below) {
+      child.setAttribute('inert', '');
+      child.dataset.limitInert = '';
+    } else if (child.dataset.limitInert !== undefined) {
+      child.removeAttribute('inert');
+      delete child.dataset.limitInert;
+    }
+  }
+  activeLenis?.resize();
+  onLayoutChange?.();
+}
+
+/**
+ * Go to a document position. With Lenis, glide (or jump when `immediate`).
+ * Without Lenis the visitor asked for reduced motion: always jump.
+ */
 function scrollToY(y: number, immediate: boolean): void {
-  if (activeLenis) {
-    // force: a held page has Lenis stopped, and restoring position must still work.
-    activeLenis.scrollTo(y, { immediate, force: true });
+  if (!activeLenis) {
+    window.scrollTo({ top: y, behavior: 'auto' });
     return;
   }
-  window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
+  // force: a held page has Lenis stopped, and restoring position must still work.
+  activeLenis.scrollTo(y, { immediate, force: true });
 }
 
 /**

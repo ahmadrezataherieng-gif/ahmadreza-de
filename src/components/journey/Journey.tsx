@@ -13,7 +13,7 @@ import { useThemeStore } from '@/store/theme-store';
 import { useUnlockStore } from '@/store/unlock-store';
 import { usePuzzleProgressStore } from '@/store/puzzle-progress-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
-import { setActiveLenis } from '@/lib/lenis-controller';
+import { setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
 import { themeToCssVars } from '@/lib/apply-theme';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
@@ -23,6 +23,9 @@ import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { ModeSwitch } from '@/components/journey/ModeSwitch';
 import { JOURNEY_SCENES_ID } from '@/components/puzzles/hold';
+import { gateBottom, isGateActive, measureGates, tickGate } from '@/components/puzzles/gate';
+// Renders nothing on the server (its copy loads lazily), so no hydration risk.
+import { PuzzleGate } from '@/components/puzzles/PuzzleGate';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
@@ -186,6 +189,16 @@ export function Journey() {
       if (convergence) {
         bounds.push(boundsFor(convergence, CONVERGENCE_ID, null, 'modern'));
       }
+      // Where each era's Play-mode gate would end the page. The gate module
+      // decides whether one applies; the resolver only measures.
+      const viewport = window.innerHeight;
+      measureGates(
+        bounds.flatMap((entry) =>
+          entry.eraId === null
+            ? []
+            : [{ eraId: entry.eraId, section: entry.section, bottom: gateBottom({ ...entry, viewport }) }],
+        ),
+      );
     };
 
     /**
@@ -229,6 +242,7 @@ export function Journey() {
       if (bounds.length === 0) return;
       const scrollY = window.scrollY;
       const viewport = window.innerHeight;
+      tickGate(scrollY, viewport);
 
       // The reference line an era must cross to own the theme.
       // Pinned: 80% down the viewport. By the time the next stage slides in, the
@@ -287,8 +301,9 @@ export function Journey() {
         // Skip control is. Once, so the persisted store is not rewritten.
         // In document flow the last section cannot always scroll far enough
         // for its progress to reach 1, so the bottom of the page counts too.
+        // A closed gate also ends the page; that is not the desktop.
         const atPageEnd =
-          scrollY + viewport >= document.documentElement.scrollHeight - 2;
+          !isGateActive() && scrollY + viewport >= document.documentElement.scrollHeight - 2;
         if (!journeyCompleted && entry.eraId === null && (progress >= 0.98 || atPageEnd)) {
           journeyCompleted = true;
           completeJourney();
@@ -345,11 +360,20 @@ export function Journey() {
     });
     for (const entry of bounds) resizeObserver.observe(entry.section);
 
+    // The scroll limit (Play-mode gates) changes the page height.
+    let limitFrame = 0;
+    setLayoutChangeHandler(() => {
+      cancelAnimationFrame(limitFrame);
+      limitFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+
     return () => {
       cancelled = true;
       cancelAnimationFrame(refreshFrame);
       resizeObserver.disconnect();
       window.clearTimeout(resizeTimer);
+      setLayoutChangeHandler(null);
+      cancelAnimationFrame(limitFrame);
       context.revert();
     };
   }, [completeJourney, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
@@ -381,11 +405,12 @@ export function Journey() {
         <SkipToDesktop />
       </div>
       <JourneyProgress sectionId={sectionId} />
+      <PuzzleGate />
 
       {/* The scenes, separate from the chrome above: while a puzzle holds the
           page, this container is made inert, and the chrome - Skip to Desktop
           included - stays reachable. */}
-      <div id={JOURNEY_SCENES_ID}>
+      <div id={JOURNEY_SCENES_ID} className="relative">
         {eras.map((era) => (
           <EraSection
             key={era.id}

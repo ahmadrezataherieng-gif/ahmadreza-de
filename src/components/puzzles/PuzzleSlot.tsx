@@ -16,6 +16,8 @@ interface PuzzleSlotProps {
   eraId: EraId;
   eraIndex: number;
   nextSectionId: string;
+  /** The era's insider detail, from the journey's own copy. */
+  insider: string;
 }
 
 /**
@@ -26,7 +28,7 @@ interface PuzzleSlotProps {
  * way back would lose a half-solved puzzle and shift layout for nothing.
  * Height changes are picked up by the journey's section observer.
  */
-export function PuzzleSlot({ eraId, eraIndex, nextSectionId }: PuzzleSlotProps) {
+export function PuzzleSlot({ eraId, eraIndex, nextSectionId, insider }: PuzzleSlotProps) {
   const activeIndex = useJourneyStore((state) => getEra(state.activeEraId).index);
   const near = Math.abs(activeIndex - eraIndex) <= 1;
   const [wanted, setWanted] = useState(false);
@@ -38,7 +40,7 @@ export function PuzzleSlot({ eraId, eraIndex, nextSectionId }: PuzzleSlotProps) 
     <div data-puzzle-slot={eraId}>
       {wanted ? (
         <PuzzleMessages fallback={<SlotPlaceholder />}>
-          <PuzzleShell eraId={eraId} eraIndex={eraIndex} nextSectionId={nextSectionId} />
+          <PuzzleShell eraId={eraId} eraIndex={eraIndex} nextSectionId={nextSectionId} insider={insider} />
         </PuzzleMessages>
       ) : (
         <SlotPlaceholder />

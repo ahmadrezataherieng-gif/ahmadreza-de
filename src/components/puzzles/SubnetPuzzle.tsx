@@ -10,27 +10,72 @@ import { checkConfiguration, normalizeDigits, type SubnetResult } from '@/compon
 const FIELDS = ['ip', 'mask', 'gateway'] as const;
 type Field = (typeof FIELDS)[number];
 
+/**
+ * Start > Run. Windows 95 showed its IP settings with `winipcfg`; `ipconfig`
+ * was the Windows NT tool and did not exist there. The era's insider trick.
+ */
+type RunResult = null | { kind: 'winipcfg' } | { kind: 'notFound'; name: string };
+
 interface SubnetState {
   values: Record<Field, string>;
   result: SubnetResult | null;
+  runOpen: boolean;
+  runDraft: string;
+  run: RunResult;
+  /** winipcfg was run at least once. */
+  usedWinipcfg: boolean;
 }
 
-type SubnetAction = { type: 'set'; field: Field; value: string } | { type: 'connect' };
+type SubnetAction =
+  | { type: 'set'; field: Field; value: string }
+  | { type: 'connect' }
+  | { type: 'openRun' }
+  | { type: 'typeRun'; text: string }
+  | { type: 'submitRun'; text?: string };
 
 function reduce(state: SubnetState, action: SubnetAction): SubnetState {
-  if (action.type === 'set') {
-    return { values: { ...state.values, [action.field]: normalizeDigits(action.value) }, result: null };
+  switch (action.type) {
+    case 'set':
+      return { ...state, values: { ...state.values, [action.field]: normalizeDigits(action.value) }, result: null };
+    case 'connect': {
+      const { ip, mask, gateway } = state.values;
+      return { ...state, result: checkConfiguration(ip, mask, gateway) };
+    }
+    case 'openRun':
+      return { ...state, runOpen: !state.runOpen, run: null };
+    case 'typeRun':
+      return { ...state, runDraft: action.text };
+    case 'submitRun': {
+      const name = (action.text ?? state.runDraft).trim();
+      if (name === '') return state;
+      // Windows matched program names without regard to case or extension.
+      const found = name.toLowerCase().replace(/\.exe$/, '') === 'winipcfg';
+      return {
+        ...state,
+        runDraft: '',
+        run: found ? { kind: 'winipcfg' } : { kind: 'notFound', name },
+        usedWinipcfg: state.usedWinipcfg || found,
+      };
+    }
   }
-  const { ip, mask, gateway } = state.values;
-  return { ...state, result: checkConfiguration(ip, mask, gateway) };
 }
 
 const definition: PuzzleDefinition<SubnetState, SubnetAction> = {
   // One octet off: the PC sits on 192.168.2.0/24, the router on 192.168.1.0/24.
-  initial: () => ({ values: { ip: '192.168.2.50', mask: '255.255.255.0', gateway: '192.168.1.1' }, result: null }),
+  initial: () => ({
+    values: { ip: '192.168.2.50', mask: '255.255.255.0', gateway: '192.168.1.1' },
+    result: null,
+    runOpen: false,
+    runDraft: '',
+    run: null,
+    usedWinipcfg: false,
+  }),
   reduce,
   isSolved: (state) => state.result?.ok === true,
+  usedTrick: (state) => state.usedWinipcfg,
   script: [
+    { kind: 'act', target: 'start-run', action: { type: 'openRun' } },
+    { kind: 'type', target: 'run-input', text: 'winipcfg', action: { type: 'submitRun', text: 'winipcfg' } },
     { kind: 'point', target: 'field-gateway' },
     { kind: 'type', target: 'field-ip', text: '192.168.1.50', action: { type: 'set', field: 'ip', value: '192.168.1.50' } },
     { kind: 'act', target: 'connect', action: { type: 'connect' } },
@@ -51,8 +96,11 @@ export function SubnetPuzzle(props: PuzzleProps) {
   const { state, dispatch, interactive } = engine;
   const result = state.result;
 
+  const runTyped = engine.typingFor('run-input');
+
   return (
-    <PuzzleSurface pointer={engine.pointer} eraIndex={props.eraIndex}>
+    <PuzzleSurface pointer={engine.pointer} eraIndex={props.eraIndex} className="flex flex-col gap-3">
+      <RunBox state={state} dispatch={dispatch} interactive={interactive} typed={runTyped} />
       <form
         className="bg-surface p-[3px] shadow-window"
         onSubmit={(event) => {
@@ -127,4 +175,91 @@ function relatesTo(key: string, field: Field): boolean {
     default:
       return field === 'ip';
   }
+}
+
+/** A corner of the Windows 95 taskbar: Start > Run, and what it can open. */
+function RunBox({
+  state,
+  dispatch,
+  interactive,
+  typed,
+}: {
+  state: SubnetState;
+  dispatch: (action: SubnetAction) => void;
+  interactive: boolean;
+  typed: string | null;
+}) {
+  const t = useTranslations('puzzles.win95');
+  const run = state.run;
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-2 bg-surface p-[3px] shadow-window">
+        <button
+          type="button"
+          {...target('start-run')}
+          tabIndex={interactive ? undefined : -1}
+          aria-expanded={state.runOpen}
+          onClick={() => dispatch({ type: 'openRun' })}
+          className="cursor-pointer bg-surface px-2 py-0.5 font-body text-sm font-bold text-ink shadow-window active:shadow-bevel"
+        >
+          {t('runMenu')}
+        </button>
+        {state.runOpen ? (
+          <form
+            className="flex min-w-0 flex-1 flex-wrap items-center gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              dispatch({ type: 'submitRun' });
+            }}
+          >
+            <label htmlFor="win95-run" className="font-body text-sm text-ink">
+              {t('runOpen')}
+            </label>
+            <input
+              id="win95-run"
+              {...target('run-input')}
+              dir="ltr"
+              autoComplete="off"
+              spellCheck={false}
+              value={typed ?? state.runDraft}
+              readOnly={!interactive}
+              tabIndex={interactive ? undefined : -1}
+              onChange={(event) => dispatch({ type: 'typeRun', text: event.target.value })}
+              className="min-w-0 flex-1 bg-elevated px-2 py-0.5 font-mono text-sm text-ink shadow-bevel outline-none focus-visible:outline-1 focus-visible:outline-dotted focus-visible:outline-ink"
+            />
+            <button
+              type="submit"
+              tabIndex={interactive ? undefined : -1}
+              className="cursor-pointer bg-surface px-3 py-0.5 font-body text-sm text-ink shadow-window active:shadow-bevel"
+            >
+              {t('runOk')}
+            </button>
+          </form>
+        ) : null}
+      </div>
+
+      <div aria-live={interactive ? 'polite' : undefined}>
+        {run?.kind === 'notFound' ? (
+          <p className="font-body text-sm text-error">{t('runNotFound', { name: run.name })}</p>
+        ) : null}
+        {run?.kind === 'winipcfg' ? (
+          <div className="bg-surface p-[3px] shadow-window">
+            <div className="flex h-6 items-center bg-chrome px-2 font-mono text-xs font-bold text-chrome-ink">
+              {t('ipcfgTitle')}
+            </div>
+            <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 p-3 font-body text-sm">
+              <dt className="text-ink">{t('ipcfgAdapter')}</dt>
+              <dd dir="ltr" className="text-start font-mono">44-45-53-54-00-00</dd>
+              <dt className="text-ink">{t('ip')}</dt>
+              <dd dir="ltr" className="text-start font-mono">{state.values.ip}</dd>
+              <dt className="text-ink">{t('mask')}</dt>
+              <dd dir="ltr" className="text-start font-mono">{state.values.mask}</dd>
+              <dt className="text-ink">{t('gateway')}</dt>
+              <dd dir="ltr" className="text-start font-mono">{state.values.gateway}</dd>
+            </dl>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
 }

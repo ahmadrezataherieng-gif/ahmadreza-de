@@ -91,17 +91,6 @@ export function EraUnix({ headingId }: { headingId: string }) {
                 style={{ '--cursor-delay': `${body.end.toFixed(2)}s` } as CSSProperties}
               />
             </div>
-
-            {/*
-              PHASE 5 MOUNT POINT - filesystem puzzle.
-
-              The optional cd/ls/cat puzzle renders here, inside the lit screen,
-              once Phase 5 builds the puzzle engine. It must stay optional: the
-              section scrolls on whether or not anyone types, and the journey's
-              Skip controls remain visible above it. Keep this element; the
-              puzzle component replaces its (empty) children.
-            */}
-            <div data-puzzle-mount="unix-filesystem" />
           </div>
         </CrtMonitor>
       </div>

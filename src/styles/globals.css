@@ -81,6 +81,8 @@
   --ao-theme-duration: 600ms;
 
   /* Z-index scale. Anything stacked must use one of these. */
+  /* Decorative layers behind a page's content (inside an isolated root). */
+  --ao-z-backdrop: -1;
   --ao-z-desktop: 0;
   --ao-z-icons: 10;
   --ao-z-windows: 100;
@@ -1373,6 +1375,25 @@ html[lang^='fa'] {
 
 /* The portrait placeholder: a fine grid, so an empty frame still looks
    deliberate rather than broken. */
+.ao-landing-name {
+  background: linear-gradient(
+    100deg,
+    var(--ao-color-text) 0%,
+    var(--ao-color-text) 55%,
+    color-mix(in srgb, var(--ao-color-accent) 85%, var(--ao-color-text)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* A faint film grain over the glow: an SVG noise filter, not a raster. */
+.ao-landing-grain {
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .ao-portrait-placeholder {
   background-image:
     linear-gradient(color-mix(in srgb, var(--ao-color-border) 55%, transparent) 1px, transparent 1px),
@@ -1412,6 +1433,12 @@ html.ao-scroll-held,
 html.ao-scroll-held body {
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* The era visual keeps its own stacking to itself: windows inside the 1995
+   scene carry z-indexes that would otherwise rise above the puzzle layer. */
+.ao-era-stage > :not(.ao-puzzle-layer) {
+  isolation: isolate;
 }
 
 /* --- layout: flow (reduced motion), sticky panel (phones), overlay (wide) -- */
@@ -1575,3 +1602,201 @@ html.ao-scroll-held body {
     animation: none;
   }
 }
+
+/* --- 1946: the bug and the name (Phase 5.5) -------------------------------- */
+
+/* A deep black, not a flat one: a faint warm centre under a cold rim, the way
+   a lamp-lit machine room falls off into the dark. */
+.ao-void {
+  --ao-void-ink: #f2e6cf;
+  background:
+    radial-gradient(120% 90% at 50% 35%, #15110c 0%, #070605 55%, #020202 100%);
+  color: var(--ao-void-ink);
+  box-shadow: inset 0 0 0 1px #1f1a12, inset 0 0 60px #000;
+}
+
+.ao-void .ao-void-muted {
+  color: #9c9180;
+}
+
+/* The 1946 segment and the 1946 dialog go dark around the scene. */
+[data-era='eniac'] .ao-puzzle-scrim {
+  background: color-mix(in srgb, #020202 94%, transparent);
+}
+
+[data-era='eniac'] .ao-puzzle-card,
+[data-era-dialog='eniac'] {
+  background: #060504;
+  border-color: #1f1a12;
+}
+
+[data-era='eniac'] .ao-puzzle-actions {
+  background: #060504;
+}
+
+body:has([data-era-dialog='eniac']) .ao-puzzle-dialog-scrim {
+  background: color-mix(in srgb, #010101 95%, transparent);
+}
+
+/* The moth. Colours of a real one: dusty brown wings, a darker body. */
+.ao-moth {
+  --moth-wing: #8a7458;
+  --moth-wing-edge: #4a3b2a;
+  --moth-body: #3b2f22;
+  --moth-spot: #c7b38f;
+  pointer-events: none;
+}
+
+.ao-moth-wing {
+  fill: var(--moth-wing);
+  stroke: var(--moth-wing-edge);
+  stroke-width: 0.6;
+}
+
+.ao-moth-body {
+  fill: var(--moth-body);
+}
+
+.ao-moth-spot {
+  fill: var(--moth-spot);
+  opacity: 0.7;
+}
+
+.ao-moth-antenna {
+  stroke: var(--moth-body);
+  stroke-width: 0.7;
+  fill: none;
+}
+
+/* Crawling in: from the lower corner to the faulty column. Guided mode scrubs
+   it with the segment's progress; play mode runs it once on opening. The
+   position lives on the outer element, the wing flutter on an inner one - a
+   CSS animation would override a scrubbed transform on the same element. */
+.ao-moth--scrub {
+  --crawl: clamp(0, var(--puzzle-progress) / 0.1, 1);
+  transform: translate(calc((1 - var(--crawl)) * 170px), calc((1 - var(--crawl)) * 150px))
+    rotate(calc((1 - var(--crawl)) * -35deg));
+}
+
+@keyframes ao-moth-crawl {
+  from {
+    transform: translate(170px, 150px) rotate(-35deg);
+  }
+  to {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+.ao-moth--timed {
+  animation: ao-moth-crawl 2.6s cubic-bezier(0.3, 0.1, 0.3, 1) both;
+}
+
+@keyframes ao-moth-leave {
+  from {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-60px, -190px) scale(1.25) rotate(-20deg);
+    opacity: 0;
+  }
+}
+
+.ao-moth--leave {
+  animation: ao-moth-leave 1.3s ease-in both;
+}
+
+@keyframes ao-moth-flutter {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.82);
+  }
+}
+
+.ao-moth-flutter {
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  animation: ao-moth-flutter 0.5s ease-in-out infinite;
+}
+
+/* The name, built dot by dot from the corrected columns. */
+@keyframes ao-bit-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ao-bit {
+  fill: #f6c56b;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ao-bit-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+  animation-delay: calc(var(--bit-delay, 0) * 1ms);
+}
+
+.ao-bit-code {
+  fill: #9c9180;
+}
+
+.ao-bit-code--fixed {
+  fill: #f6c56b;
+}
+
+/* The card deck seen edge-on, with the felt-tip line across its top. */
+.ao-deck-card {
+  fill: #e9dcc0;
+}
+
+.ao-deck-line {
+  stroke: #b3261e;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ao-moth--scrub,
+  .ao-moth--timed {
+    animation: none;
+    transform: none;
+  }
+
+  .ao-moth--leave {
+    animation: none;
+    opacity: 0;
+  }
+
+  .ao-moth-flutter,
+  .ao-bit {
+    animation: none;
+  }
+}
+
+/* --- Play-mode gates (Phase 5.5) ------------------------------------------- */
+
+/* A gated segment keeps the foot of its panel free for the lock cue, which
+   lies over it at the page end (puzzles/gate.ts: gateCueHeight). Last in the
+   file so it wins over the per-layout paddings above, RTL included. */
+:root {
+  --ao-gate-cue: 136px;
+}
+
+/* Phones: the cue's text wraps above its buttons, and its foot clears the
+   fixed language bar. */
+@media (max-width: 767px) {
+  :root {
+    --ao-gate-cue: 216px;
+  }
+}
+
+[data-gated] .ao-puzzle-sticky {
+  padding-bottom: calc(var(--ao-gate-cue) + 0.75rem);
+}
+

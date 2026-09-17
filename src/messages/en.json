@@ -15,7 +15,7 @@
     "imprint": "Imprint",
     "privacy": "Privacy",
     "language": "Language",
-    "skipToDesktop": "Skip to Desktop",
+    "skipToDesktop": "To the desktop",
     "skipToContent": "Skip to content",
     "home": "Home"
   },
@@ -38,12 +38,7 @@
     "progressLabel": "Progress through the eras",
     "eraOf": "Era {current} of {total}",
     "scrollHint": "Scroll to begin",
-    "puzzleOptional": "Optional — you can skip at any time",
-    "skipPuzzle": "Skip puzzle",
-    "solved": "Solved",
-    "skipped": "Skipped",
-    "truthLabel": "Still true today",
-    "insiderLabel": "Insider"
+    "truthLabel": "Still true today"
   },
   "eras": {
     "eniac": {
@@ -414,7 +409,7 @@
     "guidedText": "You scroll, and every puzzle solves itself in front of you.",
     "guidedTime": "about 2 minutes",
     "interactiveTitle": "Play",
-    "interactiveText": "Seven small puzzles, each with a hint and an answer.",
+    "interactiveText": "Seven small puzzles with a hint and a solution. Each era opens once you solve its puzzle – or see the solution with one click.",
     "interactiveTime": "about 15 minutes",
     "lastChosen": "Last chosen",
     "resume": "Résumé (PDF)",
@@ -423,7 +418,9 @@
     "photoPlaceholder": "Portrait coming soon",
     "photoDimensions": "{width} × {height} px",
     "hint": "80 years in 90 seconds",
-    "journeyTitle": "The Journey"
+    "journeyTitle": "The Journey",
+    "resumeShort": "Résumé",
+    "email": "Email"
   },
   "mode": {
     "label": "Mode",
@@ -433,31 +430,32 @@
   "puzzles": {
     "common": {
       "start": "Start puzzle",
-      "tryMyself": "I'll try this one myself",
-      "skip": "Skip",
+      "tryMyself": "Let me try",
       "close": "Close",
       "continue": "Continue",
       "hint": "Hint",
-      "answer": "Show answer",
       "hintLabel": "Hint",
-      "answerLabel": "Answer",
+      "answerLabel": "Solution",
       "solved": "Solved",
       "playAgain": "Play again",
       "watching": "Playing for you",
-      "loading": "Loading puzzle …",
       "dialogLabel": "Puzzle: {title}",
       "optional": "Optional",
       "taskLabel": "Task",
-      "helpLabel": "Help",
-      "summaryLabel": "What this demonstration shows"
+      "summaryLabel": "What this demonstration shows",
+      "reveal": "Show solution",
+      "revealed": "Solution shown",
+      "revealing": "Playing the solution …",
+      "insiderLabel": "Insider",
+      "gateNote": "The journey continues once you solve the puzzle or choose to see the solution."
     },
     "eniac": {
-      "title": "The first bug",
-      "invitation": "The card reads one letter wrong. Can you find the fault?",
+      "title": "The bug",
+      "invitation": "Something is wrong: a moth sits on the card, and the card reads the name wrong. Can you find the fault?",
       "task": "The card should spell AHMADREZA, but one column is punched wrong. Punch and clear holes until the name is right.",
       "hint": "Column 5 reads E instead of D. Compare its holes with the table: same zone, different digit.",
       "answer": "In column 5, clear the hole in row 5 and punch row 4. Zone 12 plus digit 4 is D.",
-      "success": "AHMADREZA. Every character is just a pattern of hole and no hole, on and off. Your computer still stores that D as 01000100.",
+      "success": "AHMADREZA – nothing but holes and no holes.",
       "skip": "Skip the card",
       "tableTitle": "IBM punch-card code",
       "table": [
@@ -469,7 +467,15 @@
       "holeLabel": "Column {column}, row {row}: {state}",
       "punched": "punched",
       "blank": "not punched",
-      "bugNote": "The word is older than the story: on 9 September 1947, operators of the Harvard Mark II found a moth in relay 70 and taped it into the logbook as the “first actual case of bug being found”. The logbook is now at the Smithsonian."
+      "bugNote": "And the bug? The famous moth was real, but it was not in ENIAC: a year later, on 9 September 1947, operators of the Harvard Mark II found a moth in relay 70 and taped it into the logbook as the “first actual case of bug being found”. The joke worked because “bug” already meant a fault. The logbook is now at the Smithsonian.",
+      "nameLabel": "The name, built from the corrected columns",
+      "explain": "Each column is just a number: a zone and a digit, hole or no hole. Only an agreed table turns them into letters. Text is numbers – your computer still stores that D as 01000100.",
+      "mothHere": "A moth sits on column 5.",
+      "mothGone": "The moth has flown away.",
+      "deckLabel": "The card deck, seen edge-on",
+      "deckCard": "Card in position {position}",
+      "deckPicked": "Card picked up. Choose the card to swap it with.",
+      "deckSorted": "The deck is back in order: the line runs straight."
     },
     "batch": {
       "title": "The queue",
@@ -489,7 +495,10 @@
       "waits": "waits {minutes} min",
       "total": "Total waiting time: {minutes} min",
       "moveUp": "Move {job} forward",
-      "moveDown": "Move {job} back"
+      "moveDown": "Move {job} back",
+      "listingLabel": "Excerpt from the FORTRAN program",
+      "switchesLabel": "Console sense switches",
+      "switchLabel": "Sense switch {which}"
     },
     "unix": {
       "title": "The hidden file",
@@ -502,7 +511,7 @@
       "inputLabel": "Enter a command",
       "help": "Commands: pwd  ls  ls -a  cd <path>  cat <file>  clear",
       "files": {
-        "motd": "Welcome. Type help.",
+        "motd": "Welcome. Type help. Sixth Edition veterans may use the old names.",
         "notes": "The interesting stuff is in projects.",
         "network": "192.168.1.0/24 -- my home network.",
         "secret": "You found the path."
@@ -519,9 +528,9 @@
     "dos": {
       "title": "640 kilobytes",
       "invitation": "The word processor won't start: not enough memory. Can you make room without losing the printer?",
-      "task": "The word processor needs 384 K of free memory. Unload drivers until it starts. The letter still has to reach the network printer afterwards.",
+      "task": "A PC running MS-DOS, some years after 1981 and full of drivers: the word processor (command WP) needs 384 K of free memory. Unload drivers until it starts. The letter still has to reach the network printer afterwards.",
       "hint": "You are 88 K short. Which drivers do you not need to write and print a letter?",
-      "answer": "Unload the sound driver and the CD-ROM driver, keep the network driver, then start the word processor.",
+      "answer": "Unload the sound driver and the CD-ROM driver, keep the network driver, then type WP.",
       "success": "The word processor runs, and the printer is reachable. Memory is finite: every driver took a share of the same 640 K, and programs still compete for memory today.",
       "skip": "Skip memory",
       "drivers": {
@@ -534,12 +543,15 @@
       },
       "fixed": "fixed",
       "free": "Free: {kb} K",
-      "needs": "Word processor needs {kb} K",
+      "needs": "{command} needs {kb} K",
       "run": "Start word processor",
       "tooBig": "Program too big to fit in memory",
       "noNetwork": "The word processor runs, but without the network driver the letter cannot find a printer.",
       "toggleLabel": "{driver}, {kb} K",
-      "memoryLabel": "Memory: {used} K of 640 K in use"
+      "memoryLabel": "Memory: {used} K of 640 K in use",
+      "badCommand": "Bad command or file name",
+      "promptLabel": "Enter a DOS command, for example {command}",
+      "f3Label": "F3: bring back the last command line"
     },
     "macintosh": {
       "title": "Tidy up",
@@ -589,7 +601,13 @@
         "conflictPrinter": "{ip} already belongs to the printer.",
         "routerCannotReply": "The router sits on network 192.168.1.0/24. It cannot answer {ip}, because that address is outside its network.",
         "noRouter": "No router answers at {gateway}. The router is 192.168.1.1."
-      }
+      },
+      "runMenu": "Start › Run…",
+      "runOpen": "Open:",
+      "runOk": "OK",
+      "runNotFound": "Cannot find file {name} (or one of its components).",
+      "ipcfgTitle": "IP Configuration",
+      "ipcfgAdapter": "Adapter Address"
     },
     "cloud": {
       "title": "Unreachable",
@@ -618,6 +636,13 @@
         "deny": "DENY",
         "tcp": "tcp"
       }
+    },
+    "gate": {
+      "label": "Locked section",
+      "locked": "Puzzle {index} is still open: {title}.",
+      "explain": "Solve it or see the solution, and the journey continues.",
+      "open": "Open puzzle",
+      "reveal": "Show solution"
     }
   }
 }

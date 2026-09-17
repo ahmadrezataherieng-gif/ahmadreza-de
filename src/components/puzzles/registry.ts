@@ -20,3 +20,24 @@ export const puzzleComponents: Record<EraId, ComponentType<PuzzleProps>> = {
   win95: dynamic(() => import('@/components/puzzles/SubnetPuzzle').then((m) => m.SubnetPuzzle), { ssr: false }),
   cloud: dynamic(() => import('@/components/puzzles/FirewallPuzzle').then((m) => m.FirewallPuzzle), { ssr: false }),
 };
+
+/**
+ * How long "Lösung zeigen" takes to play each script, in seconds: slow enough
+ * to follow every step, short enough not to feel like a punishment.
+ */
+export const revealSeconds: Record<EraId, number> = {
+  eniac: 7,
+  batch: 8,
+  unix: 11,
+  dos: 9,
+  macintosh: 7,
+  win95: 8,
+  cloud: 6,
+};
+
+/**
+ * Eras whose insider detail is a working trick in the puzzle. For these, the
+ * note appears once the trick was used or the puzzle has ended; the others show
+ * it as plain text from the start.
+ */
+export const erasWithTrick: readonly EraId[] = ['eniac', 'batch', 'unix', 'dos', 'win95'];

@@ -26,7 +26,8 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
       {/*
         Static text fallback. Act 1 hydrates client-side, so this block is what
         crawlers and screen readers get before any JavaScript runs: every era
-        with its one truth. Phase 10 expands it into the full SEO layer.
+        with its one truth and its insider detail. Phase 10 expands it into the
+        full SEO layer.
       */}
       <div className="ao-sr-only">
         <h1>{t('title')}</h1>
@@ -37,7 +38,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
               <strong>
                 {era.yearLabelKey ? tEras(era.yearLabelKey) : era.year} — {tEras(era.nameKey)}
               </strong>{' '}
-              {tEras(era.descriptionKey)}
+              {tEras(era.descriptionKey)} {tEras(`${era.id}.insider`)}
             </li>
           ))}
         </ul>

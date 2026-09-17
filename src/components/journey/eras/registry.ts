@@ -35,11 +35,11 @@ export interface EraStaging {
  * rather than in `content/eras.ts`.
  */
 export const eraStaging: Record<EraId, EraStaging> = {
-  eniac: { Visual: EraEniac, length: 2.2, startAt: 0, puzzleLength: 2 },
-  batch: { Visual: EraBatch, length: 2.6, startAt: 0, puzzleLength: 2.4 },
+  eniac: { Visual: EraEniac, length: 2.2, startAt: 0, puzzleLength: 3 },
+  batch: { Visual: EraBatch, length: 2.6, startAt: 0, puzzleLength: 2.6 },
   unix: { Visual: EraUnix, length: 3, startAt: 0.3, puzzleLength: 3 },
-  dos: { Visual: EraDos, length: 2.6, startAt: 0.02, puzzleLength: 2 },
+  dos: { Visual: EraDos, length: 2.6, startAt: 0.02, puzzleLength: 2.4 },
   macintosh: { Visual: EraMac, length: 2.8, startAt: 0, puzzleLength: 2.2 },
-  win95: { Visual: EraWin95, length: 3.2, startAt: 0, puzzleLength: 2.6 },
+  win95: { Visual: EraWin95, length: 3.2, startAt: 0, puzzleLength: 2.8 },
   cloud: { Visual: EraCloud, length: 2.6, startAt: 0.72, puzzleLength: 2 },
 };

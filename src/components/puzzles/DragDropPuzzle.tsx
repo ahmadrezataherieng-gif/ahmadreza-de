@@ -269,6 +269,7 @@ export function DragDropPuzzle(props: PuzzleProps) {
             );
           })}
 
+          {/* Physical: the ghost follows pointer coordinates inside the LTR desk. */}
           {drag?.moved ? (
             <span
               aria-hidden="true"

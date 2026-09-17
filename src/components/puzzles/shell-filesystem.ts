@@ -45,10 +45,12 @@ export interface ShellState {
   cwd: string;
   lines: ShellLine[];
   found: boolean;
+  /** The Sixth Edition name for cd was used: the era's insider trick. */
+  usedChdir: boolean;
 }
 
 export function initialShell(): ShellState {
-  return { cwd: '/', lines: [{ kind: 'file', content: 'motd' }], found: false };
+  return { cwd: '/', lines: [{ kind: 'file', content: 'motd' }], found: false, usedChdir: false };
 }
 
 /** Resolve `path` against `cwd` into a normalised absolute path. */
@@ -123,7 +125,7 @@ export function runCommand(state: ShellState, input: string): ShellState {
       const node = lookup(absolute);
       if (!node) return error('noDir', { path });
       if (node.kind !== 'dir') return error('notDir', { path });
-      return { ...out(), cwd: absolute };
+      return { ...out(), cwd: absolute, usedChdir: state.usedChdir || command === 'chdir' };
     }
 
     case 'cat': {

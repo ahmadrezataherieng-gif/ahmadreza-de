@@ -58,7 +58,7 @@ export function PuzzleSurface({ pointer, eraIndex, className, children }: Puzzle
         y: rect.top - origin.top + rect.height / 2,
         carry: carried ? { width: carried.width, height: carried.height } : null,
       });
-      keepVisible(element);
+      revealInScroller(element);
     };
 
     place();
@@ -114,7 +114,7 @@ export function PuzzleSurface({ pointer, eraIndex, className, children }: Puzzle
 }
 
 /** Scroll the nearest scrollable ancestor - never the page - to show `element`. */
-function keepVisible(element: HTMLElement) {
+export function revealInScroller(element: HTMLElement) {
   let parent = element.parentElement;
   while (parent && parent !== document.body) {
     const style = getComputedStyle(parent);

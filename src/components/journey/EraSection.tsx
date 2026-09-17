@@ -28,9 +28,11 @@ interface EraSectionProps {
  * existed: `data-visual-share` tells the resolver which part of the pin belongs
  * to it. The visual never learns that a puzzle follows, or which mode is active.
  *
- * The era's one truth and its insider detail are rendered here, on the server,
- * so they are in the static HTML for every visitor. The puzzle itself is not:
- * the slot mounts it client-side, on demand.
+ * The era's one truth is rendered here, on the server, so it is in the static
+ * HTML for every visitor. The puzzle is not: the slot mounts it client-side, on
+ * demand, and shows the insider detail once it has earned its place (after the
+ * trick was used or the puzzle ended; DECISIONS.md 40). The static SEO list in
+ * page.tsx carries every insider detail for crawlers.
  */
 export function EraSection({ era, sectionId, nextSectionId }: EraSectionProps) {
   const t = useTranslations('eras');
@@ -68,15 +70,14 @@ export function EraSection({ era, sectionId, nextSectionId }: EraSectionProps) {
                 <p className="font-body text-lg leading-snug font-bold text-ink sm:text-xl">
                   {t(era.descriptionKey)}
                 </p>
-                <p className="font-body text-sm leading-relaxed text-muted">
-                  <span className="me-1.5 font-mono text-[11px] tracking-wide text-accent uppercase">
-                    {tJourney('insiderLabel')}
-                  </span>
-                  {t(`${era.id}.insider`)}
-                </p>
               </div>
 
-              <PuzzleSlot eraId={era.id} eraIndex={era.index} nextSectionId={nextSectionId} />
+              <PuzzleSlot
+                eraId={era.id}
+                eraIndex={era.index}
+                nextSectionId={nextSectionId}
+                insider={t(`${era.id}.insider`)}
+              />
             </div>
           </div>
         </div>

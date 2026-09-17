@@ -28,6 +28,11 @@ export interface PuzzleDefinition<S, A> {
   initial: () => S;
   reduce: (state: S, action: A) => S;
   isSolved: (state: S) => boolean;
+  /**
+   * The era's period trick (DECISIONS.md 40): true once the visitor has used
+   * it. Never required to solve. Scripts demonstrate it once.
+   */
+  usedTrick?: (state: S) => boolean;
   script: readonly ScriptStep<A>[];
 }
 
@@ -40,6 +45,8 @@ export interface PuzzleProps {
   eraIndex: number;
   /** Called once when the visitor solves the puzzle in play. */
   onSolved: () => void;
+  /** Called once when the visitor uses the era's trick in play. */
+  onTrick: () => void;
 }
 
 /** Guided playback runs over this window of the puzzle segment's progress. */
@@ -88,9 +95,9 @@ function appliedCount<A>(script: readonly ScriptStep<A>[], playhead: number): nu
 
 export function usePuzzleEngine<S, A>(
   definition: PuzzleDefinition<S, A>,
-  { presentation, progress, onSolved }: PuzzleProps,
+  { presentation, progress, onSolved, onTrick }: PuzzleProps,
 ): PuzzleEngine<S, A> {
-  const { script, reduce, initial, isSolved } = definition;
+  const { script, reduce, initial, isSolved, usedTrick } = definition;
   const [played, playDispatch] = useReducer(reduce, undefined, initial);
 
   const steps = script.length;
@@ -123,6 +130,15 @@ export function usePuzzleEngine<S, A>(
       onSolved();
     }
   }, [solved, onSolved]);
+
+  const trickReported = useRef(false);
+  const trick = interactive && (usedTrick?.(played) ?? false);
+  useEffect(() => {
+    if (trick && !trickReported.current) {
+      trickReported.current = true;
+      onTrick();
+    }
+  }, [trick, onTrick]);
 
   const dispatch = useCallback(
     (action: A) => {

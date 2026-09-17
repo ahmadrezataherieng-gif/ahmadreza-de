@@ -41,6 +41,7 @@ export function ModeSwitch() {
             key={option}
             type="button"
             aria-pressed={active}
+            data-mode-option={option}
             onClick={() => {
               // Watching cannot hold the page: end a puzzle being played first.
               if (option === 'guided') requestPuzzleRelease();

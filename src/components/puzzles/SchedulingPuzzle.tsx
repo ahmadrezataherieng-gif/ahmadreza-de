@@ -13,25 +13,40 @@ type JobId = keyof typeof JOBS;
 /** Shortest job first: 0 + 2 + 7 + 22. */
 const OPTIMAL_WAIT = 31;
 
+/**
+ * The IBM 704 console had six sense switches a running program could read. The
+ * program here reads switch 3 - `IF (SENSE SWITCH 3) 10, 20` - and, when it is
+ * up, also prints each job's waiting time. The era's insider trick, working.
+ */
+const SENSE_SWITCHES = [1, 2, 3, 4, 5, 6] as const;
+const PRINT_SWITCH = 3;
+
 interface QueueState {
   order: JobId[];
+  switches: number[];
 }
 
-type QueueAction = { type: 'move'; job: JobId; by: -1 | 1 };
+type QueueAction = { type: 'move'; job: JobId; by: -1 | 1 } | { type: 'switch'; which: number };
 
 function initial(): QueueState {
   // Arrival order, longest first: 0 + 30 + 35 + 50 = 115 minutes of waiting.
-  return { order: ['payroll', 'inventory', 'invoices', 'report'] };
+  return { order: ['payroll', 'inventory', 'invoices', 'report'], switches: [] };
 }
 
 function reduce(state: QueueState, action: QueueAction): QueueState {
+  if (action.type === 'switch') {
+    const switches = state.switches.includes(action.which)
+      ? state.switches.filter((which) => which !== action.which)
+      : [...state.switches, action.which];
+    return { ...state, switches };
+  }
   const from = state.order.indexOf(action.job);
   const to = from + action.by;
   if (from < 0 || to < 0 || to >= state.order.length) return state;
   const order = [...state.order];
   const [moved] = order.splice(from, 1);
   if (moved) order.splice(to, 0, moved);
-  return { order };
+  return { ...state, order };
 }
 
 function waits(order: readonly JobId[]): number[] {
@@ -51,7 +66,9 @@ const definition: PuzzleDefinition<QueueState, QueueAction> = {
   initial,
   reduce,
   isSolved: (state) => totalWait(state.order) === OPTIMAL_WAIT,
+  usedTrick: (state) => state.switches.includes(PRINT_SWITCH),
   script: [
+    { kind: 'act', target: `switch-${PRINT_SWITCH}`, action: { type: 'switch', which: PRINT_SWITCH } },
     { kind: 'act', target: up('report'), action: { type: 'move', job: 'report', by: -1 } },
     { kind: 'act', target: up('report'), action: { type: 'move', job: 'report', by: -1 } },
     { kind: 'act', target: up('report'), action: { type: 'move', job: 'report', by: -1 } },
@@ -61,6 +78,9 @@ const definition: PuzzleDefinition<QueueState, QueueAction> = {
 };
 
 const LONGEST = Math.max(...Object.values(JOBS));
+
+/** FORTRAN as the 704 ran it: machine text, the same in every language. */
+const LISTING = ['      IF (SENSE SWITCH 3) 10, 20', '   10 PRINT 100, WAIT'].join(String.fromCharCode(10));
 
 /**
  * 1956: four jobs, one machine. Order them so everyone waits the least.
@@ -91,8 +111,41 @@ export function SchedulingPuzzle(props: PuzzleProps) {
     setFocusRequest({ job, by });
   };
 
+  const printWaits = state.switches.includes(PRINT_SWITCH);
+
   return (
     <PuzzleSurface pointer={engine.pointer} eraIndex={props.eraIndex} className="flex flex-col gap-3">
+      {/* The operator's console: the program listing it runs, and the switches
+          it reads while running. */}
+      <div className="flex flex-wrap items-end justify-between gap-3 rounded-control border border-edge px-2 py-1.5">
+        <pre dir="ltr" className="font-mono text-[11px] leading-snug text-muted" aria-label={t('listingLabel')}>
+          {LISTING}
+        </pre>
+        <div role="group" aria-label={t('switchesLabel')} className="flex items-end gap-1.5" dir="ltr">
+          {SENSE_SWITCHES.map((which) => {
+            const raised = state.switches.includes(which);
+            return (
+              <button
+                key={which}
+                type="button"
+                {...target(`switch-${which}`)}
+                aria-pressed={raised}
+                aria-label={t('switchLabel', { which })}
+                tabIndex={interactive ? undefined : -1}
+                onClick={() => dispatch({ type: 'switch', which })}
+                className="flex cursor-pointer flex-col items-center gap-0.5 rounded-control px-0.5 focus-visible:outline-2 focus-visible:outline-accent"
+              >
+                <svg viewBox="0 0 10 18" className="h-5 w-3" aria-hidden="true">
+                  <rect x="1" y="6" width="8" height="6" rx="1" className="fill-edge" />
+                  <path d={raised ? 'M5 9V1' : 'M5 9v8'} className="stroke-ink" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                <span className="font-mono text-[9px] text-muted">{which}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <ol ref={listRef} className="flex flex-col gap-1.5">
         {state.order.map((job, index) => {
           const name = t(`jobs.${job}`);
@@ -110,7 +163,9 @@ export function SchedulingPuzzle(props: PuzzleProps) {
                 />
               </span>
               <span className="font-mono text-xs text-ink">{t('runs', { minutes: JOBS[job] })}</span>
-              <span className="font-mono text-xs text-muted">{t('waits', { minutes: jobWaits[index] ?? 0 })}</span>
+              {printWaits ? (
+                <span className="font-mono text-xs text-muted">{t('waits', { minutes: jobWaits[index] ?? 0 })}</span>
+              ) : null}
               <span className="ms-auto flex gap-1">
                 {(
                   [

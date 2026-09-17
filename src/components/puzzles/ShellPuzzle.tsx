@@ -17,11 +17,13 @@ const definition: PuzzleDefinition<ShellState, ShellAction> = {
   initial: initialShell,
   reduce: (state, action) => runCommand(state, action.text),
   isSolved: (state) => state.found,
+  usedTrick: (state) => state.usedChdir,
   script: [
     { kind: 'type', target: 'prompt', text: 'ls', action: run('ls') },
     { kind: 'type', target: 'prompt', text: 'cd home/ahmadreza', action: run('cd home/ahmadreza') },
     { kind: 'type', target: 'prompt', text: 'ls', action: run('ls') },
-    { kind: 'type', target: 'prompt', text: 'cd projects', action: run('cd projects') },
+    // The demonstration uses the Sixth Edition name once.
+    { kind: 'type', target: 'prompt', text: 'chdir projects', action: run('chdir projects') },
     { kind: 'type', target: 'prompt', text: 'ls -a', action: run('ls -a') },
     { kind: 'type', target: 'prompt', text: 'cat .secret', action: run('cat .secret') },
   ],

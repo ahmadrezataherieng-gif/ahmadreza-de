@@ -8,6 +8,8 @@ import { JOURNEY_SCENES_ID, registerPuzzleRelease } from '@/components/puzzles/h
 
 interface HeldDialogProps {
   label: string;
+  /** The era whose puzzle is held: lets the dialog take that era's stage look. */
+  eraId: string;
   /** Asked to close: Escape, the browser's back button, or Skip to Desktop. */
   onRequestClose: () => void;
   children: ReactNode;
@@ -38,7 +40,7 @@ let baseRestoration: ScrollRestoration = 'auto';
  *
  * See DECISIONS.md 36.
  */
-export function HeldDialog({ label, onRequestClose, children }: HeldDialogProps) {
+export function HeldDialog({ label, eraId, onRequestClose, children }: HeldDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const requestClose = useRef(onRequestClose);
   useEffect(() => {
@@ -158,6 +160,7 @@ export function HeldDialog({ label, onRequestClose, children }: HeldDialogProps)
         <div
           ref={dialogRef}
           role="dialog"
+          data-era-dialog={eraId}
           aria-modal="true"
           aria-label={label}
           tabIndex={-1}
