@@ -31,7 +31,7 @@ export const DEFAULT_MODE: JourneyMode = 'guided';
  * mode never reads `passedEras`. Legend badges record that a visitor used an
  * era's period trick; nothing displays them yet (the desktop will).
  */
-interface UnlockState {
+export interface UnlockState {
   /** Artifacts collected by solving puzzles. */
   artifacts: ArtifactId[];
   /** Eras the visitor has scrolled through, solved or skipped. */
@@ -166,3 +166,22 @@ export const useUnlockStore = create<UnlockState>()(
     },
   ),
 );
+
+/*
+ * Selectors for the desktop. Components subscribe through these rather than
+ * calling the store's methods, so a re-render follows exactly the data it shows.
+ */
+
+/** The hidden "Legende" badges. Read, not displayed, until Phase 9. */
+export const selectLegendEras = (state: UnlockState): readonly EraId[] => state.legendEras;
+
+/** Whether an app can be opened: base apps always, bonus apps with their artifact. */
+export const selectIsAppUnlocked =
+  (appId: AppId) =>
+  (state: UnlockState): boolean => {
+    if (baseAppIds.includes(appId)) return true;
+    const era = eras.find((candidate) => candidate.unlocksApp === appId);
+    return era !== undefined && state.artifacts.includes(era.artifact);
+  };
+
+export const selectHasCompletedJourney = (state: UnlockState): boolean => state.hasCompletedJourney;
