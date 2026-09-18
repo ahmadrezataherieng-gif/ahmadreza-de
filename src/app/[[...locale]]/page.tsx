@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { JourneyLoader } from '@/components/journey/JourneyLoader';
 import { Landing } from '@/components/landing/Landing';
+import { Desktop } from '@/components/os/Desktop';
 import { eras } from '@/content/eras';
 import { matchSegments } from '@/lib/routing';
 
@@ -17,6 +18,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
   setRequestLocale(locale);
 
   if (view === 'landing') return <Landing />;
+  if (view === 'desktop') return <Desktop locale={locale} />;
 
   const t = await getTranslations({ locale, namespace: 'site' });
   const tEras = await getTranslations({ locale, namespace: 'eras' });

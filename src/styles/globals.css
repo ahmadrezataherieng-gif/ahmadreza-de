@@ -1312,8 +1312,9 @@ html[data-tier='light'] .ao-lamp {
   }
 }
 
-/* The empty desktop: two soft pools of accent light on the surface colour. */
-.ao-conv-wallpaper {
+/* The empty desktop: two soft pools of accent light on the surface colour.
+   Shared by the Convergence's last frame and the desktop (DesktopFrame). */
+.ao-desktop-wallpaper {
   background:
     radial-gradient(
       ellipse 70% 60% at 25% 20%,
@@ -1401,6 +1402,185 @@ html[data-tier='light'] .ao-lamp {
   /* The static frame keeps the log: the text is the content. */
   .ao-conv-log {
     opacity: 1;
+  }
+}
+
+/* A returning visitor's landing page: "Zum Desktop" leads, the mode cards step
+   back. Colour and emphasis only - nothing changes size, so nothing shifts. */
+html[data-returning] .ao-mode-section a {
+  border-color: var(--ao-color-border);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+html[data-returning] .ao-mode-section a:hover,
+html[data-returning] .ao-mode-section a:focus-visible {
+  border-color: var(--ao-color-accent);
+}
+
+html[data-returning] .ao-mode-section h2 {
+  color: var(--ao-color-text-muted);
+}
+
+/* ==========================================================================
+   AhmadOS desktop (Phase 6, DECISIONS.md 49)
+
+   The page paints DesktopFrame - the Convergence's last frame - and the shell
+   fades in over it. Everything is placed against the same two landmarks as the
+   frame: the top strip (3.5cqh) and the seam (9cqh from the bottom), in units
+   of the full-viewport size container, as in the Convergence.
+   ========================================================================== */
+
+.ao-desktop-screen {
+  container-type: size;
+}
+
+/* The journey's last frame is the desktop's first: its chrome fades out just
+   before the hand-over, since the desktop has none of it (Journey.tsx). */
+[data-handover] .ao-journey-chrome {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ao-ease);
+}
+
+/* The seam at rest, exactly as the Convergence leaves it; its light passes to
+   the taskbar or the dock as the shell arrives. */
+.ao-desktop-seam {
+  opacity: 0.25;
+}
+
+.ao-desktop-screen:has([data-shell-ready]) .ao-desktop-seam {
+  opacity: 0;
+}
+
+/* The taskbar (3rem tall) is centred on the seam, at least as wide as it. */
+.ao-taskbar {
+  bottom: calc(9cqh - 1.5rem);
+  left: 50%;
+  translate: -50% 0;
+  width: max-content;
+  min-width: 64%;
+  max-width: calc(100% - 2rem);
+}
+
+/* Windows live between the top strip and the taskbar, with a small gap. */
+.ao-desktop-area {
+  bottom: calc(9cqh + 2.25rem);
+}
+
+.ao-dock {
+  bottom: calc(9cqh - 2.25rem);
+  left: 50%;
+  translate: -50% 0;
+  width: min(22rem, calc(100% - 2rem));
+}
+
+.ao-home {
+  bottom: calc(9cqh + 2.75rem);
+}
+
+.ao-notice-slot {
+  left: 50%;
+  translate: -50% 0;
+  bottom: calc(9cqh + 2.25rem);
+  width: max-content;
+  max-width: calc(100% - 2rem);
+}
+
+.ao-notice-slot--mobile {
+  bottom: calc(9cqh + 3rem);
+}
+
+/* The shell's parts are invisible until it is ready, so the first frame is the
+   Convergence's last one exactly. */
+.ao-reveal {
+  opacity: 0;
+}
+
+[data-shell-ready] .ao-reveal {
+  opacity: 1;
+}
+
+/* A minimised or closing window is gone for the pointer and the keyboard too
+   (it is also inert). Without motion that is all that happens. */
+.ao-window--minimised,
+.ao-window--closing {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ao-reveal {
+    transition:
+      opacity 450ms var(--ao-ease),
+      scale 450ms var(--ao-ease);
+  }
+
+  /* The taskbar and the dock grow out of the seam line. */
+  .ao-taskbar.ao-reveal,
+  .ao-dock.ao-reveal {
+    scale: 0.6 0.08;
+  }
+
+  [data-shell-ready] .ao-taskbar.ao-reveal,
+  [data-shell-ready] .ao-dock.ao-reveal {
+    scale: 1;
+  }
+
+  .ao-desktop-seam {
+    transition: opacity 450ms var(--ao-ease);
+  }
+
+  /* Opening. `backwards` fill only: a filled end state would override the
+     minimised and closing values below (an animation beats a declaration). */
+  .ao-window {
+    animation: ao-window-in 180ms var(--ao-ease) backwards;
+    transition:
+      opacity 180ms var(--ao-ease),
+      scale 180ms var(--ao-ease),
+      translate 180ms var(--ao-ease),
+      visibility 0s;
+  }
+
+  .ao-window--minimised {
+    translate: 0 1.5rem;
+    scale: 0.96;
+    transition:
+      opacity 180ms var(--ao-ease),
+      scale 180ms var(--ao-ease),
+      translate 180ms var(--ao-ease),
+      visibility 0s linear 180ms;
+  }
+
+  .ao-window--closing {
+    scale: 0.97;
+    transition:
+      opacity 150ms var(--ao-ease),
+      scale 150ms var(--ao-ease),
+      visibility 0s linear 150ms;
+  }
+
+  .ao-mobile-app {
+    animation: ao-app-in 200ms var(--ao-ease) backwards;
+  }
+
+  .ao-notice {
+    animation: ao-app-in 200ms var(--ao-ease) backwards;
+  }
+}
+
+@keyframes ao-window-in {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
+@keyframes ao-app-in {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
   }
 }
 

@@ -16,9 +16,10 @@ import '@/styles/globals.css';
 
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
-import { dirForLocale, htmlLang } from '@/lib/i18n-config';
+import { dirForLocale, htmlLang, type Locale } from '@/lib/i18n-config';
 import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
 import { SITE_URL } from '@/lib/constants';
+import { returningRedirectScript } from '@/lib/returning';
 
 type LayoutParams = { locale?: string[] };
 
@@ -48,7 +49,7 @@ f=fine&&wide&&c>=4&&m>=4?'full':'light';}d.dataset.tier=f;}catch(e){document.doc
 export const dynamicParams = false;
 
 /**
- * `/`, `/journey`, and the same under `/en` and `/fa`.
+ * `/`, `/journey`, `/desktop`, and the same under `/en` and `/fa`.
  * `/de` is deliberately not generated: it would duplicate `/`, and
  * `public/_redirects` 301s it home.
  */
@@ -65,7 +66,21 @@ export function generateStaticParams(): LayoutParams[] {
 const VIEW_NAMESPACES: Record<View, readonly string[]> = {
   landing: ['site', 'nav', 'languages', 'landing', 'mode'],
   journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'mode'],
+  // No era, journey or puzzle copy: the desktop loads none of that code either.
+  desktop: ['site', 'nav', 'languages', 'os'],
 };
+
+/** Page title per view; the landing page uses the site title as it is. */
+async function viewTitle(locale: Locale, view: View): Promise<string> {
+  const t = await getTranslations({ locale, namespace: 'site' });
+  if (view === 'landing') return t('title');
+  if (view === 'journey') {
+    const tLanding = await getTranslations({ locale, namespace: 'landing' });
+    return `${tLanding('journeyTitle')} — ${t('author')}`;
+  }
+  const tOs = await getTranslations({ locale, namespace: 'os' });
+  return `${tOs('title')} — ${t('author')}`;
+}
 
 export async function generateMetadata({
   params,
@@ -77,9 +92,7 @@ export async function generateMetadata({
   if (!match) return {};
   const { locale, view } = match;
   const t = await getTranslations({ locale, namespace: 'site' });
-  const tLanding = await getTranslations({ locale, namespace: 'landing' });
-
-  const title = view === 'landing' ? t('title') : `${tLanding('journeyTitle')} — ${t('author')}`;
+  const title = await viewTitle(locale, view);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -133,7 +146,12 @@ export default async function LocaleLayout({
             shifts afterwards. Inline and tiny on purpose: it has to run before
             the first frame, and it only sets one attribute. */}
         {view === 'journey' ? (
-          <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
+          <>
+            {/* A returning visitor goes straight to the desktop, before the
+                journey paints (DECISIONS.md 49). First, so nothing else runs. */}
+            <script dangerouslySetInnerHTML={{ __html: returningRedirectScript(viewHref(locale, 'desktop')) }} />
+            <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
+          </>
         ) : null}
       </head>
       <body className="antialiased">

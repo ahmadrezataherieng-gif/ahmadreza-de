@@ -4,10 +4,11 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  * URL shape.
  *
  * German is the default locale and is served without a prefix; English and
- * Persian are prefixed. Every locale has two views:
+ * Persian are prefixed. Every locale has three views:
  *
  *   /             /en/            /fa/             the landing page
  *   /journey/     /en/journey/    /fa/journey/     Act 1 and the Convergence
+ *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the AhmadOS desktop
  *
  * All of it is one optional catch-all segment (`app/[[...locale]]`) rather than
  * middleware, because `output: 'export'` produces plain files and never runs
@@ -15,16 +16,21 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  * locale early enough to emit a correct static `lang` and `dir`.
  */
 
-export const views = ['landing', 'journey'] as const;
+export const views = ['landing', 'journey', 'desktop'] as const;
 export type View = (typeof views)[number];
 
 /** URL path of each view, without the locale prefix. */
 const VIEW_PATHS: Record<View, string> = {
   landing: '/',
   journey: '/journey',
+  desktop: '/desktop',
 };
 
-const JOURNEY_SEGMENT = 'journey';
+/** The path segment of each view that has one. */
+const VIEW_SEGMENTS: Record<Exclude<View, 'landing'>, string> = {
+  journey: 'journey',
+  desktop: 'desktop',
+};
 
 export interface RouteMatch {
   locale: Locale;
@@ -47,15 +53,18 @@ export function matchSegments(segments: string[] | undefined): RouteMatch | null
   }
 
   if (rest.length === 0) return { locale, view: 'landing' };
-  if (rest.length === 1 && rest[0] === JOURNEY_SEGMENT) return { locale, view: 'journey' };
-  return null;
+  if (rest.length !== 1) return null;
+  const view = (Object.keys(VIEW_SEGMENTS) as Array<keyof typeof VIEW_SEGMENTS>).find(
+    (candidate) => VIEW_SEGMENTS[candidate] === rest[0],
+  );
+  return view ? { locale, view } : null;
 }
 
 /** Every page the static export must generate, as catch-all params. */
 export function allRouteSegments(): string[][] {
   return locales.flatMap((locale) => {
     const prefix = locale === defaultLocale ? [] : [locale];
-    return [prefix, [...prefix, JOURNEY_SEGMENT]];
+    return [prefix, ...Object.values(VIEW_SEGMENTS).map((segment) => [...prefix, segment])];
   });
 }
 

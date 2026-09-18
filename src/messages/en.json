@@ -19,21 +19,6 @@
     "skipToContent": "Skip to content",
     "home": "Home"
   },
-  "boot": {
-    "start": "Starting AhmadOS",
-    "loading": "Loading component",
-    "ready": "System ready",
-    "welcome": "Welcome",
-    "lines": {
-      "kernel": "Kernel loaded",
-      "memory": "Memory checked",
-      "filesystem": "Filesystem mounted",
-      "network": "Network initialised",
-      "display": "Display ready",
-      "input": "Input devices detected",
-      "done": "All components compiled"
-    }
-  },
   "journey": {
     "progressLabel": "Progress through the eras",
     "eraOf": "Era {current} of {total}",
@@ -328,16 +313,6 @@
       "insider": "On Linux, only root may open ports below 1024. That is why so many containers listen on port 8080 instead of 80."
     }
   },
-  "ui": {
-    "close": "Close",
-    "minimize": "Minimise",
-    "maximize": "Maximise",
-    "open": "Open",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "retry": "Retry",
-    "locked": "Locked"
-  },
   "languages": {
     "de": "Deutsch",
     "en": "English",
@@ -420,7 +395,11 @@
     "hint": "80 years in 90 seconds",
     "journeyTitle": "The Journey",
     "resumeShort": "Résumé",
-    "email": "Email"
+    "email": "Email",
+    "welcomeBack": "Welcome back.",
+    "desktopCta": "To the desktop",
+    "desktopShortcutLead": "Just the résumé and contact?",
+    "desktopShortcut": "Straight to the desktop"
   },
   "mode": {
     "label": "Mode",
@@ -643,6 +622,123 @@
       "explain": "Solve it or see the solution, and the journey continues.",
       "open": "Open puzzle",
       "reveal": "Show solution"
+    }
+  },
+  "os": {
+    "brand": "AhmadOS",
+    "title": "AhmadOS desktop",
+    "heading": "AhmadOS – the desktop of Ahmadreza Taheri",
+    "noscript": "The desktop needs JavaScript. Everything important is also on the home page.",
+    "home": "Home",
+    "replay": "Watch the journey again",
+    "desktopLabel": "AhmadOS desktop",
+    "icons": "Apps on the desktop",
+    "launcher": {
+      "open": "Apps",
+      "title": "All apps",
+      "base": "Apps",
+      "bonus": "Unlockable",
+      "shortcutsTitle": "Keyboard shortcuts",
+      "shortcuts": [
+        "Alt+Shift+Right or Left arrow: next or previous window",
+        "With a window title focused, the arrow keys move the window",
+        "Shift+arrow keys resize it",
+        "Enter maximises or restores it"
+      ]
+    },
+    "taskbar": {
+      "label": "Taskbar",
+      "windows": "Open windows",
+      "clock": "Time",
+      "resume": "Download résumé",
+      "resumePending": "Résumé coming soon"
+    },
+    "window": {
+      "minimize": "Minimise",
+      "maximize": "Maximise",
+      "restore": "Restore",
+      "close": "Close",
+      "grip": "Window {title}",
+      "gripHint": "Arrow keys move, Shift+arrow keys resize, Enter maximises.",
+      "loading": "Loading…"
+    },
+    "locked": {
+      "label": "Locked",
+      "message": "{year, select, today {Solve today’s puzzle to unlock “{app}”.} other {Solve the {year} puzzle to unlock “{app}”.}}",
+      "dismiss": "Dismiss",
+      "play": "To the journey",
+      "iconLabel": "{app} (locked)"
+    },
+    "mobile": {
+      "back": "Back",
+      "home": "Home screen",
+      "dock": "Dock",
+      "apps": "Apps"
+    },
+    "soon": "This app is being built.",
+    "bonusBody": "{year, select, today {Unlocked with today’s puzzle.} other {Unlocked with the {year} puzzle.}} This app is being built.",
+    "cv": {
+      "download": "Download résumé (PDF)",
+      "pending": "The résumé is coming soon."
+    },
+    "contact": {
+      "email": "Write an email",
+      "pending": "The email address will be added soon."
+    },
+    "apps": {
+      "about": {
+        "title": "About me",
+        "body": "Who Ahmadreza is and what he is learning as an apprentice IT specialist for systems integration at Stadtverwaltung Trier – he introduces himself in full here."
+      },
+      "terminal": {
+        "title": "Terminal",
+        "body": "A shell in the browser for exploring this website – with the commands administrators use every day."
+      },
+      "tickets": {
+        "title": "Tickets",
+        "body": "A small ticket system of the kind used in IT support: log an incident, triage it, solve it."
+      },
+      "traceroute": {
+        "title": "Traceroute",
+        "body": "Follow the stops a data packet makes on its way through the network, hop by hop."
+      },
+      "assistant": {
+        "title": "Assistant",
+        "body": "An AI assistant that answers your questions about Ahmadreza’s background and skills."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "How to reach Ahmadreza."
+      },
+      "timeline": {
+        "title": "Timeline",
+        "body": "The stations of his path on a timeline."
+      },
+      "cv": {
+        "title": "Résumé",
+        "body": "The résumé as a PDF to download."
+      },
+      "punchcard-lab": {
+        "title": "Punch card lab"
+      },
+      "scheduler": {
+        "title": "Batch planner"
+      },
+      "filesystem": {
+        "title": "File tree"
+      },
+      "memory-map": {
+        "title": "Memory map"
+      },
+      "paint": {
+        "title": "Pixel painter"
+      },
+      "dialup": {
+        "title": "Dial-up"
+      },
+      "firewall": {
+        "title": "Firewall"
+      }
     }
   }
 }
