@@ -124,25 +124,37 @@ export function DragDropPuzzle(props: PuzzleProps) {
     setDrag({ item, pointerId: event.pointerId, startX: x, startY: y, x, y, moved: false, over: null });
   };
 
-  const onItemPointerMove = (event: PointerEvent<HTMLButtonElement>) => {
-    if (!drag || event.pointerId !== drag.pointerId) return;
+  const deskPoint = (event: PointerEvent<HTMLButtonElement>) => {
     const desk = deskRef.current?.getBoundingClientRect();
-    const x = event.clientX - (desk?.left ?? 0);
-    const y = event.clientY - (desk?.top ?? 0);
-    const moved = drag.moved || Math.hypot(x - drag.startX, y - drag.startY) > DRAG_THRESHOLD;
+    return { x: event.clientX - (desk?.left ?? 0), y: event.clientY - (desk?.top ?? 0) };
+  };
+
+  const targetAt = (event: PointerEvent<HTMLButtonElement>): Target | null => {
     const hit = document
       .elementsFromPoint(event.clientX, event.clientY)
       .map((element) => element.closest<HTMLElement>('[data-drop]'))
       .find((element): element is HTMLElement => element !== null);
-    const over = (hit?.dataset.drop as Target | undefined) ?? null;
-    setDrag({ ...drag, x, y, moved, over });
+    return (hit?.dataset.drop as Target | undefined) ?? null;
   };
 
+  const onItemPointerMove = (event: PointerEvent<HTMLButtonElement>) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const { x, y } = deskPoint(event);
+    const moved = drag.moved || Math.hypot(x - drag.startX, y - drag.startY) > DRAG_THRESHOLD;
+    setDrag({ ...drag, x, y, moved, over: targetAt(event) });
+  };
+
+  // The drop is decided where the pointer is released, not from the last
+  // rendered move: a quick release can arrive before React has rendered the
+  // move that reached the target, and the item would silently not drop.
   const onItemPointerUp = (event: PointerEvent<HTMLButtonElement>) => {
     if (!drag || event.pointerId !== drag.pointerId) return;
-    if (drag.moved) {
+    const { x, y } = deskPoint(event);
+    const moved = drag.moved || Math.hypot(x - drag.startX, y - drag.startY) > DRAG_THRESHOLD;
+    if (moved) {
       suppressClick.current = true;
-      if (drag.over) drop(drag.item, drag.over);
+      const over = targetAt(event);
+      if (over) drop(drag.item, over);
     }
     setDrag(null);
   };
