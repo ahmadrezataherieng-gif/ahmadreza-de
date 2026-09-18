@@ -943,3 +943,203 @@ solved frame with no moth and all text present.
 - **Z-index:** the landing's decorative layers use a new `--ao-z-backdrop` step
   instead of an ad-hoc `-z-10`.
 
+
+---
+
+## 45. Era-to-era crossings, Phase 5.5B
+
+The journey never cuts between eras. Each section owns the crossing **into**
+itself, so there is always exactly one owner of the picture at any scroll
+position and no gap between two sections.
+
+- **Overlap, not adjacency.** A section that follows another pulls itself up by
+  `margin-top: calc(-1 * (1 + var(--boundary-length)) * 100dvh)` and adds
+  `BOUNDARY_LENGTH` (1.4 viewports) to its own length. The two eras therefore
+  share the screen for the whole crossing: the one being left is still pinned
+  behind while the one arriving is already painting.
+- **Zero-height markers**, not arithmetic. `.ao-mark` elements (`visual`,
+  `puzzle`, `out`) sit at each phase boundary and the resolver reads their real
+  pixel positions. `100dvh` and `window.innerHeight` are not the same number
+  while a phone's toolbar is in play, so every length is measured, never
+  re-derived - including the sticky stage's own height, which is what the
+  progress maths divides by.
+- **Five custom properties** come out of the one resolver:
+  `--section-progress`, `--boundary-in`, `--era-progress`, `--puzzle-progress`,
+  `--boundary-out`. Everything the crossings do is `calc()`/`clamp()` over them
+  in `globals.css`. No per-frame JS, no timeline per boundary, no per-section
+  trigger.
+- **One bespoke morph per boundary**, in `EraBridge.tsx`: the last object of the
+  era being left becomes the first object of the next (card into the reader into
+  teletype paper; paper curling into CRT glass, ink into phosphor; green cooling
+  to amber as the camera pulls back to the IBM PC; the `C:\>` prompt shrinking
+  into a window as the lights come up; the 1-bit desktop gaining dither, sixteen
+  colours, then teal and bevels; the dial-up progress bar becoming light over
+  fibre; today's panels folding into the Convergence). Parts are absolutely
+  positioned `.ao-part`s inside a centred square (`.ao-bridge-art`, one set of
+  per-cent coordinates at any aspect ratio) or, when they are a whole screen in
+  their era, in the full-bleed `.ao-bridge-wide`.
+- **Both palettes on screen at once.** Themes are scoped per section with
+  `[data-theme-scope]`, and each bridge part is wrapped in the scope of the era
+  it belongs to, so the outgoing and incoming eras keep their exact period
+  colours while they share the frame. The document theme - the chrome - hands
+  over at the **visual midpoint** of the morph: `switchAt`, the middle of the
+  crossing's travel.
+- **A crossing runs in sequence, and two eras' text is never on screen
+  together.** The era being left recedes behind its own background (0.10-0.40);
+  the new background arrives as a travelling edge that crosses the middle of the
+  screen exactly where the theme switches (0.32-0.68); the new scene assembles
+  under it (0.56-0.72); and, where the crossing is an overlay, the background
+  lifts off it (0.76-0.94). The morphing object carries both eras throughout, so
+  no frame is empty. An earlier version cross-faded the backgrounds and faded
+  the new scene in over the old one: two half-transparent fills average to a
+  grey that belongs to neither era, and two paragraphs of era copy ended up on
+  top of each other at the midpoint.
+- **`--bridge-overlay` is the one switch between layouts.** 0 in document flow,
+  where the band scrolls away by itself; 1 when the crossing is an overlay over
+  pinned stages, and always for the Convergence, which pins at every width. The
+  first version had separate rule sets per layout, and on phones the
+  Convergence's veil never lifted: all of Act 2 was covered.
+- **Depth** is CSS 3D only - no WebGL, no three.js, no canvas. The stage holds
+  the `perspective`, `.ao-camera` dollies on `translateZ` and tilts from scroll
+  (and from the pointer on the full tier), `.ao-era-backdrop` parallaxes behind
+  it. Only `transform`, `opacity` and `filter` are animated.
+- **Overflow is clipped at `#journey-scenes`**, not on the stage: the parallax
+  layers bleed past their stage on purpose, and the stage owns the perspective,
+  so clipping there would flatten the 3D context. A single overflowing pixel
+  makes a mobile browser widen the layout viewport and shrink the whole page.
+- Reduced motion drops the bridges entirely (`display: none`) and renders each
+  era as its finished frame, as before.
+
+---
+
+## 46. Motion tiers, Phase 5.5B
+
+Three tiers, chosen once before first paint by an inline script in `<head>` on
+the journey view only, written to `document.documentElement.dataset.tier`:
+
+| Tier | When | What changes |
+|---|---|---|
+| `full` | wide viewport, fine pointer, capable hardware | every layer, the full depth move, pointer tilt |
+| `light` | phones, coarse pointers, low `hardwareConcurrency` or `deviceMemory` | the same morph and the same story, fewer layers, smaller depth moves, no pointer tilt |
+| reduced motion | `prefers-reduced-motion: reduce` | finished composed frames, no crossings |
+
+- The choice is made **before first paint** so there is no layout shift and no
+  second pass; `<html>` carries `suppressHydrationWarning` because the script
+  writes the attribute before React hydrates.
+- `?tier=full` or `?tier=light` forces one, which is how both paths are walked
+  at any width in `scripts/verify/`.
+- **A missing reading is not a weak device.** `navigator.deviceMemory` does not
+  exist in Safari or Firefox; defaulting it low would put every desktop visitor
+  not on Chrome - many recruiters on a Mac - into the light tier. Missing
+  `deviceMemory` and `hardwareConcurrency` fall back to the threshold, so only a
+  reported low value downgrades.
+- The tiers differ in `--depth-k` and in which decorative layers exist. They
+  never differ in **what the visitor is told**: no era, no morph and no puzzle
+  step is missing from a tier.
+
+---
+
+## 47. Wheel scrolling over pinned stages; honest input in the checks
+
+**Found in Phase 5.5B, present since Phase 5:** on wide screens the mouse wheel
+did not scroll the journey while the pointer was over a pinned stage. The puzzle
+layer covers the whole stage for the entire era - invisible until its segment -
+and its container carried `data-lenis-prevent` so an overflowing puzzle card
+could scroll. Lenis therefore ignored every wheel event over the stage, and the
+card's `overscroll-behavior: contain` kept the browser from scrolling the page
+instead.
+
+- The container no longer carries `data-lenis-prevent`. Lenis runs with
+  `allowNestedScroll`, which lets a nested element scroll natively only while it
+  can actually scroll in that direction, and hands the wheel back after.
+- While invisible, the pinned puzzle layer takes no pointer events: the
+  resolver marks the section `data-puzzle-live` (one boolean, written on change)
+  and only then does the layer accept the pointer. Before, an unseen Start
+  button in mid-screen could catch a click during the era's visual.
+- The held Play dialog keeps `data-lenis-prevent`; the page is held then anyway.
+- **The same trap on phones:** the inline puzzle card scrolls inside itself and
+  had `overscroll-behavior: contain`. Once a tall card had scrolled to its end, a
+  swipe that started on it - and on a phone it fills the width - reached the
+  page no more: the visitor was stuck at the first puzzle. The card now chains
+  into the page at its end. Only the held dialog stays contained.
+
+**Why no check caught it:** the verification's `swipe()` used
+`Input.synthesizeScrollGesture`, which moves nothing in headless Chrome, so "the
+wheel cannot pass the gate" passed on a page that could not move at all. It now
+sends real wheel notches and real touch sequences, and `journey.mjs` first
+checks that the input scrolls the page before checking that the gate stops it.
+Positions in the other checks are still set with `window.scrollTo`, which is
+fine for placing the page but proves nothing about input.
+
+---
+
+## 48. Scroll performance, Phase 5.5B
+
+Measured with `scripts/verify/perf.mjs` (a full scroll of the journey, driven by
+real wheel or touch input, frames counted in the page) and `trace.mjs` (a
+Chrome performance trace of one crossing, with style-invalidation tracking).
+The first honest measurement - earlier ones had scrolled nothing, see 47 - was
+45 fps at 1280 with 51 long tasks. What cost the frames, in the order found:
+
+1. **The resolver forced a full restyle per section per frame.** It read
+   `document.documentElement.scrollHeight` after writing each section's
+   properties. Now every layout read happens before the first write, the
+   viewport is cached at measure time, and a call that finds the page where the
+   last one left it returns before writing - so the second call in a frame is
+   free. (Reading Lenis's scroll number instead of `window.scrollY` was tried:
+   it goes stale on native scrolls and left the theme and the crossings behind
+   the page.)
+2. **Pointer tilt restyled the whole page on every mouse move** (37 ms): its
+   properties were inherited, set on the journey root. Now non-inherited, set
+   on the cameras.
+3. **Progress was written on the section**, so every write restyled all ~500
+   elements in it. Each value now goes only to the subtree that reads it, and
+   the crossing values are split into non-inherited properties
+   (`--scene-in`, `--boundary-out`, `--dolly`) set straight on their readers;
+   only the bridge, whose parts all read it, keeps an inherited
+   `--boundary-in`. `--section-progress` had no reader left and is gone.
+4. **Theme cascade.** The page's text colour and typeface are animated or
+   swapped on a theme switch, and the eras inherited both - so at a crossing's
+   midpoint the era being left was re-inked and re-set in the new era's font,
+   and every transitioning element in it restarted its colour transition on
+   each frame of the cross-fade. Palette scopes now set their own colour and
+   face.
+5. **Endless CSS animations ran in every era, on screen or not** - the 1946
+   lamp grid alone restyled ~300 elements every frame from anywhere in the
+   journey. Off-screen sections are marked by the resolver and paused.
+6. **The travelling edge was an animated mask**, repainting a full-screen layer
+   each frame. It is now a fixed soft edge moved with a transform, and a
+   crossing's layers are promoted only while it is under way.
+7. `setTheme` read a computed style right after writing sixty tokens, forcing
+   the page to restyle mid-frame. It reads first, once.
+
+8. **The 1946 lamps' swell kept their pulse off the compositor** (Chrome
+   declined to composite the scale), so ~130 lamps were restyled on the main
+   thread every frame while the era was on screen. On the light tier the lamps
+   now only brighten and dim; the full tier keeps the swell.
+9. **A scroll-trapping puzzle card and the wheel over pinned stages** were
+   input bugs rather than frame costs - see 47.
+
+Tried and dropped, for want of a measurable gain: rendering guided playback
+from a deferred React value, and mounting puzzles in a transition. Also tried
+and dropped: a ScrollTrigger scroller proxy onto Lenis. It removed
+ScrollTrigger's forced read, but the same restyle simply moved to Lenis's own
+`scrollTo` - it is the first layout-dependent call in a frame that pays for what
+running animations dirtied - so it gained nothing and was reverted.
+
+**What remains:** each theme switch still restyles nearly the whole document
+(~2,300 elements, ~40 ms), once per crossing, seven times in the journey.
+Chrome does not stop a changed root custom property at a scope that
+re-declares it, so the cost belongs to the theme engine writing onto `<html>`
+(CLAUDE.md) and would take a change to that contract to remove - a candidate
+for Phase 12.
+
+**On a 4x-throttled phone the frame rate holds (about 43 fps) but long tasks
+remain.** What is left is each era's own scrubbing: `--era-progress` has to
+reach every animated element of the visual, and some visuals are large - the
+1956 printout is ~730 spans - so one restyle is a long task at a quarter of the
+CPU. The first reader of the scroll position in a frame (Lenis, ScrollTrigger)
+pays for it, which is why profiles attribute the time to them. Removing it means
+restructuring the heavy visuals (fewer nodes, narrower readers), which is Phase
+12 work. Headless Chrome is not a phone: these numbers are measured under
+emulation, not on hardware.

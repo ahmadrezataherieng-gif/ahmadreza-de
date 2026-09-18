@@ -395,6 +395,57 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
   Anything laid out beside the progress rail ends at 84cqw landscape / 80cqw
   portrait, and moves away from the left edge in RTL, where the rail sits.
 
+### Era-to-era crossings and depth (Phase 5.5B)
+
+Read DECISIONS.md 45 and 46 before touching any of this.
+
+- **No era ever cuts to the next.** Each section owns the crossing *into*
+  itself and overlaps the section before it by `1 + BOUNDARY_LENGTH` viewports,
+  so both eras share the screen for the whole morph. At no scroll position may
+  neither era be visible, and no frame may show an empty background.
+- **Measure, never re-derive.** `100dvh` and `window.innerHeight` differ while a
+  phone's toolbar is in play. The phases are marked in the document with
+  zero-height `.ao-mark` elements and the resolver reads their pixels, dividing
+  by the sticky stage's measured height - not by the viewport.
+- **One resolver, four properties, written where they are read** (DECISIONS.md
+  48): `--era-progress` on the scene, `--boundary-in` on the scene and the
+  crossing, `--boundary-out` on the scene and the puzzle layer,
+  `--puzzle-progress` on the puzzle layer. They inherit, so a write on the
+  section restyled all ~500 of its elements every frame. A new reader outside
+  those subtrees gets the value by being written to, not by moving the write
+  up. Still no per-section trigger, still no per-frame JS.
+- **Read layout before writing it.** The resolver runs every frame and twice
+  (scroll event and ticker): it reads `window.scrollY` first, the viewport from
+  the last measure, returns early if nothing moved, and never reads layout after
+  a write. Do not read Lenis's own scroll number instead - it goes stale on
+  native scrolls (keyboard, scrollbar, jumps).
+- **The theme hands over at the visual midpoint** of each morph (`switchAt`),
+  never at its edges. Both eras keep their exact period palette while they share
+  the frame, through per-section `[data-theme-scope]`.
+- **Never cross-fade two background fills.** Two half-transparent fills average
+  to a grey that belongs to neither era. Hand the background over with a
+  travelling masked edge instead, and never show two eras' text at once: the
+  crossing runs in sequence (DECISIONS.md 45) and the morphing object carries
+  both eras.
+- **`--bridge-overlay`** (0 in flow, 1 pinned and always for the Convergence) is
+  the only difference between the layouts' crossings. Never write a second rule
+  set per layout - that is how the phone Convergence ended up permanently
+  covered by its own veil.
+- **Depth is CSS 3D only.** The stage owns the `perspective`; `.ao-camera`
+  dollies and tilts; backdrops parallax. No WebGL, no three.js, no canvas.
+  Animate only `transform`, `opacity` and `filter`.
+- **A section's top is where the crossing into it begins**, still showing the
+  era before. Anything that takes the visitor to an era (the rail, Continue,
+  Skip) uses `scrollToEra()`, which lands on the era's `visual` marker and
+  glides through the crossing on the way.
+- **Clip horizontal overflow at `#journey-scenes`**, never on the stage - the
+  stage's `perspective` would be flattened by an overflow on it. One overflowing
+  pixel makes a mobile browser shrink the entire page to fit.
+- **Three motion tiers** (`full`, `light`, reduced motion) chosen before first
+  paint into `document.documentElement.dataset.tier`; `?tier=` forces one. A
+  tier may drop layers and shorten depth moves. It may never drop a step of the
+  story.
+
 ### Phase 4 patterns — use these, don't reinvent them
 
 - **HTML weight is a tracked budget** (reported every phase). No per-letter
@@ -463,6 +514,18 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
   (`ipv4.ts`, `shell-filesystem.ts`) and test it with plain node.
 - Scroll the puzzle's own containers by hand; never `scrollIntoView` inside the
   journey, it scrolls the document too.
+- **Never put `data-lenis-prevent` on anything that covers a stage.** Lenis
+  ignores every wheel event inside it, and with `overscroll-behavior: contain`
+  the page cannot scroll at all (DECISIONS.md 47). Lenis runs with
+  `allowNestedScroll`, so an overflowing card scrolls by itself. Layers that
+  cover the stage while invisible take no pointer events (`data-puzzle-live`).
+- **A check about input must first prove the input moves the page.** Headless
+  Chrome ignores `Input.synthesizeScrollGesture`; `swipe()` in `cdp.mjs` sends
+  real wheel notches and touch sequences.
+- **Decide a drop where the pointer is released**, from the `pointerup` event's
+  own coordinates - never from state set by the last `pointermove`. A quick
+  release can arrive before React renders that move, and on a busy frame the
+  item silently fails to drop.
 - **Do not use `next/dynamic` for anything server-rendered inside the journey
   tree** — its server-only preloader shifts `useId` and breaks hydration. Use
   `React.lazy` (as `JourneyLoader` does); `next/dynamic` with `ssr: false` is fine
@@ -499,7 +562,9 @@ npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out
 npm run lint
 npm run check:pixel-font   # every Press Start 2P string has real glyphs
-node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch]
+node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch] [--tier light]
+node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
+node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
 ```
 
 The verify script needs a running server (default `http://localhost:3001`,

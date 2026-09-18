@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-09-17
+Last updated: 2026-09-18
 
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
@@ -9,7 +9,7 @@ Last updated: 2026-09-17
 - [x] **Phase 4** — Era visuals 5 to 7 and the Convergence sequence
 - [x] **Phase 5** — Concept pass, landing page, puzzle engine and the seven puzzles
 - [x] **Phase 5.5A** — Concept alignment: Play-mode gates, "Sie", the 1946 scene, working insider tricks, landing polish, full audit
-- [ ] **Phase 5.5B** — Era-to-era transitions and 3D motion
+- [x] **Phase 5.5B** — Era-to-era crossings, CSS 3D depth, motion tiers
 - [ ] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [ ] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
@@ -43,28 +43,63 @@ Last updated: 2026-09-17
   misencoded card (deck line), shortest-job-first (sense switch 3), a shell over
   a file tree (`chdir`), drivers in 640 K at a real DOS prompt (F3), drag and
   drop, IPv4 subnetting (`winipcfg`), and a first-match firewall.
+- **Crossings between eras** (DECISIONS.md 45): no era cuts to the next. Each
+  section overlaps the one before it and owns a bespoke morph in which the last
+  object of one era becomes the first of the next; both eras keep their own
+  palette while they share the frame, and the chrome's theme hands over at the
+  morph's midpoint. CSS 3D depth: a camera dolly and tilt, parallax backdrops,
+  pointer tilt on the full tier. No WebGL, no canvas.
+- **Motion tiers** (DECISIONS.md 46): `full`, `light` (phones, coarse pointers,
+  weak hardware) and reduced motion, chosen before first paint; `?tier=` forces
+  one.
 - **Act 2, the Convergence:** the seven eras compile into an empty AhmadOS
   desktop; reaching it (or Zum Desktop) completes the journey.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
-  real Chrome through both modes, all puzzles, the gates and the landing page.
+  real Chrome through both modes, all puzzles, the gates and the landing page;
+  `boundaries.mjs` screenshots every crossing and checks that no frame is blank
+  and the theme hands over at each midpoint; `perf.mjs` measures a full scroll;
+  `serve.mjs` serves `out/` so all of them can run against the real export.
 
 ## Budgets (measured on the export)
 
 Reported per phase; see the phase reports and DECISIONS.md 34 and 38.
 
-| After Phase 5.5A | Value |
-|---|---|
-| Route First Load JS | 133 kB (limit 250) |
-| Landing HTML, gzipped | de 6.5 kB · en 6.4 kB · fa 6.8 kB |
-| Journey HTML, gzipped | de 38.0 kB · en 36.3 kB · fa 34.4 kB (limit 48) |
-| Journey chunk (with gates), gzipped | 17.6 kB; GSAP and Lenis chunks 19.8 + 31.1 kB, unchanged |
+Measured with `gzip -6` on both builds (the 5.5A report used a different
+setting, so its numbers are not comparable to these).
+
+| | Before 5.5B | After 5.5B |
+|---|---|---|
+| Route First Load JS | 133 kB | 133 kB (limit 250) |
+| Landing HTML, gzipped | de 6.4 · en 6.3 · fa 6.6 kB | unchanged |
+| Journey HTML, gzipped | de 36.9 · en 35.2 · fa 33.2 kB | de 39.4 · en 37.0 · fa 34.9 kB (limit 48) |
+| Journey chunk, gzipped | 17.1 kB | 19.5 kB |
+| Stylesheet, gzipped | 14.9 kB | 18.3 kB |
+| GSAP / ScrollTrigger + Lenis chunks | 19.3 + 30.4 kB | 19.3 + 30.2 kB |
 | Per puzzle, gzipped | 2.6-4.0 kB; shell 4.3 kB; puzzle copy 8.5-10.1 kB per locale |
+
+## Scroll performance (DECISIONS.md 48)
+
+A full scroll of the journey with real input, on the production export
+(`scripts/verify/perf.mjs`, headless Chrome):
+
+| Run | fps | median / p95 frame | frames > 33 ms | long tasks (worst) |
+|---|---|---|---|---|
+| 1280, full tier, GPU path | 58.4 | 16.7 / 16.8 ms | 41 | 6 (59 ms) |
+| 1280, full tier, no GPU | 56.0 | 16.7 / 33.3 ms | 119 | 7 (56 ms) |
+| 380, light tier, 4x CPU throttle, GPU path | 42.2 | 16.7 / 50 ms | 532 | 50 (324 ms) |
+| 380, light tier, 4x CPU throttle, no GPU | 43.3 | 16.7 / 50 ms | 520 | 49 (321 ms) |
+
+Desktop: the remaining long tasks are the theme switch at each crossing's
+midpoint. Throttled phone: above the 30 fps floor, but each era's own scrubbing
+still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
 - The desktop shell and every app. Zum Desktop scrolls to the empty desktop at
   the end of the Convergence; returning visitors still see Act 1.
 - Badges are recorded but not displayed.
+- The motion tiers have only been measured in headless Chrome; no real phone or
+  Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
 - Legal pages, sitemap, JSON-LD, `llms.txt`.
 - Deployment.

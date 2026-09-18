@@ -70,6 +70,18 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   global edge network sees visitor IP addresses). Standard contractual clauses
   and the EU-US Data Privacy Framework are the legal basis to cite.
 
+## Phase 12 — Performance (from Phase 5.5B, DECISIONS.md 48)
+
+- **Test the journey on a real phone and in Safari and Firefox.** Everything so
+  far was measured in headless Chrome under emulation.
+- **Heavy era visuals on slow phones.** On a 4x-throttled phone the journey holds
+  about 43 fps but still has long tasks: each era's scrubbing restyles its whole
+  visual, and some are large (the 1956 printout is ~730 spans). Options: fewer
+  nodes in the printers, or narrower readers of `--era-progress`.
+- **Theme switch cost.** Each crossing's midpoint restyles nearly the whole page
+  (~40 ms) because theme tokens are written onto `<html>`. Removing it means
+  changing the theme engine's contract - decide before Phase 9's Time Machine.
+
 ## Phase 13 — Deployment
 
 - `ahmadreza.de` nameservers must be moved to Cloudflare. Workers custom domains
