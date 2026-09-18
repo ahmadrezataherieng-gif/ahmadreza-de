@@ -90,10 +90,12 @@ await b.evaluate(`(() => {
   return true;
 })()`);
 
-// Keep scrolling until the page end: Lenis eases each gesture, so a fixed count
-// of gestures does not map to a fixed distance.
+// Keep scrolling until near the page end: Lenis eases each gesture, so a fixed
+// count of gestures does not map to a fixed distance. Not to the very end:
+// since Phase 6 that hands over to /desktop/, which would end the measurement
+// on another page. The last 1.5 screens are the Convergence's settled frame.
 const atEnd = () =>
-  b.evaluate('scrollY >= document.documentElement.scrollHeight - innerHeight - 4');
+  b.evaluate('scrollY >= document.documentElement.scrollHeight - innerHeight * 2.5');
 let gestures = 0;
 while (!(await atEnd()) && gestures < 400) {
   await b.swipe(Math.round(HEIGHT * 0.8));
@@ -152,7 +154,7 @@ const result = await b.evaluate(`(() => {
       }
       return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([k, v]) => v + ' ' + k);
     })(),
-    reachedEnd: Math.round(scrollY) >= Math.round(document.documentElement.scrollHeight - innerHeight) - 4,
+    reachedEnd: Math.round(scrollY) >= Math.round(document.documentElement.scrollHeight - innerHeight * 2.5) - 4,
     scrolledPx: Math.round(scrollY),
   };
 })()`);

@@ -136,11 +136,20 @@ export async function launch({ width, height, reduce = false, touch = false, tag
       const r = await send('Page.captureScreenshot', { format: 'png' });
       writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(r.result.data, 'base64'));
     },
-    async key(key, text) {
+    /** `modifiers`: an array of 'Alt', 'Control', 'Meta', 'Shift'. */
+    async key(key, text, modifiers = []) {
       const code = key === ' ' ? 'Space' : key;
-      const base = { key, code, windowsVirtualKeyCode: VK[key] ?? 0 };
+      const mask = modifiers.reduce((sum, name) => sum | ({ Alt: 1, Control: 2, Meta: 4, Shift: 8 }[name] ?? 0), 0);
+      const base = { key, code, windowsVirtualKeyCode: VK[key] ?? 0, modifiers: mask };
       await send('Input.dispatchKeyEvent', { type: 'keyDown', ...base, ...(text ? { text } : {}) });
       await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+    },
+    async dblclick(x, y) {
+      await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y });
+      for (const clickCount of [1, 2]) {
+        await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount });
+        await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount });
+      }
     },
     async type(text) {
       await send('Input.insertText', { text });
@@ -155,8 +164,13 @@ export async function launch({ width, height, reduce = false, touch = false, tag
       await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
       await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
     },
-    async drag(from, to, steps = 12) {
-      if (touch) {
+    /**
+     * Drag from one point to another. `input` forces the kind: 'touch' sends raw
+     * touch events even without touch emulation - a touchscreen laptop, whose
+     * primary pointer is still fine.
+     */
+    async drag(from, to, steps = 12, input = touch ? 'touch' : 'mouse') {
+      if (input === 'touch') {
         await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [from] });
         for (let i = 1; i <= steps; i++) {
           const point = { x: from.x + ((to.x - from.x) * i) / steps, y: from.y + ((to.y - from.y) * i) / steps };

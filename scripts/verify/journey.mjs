@@ -164,16 +164,21 @@ if (MODE === 'watch') {
   check('watch: no gate', (await gated()) === null);
   // Real input alone must carry the visitor through the whole journey - a
   // puzzle card under the finger or the pointer must never stop the page.
+  // Since Phase 6 the end of the journey hands over to /desktop/, so reaching
+  // the end means arriving there.
   if (!REDUCE) {
+    const arrived = () => js(`location.pathname.endsWith('/desktop/') || scrollY >= document.documentElement.scrollHeight - innerHeight - 4`);
     let swipes = 0;
-    while (swipes < 160 && !(await js('scrollY >= document.documentElement.scrollHeight - innerHeight - 4'))) {
+    while (swipes < 160 && !(await arrived())) {
       await b.swipe(Math.round(HEIGHT * 0.7));
       await sleep(140);
       swipes += 1;
     }
-    check(`watch: ${TOUCH ? 'swipes' : 'the wheel'} alone reach the end`, await js('scrollY >= document.documentElement.scrollHeight - innerHeight - 4'), { swipes, y: await js('Math.round(scrollY)') });
-    await js('window.scrollTo(0, 0); true');
-    await sleep(1500);
+    await sleep(2500);
+    check(`watch: ${TOUCH ? 'swipes' : 'the wheel'} alone reach the end and the desktop`, await js(`location.pathname.endsWith('/desktop/')`), { swipes, at: await js('location.pathname') });
+    // Back into the journey as "Reise erneut ansehen" does it.
+    await js(`sessionStorage.setItem('ahmados.replay', '1'); true`);
+    await b.goto(JOURNEY, 9000);
   }
   for (const [i, era] of ERAS.entries()) {
     const index = i + 1;
@@ -487,7 +492,14 @@ if (MODE === 'play') {
   await press('Enter');
   await sleep(3000);
   check('play: no gate left', (await gated()) === null);
-  check('play: convergence reached', Math.abs(await js(`Math.round(document.getElementById('convergence').querySelector('[data-mark="visual"]').getBoundingClientRect().top)`)) < 30);
+  // Under reduced motion the Convergence is the page end, so arriving there
+  // already hands over to the desktop (DECISIONS.md 49).
+  const reached = await js(`(() => {
+    if (location.pathname.endsWith('/desktop/')) return 'desktop';
+    const mark = document.getElementById('convergence')?.querySelector('[data-mark="visual"]');
+    return mark && Math.abs(mark.getBoundingClientRect().top) < 30 ? 'convergence' : null;
+  })()`);
+  check('play: convergence reached', reached === 'convergence' || (REDUCE && reached === 'desktop'), reached);
 
   // Zum Desktop while gated: un-pass era 3 from the landing page (the journey
   // would write its own state back), then open the journey at the top.
@@ -499,8 +511,8 @@ if (MODE === 'play') {
   check('reload: era 3 gated again', (await gated()) === 'unix');
   await clickOn('[data-action="to-desktop"]');
   await sleep(4500);
-  const end = await js(`({ atEnd: scrollY + innerHeight >= document.documentElement.scrollHeight - 40, gated: document.querySelector('[data-gated]') !== null })`);
-  check('Zum Desktop passes a closed gate', end.atEnd && !end.gated, end);
+  const at = await js('location.pathname');
+  check('Zum Desktop passes a closed gate', at.endsWith('/desktop/'), at);
   check('Zum Desktop completes the journey', (await store()).hasCompletedJourney === true);
 }
 
