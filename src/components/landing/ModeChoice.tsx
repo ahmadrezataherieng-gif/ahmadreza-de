@@ -6,13 +6,16 @@ import { useEffect, useState } from 'react';
 
 import { useUnlockStore, type JourneyMode } from '@/store/unlock-store';
 import { cn } from '@/lib/cn';
+import { allowJourneyReplay } from '@/lib/returning';
 
 /**
  * The two ways into the journey, as the landing page's primary call to action.
  *
  * Each is a real link to the journey, so it works before hydration and without
  * JavaScript; clicking it also stores the chosen mode. Neither is styled as the
- * lesser option - they differ only in how much time the visitor has. The Play
+ * lesser option - they differ only in how much time the visitor has. For a
+ * returning visitor both step back behind "Zum Desktop" (`html[data-returning]`,
+ * set by DesktopCta), without changing size. The Play
  * card's copy must describe the gates honestly: an era opens once its puzzle is
  * solved or its solution shown.
  */
@@ -38,7 +41,12 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
         <li key={option.mode}>
           <Link
             href={journeyHref}
-            onClick={() => setMode(option.mode)}
+            onClick={() => {
+              setMode(option.mode);
+              // Choosing a mode is choosing the journey: a returning visitor
+              // is not redirected to the desktop for it.
+              allowJourneyReplay();
+            }}
             className={cn(
               'ao-themed group relative flex h-full flex-col gap-2 overflow-hidden rounded-window border bg-surface p-5 shadow-window transition-colors',
               'hover:border-accent hover:bg-elevated focus-visible:border-accent',

@@ -22,6 +22,7 @@ import { CONVERGENCE_ID, Convergence } from '@/components/journey/Convergence';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { ModeSwitch } from '@/components/journey/ModeSwitch';
+import { leaveForDesktop } from '@/components/journey/hand-over';
 import { JOURNEY_SCENES_ID } from '@/components/puzzles/hold';
 import { gateBottom, isGateActive, measureGates, tickGate } from '@/components/puzzles/gate';
 // Renders nothing on the server (its copy loads lazily), so no hydration risk.
@@ -33,6 +34,9 @@ import type { Locale } from '@/lib/i18n-config';
 gsap.registerPlugin(ScrollTrigger);
 
 const sectionId = (eraIndex: number) => `era-${eraIndex}`;
+
+/** How long the chrome takes to fade before the journey hands over to the desktop. */
+const HAND_OVER_MS = 420;
 
 /**
  * The first era's tokens as a stylesheet, rendered into the static HTML.
@@ -82,6 +86,7 @@ export function Journey() {
   const t = useTranslations('journey');
   const tNav = useTranslations('nav');
   const locale = useLocale() as Locale;
+  const desktopHref = viewHref(locale, 'desktop');
   const setActiveEra = useJourneyStore((state) => state.setActiveEra);
   const setProgress = useJourneyStore((state) => state.setProgress);
   const setTheme = useThemeStore((state) => state.setTheme);
@@ -516,13 +521,17 @@ export function Journey() {
         }
 
         // Reaching the empty desktop is finishing the journey, exactly as the
-        // Skip control is. Once, so the persisted store is not rewritten.
+        // Skip control is - and it hands over to /desktop/, which opens on
+        // this very frame (DECISIONS.md 49). The chrome fades first, so the
+        // last frame is the desktop's first. Once per visit.
         // In document flow the last section cannot always scroll far enough
         // for its progress to reach 1, so the bottom of the page counts too.
         // A closed gate also ends the page; that is not the desktop.
         if (!journeyCompleted && entry.eraId === null && (progress >= 0.98 || atPageEnd)) {
           journeyCompleted = true;
           completeJourney();
+          container.dataset.handover = '';
+          window.setTimeout(() => leaveForDesktop(desktopHref, { replace: true }), HAND_OVER_MS);
         }
       }
     };
@@ -592,7 +601,7 @@ export function Journey() {
       cancelAnimationFrame(limitFrame);
       context.revert();
     };
-  }, [completeJourney, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
+  }, [completeJourney, desktopHref, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
 
   /* --- the pointer tilts the camera, on the full tier only --------------- */
   useEffect(() => {
@@ -649,7 +658,7 @@ export function Journey() {
       <style>{SCOPED_THEMES_CSS}</style>
       {/* Phones: the switcher sits at the bottom so "Skip to Desktop" - the one
           control a recruiter must always find - never shares its row. */}
-      <header className="ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] flex items-center gap-1 rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
+      <header className="ao-journey-chrome ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] flex items-center gap-1 rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
         <Link
           href={viewHref(locale, 'landing')}
           className="ao-themed rounded-control px-2 py-1 font-mono text-xs text-muted hover:text-ink"
@@ -660,11 +669,13 @@ export function Journey() {
         <LanguageSwitcher />
       </header>
 
-      <div className="fixed top-4 end-4 z-[var(--ao-z-modal)] flex items-center gap-2">
+      <div className="ao-journey-chrome fixed top-4 end-4 z-[var(--ao-z-modal)] flex items-center gap-2">
         <ModeSwitch />
         <SkipToDesktop />
       </div>
-      <JourneyProgress sectionId={sectionId} />
+      <div className="ao-journey-chrome">
+        <JourneyProgress sectionId={sectionId} />
+      </div>
       <PuzzleGate />
 
       {/* The scenes, separate from the chrome above: while a puzzle holds the

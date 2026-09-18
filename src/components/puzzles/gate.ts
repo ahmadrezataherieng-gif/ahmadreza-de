@@ -59,7 +59,6 @@ export const useGateStore = create<GateView>((set) => ({
 }));
 
 let enabled = false;
-let suspended = false;
 let passed: ReadonlySet<EraId> = new Set();
 let measures: GateMeasure[] = [];
 let lastScroll = { y: 0, viewport: 0 };
@@ -68,15 +67,6 @@ let lastScroll = { y: 0, viewport: 0 };
 export function configureGates(next: { enabled: boolean; passed: readonly EraId[] }): void {
   enabled = next.enabled;
   passed = new Set(next.passed);
-  apply();
-}
-
-/**
- * Zum Desktop: the visitor chose to leave the journey. Gates stay off for the
- * rest of this page visit, so the way back down to the desktop stays open.
- */
-export function suspendGates(): void {
-  suspended = true;
   apply();
 }
 
@@ -111,13 +101,13 @@ export function measureGates(next: GateMeasure[]): void {
 
 export function tickGate(scrollY: number, viewport: number): void {
   lastScroll = { y: scrollY, viewport };
-  if (enabled && !suspended) apply();
+  if (enabled) apply();
 }
 
 function apply(): void {
   const store = useGateStore.getState();
   let gate: GateMeasure | undefined;
-  if (enabled && !suspended) {
+  if (enabled) {
     // An era whose gate line is already above the viewport is behind the
     // visitor and never pulls them back. One whose line is on screen still
     // gates; the page end then settles on that line.

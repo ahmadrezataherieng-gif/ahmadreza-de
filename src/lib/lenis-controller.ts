@@ -127,11 +127,6 @@ export function scrollToEra(id: string, immediate = false): void {
   scrollToMovingTarget(() => target.getBoundingClientRect().top + window.scrollY, immediate);
 }
 
-/** Scroll to the very end of the page - the Convergence's empty desktop. */
-export function scrollToPageEnd(): void {
-  scrollToMovingTarget(() => document.documentElement.scrollHeight - window.innerHeight, false);
-}
-
 /** How long the anchor is held after a change: puzzles above the visitor
  * re-render in their new presentation a few frames to a few hundred ms later. */
 const ANCHOR_HOLD_MS = 1200;

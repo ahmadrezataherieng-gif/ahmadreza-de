@@ -11,6 +11,7 @@ import { eras } from '@/content/eras';
 import { asStringList } from '@/lib/message-shapes';
 import { BOUNDARY_LENGTH } from '@/components/journey/EraSection';
 import { EraBridge } from '@/components/journey/EraBridge';
+import { DesktopFrame } from '@/components/os/DesktopFrame';
 
 export const CONVERGENCE_ID = 'convergence';
 
@@ -49,7 +50,8 @@ function asComponents(value: unknown): LogComponent[] {
  * in a ring, then one by one fly to the foot of a forming desktop and shrink
  * into it. As each one docks, its line in the boot log types out and reports
  * OK. The chips dissolve into a seam of light, the desktop grows to fill the
- * screen, the log fades, and the story ends on an empty AhmadOS desktop.
+ * screen, the log fades, and the story ends on an empty AhmadOS desktop - the
+ * same picture /desktop/ opens on, so the hand-over to it is seamless.
  *
  * All of it is one scroll-progress value. No GSAP timeline; each element's
  * position is a calc() over --era-progress in globals.css.
@@ -101,24 +103,9 @@ export function Convergence() {
         <div className="ao-conv-scene w-full bg-background" data-era-scene="">
         {/* --- the desktop that forms --- */}
         <div className="ao-conv-frame">
-          <div
-            className="ao-conv-wallpaper absolute inset-0 overflow-hidden rounded-window border border-edge shadow-window"
-            role="img"
-            aria-label={t('desktopLabel')}
-          >
-            <div className="absolute inset-x-0 top-0 h-[3.5cqh] border-b border-edge bg-surface/60" />
-            <div className="ao-conv-seam absolute inset-x-[18%] bottom-[9cqh] h-px bg-accent shadow-[0_0_24px_var(--ao-color-glow)]" />
-
-            {/*
-              PHASE 6 MOUNT POINT - the AhmadOS desktop shell.
-
-              The Convergence ends here, on an empty desktop. Phase 6 attaches
-              the window manager, taskbar and mobile home screen to this element
-              and takes over from the journey. Do not build shell UI inside the
-              Convergence; replace this element's children instead.
-            */}
-            <div data-shell-mount="ahmados" className="absolute inset-0" />
-          </div>
+          {/* The desktop's first frame, exactly: the journey hands over to
+              /desktop/ on this picture (DECISIONS.md 49). */}
+          <DesktopFrame label={t('desktopLabel')} seamClassName="ao-conv-seam" />
         </div>
 
         {/* --- seven eras, compiling --- */}

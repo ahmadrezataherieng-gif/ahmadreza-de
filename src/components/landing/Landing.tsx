@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 
+import { DesktopCta } from '@/components/landing/DesktopCta';
 import { EmailLink } from '@/components/landing/EmailLink';
 import { JourneyHint } from '@/components/landing/JourneyHint';
 import { ModeChoice } from '@/components/landing/ModeChoice';
@@ -17,8 +18,8 @@ import type { Locale } from '@/lib/i18n-config';
  *
  * It is the page a recruiter judges in three seconds and the page Google reads
  * first, so it is a server component with real HTML text and almost no
- * JavaScript: the only client islands are the language switcher and the two
- * mode cards. The journey's code - GSAP, Lenis, every era - is never loaded
+ * JavaScript: the only client islands are the language switcher, the desktop
+ * call to action and the two mode cards. The journey's code - GSAP, Lenis, every era - is never loaded
  * here.
  *
  * Reading order, on every width: name, role, the ways to reach him, the key
@@ -29,6 +30,7 @@ export async function Landing() {
   const t = await getTranslations('landing');
   const facts = asStatList(t.raw('facts'));
   const journeyHref = viewHref(locale, 'journey');
+  const desktopHref = viewHref(locale, 'desktop');
 
   return (
     <main className="ao-landing relative isolate min-h-dvh overflow-hidden bg-background text-ink">
@@ -93,7 +95,11 @@ export async function Landing() {
             ))}
           </dl>
 
-          <section aria-labelledby="choose-mode" className="flex flex-col gap-4">
+          {/* Fixed height: a returning visitor's "Zum Desktop" replaces the
+              shortcut here without moving anything below it. */}
+          <DesktopCta desktopHref={desktopHref} />
+
+          <section aria-labelledby="choose-mode" className="ao-mode-section flex flex-col gap-4">
             <div>
               <h2 id="choose-mode" className="font-body text-xl font-bold text-ink sm:text-2xl">
                 {t('chooseTitle')}
