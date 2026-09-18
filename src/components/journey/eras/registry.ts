@@ -19,7 +19,8 @@ export interface EraStaging {
   length: number;
   /**
    * Era progress (0..1) at which one-shot animations - printing, the POST count -
-   * start. The UNIX screen must be lit before anything prints on it.
+   * start. Since Phase 5.5B the screens are already lit when an era begins (the
+   * crossing warms them up), so these start almost immediately.
    */
   startAt: number;
   /**
@@ -37,7 +38,7 @@ export interface EraStaging {
 export const eraStaging: Record<EraId, EraStaging> = {
   eniac: { Visual: EraEniac, length: 2.2, startAt: 0, puzzleLength: 3 },
   batch: { Visual: EraBatch, length: 2.6, startAt: 0, puzzleLength: 2.6 },
-  unix: { Visual: EraUnix, length: 3, startAt: 0.3, puzzleLength: 3 },
+  unix: { Visual: EraUnix, length: 3, startAt: 0.02, puzzleLength: 3 },
   dos: { Visual: EraDos, length: 2.6, startAt: 0.02, puzzleLength: 2.4 },
   macintosh: { Visual: EraMac, length: 2.8, startAt: 0, puzzleLength: 2.2 },
   win95: { Visual: EraWin95, length: 3.2, startAt: 0, puzzleLength: 2.8 },

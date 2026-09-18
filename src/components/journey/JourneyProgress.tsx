@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { eras } from '@/content/eras';
 import { useJourneyStore } from '@/store/journey-store';
-import { scrollToElementId } from '@/lib/lenis-controller';
+import { scrollToEra } from '@/lib/lenis-controller';
 import { cn } from '@/lib/cn';
 
 /**
@@ -38,7 +38,7 @@ export function JourneyProgress({ sectionId }: { sectionId: (eraIndex: number) =
                 // Lenis owns the scroll it has to perform the jump itself.
                 onClick={(event) => {
                   event.preventDefault();
-                  scrollToElementId(target);
+                  scrollToEra(target);
                 }}
                 className="group flex items-center justify-end gap-2"
               >
@@ -52,7 +52,9 @@ export function JourneyProgress({ sectionId }: { sectionId: (eraIndex: number) =
                 </span>
                 <span
                   className={cn(
-                    'ao-themed block h-2 w-2 rounded-full border transition-all duration-300',
+                    // Only what the dot shows transitions: an inherited colour
+                    // would restart on every frame of the page's cross-fade.
+                    'block h-2 w-2 rounded-full border transition-[transform,background-color,border-color] duration-300',
                     isActive
                       ? 'scale-150 border-accent bg-accent'
                       : 'border-edge bg-transparent group-hover:border-accent',

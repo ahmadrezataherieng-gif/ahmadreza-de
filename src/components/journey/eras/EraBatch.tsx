@@ -55,7 +55,7 @@ export function EraBatch({ headingId }: { headingId: string }) {
 
         <div className="relative w-full md:flex md:h-full md:w-[66%] md:items-start md:justify-center">
           <div
-            className="ao-paper-feed ao-paper ao-themed relative mx-auto flex w-full max-w-xl shadow-window md:min-h-[125dvh]"
+            className="ao-depth-mid ao-paper-feed ao-paper ao-themed relative mx-auto flex w-full max-w-xl shadow-window md:min-h-[125dvh]"
             role="img"
             aria-label={t('visual.paperLabel')}
           >

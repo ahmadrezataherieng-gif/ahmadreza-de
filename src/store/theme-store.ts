@@ -28,13 +28,17 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     // The Time Machine wins over the journey's automatic era switching.
     if (isLocked && !options?.force) return;
 
+    // Read before the theme is written, while styles are clean: read after,
+    // it forced the whole page to restyle synchronously - about 33 ms in the
+    // middle of every crossing (DECISIONS.md 48).
+    const duration = readThemeDuration();
     applyThemeToDocument(getTheme(id));
     set({ themeId: id, isTransitioning: true });
 
     if (transitionTimer) clearTimeout(transitionTimer);
     transitionTimer = setTimeout(() => {
       set({ isTransitioning: false });
-    }, readThemeDuration());
+    }, duration);
   },
 
   lockTheme: (locked) => set({ isLocked: locked }),
@@ -42,8 +46,20 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   theme: () => getTheme(get().themeId),
 }));
 
-/** Read the cross-fade duration from the stylesheet so CSS stays the source of truth. */
+let themeDuration: number | null = null;
+
+/**
+ * Read the cross-fade duration from the stylesheet so CSS stays the source of
+ * truth. It is one static token on :root, the same for every theme, so it is
+ * read once.
+ */
 function readThemeDuration(): number {
+  if (themeDuration !== null) return themeDuration;
+  themeDuration = readThemeDurationFromCss();
+  return themeDuration;
+}
+
+function readThemeDurationFromCss(): number {
   if (typeof window === 'undefined') return 600;
   const raw = getComputedStyle(document.documentElement)
     .getPropertyValue('--ao-theme-duration')

@@ -95,7 +95,7 @@ export function EraMac({ headingId }: { headingId: string }) {
           <p>{[...icons, ...desktopIcons].join(', ')}</p>
         </div>
 
-        <figure className="flex flex-col items-center gap-4 lg:flex-1">
+        <figure className="ao-depth-mid flex flex-col items-center gap-4 lg:flex-1">
           <div className="ao-mac-case p-3 sm:p-4">
             <div className="ao-mac-screen relative">
               <svg

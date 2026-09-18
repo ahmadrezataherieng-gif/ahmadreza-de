@@ -65,7 +65,7 @@ export function EraUnix({ headingId }: { headingId: string }) {
           ))}
         </div>
 
-        <CrtMonitor label={t('visual.screenLabel')} powerOn className="w-full md:w-[70%]">
+        <CrtMonitor label={t('visual.screenLabel')} powerOn className="ao-depth-mid w-full md:w-[70%]">
           <div
             className="min-h-[21rem] px-4 py-5 font-mono text-[17px] leading-[1.3] text-ink sm:min-h-[26rem] sm:px-7 sm:py-7 sm:text-xl"
             aria-hidden="true"

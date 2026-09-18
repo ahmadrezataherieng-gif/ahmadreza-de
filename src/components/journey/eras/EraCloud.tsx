@@ -92,7 +92,7 @@ export function EraCloud({ headingId }: { headingId: string }) {
         </EraTitle>
 
         <div
-          className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:flex-1"
+          className="ao-depth-mid grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:flex-1"
           role="group"
           aria-label={t('visual.dashboardLabel')}
         >

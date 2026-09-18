@@ -4,46 +4,58 @@ import type { CSSProperties } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { Era } from '@/content/eras';
+import { EraBridge } from '@/components/journey/EraBridge';
 import { eraStaging } from '@/components/journey/eras/registry';
 import { PuzzleSlot } from '@/components/puzzles/PuzzleSlot';
+
+/** Scroll distance of one crossing, in viewport heights (DECISIONS.md 45). */
+export const BOUNDARY_LENGTH = 1.4;
 
 interface EraSectionProps {
   era: Era;
   /** Element id used by the resolver and by the progress rail's anchors. */
   sectionId: string;
-  /** Where "skip" and "continue" take the visitor. */
+  /** Where "continue" takes the visitor. */
   nextSectionId: string;
+  /** The era before this one: the crossing it arrives through. */
+  previous: Era | null;
 }
 
 /**
  * One act of the journey: a tall `<section>` that supplies scroll distance and a
- * sticky stage inside it holding the era's visual, followed by the era's puzzle
- * segment.
+ * sticky stage inside it holding the crossing into this era, the era's visual
+ * and its puzzle segment.
  *
- * The section is the element the resolver measures and writes to. It receives
- * `--era-progress`, `--puzzle-progress` and `--section-progress` every frame and
- * `data-started` once; everything inside reads those through CSS.
+ * The section is the element the resolver measures. It writes each progress
+ * value only onto the subtree that reads it - `--era-progress` on the scene,
+ * `--boundary-in` on the scene and the crossing, `--boundary-out` on the scene
+ * and the puzzle layer, `--puzzle-progress` on the puzzle layer - and marks the
+ * section itself with `data-started`, `data-crossing` and `data-puzzle-live`.
+ * The zero-height `.ao-mark` elements mark where each phase begins, so the
+ * resolver reads exact pixels.
  *
- * The visual keeps exactly the pinned scroll distance it had before puzzles
- * existed: `data-visual-share` tells the resolver which part of the pin belongs
- * to it. The visual never learns that a puzzle follows, or which mode is active.
+ * Every section carries its own era's palette (`data-theme-scope`): during a
+ * crossing two eras are on screen at once, and each has to keep its own
+ * colours, fonts and effects. The document theme - the chrome - switches at the
+ * midpoint of the crossing.
  *
  * The era's one truth is rendered here, on the server, so it is in the static
  * HTML for every visitor. The puzzle is not: the slot mounts it client-side, on
- * demand, and shows the insider detail once it has earned its place (after the
- * trick was used or the puzzle ended; DECISIONS.md 40). The static SEO list in
- * page.tsx carries every insider detail for crawlers.
+ * demand, and shows the insider detail once it has earned its place. The static
+ * SEO list in page.tsx carries every insider detail for crawlers.
  */
-export function EraSection({ era, sectionId, nextSectionId }: EraSectionProps) {
+export function EraSection({ era, sectionId, nextSectionId, previous }: EraSectionProps) {
   const t = useTranslations('eras');
   const tJourney = useTranslations('journey');
   const staging = eraStaging[era.id];
   const headingId = `${sectionId}-heading`;
   const Visual = staging.Visual;
 
-  const total = staging.length + staging.puzzleLength;
-  // Pinned travel is (length - 1) viewports; keep the visual's part of it intact.
-  const visualShare = (staging.length - 1) / (total - 1);
+  // Scroll distance, in viewport heights: the crossing in, the visual's own
+  // travel, the puzzle segment, then the crossing out into the next era.
+  const inLength = previous ? BOUNDARY_LENGTH : 0;
+  const visualLength = staging.length - 1;
+  const total = inLength + staging.length + staging.puzzleLength + BOUNDARY_LENGTH;
 
   return (
     <section
@@ -51,17 +63,47 @@ export function EraSection({ era, sectionId, nextSectionId }: EraSectionProps) {
       data-era={era.id}
       data-era-index={era.index}
       data-start-at={staging.startAt}
-      data-visual-share={visualShare.toFixed(4)}
+      data-theme-scope={era.themeId}
+      data-follows={previous ? '' : undefined}
       aria-labelledby={headingId}
       className="ao-era-section ao-themed w-full"
-      style={{ '--era-length': total, '--puzzle-length': staging.puzzleLength } as CSSProperties}
+      style={
+        {
+          '--era-length': total,
+          '--puzzle-length': staging.puzzleLength,
+          '--boundary-length': BOUNDARY_LENGTH,
+        } as CSSProperties
+      }
     >
+      <span className="ao-mark" data-mark="visual" style={{ '--mark': inLength } as CSSProperties} />
+      <span
+        className="ao-mark"
+        data-mark="puzzle"
+        style={{ '--mark': inLength + visualLength } as CSSProperties}
+      />
+      <span
+        className="ao-mark"
+        data-mark="out"
+        style={{ '--mark': inLength + visualLength + staging.puzzleLength } as CSSProperties}
+      />
+
       <div className="ao-era-stage w-full" data-era-stage="">
-        <Visual headingId={headingId} />
+        {previous ? (
+          <EraBridge kind={previous.id} fromTheme={previous.themeId} toTheme={era.themeId} />
+        ) : null}
+
+        <div className="ao-era-scene w-full" data-era-scene="">
+          <div className="ao-era-backdrop" aria-hidden="true">
+            <span className="ao-depth-extra ao-era-dust" />
+          </div>
+          <div className="ao-camera w-full">
+            <Visual headingId={headingId} />
+          </div>
+        </div>
 
         <div className="ao-puzzle-layer" data-puzzle-layer="">
           <div className="ao-puzzle-scrim" aria-hidden="true" />
-          <div className="ao-puzzle-sticky" data-puzzle-sticky="" data-lenis-prevent="">
+          <div className="ao-puzzle-sticky" data-puzzle-sticky="">
             <div className="ao-puzzle-card ao-themed flex w-full max-w-3xl flex-col gap-4 rounded-window border border-edge bg-surface p-4 text-ink shadow-window sm:p-6">
               <div className="flex flex-col gap-1.5">
                 <p className="font-mono text-[11px] tracking-[0.2em] text-muted uppercase">

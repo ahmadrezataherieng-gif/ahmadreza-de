@@ -65,7 +65,7 @@ export function EraEniac({ headingId }: { headingId: string }) {
         <div className="flex w-full flex-col gap-6 lg:w-[58%]">
           <LampPanel label={t('visual.panelLabel')} />
 
-          <figure className="flex flex-col gap-2">
+          <figure className="ao-depth-mid flex flex-col gap-2">
             <PunchCard columns={columns} label={t('visual.cardLabel')} />
             <figcaption className="font-mono text-[10px] tracking-wide text-muted sm:text-xs">
               {t('visual.cardCaption', { text: CARD_TEXT })}

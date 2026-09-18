@@ -53,7 +53,11 @@ export function setScrollLimit(container: HTMLElement, bottom: number | null): v
   }
   for (const child of Array.from(container.children)) {
     if (!(child instanceof HTMLElement) || child.dataset.scrollLimitIgnore !== undefined) continue;
-    const below = bottom !== null && child.getBoundingClientRect().top + window.scrollY >= bottom - 1;
+    // Since Phase 5.5B a section's box starts one crossing above its own era,
+    // overlapping the section before it, so the box top no longer says whether
+    // the visitor can reach it. The era's visual marker does.
+    const start = child.querySelector('[data-mark="visual"]') ?? child;
+    const below = bottom !== null && start.getBoundingClientRect().top + window.scrollY >= bottom - 1;
     // Only undo what this function did; the held dialog manages its own inert.
     if (below) {
       child.setAttribute('inert', '');
@@ -109,12 +113,17 @@ function scrollToMovingTarget(resolve: () => number, immediate: boolean): void {
 }
 
 /**
- * Scroll to an element by id. Falls back to native scrolling when Lenis is not
- * running, which is the case under `prefers-reduced-motion`.
+ * Go to an era: where the era itself begins, which is its `visual` marker.
+ *
+ * Since Phase 5.5B a section's box starts where the crossing into it begins -
+ * still showing the era before - so its top is the wrong place to land. With
+ * Lenis the page glides there, through the crossing; without it (reduced
+ * motion) it jumps. Falls back to the element's top for anything unmarked.
  */
-export function scrollToElementId(id: string, immediate = false): void {
-  const target = document.getElementById(id);
-  if (!target) return;
+export function scrollToEra(id: string, immediate = false): void {
+  const section = document.getElementById(id);
+  if (!section) return;
+  const target = section.querySelector<HTMLElement>('[data-mark="visual"]') ?? section;
   scrollToMovingTarget(() => target.getBoundingClientRect().top + window.scrollY, immediate);
 }
 
@@ -123,10 +132,18 @@ export function scrollToPageEnd(): void {
   scrollToMovingTarget(() => document.documentElement.scrollHeight - window.innerHeight, false);
 }
 
+/** How long the anchor is held after a change: puzzles above the visitor
+ * re-render in their new presentation a few frames to a few hundred ms later. */
+const ANCHOR_HOLD_MS = 1200;
+
 /**
  * Run a change that may alter the height of content above the visitor - a mode
  * switch in document flow - and keep the section they are reading where it is.
  * Pinned layouts do not change height at all; this is then a no-op.
+ *
+ * The anchor is held for a short window rather than corrected once: the
+ * change itself lands at once, but puzzles above re-render in their new
+ * presentation later, and each of those moves the page again.
  */
 export function keepScrollAnchor(change: () => void): void {
   const middle = window.innerHeight / 2;
@@ -138,15 +155,40 @@ export function keepScrollAnchor(change: () => void): void {
   const layers = Array.from(document.querySelectorAll<HTMLElement>('[data-puzzle-layer]'));
   const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-era], #convergence'));
   const anchor = layers.find(spans) ?? sections.find(spans);
-  const before = anchor?.getBoundingClientRect().top;
+  // Track where the anchor sits in the document, not on screen: only layout
+  // shifts move it there, so a visitor who scrolls meanwhile is never pulled
+  // back - each correction covers exactly the shift since the last one.
+  // Both rects carry the same scroll offset, so their difference is pure
+  // layout; `window.scrollY` can lag a programmatic scroll on mobile viewports
+  // and would count one shift twice.
+  const inDocument = (element: HTMLElement) =>
+    element.getBoundingClientRect().top - document.documentElement.getBoundingClientRect().top;
+  let anchoredAt = anchor ? inDocument(anchor) : 0;
+  if (anchor) document.documentElement.classList.add('ao-anchor-held');
   change();
-  if (!anchor || before === undefined) return;
-  requestAnimationFrame(() =>
-    requestAnimationFrame(() => {
-      const delta = anchor.getBoundingClientRect().top - before;
-      if (Math.abs(delta) > 1) scrollToY(window.scrollY + delta, true);
-    }),
-  );
+  if (!anchor) return;
+  const correct = () => {
+    if (!anchor.isConnected) return;
+    const now = inDocument(anchor);
+    const delta = now - anchoredAt;
+    anchoredAt = now;
+    if (Math.abs(delta) > 1) scrollToY(window.scrollY + delta, true);
+  };
+  requestAnimationFrame(() => requestAnimationFrame(correct));
+  // Layout changes arrive as resizes of the sections. Observe them, not only
+  // the scenes container: while a Play-mode gate still limits the container's
+  // height, a section can grow inside it without the container resizing.
+  const scenes = document.getElementById('journey-scenes');
+  const observer =
+    scenes && typeof ResizeObserver !== 'undefined' ? new ResizeObserver(correct) : null;
+  if (scenes && observer) {
+    observer.observe(scenes);
+    for (const child of Array.from(scenes.children)) observer.observe(child);
+  }
+  window.setTimeout(() => {
+    observer?.disconnect();
+    document.documentElement.classList.remove('ao-anchor-held');
+  }, ANCHOR_HOLD_MS);
 }
 
 /**

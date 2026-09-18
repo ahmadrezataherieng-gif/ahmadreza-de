@@ -98,7 +98,7 @@ export function EraDos({ headingId }: { headingId: string }) {
           <p>{t('visual.dirFooter')}</p>
         </div>
 
-        <CrtMonitor label={t('visual.screenLabel')} className="w-full md:w-[66%]">
+        <CrtMonitor label={t('visual.screenLabel')} className="ao-depth-mid w-full md:w-[66%]">
           <div
             dir="ltr"
             className="min-h-[22rem] px-3 py-4 font-[family-name:var(--ao-font-vt323)] text-[15px] leading-[1.25] whitespace-pre text-ink sm:min-h-[25rem] sm:px-6 sm:py-6 sm:text-lg lg:text-xl"

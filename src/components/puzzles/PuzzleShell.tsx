@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { getEra, type EraId } from '@/content/eras';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
-import { keepScrollAnchor, scrollToElementId } from '@/lib/lenis-controller';
+import { keepScrollAnchor, scrollToEra } from '@/lib/lenis-controller';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { DEFAULT_MODE, useUnlockStore } from '@/store/unlock-store';
 import { usePuzzleProgressStore } from '@/store/puzzle-progress-store';
@@ -92,7 +92,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
 
   const skipAhead = () => {
     skipPuzzle(eraId);
-    scrollToElementId(nextSectionId);
+    scrollToEra(nextSectionId);
   };
 
   const onSolved = useCallback(() => {
@@ -144,7 +144,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
     if (held || pendingScroll.current === null) return;
     const id = pendingScroll.current;
     pendingScroll.current = null;
-    const frame = requestAnimationFrame(() => scrollToElementId(id));
+    const frame = requestAnimationFrame(() => scrollToEra(id));
     return () => cancelAnimationFrame(frame);
   }, [held]);
 

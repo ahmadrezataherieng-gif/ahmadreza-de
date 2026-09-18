@@ -23,6 +23,24 @@ import { SITE_URL } from '@/lib/constants';
 type LayoutParams = { locale?: string[] };
 
 /**
+ * Picks the journey's motion tier (DECISIONS.md 46).
+ *
+ * `full` - a mouse on a wide screen with enough cores and memory: every depth
+ * layer, the camera dolly and the pointer tilt.
+ * `light` - phones, coarse pointers and weak hardware: the same crossings with
+ * fewer layers and smaller moves.
+ * `?tier=full|light` forces one, which is how the verification runs both.
+ *
+ * A missing reading is not a weak device: `deviceMemory` does not exist in
+ * Safari or Firefox, so defaulting it low would put every desktop visitor who
+ * is not on Chrome into the light tier. Both counts fall back to the threshold.
+ */
+const MOTION_TIER_SCRIPT = `(function(){try{var d=document.documentElement,f=new URLSearchParams(location.search).get('tier');
+if(f!=='full'&&f!=='light'){var fine=matchMedia('(pointer: fine)').matches&&matchMedia('(hover: hover)').matches;
+var wide=innerWidth>=768&&innerHeight>=600;var c=navigator.hardwareConcurrency||4;var m=navigator.deviceMemory||4;
+f=fine&&wide&&c>=4&&m>=4?'full':'light';}d.dataset.tier=f;}catch(e){document.documentElement.dataset.tier='light';}})();`;
+
+/**
  * Only generated routes exist. Without this, any URL under the catch-all -
  * browsers ask for `/favicon.ico` on their own - rendered the layout and threw,
  * which was a 500 in dev. Now such a request is a plain 404.
@@ -110,6 +128,14 @@ export default async function LocaleLayout({
 
   return (
     <html lang={htmlLang[locale]} dir={dirForLocale(locale)} suppressHydrationWarning>
+      <head>
+        {/* The journey's motion tier, decided before the first paint so nothing
+            shifts afterwards. Inline and tiny on purpose: it has to run before
+            the first frame, and it only sets one attribute. */}
+        {view === 'journey' ? (
+          <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
+        ) : null}
+      </head>
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>

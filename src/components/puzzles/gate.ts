@@ -34,9 +34,6 @@ export function gateCueHeight(element: Element): number {
   return parseFloat(getComputedStyle(element).getPropertyValue('--ao-gate-cue')) || 136;
 }
 
-/** Pinned stages: the gate line sits before the segment starts fading out. */
-const PINNED_GATE_AT = 0.85;
-
 export interface GateMeasure {
   eraId: EraId;
   section: HTMLElement;
@@ -88,27 +85,23 @@ export function isGateActive(): boolean {
 }
 
 /**
- * Where each era's gate line lies, from the resolver's measurements.
- * `pinned`: the stage is sticky; `layer`: the puzzle segment in flow (phones:
- * `sticky` panel, reduced motion: plain flow).
+ * Where an era's gate ends the page: right after its puzzle segment, before the
+ * crossing into the next era. The resolver measures; this only picks.
  */
 export function gateBottom(entry: {
-  top: number;
-  height: number;
   pinned: boolean;
-  layer: { top: number; height: number; sticky: boolean } | null;
-  viewport: number;
+  /** Document y where the puzzle segment ends (pinned layouts). */
+  puzzleEnd: number;
+  /** The puzzle segment in document flow, if that is the layout. */
+  layer: { top: number; height: number } | null;
+  /** The section's own bottom, as a last resort. */
+  bottom: number;
 }): number {
-  if (entry.pinned) {
-    return entry.top + PINNED_GATE_AT * Math.max(0, entry.height - entry.viewport) + entry.viewport;
-  }
-  if (entry.layer) {
-    // A gated segment reserves room for the cue at its foot (globals.css,
-    // `[data-gated]`), so the page can end exactly where the segment does -
-    // in a sticky phone panel and in plain flow alike.
-    return entry.layer.top + entry.layer.height;
-  }
-  return entry.top + entry.height;
+  if (entry.pinned) return entry.puzzleEnd;
+  // A gated segment reserves room for the cue at its foot (globals.css,
+  // `[data-gated]`), so the page ends exactly where the segment does.
+  if (entry.layer) return entry.layer.top + entry.layer.height;
+  return entry.bottom;
 }
 
 export function measureGates(next: GateMeasure[]): void {

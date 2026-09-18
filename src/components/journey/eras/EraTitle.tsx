@@ -15,6 +15,9 @@ interface EraTitleProps {
  * The year and heading every era carries. Kept in one place so each era visual
  * only has to decide where it sits, not how it is marked up - the heading is
  * what gives each `<section>` its accessible name and what a crawler reads.
+ *
+ * It is also the nearest layer of the era's depth (`ao-depth-near`): it parts
+ * from the machine behind it as the era plays.
  */
 export function EraTitle({
   year,
@@ -25,7 +28,7 @@ export function EraTitle({
   titleClassName,
 }: EraTitleProps) {
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn('ao-depth-near flex flex-col gap-2', className)}>
       <p className="ao-glow font-mono text-xs tracking-[0.35em] text-muted uppercase sm:text-sm">
         {year}
       </p>

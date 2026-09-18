@@ -8,30 +8,17 @@ import { MacScreen } from '@/components/journey/eras/EraMac';
 import { Sparkline } from '@/components/journey/eras/EraCloud';
 import { W95Window } from '@/components/journey/eras/EraWin95';
 import { eras } from '@/content/eras';
-import { themeToCssVars } from '@/lib/apply-theme';
-import { getTheme } from '@/lib/themes';
 import { asStringList } from '@/lib/message-shapes';
+import { BOUNDARY_LENGTH } from '@/components/journey/EraSection';
+import { EraBridge } from '@/components/journey/EraBridge';
 
 export const CONVERGENCE_ID = 'convergence';
 
 /** Scroll distance of the Convergence, in viewport heights. */
 export const CONVERGENCE_LENGTH = 3;
 
-/**
- * Each chip keeps its own era's palette while the page is in the modern theme.
- * This is the theme engine applied to a subtree instead of the document: the
- * same themeToCssVars() output, scoped by attribute. It is generated from
- * themes.ts, so nothing is hardcoded, and it is exactly what the Phase 9 Time
- * Machine will do to a whole window.
- */
-const SCOPED_THEMES_CSS = eras
-  .map(
-    (era) =>
-      `[data-theme-scope="${era.themeId}"]{${Object.entries(themeToCssVars(getTheme(era.themeId)))
-        .map(([name, value]) => `${name}:${value}`)
-        .join(';')}}`,
-  )
-  .join('');
+/** The era the Convergence is entered from: the last one. */
+const LAST_ERA = eras[eras.length - 1];
 
 /** When each chip docks, matching --start + 0.16 in `.ao-conv-chip`. */
 const DOCKED_AT = [0.28, 0.33, 0.38, 0.43, 0.48, 0.53, 0.58] as const;
@@ -81,15 +68,37 @@ export function Convergence() {
     <section
       id={CONVERGENCE_ID}
       aria-labelledby={`${CONVERGENCE_ID}-heading`}
+      data-theme-scope="modern"
+      data-follows=""
       className="ao-conv-section ao-themed w-full"
-      style={{ '--era-length': CONVERGENCE_LENGTH } as CSSProperties}
+      style={
+        {
+          '--era-length': CONVERGENCE_LENGTH + BOUNDARY_LENGTH,
+          '--boundary-length': BOUNDARY_LENGTH,
+        } as CSSProperties
+      }
     >
-      <style>{SCOPED_THEMES_CSS}</style>
       <h2 id={`${CONVERGENCE_ID}-heading`} className="ao-sr-only">
         {t('title')}
       </h2>
 
-      <div className="ao-conv-stage ao-final-frame w-full bg-background" data-era-stage="">
+      {/* No puzzle segment here: the whole travel follows the crossing in. */}
+      <span className="ao-mark" data-mark="visual" style={{ '--mark': BOUNDARY_LENGTH } as CSSProperties} />
+      <span
+        className="ao-mark"
+        data-mark="puzzle"
+        style={{ '--mark': BOUNDARY_LENGTH + CONVERGENCE_LENGTH - 1 } as CSSProperties}
+      />
+      <span
+        className="ao-mark"
+        data-mark="out"
+        style={{ '--mark': BOUNDARY_LENGTH + CONVERGENCE_LENGTH - 1 } as CSSProperties}
+      />
+
+      <div className="ao-conv-stage ao-final-frame w-full" data-era-stage="">
+        <EraBridge kind={LAST_ERA.id} fromTheme={LAST_ERA.themeId} toTheme="modern" />
+
+        <div className="ao-conv-scene w-full bg-background" data-era-scene="">
         {/* --- the desktop that forms --- */}
         <div className="ao-conv-frame">
           <div
@@ -213,6 +222,7 @@ export function Convergence() {
           <LogLine on={WELCOME_AT} className="mt-[1.6cqh] text-[length:var(--conv-welcome)] font-bold text-accent">
             <bdi>{t('welcome')}</bdi>
           </LogLine>
+          </div>
         </div>
       </div>
     </section>
