@@ -3,7 +3,9 @@
 // No dependencies: Node's global fetch and WebSocket, and a locally installed
 // Chrome. Set CHROME_PATH if Chrome is not at the Windows default location, and
 // VERIFY_OUT to choose where screenshots and throwaway profiles go (default: the
-// system temp directory).
+// system temp directory). VERIFY_GPU=1 keeps Chrome's GPU path (compositing on
+// the graphics card, as a visitor's browser does); by default it is disabled so
+// screenshots are identical from run to run.
 import { spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -38,7 +40,7 @@ export async function launch({ width, height, reduce = false, touch = false, tag
     chrome = spawn(
       CHROME,
       [
-        '--headless=new', '--disable-gpu', '--hide-scrollbars',
+        '--headless=new', ...(process.env.VERIFY_GPU ? [] : ['--disable-gpu']), '--hide-scrollbars',
         `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`,
         `--window-size=${width},${height}`, 'about:blank',
       ],
@@ -116,6 +118,12 @@ export async function launch({ width, height, reduce = false, touch = false, tag
     send,
     evaluate,
     errors,
+    /** Listen for one DevTools event by method name (e.g. Tracing.dataCollected). */
+    on(method, fn) {
+      listeners.push((msg) => {
+        if (msg.method === method) fn(msg);
+      });
+    },
     async goto(url, wait = 6000) {
       await send('Page.navigate', { url });
       await sleep(wait);
@@ -171,15 +179,33 @@ export async function launch({ width, height, reduce = false, touch = false, tag
     async wheel(deltaY, x = width / 2, y = height / 2) {
       await send('Input.dispatchMouseEvent', { type: 'mouseWheel', x, y, deltaX: 0, deltaY });
     },
-    /** A real scroll gesture: touch swipes on touch profiles, wheel otherwise. */
+    /**
+     * A real scroll gesture: a finger swipe on touch profiles, wheel notches
+     * otherwise. Input.synthesizeScrollGesture is not used: in headless Chrome it
+     * moves nothing at all, so checks built on it passed without scrolling.
+     */
     async swipe(distance) {
-      await send('Input.synthesizeScrollGesture', {
-        x: Math.round(width / 2),
-        y: Math.round(height / 2),
-        yDistance: -distance,
-        gestureSourceType: touch ? 'touch' : 'mouse',
-        speed: 3000,
-      });
+      const x = Math.round(width / 2);
+      if (touch) {
+        const startY = Math.round(height * 0.8);
+        const endY = Math.max(10, startY - Math.min(distance, height * 0.7));
+        const steps = 10;
+        await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: startY }] });
+        for (let i = 1; i <= steps; i++) {
+          const y = Math.round(startY + ((endY - startY) * i) / steps);
+          await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y }] });
+          await sleep(12);
+        }
+        await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        return;
+      }
+      const notch = 100;
+      for (let moved = 0; moved < distance; moved += notch) {
+        await send('Input.dispatchMouseEvent', {
+          type: 'mouseWheel', x, y: Math.round(height / 2), deltaX: 0, deltaY: Math.min(notch, distance - moved),
+        });
+        await sleep(16);
+      }
     },
     close() {
       ws.close();

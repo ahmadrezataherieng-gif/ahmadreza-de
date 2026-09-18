@@ -22,8 +22,12 @@ const LOCALE = args.locale ?? 'de';
 const REDUCE = Boolean(args.reduce);
 const TOUCH = Boolean(args.touch);
 const BASE = args.base ?? 'http://localhost:3001';
-const TAG = args.tag ?? `${MODE}-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}`;
+const TAG = args.tag ?? `${MODE}-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}${args.tier ? `-${args.tier}` : ''}`;
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
+// The motion tier is chosen from the device before first paint; ?tier= forces
+// one, so both paths can be walked at any width.
+const TIER = args.tier === 'light' || args.tier === 'full' ? args.tier : null;
+const JOURNEY = `${BASE}${PREFIX}/journey/${TIER ? `?tier=${TIER}` : ''}`;
 const ERAS = ['eniac', 'batch', 'unix', 'dos', 'macintosh', 'win95', 'cloud'];
 const STORE = 'ahmados.unlocks.v1';
 
@@ -55,15 +59,18 @@ const puzzleY = (index, p) =>
     const s = document.getElementById('era-${index}');
     const stage = s.querySelector('[data-era-stage]');
     const layer = s.querySelector('[data-puzzle-layer]');
-    const vh = innerHeight;
     const top = s.getBoundingClientRect().top + scrollY;
     if (getComputedStyle(stage).position === 'sticky') {
-      const share = Number(s.dataset.visualShare);
-      return Math.round(top + (s.offsetHeight - vh) * (share + (1 - share) * ${p}));
+      // Since Phase 5.5B the section's phases are marked in the document
+      // itself, so this reads the same pixels the resolver does.
+      const at = (name) => s.querySelector('[data-mark="' + name + '"]').getBoundingClientRect().top + scrollY;
+      const start = at('puzzle');
+      return Math.round(start + (at('out') - start) * ${p});
     }
     const lt = layer.getBoundingClientRect().top + scrollY;
-    const sticky = getComputedStyle(layer.querySelector('[data-puzzle-sticky]')).position === 'sticky';
-    return Math.round(sticky ? lt + (layer.offsetHeight - vh) * ${p} : lt - 40);
+    const panel = layer.querySelector('[data-puzzle-sticky]');
+    const sticky = getComputedStyle(panel).position === 'sticky';
+    return Math.round(sticky ? lt + (layer.offsetHeight - panel.offsetHeight) * ${p} : lt - 40);
   })()`);
 
 const tabTo = async (selector, max = 80) => {
@@ -94,8 +101,24 @@ const clickOn = async (selector) => {
   })()`);
   if (off === null) return false;
   if (off) await sleep(1400);
-  const r = await js(`(() => { const r = document.querySelector(${JSON.stringify(selector)})?.getBoundingClientRect(); return r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null; })()`);
+  // Only click what a visitor could: the element must be what the pointer hits
+  // there, and visible. A click that lands on an invisible layer proves nothing.
+  const r = await js(`(() => {
+    const el = document.querySelector(${JSON.stringify(selector)});
+    const r = el?.getBoundingClientRect();
+    if (!r) return null;
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const hit = document.elementFromPoint(x, y);
+    let visible = true;
+    for (let n = el; n; n = n.parentElement) if (Number(getComputedStyle(n).opacity) < 0.05) visible = false;
+    return { x, y, hits: !!hit && (hit === el || el.contains(hit)), visible };
+  })()`);
   if (!r) return false;
+  if (!r.hits || !r.visible) {
+    console.log(`  (not clickable: ${selector} ${JSON.stringify(r)})`);
+    return false;
+  }
   await b.click(r.x, r.y);
   await sleep(600);
   return true;
@@ -129,11 +152,29 @@ await b.click(card.x, card.y);
 await sleep(9000);
 check('landing card opens the journey', (await js('location.pathname')).includes('journey'));
 check('mode stored', (await store()).mode === (MODE === 'watch' ? 'guided' : 'interactive'));
+if (TIER) {
+  // The mode is persisted, so reloading with the tier forced keeps the run.
+  await b.goto(JOURNEY, 9000);
+  check(`tier forced: ${TIER}`, (await js('document.documentElement.dataset.tier')) === TIER);
+}
 
 /* --- watch mode ---------------------------------------------------------------- */
 
 if (MODE === 'watch') {
   check('watch: no gate', (await gated()) === null);
+  // Real input alone must carry the visitor through the whole journey - a
+  // puzzle card under the finger or the pointer must never stop the page.
+  if (!REDUCE) {
+    let swipes = 0;
+    while (swipes < 160 && !(await js('scrollY >= document.documentElement.scrollHeight - innerHeight - 4'))) {
+      await b.swipe(Math.round(HEIGHT * 0.7));
+      await sleep(140);
+      swipes += 1;
+    }
+    check(`watch: ${TOUCH ? 'swipes' : 'the wheel'} alone reach the end`, await js('scrollY >= document.documentElement.scrollHeight - innerHeight - 4'), { swipes, y: await js('Math.round(scrollY)') });
+    await js('window.scrollTo(0, 0); true');
+    await sleep(1500);
+  }
   for (const [i, era] of ERAS.entries()) {
     const index = i + 1;
     await scrollTo(await puzzleY(index, 0.02));
@@ -179,8 +220,38 @@ if (MODE === 'play') {
   await sleep(500);
   check('play: era 1 gated', (await gated()) === 'eniac', await gated());
   const limit = await scrollMax();
-  const era2Top = await js(`document.getElementById('era-2').getBoundingClientRect().top + scrollY`);
-  check('play: page ends before era 2', limit + HEIGHT <= era2Top + 1, { limit, era2Top });
+  // Since Phase 5.5B era 2's box overlaps era 1's puzzle - it carries the
+  // crossing between them - so what matters is that none of era 2 is visible
+  // at the end of the page, not where its box begins.
+  // In document flow (phones, reduced motion) nothing overlaps, so the page
+  // simply has to end above era 2's box.
+  const era2 = await js(`(() => {
+    const s = document.getElementById('era-2');
+    const scene = s.querySelector('[data-era-scene]');
+    const art = s.querySelector('.ao-bridge-art');
+    return {
+      pinned: getComputedStyle(s.querySelector('[data-era-stage]')).position === 'sticky',
+      top: Math.round(s.getBoundingClientRect().top + scrollY),
+      visual: Math.round(s.querySelector('[data-mark="visual"]').getBoundingClientRect().top + scrollY),
+      scene: Number(getComputedStyle(scene).opacity),
+      art: art ? Number(getComputedStyle(art).opacity) : 0,
+    };
+  })()`);
+  check(
+    'play: page ends before era 2',
+    era2.pinned
+      ? limit + HEIGHT <= era2.visual + 1 && era2.scene < 0.01 && era2.art < 0.01
+      : limit + HEIGHT <= era2.top + 1,
+    { limit, ...era2 },
+  );
+  // The input itself must scroll the page, or the gate checks below would pass
+  // on a page that cannot move at all.
+  await js('window.scrollTo(0, 0); true');
+  await sleep(1200);
+  await b.swipe(500);
+  await sleep(1500);
+  const moved = await js('Math.round(scrollY)');
+  check(`play: ${TOUCH ? 'a touch swipe' : 'the wheel'} scrolls the page`, moved > 100, moved);
   await js('window.scrollTo(0, 1e7); true');
   await sleep(1500);
   check('play: scrollTo cannot pass the gate', (await js('scrollY')) <= limit + 1);
@@ -241,10 +312,14 @@ if (MODE === 'play') {
   check('eniac: continue focused', await js(`document.activeElement?.dataset.action === 'continue'`));
   await press('Enter');
   await sleep(3000);
-  check('eniac: continue reaches era 2', Math.abs(await js(`Math.round(document.getElementById('era-2').getBoundingClientRect().top)`)) < 30);
+  // Continue lands where era 2 itself begins - after the crossing into it,
+  // which the page glides through on the way.
+  check('eniac: continue reaches era 2', Math.abs(await js(`Math.round(document.getElementById('era-2').querySelector('[data-mark="visual"]').getBoundingClientRect().top)`)) < 30);
   check('play: gate moved to era 2', (await gated()) === 'batch', await gated());
 
-  // 1956 with the sense switch.
+  // 1956 with the sense switch. Its Start button exists visibly - and takes the
+  // pointer - only once the puzzle segment is on screen.
+  await scrollTo(await puzzleY(2, 0.4));
   await clickOn('[data-puzzle="batch"] [data-action="start"]');
   await sleep(900);
   check('batch: opened inline', await dialogOpen());
@@ -412,13 +487,13 @@ if (MODE === 'play') {
   await press('Enter');
   await sleep(3000);
   check('play: no gate left', (await gated()) === null);
-  check('play: convergence reached', Math.abs(await js(`Math.round(document.getElementById('convergence').getBoundingClientRect().top)`)) < 30);
+  check('play: convergence reached', Math.abs(await js(`Math.round(document.getElementById('convergence').querySelector('[data-mark="visual"]').getBoundingClientRect().top)`)) < 30);
 
   // Zum Desktop while gated: un-pass era 3 from the landing page (the journey
   // would write its own state back), then open the journey at the top.
   await b.goto(`${BASE}${PREFIX}/`, 3000);
   await js(`(() => { const raw = JSON.parse(localStorage.getItem('${STORE}')); raw.state.passedEras = raw.state.passedEras.filter((id) => id !== 'unix'); raw.state.hasCompletedJourney = false; localStorage.setItem('${STORE}', JSON.stringify(raw)); return true; })()`);
-  await b.goto(`${BASE}${PREFIX}/journey/`, 9000);
+  await b.goto(JOURNEY, 9000);
   await js('window.scrollTo(0, 0); true');
   await sleep(1500);
   check('reload: era 3 gated again', (await gated()) === 'unix');
