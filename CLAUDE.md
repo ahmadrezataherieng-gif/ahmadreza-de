@@ -121,10 +121,14 @@ available.**
 - Watch mode never gates. Play mode gates each era, and "Lösung zeigen" is always
   one click away - in the puzzle and on the lock cue at the gate.
 - **Zum Desktop** and the mode switch work at every point in Act 1 and are never
-  blocked; both call `requestPuzzleRelease()`, and Zum Desktop suspends gates.
+  blocked. Zum Desktop goes to `/desktop/` through `leaveForDesktop()`, which
+  lets a held puzzle drop its history entry first; the mode switch calls
+  `requestPuzzleRelease()`.
 - A gate is always visible (the lock cue), never a silent scroll stop, and never
   traps keyboard or screen-reader users.
-- Returning visitors go **straight to the desktop**.
+- Returning visitors go **straight to the desktop**: a direct visit to the
+  journey redirects there, and the landing page leads with "Zum Desktop"
+  (DECISIONS.md 49).
 - Solving a puzzle unlocks a bonus app. A shown solution opens the gate only.
 - **Recruiters must never be stuck behind a game.**
 
@@ -220,12 +224,12 @@ src/
     [[...locale]]/          the real root layout + routes; German at /, en at /en, fa at /fa
   components/
     ui/                     generic primitives (Button, Panel, LanguageSwitcher)
-    os/                     OS shell: Desktop, Taskbar, WindowManager, BootScreen
+    os/                     Act 3 shell: Desktop, DesktopFrame, Shell, windows, taskbar, launcher, home screen
     landing/                the landing page (server-rendered; client islands only)
     journey/                Act 1 era sections and scroll machinery; Convergence.tsx (Act 2)
       eras/                 one component per era visual, plus registry.ts
     puzzles/                the puzzle engine, shell, gates and the seven puzzles
-    apps/                   one folder per application
+    apps/                   registry.ts, icons, one folder per application
     theme/                  theme application and era rendering effects
   lib/                      helpers: cn(), themes, routing, constants, hooks
   store/                    zustand stores
@@ -246,8 +250,9 @@ Rules of thumb:
 
 - `de` is the default locale and is served **without a prefix**; `en` at `/en`,
   `fa` at `/fa` with `dir="rtl"`.
-- Two views per locale: the **landing page** at `/` (`/en/`, `/fa/`) and the
-  **journey** at `/journey/` (`/en/journey/`, `/fa/journey/`).
+- Three views per locale: the **landing page** at `/` (`/en/`, `/fa/`), the
+  **journey** at `/journey/` (`/en/journey/`, `/fa/journey/`) and the
+  **desktop** at `/desktop/` (`/en/desktop/`, `/fa/desktop/`).
 - All of it is one **optional catch-all segment** `app/[[...locale]]`, not
   middleware: `output: 'export'` never runs middleware, and the catch-all is the
   only segment that knows the locale early enough for a static `lang` and `dir`.
@@ -266,6 +271,53 @@ Rules of thumb:
   layout). Everything handed to the client provider is serialised into the HTML,
   so add a namespace there when a view starts using it — and never add `puzzles`,
   which loads with the puzzle chunk.
+
+## The desktop (Act 3, Phase 6)
+
+`src/components/os/` and `src/components/apps/`. Read DECISIONS.md 49 first.
+
+- **Its own route, `/desktop/`,** in the `modern` theme, with only the `site`,
+  `nav`, `languages` and `os` messages. It must never import GSAP, Lenis, an era
+  or a puzzle - `desktop.mjs` checks every loaded script for them.
+- **The hand-over is one picture.** `DesktopFrame` is the Convergence's last frame
+  and the desktop's first; both render it, so never draw the empty desktop twice.
+  The server paints only the frame; the shell is client-only
+  (`DesktopShellLoader`, `next/dynamic` with `ssr: false`) and fades in over it
+  (`data-shell-ready`). `navigation.mjs` compares the two frames pixel by pixel.
+- **The end of the journey** fades the journey chrome (`data-handover`) and
+  replaces the entry with `/desktop/`, so Back never lands on the journey's end
+  and bounces forward again. Zum Desktop pushes, so Back returns to the era.
+- **Returning visitors** (`hasCompletedJourney`, set on arriving at the desktop):
+  an inline `<head>` script on the journey redirects a real navigation (never
+  Back, forward or reload) unless the tab asked to replay - `allowJourneyReplay()`
+  from "Reise erneut ansehen" and the mode cards (`lib/returning.ts`). The landing
+  page's `DesktopCta` keeps one fixed-height slot, so switching to "Zum Desktop"
+  shifts nothing; the mode cards step back by colour only.
+- **Which shell:** `(min-width: 768px) and (pointer: fine)` gets the window
+  manager, everything else the home screen (`use-shell-layout.ts`).
+- **Windows** (`store/window-store.ts`, not persisted): one per app, logical
+  geometry (`x` is the inline-start offset) so Persian mirrors, clamped to the
+  area between the top strip and the taskbar. Pointer events for drag and
+  resize, so mouse, touch and pen share one path. Non-modal dialogs; every
+  action goes through `window-actions.ts`, which owns focus: into a window when
+  it opens, back to its opener when it closes, to its taskbar button when it
+  minimises.
+- **Keyboard:** the focused title bar moves with the arrows, resizes with
+  Shift+arrows and maximises with Enter; Alt+Shift+Right/Left cycles windows
+  (not claimed by browsers or the OS, and skipped inside text fields).
+- **Z-order** uses the scale: windows in `--ao-z-windows` (+ rank), the focused
+  one at `--ao-z-window-active`, taskbar `--ao-z-taskbar`, launcher and notices
+  `--ao-z-modal`.
+- **Mobile:** apps open fullscreen and push a history entry (`__aoApp`, keeping
+  the router's state), so Back closes them. Never touch `scrollRestoration`.
+- **Apps** are rows in `apps/registry.ts` (id, kind, title key, default size,
+  lazy component; the glyph lives in `icons.tsx`). Phase 7 replaces a base app's
+  component in its folder; the window stays. Locked bonus apps say which era's
+  puzzle unlocks them (`unlock.ts`; the last era is "today", never a year).
+- **Zustand selectors must return stable values.** A selector that builds a new
+  array of new objects never compares equal and re-renders forever (React error
+  185) - select the store's own objects, or primitives.
+- Legende badges are read through `selectLegendEras` and displayed in Phase 9.
 
 ## The landing page
 
@@ -470,11 +522,12 @@ Read DECISIONS.md 45 and 46 before touching any of this.
 - **Never combine an opacity animation with an opacity attribute** on one
   element, and never use `truncate` where spaces must survive.
 - **Mount points** — keep them, replace their children:
-  `data-shell-mount="ahmados"` (Phase 6, end of the Convergence),
-  `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt).
+  `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt). The Phase 6
+  shell mount inside the Convergence is gone: the desktop has its own route and
+  shares the frame instead (DECISIONS.md 49).
 - **The Convergence** is not an era: the resolver gives it the `modern` theme,
-  keeps the rail on era 7, and calls `completeJourney()` when it reaches the
-  empty desktop or the page end.
+  keeps the rail on era 7, and when it reaches the empty desktop or the page end
+  calls `completeJourney()` and hands over to `/desktop/` (DECISIONS.md 49).
 
 ### Puzzles (Phase 5)
 
@@ -565,6 +618,9 @@ npm run check:pixel-font   # every Press Start 2P string has real glyphs
 node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch] [--tier light]
 node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
 node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
+node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
+node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]
+node scripts/verify/sizes.mjs
 ```
 
 The verify script needs a running server (default `http://localhost:3001`,

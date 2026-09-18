@@ -10,7 +10,7 @@ Last updated: 2026-09-18
 - [x] **Phase 5** — Concept pass, landing page, puzzle engine and the seven puzzles
 - [x] **Phase 5.5A** — Concept alignment: Play-mode gates, "Sie", the 1946 scene, working insider tricks, landing polish, full audit
 - [x] **Phase 5.5B** — Era-to-era crossings, CSS 3D depth, motion tiers
-- [ ] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
+- [x] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [ ] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
 - [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
@@ -22,14 +22,16 @@ Last updated: 2026-09-18
 ## What exists
 
 - **Build:** Next.js 15 static export, Tailwind v4, TypeScript strict. `npm run
-  build` emits six pages - the landing page and the journey in de (`/`,
-  `/journey/`), en (`/en/…`) and fa (`/fa/…`) - into a static `out/`, plus the
+  build` emits nine pages - the landing page, the journey and the desktop in de
+  (`/`, `/journey/`, `/desktop/`), en (`/en/…`) and fa (`/fa/…`) - into a
+  static `out/`, plus the
   SVG favicon. Deployment config for Cloudflare Workers with static assets is in
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
 - **Landing page** (`/`): name, role, bold key facts, two mode cards, the résumé
   control in the header and under the role, an email link that appears once the
   address is confirmed. Portrait, résumé and email are owed (TODO.md). No journey
-  code is loaded there.
+  code is loaded there. A returning visitor gets "Zum Desktop" as the primary
+  action in the same slot, without a layout shift; the mode cards step back.
 - **Theme engine:** eight themes applied as CSS custom properties, also to
   subtrees (`[data-theme-scope]`).
 - **Act 1, the journey** (`/journey/`): seven era visuals, pinned and scrubbed on
@@ -53,12 +55,25 @@ Last updated: 2026-09-18
   weak hardware) and reduced motion, chosen before first paint; `?tier=` forces
   one.
 - **Act 2, the Convergence:** the seven eras compile into an empty AhmadOS
-  desktop; reaching it (or Zum Desktop) completes the journey.
+  desktop; reaching it hands over to `/desktop/`, whose first frame is the same
+  picture (pixel-identical). Zum Desktop goes there from any point, gated or not.
+  A returning visitor's direct visit to `/journey/` lands on the desktop.
+- **Act 3, the desktop** (`/desktop/`, DECISIONS.md 49): no GSAP, Lenis or era
+  code. Wide screens with a fine pointer get a window manager - drag, resize,
+  minimise, maximise, cascade, z-order, keyboard control, Alt+Shift+Arrow
+  cycling, RTL mirroring - with a taskbar (launcher, window buttons, clock,
+  language switcher, résumé control). Phones and touch tablets get a home screen
+  with a dock; apps open fullscreen and the browser's Back closes them. Eight
+  base apps and seven bonus apps are registered; **every app is still a
+  placeholder**. Locked bonus apps name the era whose puzzle unlocks them.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
   real Chrome through both modes, all puzzles, the gates and the landing page;
   `boundaries.mjs` screenshots every crossing and checks that no frame is blank
   and the theme hands over at each midpoint; `perf.mjs` measures a full scroll;
-  `serve.mjs` serves `out/` so all of them can run against the real export.
+  `desktop.mjs` drives the window manager (mouse, touch, keyboard) and the home
+  screen; `navigation.mjs` the hand-over, Zum Desktop from every era and the
+  returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
+  so all of them can run against the real export.
 
 ## Budgets (measured on the export)
 
@@ -76,6 +91,19 @@ setting, so its numbers are not comparable to these).
 | Stylesheet, gzipped | 14.9 kB | 18.3 kB |
 | GSAP / ScrollTrigger + Lenis chunks | 19.3 + 30.4 kB | 19.3 + 30.2 kB |
 | Per puzzle, gzipped | 2.6-4.0 kB; shell 4.3 kB; puzzle copy 8.5-10.1 kB per locale |
+
+Phase 6, per view as a browser loads it (`scripts/verify/sizes.mjs`, gzip -6;
+Next's First Load JS is one number for all views of the route):
+
+| | Before 6 | After 6 |
+|---|---|---|
+| Route First Load JS (Next) | 133 kB | 135 kB (limit 250) |
+| Landing: JS / CSS loaded | 132.7 / 18.4 kB | 134.8 / 19.8 kB |
+| Journey: JS / CSS loaded | 221.4 / 18.4 kB | 223.8 / 19.8 kB |
+| Desktop: JS / CSS loaded | - | **144.6** / 19.8 kB (shell chunk 9.8 kB; each app +0.5 kB on open) |
+| Landing HTML, gzipped | de 6.4 · en 6.3 · fa 6.7 kB | de 6.6 · en 6.5 · fa 6.9 kB |
+| Journey HTML, gzipped | de 39.5 · en 37.2 · fa 35.3 kB | de 39.9 · en 37.6 · fa 35.7 kB (limit 48) |
+| Desktop HTML, gzipped | - | de 4.6 · en 4.4 · fa 5.0 kB |
 
 ## Scroll performance (DECISIONS.md 48)
 
@@ -95,9 +123,9 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- The desktop shell and every app. Zum Desktop scrolls to the empty desktop at
-  the end of the Convergence; returning visitors still see Act 1.
-- Badges are recorded but not displayed.
+- Every app. The shell opens placeholders (Phase 7 and 8 for the base apps,
+  Phase 9 for the bonus apps).
+- Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.

@@ -53,6 +53,29 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   between 1971 and 1981 (`src/content/eras.ts`, `eras/registry.ts`, themes,
   messages, the Convergence).
 
+## Phase 6 — Desktop copy to confirm
+
+- **The desktop's copy** (`os.*` in all three message files): launcher, taskbar,
+  window controls, the locked-app message, the placeholder text of every app.
+  German is the source.
+- **The landing shortcut for first-time visitors** ("Direkt zum Desktop", under
+  the mode cards): added so a recruiter who only wants the CV never has to pass
+  through the journey. Say if you would rather first-time visitors only see the
+  two modes.
+- **The dock** holds About, Lebenslauf, Kontakt and Assistent. Confirm the four.
+
+## Phase 7 — Core apps (from Phase 6, DECISIONS.md 49)
+
+- Each app replaces its placeholder in `src/components/apps/<id>/`; the registry
+  row, icon and default size already exist. Keep each app in its own lazy chunk.
+- An app that takes text input (Terminal) must stop keyboard events it handles
+  from reaching the desktop's Alt+Shift+Arrow listener; text fields are already
+  exempt.
+- A window's body scrolls itself; apps must fit from the minimum 300 x 200 up,
+  and fullscreen at 380 px on phones.
+- Test the window manager on a real touchscreen laptop and an iPad (the
+  `pointer: fine` rule decides which shell they get).
+
 ## Phase 8 — AI assistant
 
 - **A billing decision is needed before Phase 8.** The Gemini API terms require

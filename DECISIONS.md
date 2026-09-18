@@ -1143,3 +1143,125 @@ pays for it, which is why profiles attribute the time to them. Removing it means
 restructuring the heavy visuals (fewer nodes, narrower readers), which is Phase
 12 work. Headless Chrome is not a phone: these numbers are measured under
 emulation, not on hardware.
+
+---
+
+## 49. The AhmadOS desktop shell, Phase 6
+
+**Route.** Act 3 is its own view, `/desktop/` (`/en/desktop/`, `/fa/desktop/`),
+added through `matchSegments` and `viewHref` like the other two, with canonical
+and hreflang. It receives only the `site`, `nav`, `languages` and `os`
+messages, uses the `modern` theme, and loads no GSAP, Lenis, era or puzzle
+code - `desktop.mjs` fetches every script the page loaded and checks.
+
+**One picture at the hand-over.** `DesktopFrame` - wallpaper, the strip along
+the top, the seam of light at the foot - is the Convergence's last frame and the
+desktop's first; both render the one component. The desktop's server HTML paints
+only that frame; the shell is client-only (`next/dynamic`, `ssr: false`) and
+fades in over it a frame after mounting (`data-shell-ready`): the strip becomes
+the top bar, the seam grows into the taskbar or the dock. `navigation.mjs`
+compares the two frames pixel by pixel (Convergence at 97.5 %, chrome faded, and
+the desktop with JavaScript off): 0 differing pixels. Under reduced motion the
+Convergence is a static frame that keeps its boot log, so there the hand-over
+changes the picture - accepted, since nothing moves there anyway.
+
+- **The shell mount point is gone.** `data-shell-mount` inside the Convergence
+  was reserved for Phase 6, but mounting the shell there would have put the
+  window manager into the journey's chunk and made the desktop share the
+  journey's page. A separate route plus a shared frame gives the seamless look
+  without either.
+- **The end of the journey** fades the journey chrome (`data-handover`) and
+  `location.replace`s itself with `/desktop/` 420 ms later. Replace, not push:
+  Back from the desktop must not land on the journey's last frame, which would
+  hand over again at once. **Zum Desktop** pushes, so Back returns to the era
+  the visitor left; with a puzzle held open it first lets the dialog drop its
+  own history entry, whose deferred `history.back()` would otherwise cancel the
+  navigation (`journey/hand-over.ts`). Leaving the page ends every gate, so
+  `suspendGates()` and `scrollToPageEnd()` had no caller left and were removed.
+
+**Returning visitors** are those with `hasCompletedJourney`, which arriving at
+the desktop now sets (as Zum Desktop always did).
+
+- **Landing page:** `DesktopCta` is one slot of fixed height. The server
+  renders the default - a quiet "Direkt zum Desktop" shortcut for someone who
+  only wants the résumé and the contact details - and a returning visitor gets
+  "Willkommen zurück / Zum Desktop" as the primary action in the same slot. The
+  mode cards step back by colour only (`html[data-returning]`), so nothing
+  changes size. Measured: the mode heading sits at the same pixel in the
+  server's HTML and after hydration.
+- **The journey redirects** a returning visitor's direct visit before its first
+  paint: an inline `<head>` script reads the persisted store. It only acts on a
+  real navigation - never on Back, forward or reload, where a redirect would
+  trap the Back button - and not when this tab asked to replay: "Reise erneut
+  ansehen" and the landing page's mode cards set a sessionStorage flag
+  (`lib/returning.ts`), and arriving at the desktop clears it.
+
+**Which shell.** `(min-width: 768px) and (pointer: fine)` gets the window
+manager; phones and touch tablets get the home screen. A touchscreen laptop -
+fine primary pointer - gets windows and can still drag them by touch.
+
+**Window manager** (`store/window-store.ts`, not persisted, so a reload starts
+clean):
+
+- One window per app; opening an open app brings it forward.
+- Geometry is logical - `x` is the offset from the inline-start edge - so the
+  same numbers mirror in Persian; only the pointer's horizontal delta is flipped.
+  Every rect is clamped to the area between the top strip and the taskbar
+  (minimum 300 x 200); new windows cascade by 28 px.
+- Drag by the title bar, resize from four edges and four corners, all with
+  pointer events and pointer capture: mouse, touch and pen are one code path.
+  Double-click the title bar to maximise or restore.
+- **Keyboard:** the title bar is focusable - arrows move 16 px, Shift+arrows
+  resize, Enter maximises or restores - and minimise, maximise and close are
+  buttons. **Alt+Shift+Right/Left cycles windows.** Browsers and operating
+  systems leave it alone (Alt+Tab belongs to the OS, Ctrl+Tab to browser tabs,
+  Alt+Arrow to history, F6 to the browser's own UI), and it is ignored inside
+  text fields, where Option+Shift+Arrow selects words on a Mac. The launcher
+  lists the shortcuts.
+- Windows are non-modal dialogs (`aria-labelledby` their title). Focus goes into
+  a window when it opens or comes forward, back to its opener when it closes
+  (or to the next window, or the launcher), and to its taskbar button when it
+  minimises (`os/window-actions.ts`). Minimised and closing windows are inert.
+- Z-order uses the scale: windows ranked into `--ao-z-windows`, the focused one
+  at `--ao-z-window-active`, the taskbar at `--ao-z-taskbar`, the launcher and
+  notices at `--ao-z-modal`.
+- Reduced motion: no open, minimise or close animation.
+
+**Mobile:** a status bar with the clock over the top strip, a grid of the apps,
+and a dock of the four a recruiter came for (About, CV, Contact, Assistant) over
+the seam. Apps open fullscreen as modal dialogs with a back button. Opening one
+pushes a history entry keyed `__aoApp` that keeps the router's own state, so the
+browser's Back closes it; nothing touches `scrollRestoration`, which the
+journey manages per entry; a reload starts on a clean home screen.
+
+**Apps** are rows in `apps/registry.ts` - id, kind, title key, default size and
+a lazily loaded component - with glyphs in `apps/icons.tsx` (original line
+drawings, `currentColor`). In this phase every app is a placeholder with copy
+from `os.apps.*`; the CV placeholder already offers the download and the Contact
+placeholder the email, both only when `RESUME.available` / `EMAIL.available`.
+The seven bonus apps share one stand-in until Phase 9. A locked one names the
+era whose puzzle unlocks it ("Lösen Sie das Rätsel von 1971 …"); the last era is
+"heute", never 2024, through an ICU `select`. Legende badges are read through
+`selectLegendEras`, not displayed.
+
+**Copy:** a new `os` namespace. The `ui` and `boot` namespaces reserved for this
+phase (entry 44) were never used - the Convergence already is the boot log - so
+their strings were folded into `os` and the namespaces removed.
+
+**Bugs found while verifying:**
+
+- **React error 185 (maximum update depth)** the moment a window opened: the
+  taskbar selected `windows.map(w => ({ ... }))` through `useShallow`, and new
+  objects never compare equal. Select the store's own array, or primitives.
+- **A focus race under reduced motion:** a window restored from the taskbar was
+  not yet focusable in the frame focus was moved, so focus stayed on the
+  button. `focusWindow` now retries for a few frames until focus is inside.
+
+**What it costs.** Next's "First Load JS" is one number for the whole
+`[[...locale]]` route (133 → 135 kB), so it cannot tell the views apart.
+`scripts/verify/sizes.mjs` measures what a browser actually loads per view
+(gzip -6): the desktop loads **144.6 kB** of JavaScript against the journey's
+**223.8 kB** - the landing page's 134.8 kB plus one 9.8 kB shell chunk - and an
+app adds its own 0.5 kB chunk when it opens. Desktop HTML is 4.4-5.0 kB
+gzipped. The shared route chunk grew by ~2 kB (the landing CTA, the returning
+redirect, the desktop page); the stylesheet by 1.4 kB.
