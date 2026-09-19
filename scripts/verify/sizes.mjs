@@ -22,6 +22,11 @@ const args = Object.fromEntries(
 );
 const BASE = args.base ?? 'http://localhost:3001';
 const OUT_DIR = args.out ?? 'out';
+// --quiet: three lines instead of the whole report.
+const QUIET = Boolean(args.quiet);
+const say = (...parts) => {
+  if (!QUIET) console.log(...parts);
+};
 const gz = (buffer) => gzipSync(buffer, { level: 6 }).length / 1024;
 const kb = (value) => `${value.toFixed(1)} kB`;
 
@@ -70,32 +75,51 @@ if (results.desktop) {
   }
 }
 
-console.log('JavaScript and CSS loaded per view (gzip -6):');
+say('JavaScript and CSS loaded per view (gzip -6):');
 for (const [view, rows] of Object.entries(results)) {
   const js = rows.filter((row) => row.kind === 'js');
   const css = rows.filter((row) => row.kind === 'css');
-  console.log(`  ${view.padEnd(8)} JS ${kb(js.reduce((t, r) => t + r.gz, 0)).padStart(9)} in ${js.length} files, CSS ${kb(css.reduce((t, r) => t + r.gz, 0))}`);
+  say(`  ${view.padEnd(8)} JS ${kb(js.reduce((t, r) => t + r.gz, 0)).padStart(9)} in ${js.length} files, CSS ${kb(css.reduce((t, r) => t + r.gz, 0))}`);
 }
 if (results.desktop) {
   const base = new Set(results.desktop.map((row) => row.file));
   for (const [app, rows] of Object.entries(appRows)) {
     const extra = rows.filter((row) => !base.has(row.file));
     const total = extra.reduce((t, r) => t + r.gz, 0);
-    console.log(`  opening ${app.padEnd(10)} adds ${kb(total).padStart(8)}: ${extra.map((row) => `${row.file} ${kb(row.gz)}`).join(', ') || 'nothing'}`);
+    say(`  opening ${app.padEnd(10)} adds ${kb(total).padStart(8)}: ${extra.map((row) => `${row.file} ${kb(row.gz)}`).join(', ') || 'nothing'}`);
   }
   const shared = new Set(results.landing.map((row) => row.file));
-  console.log(`  desktop-only chunks: ${results.desktop.filter((row) => !shared.has(row.file)).map((row) => `${row.file} ${kb(row.gz)}`).join(', ')}`);
+  say(`  desktop-only chunks: ${results.desktop.filter((row) => !shared.has(row.file)).map((row) => `${row.file} ${kb(row.gz)}`).join(', ')}`);
 }
 if (results.journey) {
   const shared = new Set(results.landing.map((row) => row.file));
-  console.log(`  journey-only chunks: ${results.journey.filter((row) => !shared.has(row.file)).map((row) => `${row.file} ${kb(row.gz)}`).join(', ')}`);
+  say(`  journey-only chunks: ${results.journey.filter((row) => !shared.has(row.file)).map((row) => `${row.file} ${kb(row.gz)}`).join(', ')}`);
 }
 
-console.log('\nHTML per view and locale (gzip -6):');
+say('\nHTML per view and locale (gzip -6):');
 for (const view of ['', 'journey', 'desktop']) {
   const cells = ['', 'en', 'fa'].map((locale) => {
     const file = path.join(OUT_DIR, locale, view, 'index.html');
     return existsSync(file) ? kb(gz(readFileSync(file))) : '-';
   });
-  console.log(`  ${(view || 'landing').padEnd(8)} de ${cells[0]} · en ${cells[1]} · fa ${cells[2]}`);
+  say(`  ${(view || 'landing').padEnd(8)} de ${cells[0]} · en ${cells[1]} · fa ${cells[2]}`);
+}
+
+if (QUIET) {
+  const total = (rows, kind) => rows.filter((row) => row.kind === kind).reduce((t, r) => t + r.gz, 0);
+  const views = Object.entries(results).map(([view, rows]) => `${view} JS ${kb(total(rows, 'js'))}`);
+  console.log(`sizes (gzip -6): ${views.join(', ')}, CSS ${kb(total(Object.values(results)[0] ?? [], 'css'))}`);
+  if (results.desktop) {
+    const base = new Set(results.desktop.map((row) => row.file));
+    const perApp = Object.entries(appRows).map(([app, rows]) => `${app} ${kb(rows.filter((row) => !base.has(row.file)).reduce((t, r) => t + r.gz, 0))}`);
+    console.log(`on open: ${perApp.join(', ')}`);
+  }
+  const html = ['', 'journey', 'desktop'].map((view) => {
+    const cells = ['', 'en', 'fa'].map((locale) => {
+      const page = path.join(OUT_DIR, locale, view, 'index.html');
+      return existsSync(page) ? kb(gz(readFileSync(page))) : '-';
+    });
+    return `${view || 'landing'} ${cells.join('/')}`;
+  });
+  console.log(`HTML de/en/fa: ${html.join(', ')}`);
 }

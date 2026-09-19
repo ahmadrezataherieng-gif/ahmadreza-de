@@ -31,9 +31,12 @@ const JOURNEY = `${BASE}${PREFIX}/journey/${TIER ? `?tier=${TIER}` : ''}`;
 const ERAS = ['eniac', 'batch', 'unix', 'dos', 'macintosh', 'win95', 'cloud'];
 const STORE = 'ahmados.unlocks.v1';
 
+// --quiet: failures in full, passes only in the final count.
+const QUIET = Boolean(args.quiet);
 const log = [];
 const check = (name, ok, detail) => {
   log.push({ name, ok: Boolean(ok) });
+  if (QUIET && ok) return;
   const extra = detail === undefined ? '' : ` :: ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`;
   console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${extra}`);
 };
@@ -116,7 +119,7 @@ const clickOn = async (selector) => {
   })()`);
   if (!r) return false;
   if (!r.hits || !r.visible) {
-    console.log(`  (not clickable: ${selector} ${JSON.stringify(r)})`);
+    if (!QUIET) console.log(`  (not clickable: ${selector} ${JSON.stringify(r)})`);
     return false;
   }
   await b.click(r.x, r.y);
@@ -519,6 +522,6 @@ if (MODE === 'play') {
 
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 4));
 const failed = log.filter((entry) => !entry.ok).length;
-console.log(`\n${TAG}: ${log.length - failed}/${log.length} passed (screenshots in ${OUT})`);
+console.log(`${QUIET ? '' : '\n'}${TAG}: ${log.length - failed}/${log.length} passed${QUIET ? '' : ` (screenshots in ${OUT})`}`);
 b.close();
 process.exit(failed ? 1 : 0);

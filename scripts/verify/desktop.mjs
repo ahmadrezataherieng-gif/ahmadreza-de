@@ -31,9 +31,12 @@ const TAG = `desktop-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' 
 const STORE = 'ahmados.unlocks.v1';
 const RTL = LOCALE === 'fa';
 
+// --quiet: failures in full, passes only in the final count.
+const QUIET = Boolean(args.quiet);
 const log = [];
 const check = (name, ok, detail) => {
   log.push({ name, ok: Boolean(ok) });
+  if (QUIET && ok) return;
   const extra = detail === undefined ? '' : ` :: ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`;
   console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${extra}`);
 };
@@ -357,6 +360,6 @@ if (layout === 'desktop') {
 
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;
-console.log(`\n${TAG}: ${passed}/${log.length} passed`);
+console.log(`${QUIET ? '' : '\n'}${TAG}: ${passed}/${log.length} passed`);
 b.close();
 process.exit(passed === log.length ? 0 : 1);

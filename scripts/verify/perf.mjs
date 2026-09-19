@@ -25,6 +25,8 @@ const HEIGHT = Number(args.height ?? 800);
 const LOCALE = args.locale ?? 'de';
 const TIER = args.tier === 'light' ? 'light' : 'full';
 const CPU = Number(args.cpu ?? 1);
+// --quiet: one line of the numbers that matter.
+const QUIET = Boolean(args.quiet);
 const BASE = args.base ?? 'http://localhost:3001';
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 // --mode watch (default): guided puzzles play as the page scrolls. --mode open:
@@ -159,6 +161,10 @@ const result = await b.evaluate(`(() => {
   };
 })()`);
 
-console.log(TAG, JSON.stringify({ ...result, gestures }, null, 2));
-console.log('console errors:', b.errors.length ? b.errors.slice(0, 3) : 'none');
+if (QUIET) {
+  console.log(`${TAG}: ${result.fps} fps, frame median/p95 ${result.medianFrameMs}/${result.p95FrameMs} ms, ${result.framesOver33ms} frames over 33 ms, ${result.longTasks} long tasks (worst ${result.worstLongTaskMs} ms), ${result.reachedEnd ? 'reached the end' : 'DID NOT REACH THE END'}, console errors: ${b.errors.length || 'none'}`);
+} else {
+  console.log(TAG, JSON.stringify({ ...result, gestures }, null, 2));
+  console.log('console errors:', b.errors.length ? b.errors.slice(0, 3) : 'none');
+}
 b.close();

@@ -38,6 +38,8 @@ const MIN_DEVIATION = 1.5;
 const MIN_COLOURS = 3;
 
 const REDUCE = args.reduce === true;
+// --quiet: failures in full, one summary line.
+const QUIET = Boolean(args.quiet);
 const b = await launch({ width: WIDTH, height: HEIGHT, touch: WIDTH < 768, reduce: REDUCE, tag: TAG });
 const results = [];
 let failures = 0;
@@ -48,7 +50,7 @@ await b.evaluate(
   `localStorage.setItem('ahmados.unlocks.v1', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: [], legendEras: [], hasCompletedJourney: false, mode: 'guided' }, version: 2 })); true`,
 );
 await b.goto(`${BASE}${PREFIX}/journey/?tier=${TIER}`, 9000);
-console.log('tier', await b.evaluate('document.documentElement.dataset.tier'));
+if (!QUIET) console.log('tier', await b.evaluate('document.documentElement.dataset.tier'));
 
 /** Document y at which the crossing into `id` stands at progress `p`. */
 const boundaryY = (id, p) =>
@@ -107,7 +109,7 @@ for (const id of SECTIONS) {
     const ok = covered && stats.deviation >= MIN_DEVIATION && stats.colours >= MIN_COLOURS;
     if (!ok) failures += 1;
     results.push({ id, p, ...state, colours: stats.colours, deviation: Math.round(stats.deviation) });
-    console.log(
+    if (!QUIET || !ok) console.log(
       `${ok ? 'PASS' : 'FAIL'} ${id} @${p.toFixed(2)} bIn=${state.bIn.toFixed(2)} theme=${state.theme} ` +
         `scene=${state.scene?.toFixed(2)} art=${state.art?.toFixed(2)} colours=${stats.colours} dev=${Math.round(stats.deviation)}`,
     );
@@ -116,7 +118,7 @@ for (const id of SECTIONS) {
 
 // The theme must hand over in the middle of each crossing, not at its edges:
 // one step before the midpoint it is still the old era, one step after the new.
-console.log('');
+if (!QUIET) console.log('');
 for (const id of SECTIONS) {
   const mid = await boundaryY(id, 0.5);
   const themes = [];
@@ -127,11 +129,11 @@ for (const id of SECTIONS) {
   }
   const handover = themes[0] !== themes[1];
   if (!handover) failures += 1;
-  console.log(`${handover ? 'PASS' : 'FAIL'} ${id} handover ${themes[0]} -> ${themes[1]}`);
+  if (!QUIET || !handover) console.log(`${handover ? 'PASS' : 'FAIL'} ${id} handover ${themes[0]} -> ${themes[1]}`);
 }
 // Once a crossing is over it must be gone - lifted where it is an overlay,
 // scrolled away where it is a band - or it covers the era it led into.
-console.log('');
+if (!QUIET) console.log('');
 for (const id of SECTIONS) {
   const cleared = await b.evaluate(`(() => {
     const section = document.getElementById('${id}');
@@ -148,9 +150,14 @@ for (const id of SECTIONS) {
     return { gone: opacity < 0.01 || rect.bottom <= 0, opacity, bottom: Math.round(rect.bottom) };
   })()`);
   if (!cleared || !state.gone) failures += 1;
-  console.log(`${state.gone ? 'PASS' : 'FAIL'} ${id} crossing cleared ${JSON.stringify(state)}`);
+  if (!QUIET || !state.gone) console.log(`${state.gone ? 'PASS' : 'FAIL'} ${id} crossing cleared ${JSON.stringify(state)}`);
 }
-console.log(`${TAG}: ${results.length - failures}/${results.length} frames have content`);
-console.log('console errors:', b.errors.length ? b.errors.slice(0, 3) : 'none');
+if (QUIET) {
+  const total = results.length + SECTIONS.length * 2;
+  console.log(`${TAG}: ${total - failures}/${total} passed (frames, hand-overs, crossings), console errors: ${b.errors.length ? JSON.stringify(b.errors.slice(0, 3)) : 'none'}`);
+} else {
+  console.log(`${TAG}: ${results.length - failures}/${results.length} frames have content`);
+  console.log('console errors:', b.errors.length ? b.errors.slice(0, 3) : 'none');
+}
 b.close();
 process.exit(failures || b.errors.length ? 1 : 0);
