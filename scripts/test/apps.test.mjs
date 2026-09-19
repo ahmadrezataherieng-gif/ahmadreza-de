@@ -12,13 +12,14 @@ import { cleanHost, formatHop, median, resolveTarget, summarise } from '../../sr
 import { PORTFOLIO_COMMANDS, SHELL_COMMANDS } from '../../src/components/apps/terminal/shell.ts';
 
 const LOCALES = ['de', 'en', 'fa'];
-const APPS = ['about', 'terminal', 'tickets', 'traceroute'];
+const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'assistant-journey'];
 const copy = (app, locale) => JSON.parse(readFileSync(new URL(`../../src/messages/apps/${app}/${locale}.json`, import.meta.url), 'utf8'));
 const get = (object, path) => path.split('.').reduce((node, key) => node?.[key], object);
 
 /** Every key path, with array lengths, so the three locales can be compared. */
 function shape(value, prefix = '') {
-  if (Array.isArray(value)) return [`${prefix}[${value.length}]`];
+  // Keyword lists are per-language matching aids: they may differ in length.
+  if (Array.isArray(value)) return [prefix.endsWith('keywords') ? prefix : `${prefix}[${value.length}]`];
   if (value && typeof value === 'object') return Object.entries(value).flatMap(([key, child]) => shape(child, prefix ? `${prefix}.${key}` : key));
   return [prefix];
 }

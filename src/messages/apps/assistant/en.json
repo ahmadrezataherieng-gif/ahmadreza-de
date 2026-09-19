@@ -1,0 +1,66 @@
+{
+  "intro": "Ask the assistant about Ahmadreza’s background, his skills and this website. It answers only with what this website says.",
+  "log": "Conversation with the assistant",
+  "you": "You",
+  "mode": {
+    "checking": "Checking the connection …",
+    "demoBadge": "Demo",
+    "liveBadge": "Live",
+    "demo": "Demo mode: the assistant is not live yet. You see prepared answers on a few topics – not AI answers.",
+    "demoOffline": "Demo mode: the assistant cannot be reached right now. You see prepared answers on a few topics – not AI answers.",
+    "live": "Live: answers come from the Gemini AI model and rest only on the content of this website."
+  },
+  "source": {
+    "demo": "Demo · prepared answer, not AI",
+    "live": "Assistant · AI answer",
+    "refused": "Not answered"
+  },
+  "status": {
+    "idle": "Ready. Ask a question or pick a suggestion.",
+    "thinking": "Preparing the answer …",
+    "answered": "Answer received.",
+    "refused": "That question is outside what the assistant answers.",
+    "rateLimited": "Too many questions were asked. Please try again in {seconds} seconds.",
+    "offline": "The assistant is not answering right now. Please try again later.",
+    "notConfigured": "The assistant is not set up yet. Until then you see the demo mode."
+  },
+  "demoRefused": "I have no prepared answer for that in demo mode. Pick one of the topics below.",
+  "suggestions": "Topics to try",
+  "form": {
+    "label": "Your question for the assistant",
+    "placeholder": "Your question …",
+    "send": "Ask",
+    "count": "{count} of {max} characters",
+    "hint": "Press Enter to send. Arrow up brings back the last question."
+  },
+  "privacy": "Privacy: in demo mode nothing leaves your device. When the assistant is live, your questions are sent to Google’s Gemini API. Please do not enter personal data.",
+  "demo": {
+    "topics": {
+      "who": {
+        "question": "Who is Ahmadreza?",
+        "keywords": ["who is", "who are", "introduce", "about him", "person"],
+        "answer": "Ahmadreza Taheri works in IT, in Germany. He is currently doing an apprenticeship as an IT specialist for system integration (Fachinformatiker für Systemintegration) at the Stadtverwaltung Trier. His focus is networks and Linux."
+      },
+      "skills": {
+        "question": "What skills does he have?",
+        "keywords": ["skill", "can he", "knowledge", "topics", "network", "linux", "abilit"],
+        "answer": "This website lists three areas. Networks: TCP/IP, subnetting, DNS and DHCP, firewall rules, Wi-Fi. Systems: Linux, the shell, Windows clients, users and permissions. Support: structured troubleshooting, tickets, documentation, hardware. He does not state a level."
+      },
+      "path": {
+        "question": "What is his background?",
+        "keywords": ["background", "apprentice", "vocational", "career", "resume", "cv", "experience", "stations"],
+        "answer": "He is doing a dual apprenticeship as an IT specialist for system integration, at the Stadtverwaltung Trier and in vocational school. Earlier stations are not on the website yet, so I cannot say anything about them."
+      },
+      "site": {
+        "question": "What does this website show?",
+        "keywords": ["website", "site", "era", "journey", "puzzle", "desktop"],
+        "answer": "80 years of computing history in seven eras, from ENIAC to the cloud. Each era has a puzzle and explains a foundation that still holds today. At the end is this desktop, with programs such as the Terminal, the ticket system and Traceroute. The website is Ahmadreza’s own project."
+      },
+      "contact": {
+        "question": "How can I reach him?",
+        "keywords": ["contact", "reach", "e-mail", "email", "mail", "write", "hire", "apply"],
+        "answer": "The quickest way is email, at {email}."
+      }
+    }
+  }
+}

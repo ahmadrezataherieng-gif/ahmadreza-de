@@ -1,0 +1,66 @@
+{
+  "intro": "Fragen Sie den Assistenten nach Ahmadrezas Werdegang, seinen Fähigkeiten und dieser Website. Er antwortet nur mit dem, was auf dieser Website steht.",
+  "log": "Gespräch mit dem Assistenten",
+  "you": "Sie",
+  "mode": {
+    "checking": "Verbindung wird geprüft …",
+    "demoBadge": "Demo",
+    "liveBadge": "Live",
+    "demo": "Demo-Modus: Der Assistent ist noch nicht live. Sie sehen vorbereitete Antworten zu wenigen Themen – keine KI-Antworten.",
+    "demoOffline": "Demo-Modus: Der Assistent ist gerade nicht erreichbar. Sie sehen vorbereitete Antworten zu wenigen Themen – keine KI-Antworten.",
+    "live": "Live: Die Antworten kommen vom KI-Modell Gemini und beruhen nur auf den Inhalten dieser Website."
+  },
+  "source": {
+    "demo": "Demo · vorbereitete Antwort, keine KI",
+    "live": "Assistent · KI-Antwort",
+    "refused": "Nicht beantwortet"
+  },
+  "status": {
+    "idle": "Bereit. Stellen Sie eine Frage oder wählen Sie einen Vorschlag.",
+    "thinking": "Die Antwort wird vorbereitet …",
+    "answered": "Antwort erhalten.",
+    "refused": "Diese Frage liegt außerhalb dessen, wozu der Assistent Auskunft gibt.",
+    "rateLimited": "Es wurden zu viele Fragen gestellt. Bitte versuchen Sie es in {seconds} Sekunden noch einmal.",
+    "offline": "Der Assistent antwortet gerade nicht. Bitte versuchen Sie es später noch einmal.",
+    "notConfigured": "Der Assistent ist noch nicht eingerichtet. Bis dahin sehen Sie den Demo-Modus."
+  },
+  "demoRefused": "Dazu habe ich im Demo-Modus keine vorbereitete Antwort. Wählen Sie eines der Themen unten.",
+  "suggestions": "Themen zum Ausprobieren",
+  "form": {
+    "label": "Ihre Frage an den Assistenten",
+    "placeholder": "Ihre Frage …",
+    "send": "Fragen",
+    "count": "{count} von {max} Zeichen",
+    "hint": "Mit Enter senden. Pfeil nach oben holt die letzte Frage zurück."
+  },
+  "privacy": "Datenschutz: Im Demo-Modus verlässt nichts Ihr Gerät. Ist der Assistent live, werden Ihre Fragen an die Gemini-API von Google gesendet. Bitte geben Sie keine persönlichen Daten ein.",
+  "demo": {
+    "topics": {
+      "who": {
+        "question": "Wer ist Ahmadreza?",
+        "keywords": ["wer ist", "wer bist", "vorstell", "uber ihn", "person"],
+        "answer": "Ahmadreza Taheri arbeitet in der IT, in Deutschland. Er macht zurzeit eine Ausbildung zum Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Seine Schwerpunkte sind Netzwerke und Linux."
+      },
+      "skills": {
+        "question": "Welche Fähigkeiten hat er?",
+        "keywords": ["fahigkeit", "kann er", "kenntnisse", "skills", "themen", "netzwerk", "linux"],
+        "answer": "Auf dieser Website nennt er drei Bereiche. Netzwerke: TCP/IP, Subnetze, DNS und DHCP, Firewall-Regeln, WLAN. Systeme: Linux, die Shell, Windows-Clients, Benutzer und Berechtigungen. Support: strukturierte Fehlersuche, Tickets, Dokumentation, Hardware. Ein Niveau gibt er nicht an."
+      },
+      "path": {
+        "question": "Wie ist sein Werdegang?",
+        "keywords": ["werdegang", "ausbildung", "berufsschule", "lebenslauf", "erfahrung", "stationen"],
+        "answer": "Er macht eine duale Ausbildung zum Fachinformatiker für Systemintegration, im Betrieb bei der Stadtverwaltung Trier und in der Berufsschule. Frühere Stationen stehen noch nicht auf der Website; dazu kann ich nichts sagen."
+      },
+      "site": {
+        "question": "Was zeigt diese Website?",
+        "keywords": ["website", "webseite", "seite", "epoche", "reise", "ratsel", "desktop"],
+        "answer": "80 Jahre Computergeschichte in sieben Epochen, von ENIAC bis zur Cloud. Jede Epoche hat ein Rätsel und erklärt eine Grundlage, die bis heute gilt. Am Ende steht dieser Desktop mit Programmen wie Terminal, Ticketsystem und Traceroute. Die Website ist Ahmadrezas eigenes Projekt."
+      },
+      "contact": {
+        "question": "Wie erreiche ich ihn?",
+        "keywords": ["kontakt", "erreich", "e-mail", "email", "mail", "schreiben", "bewerb"],
+        "answer": "Am schnellsten per E-Mail an {email}."
+      }
+    }
+  }
+}
