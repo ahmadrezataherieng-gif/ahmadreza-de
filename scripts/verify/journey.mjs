@@ -142,7 +142,8 @@ const landing = await js(`(() => ({
 check('landing: name heading', landing.h1?.includes('Taheri') || landing.h1?.includes('طاهری'), landing.h1);
 check('landing: facts bold', landing.facts.every((w) => Number(w) >= 700), landing.facts);
 check('landing: two disabled résumé controls', landing.resume === 2, landing.resume);
-check('landing: no mailto while email unavailable', landing.mailto === 0);
+// The address was confirmed in Phase 7 (EMAIL.available): exactly one mailto link.
+check('landing: the confirmed email is a link', landing.mailto === 1, landing.mailto);
 check('landing: no horizontal overflow', landing.overflow <= 0, landing.overflow);
 
 const cardIndex = MODE === 'watch' ? 0 : 1;

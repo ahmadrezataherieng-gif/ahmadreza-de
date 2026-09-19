@@ -123,12 +123,14 @@ if (layout === 'desktop') {
   check('mouse: drag moves the window with the pointer', Math.abs(Math.abs(moved.x - before.x) - shift) <= 2 && Math.sign(moved.x - before.x) === (RTL ? -1 : 1) && Math.abs(moved.y - before.y - 90) <= 2, { before, moved, shift });
 
   // Resize from the bottom corner at the end edge: right in German, left in Persian.
+  // Within the room there is on both axes: a window stops at the desktop's edge.
   const grow = Math.min(120, toEnd(moved) - 8);
+  const growY = Math.min(70, area.y + area.h - moved.y - moved.h - 8);
   const corner = await centre(`${win('about')} [data-resize="bottom-end"]`);
-  await b.drag(corner, { x: corner.x + (RTL ? -grow : grow), y: corner.y + 70 });
+  await b.drag(corner, { x: corner.x + (RTL ? -grow : grow), y: corner.y + growY });
   await sleep(300);
   const resized = await rectOf(win('about'));
-  check('mouse: the corner resizes', Math.abs(resized.w - moved.w - grow) <= 2 && Math.abs(resized.h - moved.h - 70) <= 2, { moved, resized, grow });
+  check('mouse: the corner resizes', growY > 10 && Math.abs(resized.w - moved.w - grow) <= 2 && Math.abs(resized.h - moved.h - growY) <= 2, { moved, resized, grow, growY });
 
   const grip2 = await centre(`${win('about')} [data-window-grip]`);
   await b.drag(grip2, { x: grip2.x - 3000, y: grip2.y - 3000 });
@@ -181,6 +183,9 @@ if (layout === 'desktop') {
   check('z-order: clicking a window raises it', covered || z2.about > z2.terminal, { z2, covered });
   check('focus: clicking a window focuses it', covered || (await js(`document.querySelector('${win('about')}').hasAttribute('data-focused')`)));
 
+  // Bring the terminal forward first: the raised About window may cover its close button.
+  await clickOn('[data-taskbar-window="terminal"]');
+  await sleep(300);
   await clickOn(`${win('terminal')} [data-action="window-close"]`);
   await sleep(700);
   check('mouse: close removes the window', (await rectOf(win('terminal'))) === null);
@@ -198,11 +203,13 @@ if (layout === 'desktop') {
   await sleep(300);
   const tAfter = await rectOf(win('about'));
   check('touch: dragging the title bar moves the window', Math.abs(tAfter.x - tBefore.x - tShift) <= 3 && Math.abs(tAfter.y - tBefore.y - 40) <= 3, { tBefore, tAfter, tShift });
+  const tGrowX = Math.min(40, (RTL ? tAfter.x - area.x : area.x + area.w - tAfter.x - tAfter.w) - 4);
+  const tGrowY = Math.min(30, area.y + area.h - tAfter.y - tAfter.h - 4);
   const tCorner = await centre(`${win('about')} [data-resize="bottom-end"]`);
-  await b.drag(tCorner, { x: tCorner.x + (RTL ? -40 : 40), y: tCorner.y + 30 }, 12, 'touch');
+  await b.drag(tCorner, { x: tCorner.x + (RTL ? -tGrowX : tGrowX), y: tCorner.y + tGrowY }, 12, 'touch');
   await sleep(300);
   const tResized = await rectOf(win('about'));
-  check('touch: the corner resizes', Math.abs(tResized.w - tAfter.w - 40) <= 3 && Math.abs(tResized.h - tAfter.h - 30) <= 3, { tAfter, tResized });
+  check('touch: the corner resizes', tGrowX > 10 && tGrowY > 10 && Math.abs(tResized.w - tAfter.w - tGrowX) <= 3 && Math.abs(tResized.h - tAfter.h - tGrowY) <= 3, { tAfter, tResized, tGrowX, tGrowY });
   await clickOn(`${win('about')} [data-action="window-close"]`);
   await sleep(700);
 
@@ -306,9 +313,13 @@ if (layout === 'desktop') {
   await sleep(600);
   check('CV: no download link while the PDF is missing', (await js(`document.querySelectorAll('${win('cv')} a[download]').length`)) === 0);
   check('taskbar: the résumé control is disabled text', (await js(`document.querySelector('[data-action="taskbar-resume"]').tagName`)) === 'SPAN');
-  await clickOn('[data-app="contact"]');
+  // From the launcher: open windows cover the icon column by now.
+  await clickOn('[data-action="launcher"]');
+  await sleep(300);
+  await clickOn('[data-launcher] [data-app="contact"]');
   await sleep(600);
-  check('Contact: no mailto while the address is unconfirmed', (await js(`document.querySelectorAll('a[href^="mailto:"]').length`)) === 0);
+  // The address was confirmed in Phase 7 (EMAIL.available).
+  check('Contact: the confirmed address is a mailto link', (await js(`document.querySelector('${win('contact')} a[href="mailto:kontakt@ahmadreza.de"]') !== null`)));
   await b.shot(`${TAG}-windows`);
 } else {
   /* --- the home screen ------------------------------------------------------------ */

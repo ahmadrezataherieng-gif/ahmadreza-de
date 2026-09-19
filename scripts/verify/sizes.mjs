@@ -56,14 +56,18 @@ for (const [view, url] of views) {
   results[view] = await measure(view, url);
 }
 
-// The desktop again, with one app open: the app's own chunk loads on demand.
-let appRows = [];
+// The desktop again, with one app open at a time: each app's own chunks (code
+// and copy) load on demand, and only then.
+const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'contact'];
+const appRows = {};
 if (results.desktop) {
-  appRows = await measure('desktop-app', `${BASE}/desktop/`, async (b) => {
-    const point = await b.evaluate(`(() => { const r = document.querySelector('[data-app="about"]').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
-    await b.click(point.x, point.y);
-    await sleep(2000);
-  });
+  for (const app of APPS) {
+    appRows[app] = await measure(`desktop-${app}`, `${BASE}/desktop/`, async (b) => {
+      const point = await b.evaluate(`(() => { const r = document.querySelector('[data-app="${app}"]').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
+      await b.click(point.x, point.y);
+      await sleep(2500);
+    });
+  }
 }
 
 console.log('JavaScript and CSS loaded per view (gzip -6):');
@@ -74,8 +78,11 @@ for (const [view, rows] of Object.entries(results)) {
 }
 if (results.desktop) {
   const base = new Set(results.desktop.map((row) => row.file));
-  const extra = appRows.filter((row) => !base.has(row.file));
-  console.log(`  opening an app adds: ${extra.map((row) => `${row.file} ${kb(row.gz)}`).join(', ') || 'nothing'}`);
+  for (const [app, rows] of Object.entries(appRows)) {
+    const extra = rows.filter((row) => !base.has(row.file));
+    const total = extra.reduce((t, r) => t + r.gz, 0);
+    console.log(`  opening ${app.padEnd(10)} adds ${kb(total).padStart(8)}: ${extra.map((row) => `${row.file} ${kb(row.gz)}`).join(', ') || 'nothing'}`);
+  }
   const shared = new Set(results.landing.map((row) => row.file));
   console.log(`  desktop-only chunks: ${results.desktop.filter((row) => !shared.has(row.file)).map((row) => `${row.file} ${kb(row.gz)}`).join(', ')}`);
 }
