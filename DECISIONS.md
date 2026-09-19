@@ -1390,3 +1390,34 @@ reads), Tickets 9.5 kB (4.1 kB of it the nine cases' copy), Traceroute 6.3 kB -
 against 0.5-0.6 kB for each placeholder before. `AppMessages` and its table of
 copy files are a few hundred bytes inside each app chunk, never in the shell.
 The shared stylesheet grew 0.6 kB (Traceroute's motion), which every view pays.
+
+---
+
+## 51. Context cost: a lean CLAUDE.md, project skills, quiet checks
+
+CLAUDE.md had grown to 687 lines, all sent with every message of every session,
+most of it rules for an area the session was not touching. It is now 195 lines,
+and the specialised rules live in project skills under `.claude/skills/`, which
+load only when their description matches the task.
+
+- **Moved word for word.** Every moved line was copied by line number from the
+  committed file, never retyped, and a script confirmed that 599 of its 600
+  non-blank lines still exist, as many times as before, in CLAUDE.md or a skill.
+  The one line replaced is the intro ("Everything a future session needs is in
+  this file"), which stopped being true.
+- **What stays:** who the site is for, the purpose and its table of truths, the
+  modes rule and its first bullet (era visuals never know the mode), the seven
+  eras, the stack, folders, routing and i18n, the coding conventions, the npm
+  commands and the definition of done, a pointer list and the compact instructions.
+- **Seven skills:** `journey-visuals`, `puzzles`, `desktop-apps`,
+  `deployment-legal`, `verification` as first suggested, plus `theme-engine` and
+  `landing-page` because neither section fitted the five and neither could stay
+  inside 200 lines. The purpose section's rules and the modes section's detail bullets
+  went to `puzzles`, since they concern era copy, tricks and the mode switch.
+- **Project rules beat plugins:** CLAUDE.md now says the rules in it and in the
+  project skills override any installed plugin, skill or output style.
+- **Only two local files are ignored** (`.claude/settings.local.json`,
+  `.claude/launch.json`), so `.claude/skills/` is committed and travels with the repository.
+- **Quiet checks.** Every verify script takes `--quiet`: failures in full, passes
+  only as a count. `matrix.mjs` runs the whole matrix that way, one line per
+  configuration. `trace.mjs` (a profiler) and `serve.mjs` are left as they are.

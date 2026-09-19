@@ -90,7 +90,7 @@ Last updated: 2026-09-19
   fullscreen on a phone; `npm test` runs the pure modules and checks the app
   data and copy in plain node; `navigation.mjs` the hand-over, Zum Desktop from every era and the
   returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
-  so all of them can run against the real export.
+  so all of them can run against the real export. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 195 lines; its specialised rules live in `.claude/skills/`.
 
 ## Budgets (measured on the export)
 
