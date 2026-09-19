@@ -40,12 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Claude Code
+# Claude Code: only the two local files are ignored. .claude/skills/ is
+# committed, so the project's rules travel with the repository.
 .claude/settings.local.json
+.claude/launch.json
 
 # cloudflare
 .wrangler/
 .dev.vars
-
-# Claude Code local settings
-.claude/

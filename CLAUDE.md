@@ -1,6 +1,18 @@
 # AhmadOS — Portfolio of Ahmadreza Taheri
 
-Everything a future session needs is in this file. Read it before touching code.
+The core rules are in this file; the specialised ones are in the project skills listed below. Read this file before touching code, and the matching skill before touching its area.
+
+The rules in this file and in the project skills (`.claude/skills/`) override any installed plugin, skill or output style. If a plugin's advice conflicts with a project rule, the project rule wins.
+
+## Project skills - read the one that matches your task
+
+- `journey-visuals` - Act 1 and 2: era visuals, scroll machinery, crossings and CSS 3D depth, motion tiers, printed text, the Convergence, era visual characters.
+- `puzzles` - the puzzle rule (never block without a one-click way through), gates, engine, the modes in practice, unlocks and badges, era copy and insider details.
+- `desktop-apps` - Act 3: window manager, taskbar, launcher, mobile home screen, the app registry and every app, per-app copy.
+- `theme-engine` - themes as CSS custom properties, tokens, `apply-theme`, `setTheme`, the Time Machine.
+- `landing-page` - the landing page and the assets still owed (portrait, resume, email flags).
+- `deployment-legal` - Cloudflare Workers deploy, `_headers`, `_redirects`, the Gemini API key rule, self-hosted fonts and the pixel-font check, GDPR.
+- `verification` - running `scripts/verify`, the setups, `--quiet`, `matrix.mjs`.
 
 ## Who this is for
 
@@ -28,24 +40,6 @@ visitor can still use today.
 | 1995 | A network needs addresses. Without them a machine cannot find another machine. |
 | Today | Programs run isolated from each other, in many places at once. |
 
-Rules that follow from it:
-
-- **The era copy, the puzzle and the success message all serve that era's one
-  truth.** If copy wanders into trivia that does not serve it, cut it.
-- The truth lives in `eras.<id>.description` in `messages/`. It is shown in the
-  era's puzzle segment and in the static SEO list, so it is always in the HTML.
-- **Every era has one insider detail** (`eras.<id>.insider`): something only a
-  real user of that system would know — a shortcut, a quirk, a trick of the
-  period. It rewards the knowledgeable without confusing anyone else. **It must
-  be factually true and sourced.** Never invent period detail. The sources for
-  the current seven are recorded in DECISIONS.md entry 32.
-- **Where it can be done honestly, the insider detail is a working trick in the
-  puzzle** (DECISIONS.md 40): 1946 the deck's diagonal line, 1956 sense switch 3,
-  1971 `chdir`, 1981 F3, 1995 `winipcfg`. 1984 and today stay text. A trick is
-  never required, gets a subtle cue rather than an explanation, and earns a
-  hidden "Legende" badge (`legendEras`). The insider note appears once the trick
-  was used or the puzzle ended.
-
 ## Two viewing modes, one codebase
 
 The visitor chooses how to experience the journey:
@@ -64,39 +58,6 @@ find yourself writing the same scene twice, stop and restructure.
 
 - The mode is a single persisted value in the unlock store. Only the puzzle layer
   reads it; **era visuals never know which mode is active.**
-- The choice is made on the landing page, survives a reload, and can be switched
-  at any time from a persistent control without losing scroll position.
-- Guided mode offers "I'll try this one myself" on each puzzle, which switches
-  that puzzle — and from then on the mode — to interactive.
-- Watch mode never gates and keeps a Skip per puzzle. Play mode has no Skip:
-  "Lösung zeigen" plays the solution and opens the gate (without the artifact).
-  Switching to Watch removes every gate at once, without moving the page.
-- `prefers-reduced-motion` renders finished frames in both modes.
-
-## The concept: "AhmadOS — 80 Years in 90 Seconds"
-
-Three acts.
-
-### Act 1 — The Journey
-
-A scroll-driven trip through seven eras of computing history. The governing
-principle: **the site's own interface evolves era by era**. Each era introduces a
-UI element that persists afterwards — first lamps, then printed text, then a
-cursor you can type at, then a mouse pointer, then windows, then a taskbar.
-
-Each era contains an **optional** interactive puzzle that teaches a real
-computing concept.
-
-### Act 2 — The Convergence
-
-At the end of the timeline all seven eras visually compile together into the
-modern desktop, with a boot log listing each era as a loaded component.
-
-### Act 3 — AhmadOS
-
-A fully interactive desktop operating system. Draggable windows on desktop,
-fullscreen apps on mobile. Portfolio sections are applications. Puzzles solved
-in Act 1 unlock extra apps.
 
 ## The seven eras
 
@@ -113,33 +74,6 @@ in Act 1 unlock extra apps.
 The canonical machine-readable version of this table is `src/content/eras.ts`.
 Keep the two in sync.
 
-## The puzzle rule — never violate it
-
-**A puzzle never blocks without a one-click way through. Zum Desktop is always
-available.**
-
-- Watch mode never gates. Play mode gates each era, and "Lösung zeigen" is always
-  one click away - in the puzzle and on the lock cue at the gate.
-- **Zum Desktop** and the mode switch work at every point in Act 1 and are never
-  blocked. Zum Desktop goes to `/desktop/` through `leaveForDesktop()`, which
-  lets a held puzzle drop its history entry first; the mode switch calls
-  `requestPuzzleRelease()`.
-- A gate is always visible (the lock cue), never a silent scroll stop, and never
-  traps keyboard or screen-reader users.
-- Returning visitors go **straight to the desktop**: a direct visit to the
-  journey redirects there, and the landing page leads with "Zum Desktop"
-  (DECISIONS.md 49).
-- Solving a puzzle unlocks a bonus app. A shown solution opens the gate only.
-- **Recruiters must never be stuck behind a game.**
-
-## The unlock mechanic
-
-Solving era *N*'s puzzle awards an **artifact**, and each artifact unlocks
-exactly one **bonus app** on the AhmadOS desktop. Base apps (About, Terminal,
-Tickets, Traceroute, Assistant, Contact, Timeline, CV) are always available to
-everyone. The mapping lives in `src/content/eras.ts`; the state lives in
-`src/store/unlock-store.ts` and is persisted to `localStorage`.
-
 ## Tech stack
 
 | Concern | Choice |
@@ -154,64 +88,6 @@ everyone. The mapping lives in `src/content/eras.ts`; the state lives in
 | Fonts | `@fontsource*` packages, **self-hosted** |
 | Hosting | **Cloudflare Workers with static assets**, GitHub-connected |
 | AI (Phase 8) | **Google Gemini**, behind a server-side Cloudflare proxy |
-
-### Deployment — Cloudflare, not a VPS
-
-The site deploys to **Cloudflare Workers with static assets**, connected to the
-public GitHub repo through Workers Builds. It is **not** a Cloudflare Pages
-project: Cloudflare folded Pages into Workers during 2026, and while Pages is
-still supported, all new investment goes to Workers and a new account may not
-show a Pages tab at all.
-
-Earlier drafts of this project specified nginx on a self-managed VPS. That is
-reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
-
-- `wrangler.jsonc` — `assets.directory: "./out"`, no Worker script, so this
-  stays a pure static deploy. `html_handling: "auto-trailing-slash"` matches
-  `trailingSlash: true`; `not_found_handling: "404-page"` serves Next's
-  `404.html` with a real 404 status.
-- `public/_headers` — security headers. Next copies `public/` verbatim into the
-  export, so these land at `out/_headers`, where Cloudflare reads them. No
-  Content-Security-Policy yet; that arrives in Phase 11 once every external
-  origin is known.
-- `public/_redirects` — `301 /de/ → /`. This is what used to be an nginx rule.
-- Custom domain is **ahmadreza.de**. Workers custom domains require the zone's
-  nameservers to be managed by Cloudflare — a CNAME from an external DNS
-  provider is not enough, unlike Pages.
-- `npm run build` must keep producing nothing but a static `out/` directory.
-  Nothing in the application code may know it is running on Cloudflare.
-
-### The Gemini API key — absolute rule
-
-Phase 8's assistant uses the Google Gemini API through a server-side Cloudflare
-function. **The API key lives only in a Cloudflare environment variable.** It
-must never appear in client-side code, in a `NEXT_PUBLIC_*` variable, in a
-committed `.env`, or in any other committed file. **The GitHub repository is
-public**, so a key that is pushed once is compromised immediately, is billable,
-and survives in the git history after deletion. If it ever lands in a commit,
-rotate it rather than trying to rewrite history.
-
-### Fonts — legal requirement, not a preference
-
-Fonts must **never** be loaded from the Google Fonts CDN at runtime. German case
-law treats that as a GDPR violation. All faces come from `@fontsource` packages
-and are served from our own domain. Never add a `fonts.googleapis.com` link, a
-`next/font/google` import, or any other runtime font fetch.
-
-Installed families:
-
-- `@fontsource/jetbrains-mono` — OS chrome, terminal, UI labels
-- `@fontsource/inter` — prose in German and English
-- `@fontsource-variable/vazirmatn` — all Persian text
-- `@fontsource/vt323` — retro terminal eras
-- `@fontsource/press-start-2p` — 8-bit and pixel-art eras
-
-**Press Start 2P has only ~220 glyphs.** Before any string is set in it, it must
-pass `npm run check:pixel-font`, which reads the font's real glyph table (a CSS
-`unicode-range` is not proof of a glyph). Add every new pixel-font message key
-to `PIXEL_KEYS` in `scripts/check-pixel-font.mjs`. If a character is missing,
-change the copy — never accept a fallback glyph. Persian is never set in the
-pixel face; for `fa`, the pixel stack resolves to Vazirmatn.
 
 ## Folder structure — what belongs where
 
@@ -273,370 +149,6 @@ Rules of thumb:
   so add a namespace there when a view starts using it — and never add `puzzles`,
   which loads with the puzzle chunk.
 
-## The desktop (Act 3, Phase 6)
-
-`src/components/os/` and `src/components/apps/`. Read DECISIONS.md 49 first.
-
-- **Its own route, `/desktop/`,** in the `modern` theme, with only the `site`,
-  `nav`, `languages` and `os` messages. It must never import GSAP, Lenis, an era
-  or a puzzle - `desktop.mjs` checks every loaded script for them.
-- **The hand-over is one picture.** `DesktopFrame` is the Convergence's last frame
-  and the desktop's first; both render it, so never draw the empty desktop twice.
-  The server paints only the frame; the shell is client-only
-  (`DesktopShellLoader`, `next/dynamic` with `ssr: false`) and fades in over it
-  (`data-shell-ready`). `navigation.mjs` compares the two frames pixel by pixel.
-- **The end of the journey** fades the journey chrome (`data-handover`) and
-  replaces the entry with `/desktop/`, so Back never lands on the journey's end
-  and bounces forward again. Zum Desktop pushes, so Back returns to the era.
-- **Returning visitors** (`hasCompletedJourney`, set on arriving at the desktop):
-  an inline `<head>` script on the journey redirects a real navigation (never
-  Back, forward or reload) unless the tab asked to replay - `allowJourneyReplay()`
-  from "Reise erneut ansehen" and the mode cards (`lib/returning.ts`). The landing
-  page's `DesktopCta` keeps one fixed-height slot, so switching to "Zum Desktop"
-  shifts nothing; the mode cards step back by colour only.
-- **Which shell:** `(min-width: 768px) and (pointer: fine)` gets the window
-  manager, everything else the home screen (`use-shell-layout.ts`).
-- **Windows** (`store/window-store.ts`, not persisted): one per app, logical
-  geometry (`x` is the inline-start offset) so Persian mirrors, clamped to the
-  area between the top strip and the taskbar. Pointer events for drag and
-  resize, so mouse, touch and pen share one path. Non-modal dialogs; every
-  action goes through `window-actions.ts`, which owns focus: into a window when
-  it opens, back to its opener when it closes, to its taskbar button when it
-  minimises.
-- **Keyboard:** the focused title bar moves with the arrows, resizes with
-  Shift+arrows and maximises with Enter; Alt+Shift+Right/Left cycles windows
-  (not claimed by browsers or the OS, and skipped inside text fields).
-- **Z-order** uses the scale: windows in `--ao-z-windows` (+ rank), the focused
-  one at `--ao-z-window-active`, taskbar `--ao-z-taskbar`, launcher and notices
-  `--ao-z-modal`.
-- **Mobile:** apps open fullscreen and push a history entry (`__aoApp`, keeping
-  the router's state), so Back closes them. Never touch `scrollRestoration`.
-- **Apps** are rows in `apps/registry.ts` (id, kind, title key, default size,
-  lazy component; the glyph lives in `icons.tsx`). Phase 7 replaces a base app's
-  component in its folder; the window stays. Locked bonus apps say which era's
-  puzzle unlocks them (`unlock.ts`; the last era is "today", never a year).
-- **Zustand selectors must return stable values.** A selector that builds a new
-  array of new objects never compares equal and re-renders forever (React error
-  185) - select the store's own objects, or primitives.
-- Legende badges are read through `selectLegendEras` and displayed in Phase 9.
-
-## The apps (Act 3, Phase 7)
-
-About, Terminal, Tickets and Traceroute are real; Contact, Timeline, CV and the
-Assistant are still placeholders. Read DECISIONS.md 50 first.
-
-- **An app is its own lazy chunk, with its own copy.** Its words live in
-  `messages/apps/<app>/<locale>.json`, never in the `os` namespace (which the
-  desktop serialises into its HTML). `AppMessages` loads the file with the app
-  and exposes it under the app's id: `useTranslations('tickets')`. The page
-  message imports exclude `messages/apps/` (`webpackExclude`). Add a new id to
-  `AppCopyId`.
-- **Content is typed data** in `src/content/` (`about.ts`, `projects.ts`,
-  `tickets.ts`, `routes.ts`): ids, structure and machine text. Every word a
-  visitor reads is in the app's messages under the same ids.
-- **Logic lives in pure modules** (`terminal/shell.ts`, `traceroute/trace.ts`)
-  with only `import type`, so `npm test` runs them in plain node, which strips
-  the types. `scripts/test/` also checks the copy has the same keys in all three
-  languages, "Sie" not "du", and the data's honesty (below).
-- **Never invent a fact about Ahmadreza.** What he has not supplied is `null` in
-  content and renders as a visibly marked placeholder ("Angabe folgt"); TODO.md
-  lists each. No skill levels, no percentages. Stadtverwaltung Trier appears
-  only as the place of the apprenticeship.
-- **Tickets are fiction and say so:** Talweber Logistik, `.example` names,
-  10.20.0.0/16. The test rejects Trier, Stadtverwaltung and IT-HAUS in them.
-  Commands and their output are real and exact.
-- **Traceroute is a labelled simulation** over prepared routes from an assumed
-  home line in Frankfurt, with documentation addresses (RFC 5737, `.example`,
-  `home.arpa`). Times are honest: never faster than light in fibre (1 ms round
-  trip per 100 km), never falling by more than probe jitter - tested.
-- **Machine text is English and LTR** (shell output, commands, consoles, hop
-  lines, host inputs pin `dir="ltr"`); prose inside it gets its own
-  `dir="auto"` paragraph or a `<bdi>`.
-- **An input that answers keys handles them natively on the field.** Next
-  hydrates the whole document, so React's `onKeyDown` runs on the document -
-  the node the desktop's Alt+Shift+Arrow listener is on - and its
-  `stopPropagation()` cannot stop that listener. The Terminal attaches its
-  keydown to the input and stops what it handles there. Tab completes only on a
-  non-empty line, so Tab still leaves the field.
-- **Phone keyboards:** the desktop view sets `interactive-widget=resizes-content`
-  (Android shrinks the page), and the Terminal lifts its input by the visual
-  viewport's covered height (Safari). Focus an input on mount only with a fine
-  pointer, or the keyboard jumps up unasked.
-- **An app lays itself out against its window,** not the viewport: container
-  queries (`@container`, `@min-[480px]:`) or a ResizeObserver on the
-  `[data-window-body]`. One scrolling column when small, own scroll areas only
-  when there is room (Tickets: two panes from 640 x 320).
-- **Scroll the window body by hand** (`scrollTop`), never `scrollIntoView`: it
-  would scroll the desktop behind the window too.
-- **Motion in apps follows the tiers:** the desktop view now runs the tier
-  script too. Full tier adds glow and pulse, light keeps the step-by-step
-  reveal, reduced motion shows the finished frame.
-
-## The landing page
-
-`src/components/landing/`. Present-day Ahmadreza, in the `modern` theme; the page
-a recruiter judges in three seconds and Google reads first.
-
-- A **server component with real HTML text**. Client islands only: the language
-  switcher and the two mode buttons (which are real links, so they work without
-  JavaScript). **Never import journey code here** — the journey is behind
-  `JourneyLoader`'s dynamic import precisely so the landing page ships no GSAP,
-  Lenis or era.
-- Contents: name (the strongest element), role line, bold key facts, the two
-  mode cards as the primary call to action (the Play card must describe the
-  gates), the résumé control twice (header corner and under the role), an email
-  link, the language switcher, and a restrained timeline hint that does not
-  reveal any era.
-- **Assets still owed** are declared in `src/content/profile.ts` with an
-  `available` flag: the portrait (4:5, 1200 × 1500 px, `public/images/portrait.jpg`
-  — the one allowed raster asset) and the résumé PDF
-  (`public/files/ahmadreza-taheri-lebenslauf.pdf`). While `available` is false
-  the page renders a same-size placeholder and a disabled résumé control, never
-  a broken link. Flip the flag when the file lands. `EMAIL` works the same way:
-  no mailto link at all until its address is confirmed.
-
-## The theme engine
-
-This is the most important piece of infrastructure in the project. Phase 9's
-**Time Machine** app re-skins the entire desktop into any historical era on
-demand using this same engine, unchanged.
-
-How it works:
-
-1. `src/lib/themes.ts` defines a `Theme` interface — colour tokens, font
-   families, border radii, shadow styles, rendering effects (scanlines, phosphor
-   glow, pixelation, dithering, noise, curvature), cursor style, sound profile —
-   and eight concrete themes: one per era plus `modern` for AhmadOS.
-2. `src/lib/apply-theme.ts` flattens a theme into `--ao-*` CSS custom properties
-   and writes them onto `<html>`, plus `data-theme`, `data-cursor`, `data-sound`.
-3. `src/store/theme-store.ts` holds the active theme id. `setTheme(id)` is the
-   only entry point. `lockTheme(true)` pins a theme so Act 1's scrolling cannot
-   override the Time Machine.
-4. `src/styles/globals.css` declares bootstrap values on `:root` and re-exports
-   every token to Tailwind through `@theme inline`, so `bg-surface`, `text-ink`,
-   `border-edge`, `rounded-window`, `shadow-window` all follow the active theme.
-
-**Themes are applied by setting CSS custom properties, never by swapping Tailwind
-classes.** One state change restyles the whole document, and it costs no React
-re-render — components read tokens from CSS, not from context.
-
-Switching a theme manually:
-
-```ts
-import { useThemeStore } from '@/store/theme-store';
-useThemeStore.getState().setTheme('era1984');
-```
-
-### Era visual characters
-
-| Theme id | Character |
-|---|---|
-| `era1946` | dark metal, warm amber lamp glow |
-| `era1956` | paper white, typewriter ink black |
-| `era1971` | pure black, green phosphor, scanlines |
-| `era1981` | black with amber text, chunky 8-bit |
-| `era1984` | light grey, black 1-bit pixel art |
-| `era1995` | teal desktop, grey 3D bevelled chrome |
-| `era2024` | the modern dark palette |
-| `modern` | AhmadOS — same palette as `era2024` |
-
-## Act 1 scroll machinery
-
-`components/journey/Journey.tsx` owns it.
-
-- **Lenis** supplies smooth scrolling. It takes over the scroll position and
-  **does not emit native `scroll` events**, so `ScrollTrigger.update()` is
-  ticked from the same rAF that drives Lenis. Do not remove that.
-- Anything that scrolls programmatically must go through
-  `src/lib/lenis-controller.ts`, not `window.scrollTo`, or ScrollTrigger will
-  never learn the page moved.
-- The active era is resolved from the **scroll position** by a single
-  ScrollTrigger, not by seven per-section `onEnter` callbacks. Per-section
-  triggers are order-dependent during first layout and produced a wrong initial
-  theme. Keep the resolver model.
-- `prefers-reduced-motion` disables Lenis entirely and renders the eras as a
-  plain vertical document. ScrollTrigger still runs there, because it only
-  observes scroll position and creates no motion of its own.
-- The resolver calls the stores **only when the era changes**, never per frame —
-  per-frame calls made the persisted unlock store write `localStorage` 60 times
-  a second.
-- The theme reference line is 80% down the viewport when stages are pinned (the
-  outgoing era has already faded) and the centre in document flow.
-
-### Era visuals (Phase 3 onwards)
-
-Each era is `src/components/journey/eras/Era*.tsx`, wired up in
-`eras/registry.ts` with its pinned scroll length and `startAt` threshold.
-
-- **Pinning is CSS `position: sticky`**, never ScrollTrigger `pin` — pin-spacers
-  break the resolver's `offsetTop` measurements. Pinning only applies at
-  `min-width: 768px` and `min-height: 600px` with motion allowed; below that, eras
-  flow as ordinary blocks so nothing is clipped on phones.
-- **Scrubbed motion** reads `--era-progress` (0..1, registered with `@property`),
-  which the resolver writes on each section. Write the effect as `calc()`/`clamp()`
-  over that variable in `globals.css`. Animate only `transform`, `opacity` and
-  `filter`. No per-frame JS, no React state, no GSAP timelines per era.
-- **One-shot motion** (printing, counters) is a CSS animation paused until
-  `[data-started='true']`, which the resolver sets once and never clears.
-- **Never use `steps(n, end)` with a forwards fill.** Float rounding can finish at
-  progress 0.99999…, which freezes on the second-to-last step. Use `jump-none`.
-- **Never put a CSS animation on the same property you scrub** on one element:
-  the animation overrides the declared value. Nest them.
-- **Printed text** goes through `lib/typeset.ts` + `PrintedLine`: deterministic
-  imperfection (never `Math.random` — hydration), Persian printed word by word
-  (per-letter spans break Arabic-script joining), `dir="auto"` per line, the
-  printout `aria-hidden` with the same text once in an `ao-sr-only` block.
-- **Machine output is LTR in every locale.** Terminal and DOS blocks pin
-  `dir="ltr"`; prose follows the page direction. Directional motion must flip in
-  RTL (see `.ao-card-slide`).
-- **No raster assets.** SVG, CSS, or — only if genuinely necessary — a small canvas.
-- **No audio** until the Phase 9 audio layer; `soundProfile` stays unused.
-- Every scrubbed or one-shot effect needs a matching rule in the
-  `prefers-reduced-motion: reduce` block that resolves it to its finished state.
-- Call `ScrollTrigger.refresh()` after anything that changes layout height. Font
-  swap-in is already handled via `document.fonts.ready`.
-- Fixed journey controls carry `.ao-chrome-backdrop` (surface token) so they stay
-  legible over every era, including paper-white 1956, grey 1984 and teal 1995.
-  Anything laid out beside the progress rail ends at 84cqw landscape / 80cqw
-  portrait, and moves away from the left edge in RTL, where the rail sits.
-
-### Era-to-era crossings and depth (Phase 5.5B)
-
-Read DECISIONS.md 45 and 46 before touching any of this.
-
-- **No era ever cuts to the next.** Each section owns the crossing *into*
-  itself and overlaps the section before it by `1 + BOUNDARY_LENGTH` viewports,
-  so both eras share the screen for the whole morph. At no scroll position may
-  neither era be visible, and no frame may show an empty background.
-- **Measure, never re-derive.** `100dvh` and `window.innerHeight` differ while a
-  phone's toolbar is in play. The phases are marked in the document with
-  zero-height `.ao-mark` elements and the resolver reads their pixels, dividing
-  by the sticky stage's measured height - not by the viewport.
-- **One resolver, four properties, written where they are read** (DECISIONS.md
-  48): `--era-progress` on the scene, `--boundary-in` on the scene and the
-  crossing, `--boundary-out` on the scene and the puzzle layer,
-  `--puzzle-progress` on the puzzle layer. They inherit, so a write on the
-  section restyled all ~500 of its elements every frame. A new reader outside
-  those subtrees gets the value by being written to, not by moving the write
-  up. Still no per-section trigger, still no per-frame JS.
-- **Read layout before writing it.** The resolver runs every frame and twice
-  (scroll event and ticker): it reads `window.scrollY` first, the viewport from
-  the last measure, returns early if nothing moved, and never reads layout after
-  a write. Do not read Lenis's own scroll number instead - it goes stale on
-  native scrolls (keyboard, scrollbar, jumps).
-- **The theme hands over at the visual midpoint** of each morph (`switchAt`),
-  never at its edges. Both eras keep their exact period palette while they share
-  the frame, through per-section `[data-theme-scope]`.
-- **Never cross-fade two background fills.** Two half-transparent fills average
-  to a grey that belongs to neither era. Hand the background over with a
-  travelling masked edge instead, and never show two eras' text at once: the
-  crossing runs in sequence (DECISIONS.md 45) and the morphing object carries
-  both eras.
-- **`--bridge-overlay`** (0 in flow, 1 pinned and always for the Convergence) is
-  the only difference between the layouts' crossings. Never write a second rule
-  set per layout - that is how the phone Convergence ended up permanently
-  covered by its own veil.
-- **Depth is CSS 3D only.** The stage owns the `perspective`; `.ao-camera`
-  dollies and tilts; backdrops parallax. No WebGL, no three.js, no canvas.
-  Animate only `transform`, `opacity` and `filter`.
-- **A section's top is where the crossing into it begins**, still showing the
-  era before. Anything that takes the visitor to an era (the rail, Continue,
-  Skip) uses `scrollToEra()`, which lands on the era's `visual` marker and
-  glides through the crossing on the way.
-- **Clip horizontal overflow at `#journey-scenes`**, never on the stage - the
-  stage's `perspective` would be flattened by an overflow on it. One overflowing
-  pixel makes a mobile browser shrink the entire page to fit.
-- **Three motion tiers** (`full`, `light`, reduced motion) chosen before first
-  paint into `document.documentElement.dataset.tier`; `?tier=` forces one. A
-  tier may drop layers and shorten depth moves. It may never drop a step of the
-  story.
-
-### Phase 4 patterns — use these, don't reinvent them
-
-- **HTML weight is a tracked budget** (reported every phase). No per-letter
-  elements outside the Phase 3 printers: animate a cover over a single text node
-  instead (`.ao-wipe`, `.ao-conv-line-cover`). Prefer SVG patterns to repeated
-  elements; ASCII bitmaps in `lib/pixel-art.ts` become one path per colour.
-- **UI state over scroll** uses `.ao-cue` (`--on`/`--off` in era progress).
-  Pointers use `.ao-path` (three segments, `--ux`/`--uy` units).
-- **Reduced motion for new stages:** put `.ao-final-frame` on the stage; it pins
-  `--era-progress` to 1. Transient elements whose text must still show in the
-  static frame add `.ao-rm-show`.
-- **Scaled compositions** (1995 desktop, the Convergence) are size containers laid
-  out in `cqw`/`cqh`, with a portrait container query. Container units declared
-  on the container itself resolve against its ancestor — declare size variables
-  on descendants.
-- **Theme a subtree** with `[data-theme-scope="eraNNNN"]` rules generated from
-  `themeToCssVars()`, as the Convergence chips do. Never hand-write colours.
-- **SVG pattern ids** come from `useId()` — the same component can render twice.
-- **Bidi:** use `:dir(rtl)`, not `[dir='rtl'] .x`, inside `dir="ltr"` blocks;
-  wrap Persian runs in LTR machine output in `<bdi>`; physical SVG layouts set
-  `direction="ltr"`.
-- **Never combine an opacity animation with an opacity attribute** on one
-  element, and never use `truncate` where spaces must survive.
-- **Mount points** — keep them, replace their children:
-  `data-assistant-mount="journey-prompt"` (Phase 8, today's prompt). The Phase 6
-  shell mount inside the Convergence is gone: the desktop has its own route and
-  shares the frame instead (DECISIONS.md 49).
-- **The Convergence** is not an era: the resolver gives it the `modern` theme,
-  keeps the rail on era 7, and when it reaches the empty desktop or the page end
-  calls `completeJourney()` and hands over to `/desktop/` (DECISIONS.md 49).
-
-### Puzzles (Phase 5)
-
-`src/components/puzzles/`. Read DECISIONS.md 36–40 before changing anything here.
-
-- **One engine, one shell.** A puzzle is a `PuzzleDefinition` (`initial`, pure
-  `reduce`, `isSolved`, `script`) plus one component that renders state from
-  `usePuzzleEngine`. It receives a *presentation* (`play`, `guided`, `final`),
-  never the mode. Only `PuzzleShell` reads the mode. Never write a guided and an
-  interactive version of anything.
-- Every element a script points at carries `data-target` (use `target(id)`).
-  Controls take `tabIndex={-1}` outside `play`; the shell also makes the guided
-  demonstration `inert`.
-- Guided playback and "Lösung zeigen" never award artifacts or badges. Only an
-  interactive solve calls `solvePuzzle`; a shown solution calls `revealPuzzle`,
-  which opens the gate only. Tricks are reported through the definition's
-  `usedTrick`, in play only.
-- **Gates** (`gate.ts`, `PuzzleGate.tsx`): the resolver calls `measureGates` and
-  `tickGate`; the page end is set with `setScrollLimit()` in lenis-controller.
-  Never clamp the scroll position by hand, never add a per-section trigger for
-  a gate, and keep the lock cue outside the inert sections.
-- **Scroll hold:** interactive puzzles are played in `HeldDialog`, which holds the
-  page through `holdScroll()`/`releaseScroll()` (lenis-controller), makes
-  `#journey-scenes` inert, traps focus, closes on Escape and on browser Back.
-  Anything outside the scenes that must work while held (Skip to Desktop, the
-  mode switch) calls `requestPuzzleRelease()` first. Keep the chrome above the
-  dialog's z-index.
-- Puzzle UI and the `puzzles` messages are **never** in the static HTML:
-  `PuzzleSlot` mounts the shell client-side within one era of the active one,
-  and `PuzzleMessages` loads the locale file into a nested provider.
-- Puzzle copy per puzzle: `title`, `invitation`, `task`, `hint`, `answer`,
-  `success` (which states the era's truth), `skip` (Watch mode). Machine text
-  (shell output, IP addresses, DOS replies) is English and LTR in every locale.
-- Test hooks: `data-action` on shell, cue and chrome controls, `data-target` on
-  everything a script points at. `scripts/verify/journey.mjs` relies on them.
-- Wrong answers must fail for the real reason. Put domain logic in pure modules
-  (`ipv4.ts`, `shell-filesystem.ts`) and test it with plain node.
-- Scroll the puzzle's own containers by hand; never `scrollIntoView` inside the
-  journey, it scrolls the document too.
-- **Never put `data-lenis-prevent` on anything that covers a stage.** Lenis
-  ignores every wheel event inside it, and with `overscroll-behavior: contain`
-  the page cannot scroll at all (DECISIONS.md 47). Lenis runs with
-  `allowNestedScroll`, so an overflowing card scrolls by itself. Layers that
-  cover the stage while invisible take no pointer events (`data-puzzle-live`).
-- **A check about input must first prove the input moves the page.** Headless
-  Chrome ignores `Input.synthesizeScrollGesture`; `swipe()` in `cdp.mjs` sends
-  real wheel notches and touch sequences.
-- **Decide a drop where the pointer is released**, from the `pointerup` event's
-  own coordinates - never from state set by the last `pointermove`. A quick
-  release can arrive before React renders that move, and on a busy frame the
-  item silently fails to drop.
-- **Do not use `next/dynamic` for anything server-rendered inside the journey
-  tree** — its server-only preloader shifts `useId` and breaks hydration. Use
-  `React.lazy` (as `JourneyLoader` does); `next/dynamic` with `ssr: false` is fine
-  for client-only islands.
-
 ## Coding conventions — enforce these
 
 - **TypeScript strict. No `any`.** Prefer discriminated unions and `as const`
@@ -668,20 +180,16 @@ npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out
 npm run lint
 npm run check:pixel-font   # every Press Start 2P string has real glyphs
-node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch] [--tier light]
-node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
-node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
-node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
-node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]
-node scripts/verify/apps.mjs [--width 380] [--locale fa] [--reduce] [--touch]
-node scripts/verify/sizes.mjs
 npm test        # plain-node tests: shell, traceroute, app data and copy
 ```
 
-The verify script needs a running server (default `http://localhost:3001`,
-`--base` to change) and a local Chrome (`CHROME_PATH`). Code sent to the page
-is a template string: a regex in it needs its backslashes doubled (`\\b`), or
-`\b` arrives as a backspace and the check silently passes.
-
 `npm run build` must finish with zero TypeScript errors, zero build errors, and
 all three locales generated. That is the definition of done for every phase.
+
+# Compact instructions
+
+When this conversation is compacted, keep:
+
+- the current phase and what is left in it (PROJECT_STATE.md, TODO.md);
+- every decision made in this session, with its reason;
+- any failing check or test, with its command and output.
