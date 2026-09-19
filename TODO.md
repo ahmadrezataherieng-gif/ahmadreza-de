@@ -135,6 +135,10 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   (~40 ms) because theme tokens are written onto `<html>`. Removing it means
   changing the theme engine's contract - decide before Phase 9's Time Machine.
 
+- **On a real phone, elements inside the scenes move badly during scroll**
+  (reported by Ahmadreza after testing on a physical device). The full fix
+  belongs here, together with the heavy-era-visual work above.
+
 ## Phase 13 — Deployment
 
 - **BLOCKING: `kontakt@ahmadreza.de` must really receive mail before the site
