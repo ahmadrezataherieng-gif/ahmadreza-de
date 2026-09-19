@@ -1,4 +1,4 @@
-// End-to-end checks for the Phase 7 apps: About, Terminal, Tickets, Traceroute.
+// End-to-end checks for the apps: About, Terminal, Tickets, Traceroute (Phase 7) and the Assistant (Phase 8).
 //
 //   node scripts/verify/apps.mjs [--width 1280] [--height 800] [--locale de|en|fa]
 //        [--reduce] [--touch] [--base URL]
@@ -332,6 +332,155 @@ const traceroute = async () => {
   check('traceroute: a silent router shows as * * *', /\* \* \*/.test(await js(`document.querySelector('${root} [data-trace="tokyo"]').textContent`)));
 };
 
+/* --- the Assistant ------------------------------------------------------------- */
+
+const A = (rest = '') => `${content('assistant')}${rest ? ` ${rest}` : ''}`;
+const aState = () => js(`document.querySelector('${A()}')?.dataset.assistantState ?? null`);
+const aMode = () => js(`document.querySelector('${A()}')?.dataset.assistantMode ?? null`);
+const aMessages = () =>
+  js(`[...document.querySelectorAll('${A('[data-assistant-message]')}')].map((m) => ({ role: m.dataset.assistantMessage, source: m.dataset.source ?? null, tone: m.dataset.tone ?? null, text: m.textContent, typed: m.querySelector('[data-typed]')?.dataset.typed ?? null }))`);
+const aStateIs = (name) => until(`document.querySelector('${A()}')?.dataset.assistantState === '${name}'`, 4000);
+const aAsk = async (text) => {
+  await clickOn(A('[data-assistant-input]'));
+  await js(`(() => { const i = document.querySelector('${A('[data-assistant-input]')}'); i.select(); return true; })()`);
+  await b.type(text);
+  await press('Enter');
+};
+/** Makes the page's fetch answer for /api/assistant, so every live state can be shown without a key. */
+const stub = (get, post) =>
+  js(`(() => {
+    window.__stub = { get: ${JSON.stringify(get)}, post: ${JSON.stringify(post)} };
+    if (!window.__realFetch) {
+      window.__realFetch = window.fetch.bind(window);
+      window.fetch = async (url, init) => {
+        if (!String(url).includes('/api/assistant')) return window.__realFetch(url, init);
+        const s = init?.method === 'POST' ? window.__stub.post : window.__stub.get;
+        if (s === 'throw') throw new TypeError('offline');
+        return new Response(JSON.stringify(s.body), { status: s.status });
+      };
+    }
+    return true;
+  })()`);
+
+const assistant = async () => {
+  const input = A('[data-assistant-input]');
+  // The server behind these checks has no Worker: /api/assistant is a 404, so the app must land in the demo.
+  check('assistant: with no Worker it falls back to the demo', await until(`document.querySelector('${A()}')?.dataset.assistantMode === 'demo'`, 4000), await aMode());
+  check('assistant: the demo says so - a badge and a banner', await js(`(() => { const b = document.querySelector('${A('[data-assistant-badge]')}'); const t = document.querySelector('${A('[data-assistant-banner]')}')?.textContent ?? ''; return b?.dataset.assistantBadge === 'demo' && t.length > 60; })()`));
+  check('assistant: the unreachable state has its copy', (await aState()) === 'offline' && (await js(`document.querySelector('${A('[data-assistant-status]')}').textContent.length > 20`)));
+  check('assistant: the privacy line names Gemini', await js(`/Gemini/.test(document.querySelector('${A('[data-assistant-privacy]')}')?.textContent ?? '')`));
+  check('assistant: the input is capped at 400 characters', (await js(`document.querySelector('${input}').maxLength`)) === 400);
+  if (layout === 'desktop') check('assistant: a precise pointer gets the cursor at once', await js(`document.activeElement?.matches('[data-assistant-input]')`));
+  else check('assistant: a touchscreen does not raise the keyboard by itself', !(await js(`document.activeElement?.matches('[data-assistant-input]')`)));
+  check('assistant: five suggestions', (await js(`document.querySelectorAll('${A('[data-topic]')}').length`)) === 5);
+
+  // A suggestion: thinking, then the prepared answer, labelled as a demo.
+  const seen = await js(`(async () => { document.querySelector('${A('[data-topic="contact"]')}').click(); await new Promise((r) => setTimeout(r, 120)); return document.querySelector('${A()}').dataset.assistantState; })()`);
+  if (!REDUCE) check('assistant: thinking is a visible state', seen === 'thinking', seen);
+  check('assistant: the answer arrives', await aStateIs('answered'));
+  const first = (await aMessages()).at(-1);
+  check('assistant: a demo answer is labelled and carries the confirmed address', first.role === 'assistant' && first.source === 'demo' && /kontakt@ahmadreza\.de/.test(first.text), first);
+  if (REDUCE) check('assistant: reduced motion - the finished answer at once, no typing', first.typed === 'done', first);
+  else check('assistant: the answer types out and finishes', await until(`document.querySelector('${A('[data-typed]')}')?.dataset.typed === 'done'`, 4000));
+  check('assistant: nothing overflows sideways', await noOverflow('assistant'));
+
+  // An off-topic question is refused, never guessed.
+  await aAsk('zzqx');
+  check('assistant: an off-topic question is refused', await aStateIs('refused'));
+  const refused = (await aMessages()).at(-1);
+  check('assistant: the refusal is a demo message too', refused.tone === 'refused' && refused.source === 'demo', refused);
+
+  // Keys it answers stop at the field; others still pass.
+  await js(`window.__keys = []; document.addEventListener('keydown', (e) => window.__keys.push(e.key)); true`);
+  await press('ArrowUp');
+  const recalled = await js(`document.querySelector('${input}').value`);
+  await b.key('x', 'x');
+  const keys = await js('window.__keys');
+  check('assistant: arrow up recalls the last question', recalled === 'zzqx', recalled);
+  check('assistant: handled keys stop at the field', !keys.includes('ArrowUp') && keys.includes('x'), keys);
+  await js(`(() => { const i = document.querySelector('${input}'); i.focus(); return true; })()`);
+  for (let i = 0; i < 5; i++) await press('Backspace');
+  await press('ArrowUp');
+  await press('ArrowDown');
+  check('assistant: arrow down returns to an empty field', (await js(`document.querySelector('${input}').value`)) === '');
+  check('assistant: the input is on screen', await inside(input, 'assistant'));
+  check('assistant: send is off while the field is empty', await js(`document.querySelector('${A('[data-action="assistant-send"]')}').disabled`));
+
+  if (layout !== 'desktop') {
+    await b.send('Emulation.setDeviceMetricsOverride', { width: WIDTH, height: Math.round(HEIGHT * 0.55), deviceScaleFactor: 1, mobile: true });
+    await sleep(500);
+    await aAsk('zzqy');
+    await aStateIs('refused');
+    check('assistant: with the keyboard up, the input stays visible', await inside(input, 'assistant'));
+    await b.shot(`${TAG}-assistant-keyboard`);
+    await b.send('Emulation.setDeviceMetricsOverride', { width: WIDTH, height: HEIGHT, deviceScaleFactor: 1, mobile: true });
+    await sleep(400);
+  }
+};
+
+/** Every live state, against a stubbed Worker. Each opening asks the Worker afresh. */
+async function assistantLive() {
+  const openLive = async (post, label) => {
+    await stub({ status: 200, body: { status: 'ready' } }, post);
+    check(`assistant live (${label}): opens`, await openFromIcon('assistant'));
+    check(`assistant live (${label}): the Worker says ready, so it is live`, await until(`document.querySelector('${A()}')?.dataset.assistantMode === 'live'`, 4000), await aMode());
+  };
+
+  await openLive({ status: 200, body: { status: 'answered', text: 'Stub answer.' } }, 'answer');
+  check('assistant live: the badge says Live, and no demo label is on screen', await js(`document.querySelector('${A('[data-assistant-badge]')}').dataset.assistantBadge === 'live' && !document.querySelector('${A('[data-source="demo"]')}')`));
+  await aAsk('Was kann Ahmadreza?');
+  check('assistant live: answered', await aStateIs('answered'));
+  const answer = (await aMessages()).at(-1);
+  check('assistant live: the answer is the Worker\'s, marked live', answer.source === 'live' && /Stub answer\./.test(answer.text), answer);
+  check('assistant live: the demo suggestions step back once a conversation runs', await js(`!document.querySelector('${A('[data-topic]')}')`));
+  await b.shot(`${TAG}-assistant-live`);
+
+  await stub({ status: 200, body: { status: 'ready' } }, { status: 200, body: { status: 'refused', text: 'Nur Fragen zu Ahmadreza.' } });
+  await aAsk('Schreibe ein Gedicht');
+  check('assistant live: refused', await aStateIs('refused'));
+  check('assistant live: the refusal shows the model\'s words', /Nur Fragen zu Ahmadreza\./.test((await aMessages()).at(-1).text));
+
+  await stub({ status: 200, body: { status: 'ready' } }, 'throw');
+  await aAsk('Noch eine Frage');
+  check('assistant live: unreachable is its own state', await aStateIs('offline'));
+  check(
+    'assistant live: the unanswered question is back in the field, not asked twice',
+    (await js(`document.querySelector('${A('[data-assistant-input]')}').value`)) === 'Noch eine Frage' && (await aMessages()).filter((m) => m.role === 'user').length === 2,
+  );
+
+  await stub({ status: 200, body: { status: 'ready' } }, { status: 503, body: { status: 'notConfigured' } });
+  await clickOn(A('[data-action="assistant-send"]'));
+  check('assistant live: a Worker that loses its key drops to the demo, and says why', (await aStateIs('notConfigured')) && (await aMode()) === 'demo');
+  check('assistant live: closes', await close('assistant'));
+
+  await openLive({ status: 429, body: { status: 'rateLimited', retryAfter: 30 } }, 'rate limit');
+  await aAsk('Zu viele');
+  check('assistant live: rate limited', await aStateIs('rateLimited'));
+  check(
+    'assistant live: the wait is named, sending is off, the question is kept',
+    await js(`(() => {
+      const status = document.querySelector('${A('[data-assistant-status]')}').textContent;
+      return /30/.test(status) && document.querySelector('${A('[data-action="assistant-send"]')}').disabled && document.querySelector('${A('[data-assistant-input]')}').value === 'Zu viele';
+    })()`),
+  );
+  await b.shot(`${TAG}-assistant-ratelimit`);
+  check('assistant live: closes again', await close('assistant'));
+  await js('window.fetch = window.__realFetch; window.__realFetch = null; true');
+}
+
+/** The journey and the landing page carry nothing of the assistant in their HTML. */
+async function assistantStaysOutOfStaticHtml() {
+  const html = await js(`(async () => ({
+    landing: await (await fetch('${PREFIX}/')).text(),
+    journey: await (await fetch('${PREFIX}/journey/')).text(),
+  }))()`);
+  check('landing page: no assistant in its HTML', !/assistant|gemini/i.test(html.landing));
+  // One name was already there before Phase 8: the mount point's attribute. The teaser adds nothing named so.
+  const names = (html.journey.match(/assistant/gi) ?? []).length;
+  check('journey: the assistant adds nothing to its HTML', names === 1 && !/gemini/i.test(html.journey), { names });
+  check('journey: the teaser box is an empty slot', /data-slot="prompt-line"[^>]*><\/div>/.test(html.journey));
+}
+
 /** What must still work in the smallest window. */
 const smallChecks = {
   about: async () => check('about 300x200: the name is in view', await inside(`${content('about')} h2`, 'about')),
@@ -349,6 +498,10 @@ const smallChecks = {
     await clickOn(`${content('tickets')} [data-action="ticket-back"]`);
     check('tickets 300x200: back returns to the list', await js(`!!document.querySelector('${content('tickets')} [data-ticket-list]')`));
   },
+  assistant: async () => {
+    check('assistant 300x200: the field and the send button are in view', (await inside(A('[data-assistant-input]'), 'assistant')) && (await inside(A('[data-action="assistant-send"]'), 'assistant')));
+    check('assistant 300x200: the state line is in view', await inside(A('[data-assistant-status]'), 'assistant'));
+  },
   traceroute: async () => {
     await reveal(`${content('traceroute')} [data-trace-input]`, 'traceroute');
     check('traceroute 300x200: the target field scrolls into view', await inside(`${content('traceroute')} [data-trace-input]`, 'traceroute'));
@@ -359,6 +512,9 @@ check('layout', layout === (!TOUCH && WIDTH >= 768 ? 'desktop' : 'mobile'), layo
 await windowRound('about', about);
 await windowRound('traceroute', traceroute);
 await windowRound('tickets', tickets);
+await windowRound('assistant', assistant);
+await assistantLive();
+await assistantStaysOutOfStaticHtml();
 await windowRound('terminal', terminal);
 
 // `exit` closes the Terminal, like a real one.
