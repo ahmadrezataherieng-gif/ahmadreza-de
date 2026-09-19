@@ -15,9 +15,9 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   controls (header corner and under the role) show "Lebenslauf folgt in Kürze"
   and are not links. Decide whether you want one German PDF for all languages or
   one per language.
-- **Email address.** `EMAIL` in `src/content/profile.ts` holds a placeholder
-  (`kontakt@ahmadreza.de`). Confirm the real address, put it there and set
-  `EMAIL.available = true`; until then no mailto link is rendered.
+- **Email address:** confirmed as `kontakt@ahmadreza.de` in Phase 7 and live on
+  the site (`EMAIL.available = true`). It must receive mail before launch - see
+  Phase 13.
 
 ## Copy to confirm
 
@@ -46,6 +46,31 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   mirror something real of yours instead.
 - Which projects, skills and CV entries go into `src/content/`.
 
+### Phase 7 — the apps' copy (German is the source; check en and fa)
+
+- **About** (`messages/apps/about/`, structure in `src/content/about.ts`) is a
+  draft written only from facts already on the site. Confirm the wording, first
+  person included, and supply what is marked "Angabe folgt" on the page:
+  - the **start date** of the apprenticeship (`careerStations[0].start`, `YYYY-MM`)
+    and its expected end, if it should show;
+  - the **earlier stations** - school, studies, earlier work, the move to
+    Germany - which replace the placeholder station `earlier`;
+  - the **level of each language** (`languages[].level`); none is shown until
+    then, rather than a guess;
+  - whether the **skill list** (three areas, thirteen items, no levels) is right:
+    it follows the stated focus (networks, Linux) and the apprenticeship's
+    subjects, so remove anything you would not want to be asked about;
+  - the sentence "Mich interessiert, was unter der Oberfläche passiert …" states
+    an interest - keep it only if it is yours.
+- **Projects** (`src/content/projects.ts`): only this website so far, with the
+  GitHub repository `ahmadrezataherieng-gif/ahmadreza-de` as its source link.
+  Confirm the link should be public on the site, and name other projects.
+- **Tickets** (`messages/apps/tickets/`, `src/content/tickets.ts`): nine
+  invented cases at the invented company Talweber Logistik. Technically checked,
+  but read them once: they are presented as how you work.
+- **Traceroute** copy (`messages/apps/traceroute/`), and the Terminal's help
+  and welcome lines (`messages/apps/terminal/`).
+
 ## After launch
 
 - **The first era added after launch will be 1977: the Apple II.** It needs its
@@ -64,16 +89,21 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   two modes.
 - **The dock** holds About, Lebenslauf, Kontakt and Assistent. Confirm the four.
 
-## Phase 7 — Core apps (from Phase 6, DECISIONS.md 49)
+## Phase 8 — from Phase 7 (DECISIONS.md 50)
 
-- Each app replaces its placeholder in `src/components/apps/<id>/`; the registry
-  row, icon and default size already exist. Keep each app in its own lazy chunk.
-- An app that takes text input (Terminal) must stop keyboard events it handles
-  from reaching the desktop's Alt+Shift+Arrow listener; text fields are already
-  exempt.
-- A window's body scrolls itself; apps must fit from the minimum 300 x 200 up,
-  and fullscreen at 380 px on phones.
-- Test the window manager on a real touchscreen laptop and an iPad (the
+- The Assistant replaces its placeholder like the Phase 7 apps: its own folder,
+  its copy in `messages/apps/assistant/<locale>.json` through `AppMessages`
+  (add the id to `AppCopyId`), nothing in the `os` namespace.
+- **Its input needs what the Terminal's has:** keys it answers handled natively
+  on the field (not through React, which listens on the document), autofocus
+  only with a fine pointer, and the phone keyboard kept off the input
+  (`interactive-widget=resizes-content` on the desktop view, plus the
+  visual-viewport inset for Safari - `useKeyboardInset` in `TerminalApp.tsx`;
+  lift it into a shared hook when a second app needs it).
+- The Terminal can gain an `ask` command that hands a question to the assistant.
+- **Real devices:** the keyboard handling on phones was checked by shrinking the
+  emulated viewport, not on an iPhone or an Android phone. Test both before
+  launch, and the window manager on a touchscreen laptop and an iPad (the
   `pointer: fine` rule decides which shell they get).
 
 ## Phase 8 — AI assistant
@@ -106,6 +136,13 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   changing the theme engine's contract - decide before Phase 9's Time Machine.
 
 ## Phase 13 — Deployment
+
+- **BLOCKING: `kontakt@ahmadreza.de` must really receive mail before the site
+  goes live** - for example through Cloudflare Email Routing to a mailbox
+  Ahmadreza reads, tested with a real message from outside. The address is on
+  the landing page, in About, Contact and the Terminal, and the Impressum
+  (Phase 11) requires a real, working contact. **Do not deploy with an address
+  that does not receive mail.**
 
 - `ahmadreza.de` nameservers must be moved to Cloudflare. Workers custom domains
   **only** work for zones whose nameservers Cloudflare manages — unlike Pages,

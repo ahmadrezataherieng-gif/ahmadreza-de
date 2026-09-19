@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
@@ -11,7 +11,7 @@ Last updated: 2026-09-18
 - [x] **Phase 5.5A** — Concept alignment: Play-mode gates, "Sie", the 1946 scene, working insider tricks, landing polish, full audit
 - [x] **Phase 5.5B** — Era-to-era crossings, CSS 3D depth, motion tiers
 - [x] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
-- [ ] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
+- [x] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
 - [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
@@ -29,7 +29,8 @@ Last updated: 2026-09-18
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
 - **Landing page** (`/`): name, role, bold key facts, two mode cards, the résumé
   control in the header and under the role, an email link that appears once the
-  address is confirmed. Portrait, résumé and email are owed (TODO.md). No journey
+  address is confirmed. Portrait and résumé are owed (TODO.md); the email,
+  kontakt@ahmadreza.de, is confirmed and linked. No journey
   code is loaded there. A returning visitor gets "Zum Desktop" as the primary
   action in the same slot, without a layout shift; the mode cards step back.
 - **Theme engine:** eight themes applied as CSS custom properties, also to
@@ -64,14 +65,30 @@ Last updated: 2026-09-18
   cycling, RTL mirroring - with a taskbar (launcher, window buttons, clock,
   language switcher, résumé control). Phones and touch tablets get a home screen
   with a dock; apps open fullscreen and the browser's Back closes them. Eight
-  base apps and seven bonus apps are registered; **every app is still a
-  placeholder**. Locked bonus apps name the era whose puzzle unlocks them.
+  base apps and seven bonus apps are registered. Locked bonus apps name the era
+  whose puzzle unlocks them.
+- **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
+  own copy file per language:
+  - **About:** who Ahmadreza is, his path, what he does now, skills by area,
+    languages, résumé and email - from `src/content/about.ts`; owed facts shown
+    as marked placeholders.
+  - **Terminal:** a small bash-like shell over an in-memory filesystem - `ls`,
+    `cd`, `cat`, `pwd`, history, Tab completion, real error messages - plus
+    `about`, `skills`, `projects`, `cv`, `contact`.
+  - **Tickets:** nine helpdesk cases at a fictional company, each with symptom,
+    diagnosis steps with real command output, solution and lesson; filter by
+    status, sort.
+  - **Traceroute:** a labelled simulation over four prepared routes, the packet
+    travelling hop by hop with its latency, and where the time went.
+  - Contact, Timeline, CV and the Assistant are still placeholders.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
   real Chrome through both modes, all puzzles, the gates and the landing page;
   `boundaries.mjs` screenshots every crossing and checks that no frame is blank
   and the theme hands over at each midpoint; `perf.mjs` measures a full scroll;
   `desktop.mjs` drives the window manager (mouse, touch, keyboard) and the home
-  screen; `navigation.mjs` the hand-over, Zum Desktop from every era and the
+  screen; `apps.mjs` uses each core app, from 300 x 200 to maximised and
+  fullscreen on a phone; `npm test` runs the pure modules and checks the app
+  data and copy in plain node; `navigation.mjs` the hand-over, Zum Desktop from every era and the
   returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
   so all of them can run against the real export.
 
@@ -105,6 +122,22 @@ Next's First Load JS is one number for all views of the route):
 | Journey HTML, gzipped | de 39.5 · en 37.2 · fa 35.3 kB | de 39.9 · en 37.6 · fa 35.7 kB (limit 48) |
 | Desktop HTML, gzipped | - | de 4.6 · en 4.4 · fa 5.0 kB |
 
+Phase 7 (`scripts/verify/sizes.mjs`, gzip -6):
+
+| | Before 7 | After 7 |
+|---|---|---|
+| Route First Load JS (Next) | 135 kB | 135 kB (limit 250) |
+| Landing: JS / CSS loaded | 134.8 / 19.8 kB | 135.1 / 20.4 kB |
+| Journey: JS / CSS loaded | 223.8 / 19.8 kB | 223.9 / 20.4 kB |
+| Desktop: JS / CSS loaded | 144.6 / 19.8 kB | **145.1** / 20.4 kB (shell chunk 9.8 → 10.0 kB) |
+| About on open (code + copy) | 0.5 kB | 3.9 kB (2.4 + 1.5) |
+| Terminal on open | 0.5 kB | 8.1 kB (5.7 + its copy 1.0 + About's copy 1.5) |
+| Tickets on open | 0.6 kB | 9.5 kB (5.4 + copy 4.1) |
+| Traceroute on open | 0.6 kB | 6.3 kB (4.8 + copy 1.5) |
+| Landing HTML, gzipped | de 6.6 · en 6.5 · fa 6.9 kB | de 6.8 · en 6.7 · fa 7.1 kB (the email link) |
+| Journey HTML, gzipped | de 39.9 · en 37.6 · fa 35.7 kB | de 40.0 · en 37.7 · fa 35.7 kB (limit 48) |
+| Desktop HTML, gzipped | de 4.6 · en 4.4 · fa 5.0 kB | de 4.8 · en 4.6 · fa 5.1 kB |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -123,8 +156,9 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- Every app. The shell opens placeholders (Phase 7 and 8 for the base apps,
-  Phase 9 for the bonus apps).
+- Contact, Timeline, CV and the Assistant (Phase 8), and the seven bonus apps
+  (Phase 9), are placeholders.
+- The phone keyboard handling (Terminal) was checked in emulation only.
 - Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).

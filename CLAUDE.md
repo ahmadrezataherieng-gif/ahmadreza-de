@@ -217,6 +217,7 @@ pixel face; for `fa`, the pixel stack resolves to Vazirmatn.
 
 ```
 scripts/                    project checks (check-pixel-font.mjs)
+  test/                     plain-node tests of the pure modules and app data (`npm test`)
   verify/                   end-to-end browser checks over CDP (no dependencies)
 src/
   app/
@@ -234,7 +235,7 @@ src/
   lib/                      helpers: cn(), themes, routing, constants, hooks
   store/                    zustand stores
   content/                  portfolio content as typed data, separate from components
-  messages/                 de.json, en.json, fa.json
+  messages/                 de.json, en.json, fa.json; apps/<app>/<locale>.json (each app's own copy)
   styles/                   globals.css — the ONLY file with raw colour values
 ```
 
@@ -318,6 +319,58 @@ Rules of thumb:
   array of new objects never compares equal and re-renders forever (React error
   185) - select the store's own objects, or primitives.
 - Legende badges are read through `selectLegendEras` and displayed in Phase 9.
+
+## The apps (Act 3, Phase 7)
+
+About, Terminal, Tickets and Traceroute are real; Contact, Timeline, CV and the
+Assistant are still placeholders. Read DECISIONS.md 50 first.
+
+- **An app is its own lazy chunk, with its own copy.** Its words live in
+  `messages/apps/<app>/<locale>.json`, never in the `os` namespace (which the
+  desktop serialises into its HTML). `AppMessages` loads the file with the app
+  and exposes it under the app's id: `useTranslations('tickets')`. The page
+  message imports exclude `messages/apps/` (`webpackExclude`). Add a new id to
+  `AppCopyId`.
+- **Content is typed data** in `src/content/` (`about.ts`, `projects.ts`,
+  `tickets.ts`, `routes.ts`): ids, structure and machine text. Every word a
+  visitor reads is in the app's messages under the same ids.
+- **Logic lives in pure modules** (`terminal/shell.ts`, `traceroute/trace.ts`)
+  with only `import type`, so `npm test` runs them in plain node, which strips
+  the types. `scripts/test/` also checks the copy has the same keys in all three
+  languages, "Sie" not "du", and the data's honesty (below).
+- **Never invent a fact about Ahmadreza.** What he has not supplied is `null` in
+  content and renders as a visibly marked placeholder ("Angabe folgt"); TODO.md
+  lists each. No skill levels, no percentages. Stadtverwaltung Trier appears
+  only as the place of the apprenticeship.
+- **Tickets are fiction and say so:** Talweber Logistik, `.example` names,
+  10.20.0.0/16. The test rejects Trier, Stadtverwaltung and IT-HAUS in them.
+  Commands and their output are real and exact.
+- **Traceroute is a labelled simulation** over prepared routes from an assumed
+  home line in Frankfurt, with documentation addresses (RFC 5737, `.example`,
+  `home.arpa`). Times are honest: never faster than light in fibre (1 ms round
+  trip per 100 km), never falling by more than probe jitter - tested.
+- **Machine text is English and LTR** (shell output, commands, consoles, hop
+  lines, host inputs pin `dir="ltr"`); prose inside it gets its own
+  `dir="auto"` paragraph or a `<bdi>`.
+- **An input that answers keys handles them natively on the field.** Next
+  hydrates the whole document, so React's `onKeyDown` runs on the document -
+  the node the desktop's Alt+Shift+Arrow listener is on - and its
+  `stopPropagation()` cannot stop that listener. The Terminal attaches its
+  keydown to the input and stops what it handles there. Tab completes only on a
+  non-empty line, so Tab still leaves the field.
+- **Phone keyboards:** the desktop view sets `interactive-widget=resizes-content`
+  (Android shrinks the page), and the Terminal lifts its input by the visual
+  viewport's covered height (Safari). Focus an input on mount only with a fine
+  pointer, or the keyboard jumps up unasked.
+- **An app lays itself out against its window,** not the viewport: container
+  queries (`@container`, `@min-[480px]:`) or a ResizeObserver on the
+  `[data-window-body]`. One scrolling column when small, own scroll areas only
+  when there is room (Tickets: two panes from 640 x 320).
+- **Scroll the window body by hand** (`scrollTop`), never `scrollIntoView`: it
+  would scroll the desktop behind the window too.
+- **Motion in apps follows the tiers:** the desktop view now runs the tier
+  script too. Full tier adds glow and pulse, light keeps the step-by-step
+  reveal, reduced motion shows the finished frame.
 
 ## The landing page
 
@@ -620,11 +673,15 @@ node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [-
 node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]
+node scripts/verify/apps.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/sizes.mjs
+npm test        # plain-node tests: shell, traceroute, app data and copy
 ```
 
 The verify script needs a running server (default `http://localhost:3001`,
-`--base` to change) and a local Chrome (`CHROME_PATH`).
+`--base` to change) and a local Chrome (`CHROME_PATH`). Code sent to the page
+is a template string: a regex in it needs its backslashes doubled (`\\b`), or
+`\b` arrives as a backspace and the check silently passes.
 
 `npm run build` must finish with zero TypeScript errors, zero build errors, and
 all three locales generated. That is the definition of done for every phase.

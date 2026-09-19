@@ -1265,3 +1265,128 @@ their strings were folded into `os` and the namespaces removed.
 app adds its own 0.5 kB chunk when it opens. Desktop HTML is 4.4-5.0 kB
 gzipped. The shared route chunk grew by ~2 kB (the landing CTA, the returning
 redirect, the desktop page); the stylesheet by 1.4 kB.
+
+---
+
+## 50. The core apps, Phase 7
+
+About, Terminal, Tickets and Traceroute replace their placeholders. Contact,
+Timeline, CV and the Assistant stay placeholders; the email address is now
+confirmed (`EMAIL.available`), so it shows on the landing page, in Contact,
+About and the Terminal. Launch is blocked until it really receives mail
+(TODO.md, Phase 13).
+
+**Copy that travels with its app.** The desktop serialises the `os` messages
+into its HTML, so an app's text cannot live there without every visitor paying
+for every app. Each app's copy is its own file, `messages/apps/<app>/<locale>.json`,
+imported by `AppMessages` the first time the app opens and exposed under the
+app's id as namespace. React's `use()` suspends on the cached import, so the
+window's existing Suspense fallback covers the wait. The puzzles' pattern (one
+import of the whole locale file) was not copied: it would hand every app every
+other app's copy and the journey's too. The page-level imports exclude
+`messages/apps/` from their webpack contexts. The four apps' placeholder `body`
+lines left the `os` namespace.
+
+**Content as data, words as messages.** `content/about.ts` (stations, skill
+areas, languages), `projects.ts`, `tickets.ts` and `routes.ts` hold ids,
+structure and machine text; the apps' messages hold every sentence under the
+same ids. Pure logic (`terminal/shell.ts`, `traceroute/trace.ts`) imports only
+types, so `npm test` runs it in plain node, which strips types since Node 23.6.
+`scripts/test/` also checks: the same keys in de, en and fa; "Sie", never "du";
+every content id has its copy; every ticket step has its sentence.
+
+**About.** Written in the first person, from the facts already on the site and
+nothing else. What is missing - the apprenticeship's start date, earlier
+stations, language levels - is `null` in content and renders as a visibly
+marked "Angabe folgt", never a guess. Skills are grouped (networks, systems,
+support) and carry no levels or percentages: a bar at 80 % is a number nobody
+can check. The apprenticeship is described by what the occupation covers, not
+by anything about its workplace; Stadtverwaltung Trier is only named as the
+place. The résumé control stays behind its flag.
+
+**Terminal.**
+
+- bash with GNU tools where it can: the same error messages (`bash: cd: x: No
+  such file or directory`, `ls: cannot access 'x'`, `bash: x: command not
+  found`), `~`, dot files behind `ls -a`, Tab completing what is unique and
+  listing the rest, history on the arrows, Ctrl+L, Ctrl+C (which still copies
+  when text is selected), and `exit`, which closes the window - or goes Back on
+  a phone.
+- The visitor is `guest`, and home is `/home/ahmadreza`: that is where they
+  came to look. `about`, `skills`, `projects`, `cv` and `contact` print content
+  from `src/content/` in the visitor's language; the files in home print the
+  same sections.
+- **Keys are handled on the input, natively.** Next hydrates the whole
+  document, so React's delegated `onKeyDown` fires on the document - the same
+  node as the desktop's Alt+Shift+Arrow listener - and its `stopPropagation()`
+  cannot stop that listener. The input's own listener stops every key the
+  terminal answers before it leaves the field. `apps.mjs` proves it with a
+  document listener that must see a letter but not ArrowUp or Tab.
+- Tab completes only on a non-empty line; on an empty one it moves focus on,
+  so keyboard users are never trapped. The output is a polite `log` region.
+- **Phones:** the input takes focus on mount only with a fine pointer, or the
+  keyboard would cover the screen unasked. The desktop view asks for
+  `interactive-widget=resizes-content`, so Android shrinks the page instead of
+  covering the input; Safari ignores that, so the terminal also pads its bottom
+  by the height the visual viewport reports covered. Checked by shrinking the
+  emulated viewport, not on a real phone.
+
+**Tickets.** Nine cases at a fictional company, Talweber Logistik, with
+`.example` names and 10.20.0.0/16 addresses: nothing that could read as a real
+employer's internal case, and a test rejects Trier, Stadtverwaltung and
+IT-HAUS. Each ticket: the symptom as reported, three diagnosis steps each with
+the evidence it produced (real commands, output in the real tool's shape), the
+solution, and one lesson that holds beyond the case. Statuses are in progress,
+waiting and resolved - no "new", since every ticket has been diagnosed. The
+interaction is filtering by status and sorting, nothing more. Two panes from a
+640 x 320 window body up, each scrolling itself; below that one pane that flows
+in the window body, the ticket replacing the list and Back returning focus to
+the row.
+
+**Traceroute.**
+
+- A simulation, and the first thing it says. Four prepared routes from an
+  assumed home connection in Frankfurt: the home router, this site on a nearby
+  delivery server, New York across the Atlantic, Tokyo via the United States
+  and the Pacific, with one router that does not answer (`* * *`). Every
+  address is reserved for examples (RFC 5737, RFC 2606 `.example`, RFC 8375
+  `home.arpa`).
+- The times are invented but held to physics by a test: no hop answers faster
+  than light in fibre allows for its great-circle distance (about 1 ms round
+  trip per 100 km), and times never fall by more than probe jitter.
+- Free input borrows a prepared route and says so: private addresses and single
+  labels the router, European country domains Frankfurt, Asian and Pacific ones
+  Tokyo, everything else New York; the destination keeps the name that was
+  typed. An invalid name fails as Linux traceroute does.
+- The run reveals one hop after another, farther hops later, a silent one
+  last; the summary names the biggest jump and why (the access line, an ocean,
+  a long way over land). The raw output reads as Linux traceroute prints it.
+  The app scrolls its own window body to keep the packet in view.
+- **Tiers:** the desktop view now runs the same tier script as the journey.
+  Full tier: the packet pulses and glows. Light: rows, bars and the chain still
+  appear step by step. Reduced motion: the finished trace at once, nothing
+  animating.
+
+**Layout against the window.** Apps use container queries or a ResizeObserver
+on `[data-window-body]`, never the viewport, and scroll their window body by
+hand. `apps.mjs` checks each at 300 x 200, maximised and fullscreen at 380 px
+for sideways overflow.
+
+**Bugs found while verifying:**
+
+- **A check that could not fail.** The missing-copy check sent `/\b…/` inside a
+  template string to the page; `\b` became a backspace character and the
+  regex never matched. Doubled backslashes, and the check proven against a
+  missing key before trusting it.
+- **Traceroute ran out of sight:** in a normal window the trace starts below the
+  fold, so the packet travelled where nobody could see it.
+
+**What it costs** (`sizes.mjs`, gzip -6). The desktop's base barely moved:
+144.6 → 145.1 kB of JavaScript loaded (the shell chunk 9.8 → 10.0 kB, for the
+new window sizes), desktop HTML 4.6 → 4.8 kB (the tier script and viewport
+line). Each app arrives only when it opens, code and copy together: About
+3.9 kB, Terminal 8.1 kB (its own 1.0 kB copy plus About's 1.5 kB, which it
+reads), Tickets 9.5 kB (4.1 kB of it the nine cases' copy), Traceroute 6.3 kB -
+against 0.5-0.6 kB for each placeholder before. `AppMessages` and its table of
+copy files are a few hundred bytes inside each app chunk, never in the shell.
+The shared stylesheet grew 0.6 kB (Traceroute's motion), which every view pays.
