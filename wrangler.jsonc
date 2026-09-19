@@ -1,16 +1,25 @@
 {
-  // Cloudflare Workers with static assets.
+  // Cloudflare Workers with static assets, plus one Worker script for /api/*.
   //
-  // There is no Worker script: `main` is deliberately absent, so this deploys
-  // as a pure static site. `npm run build` still produces nothing but the
-  // static `out` directory, and the site remains portable to any plain web
-  // server if we ever move off Cloudflare.
+  // The site is still a static export: `npm run build` produces nothing but
+  // `out`, and the application code never imports `worker/`. The script only
+  // answers /api/assistant (the Gemini proxy, Phase 8). `run_worker_first`
+  // lists that one path pattern, so every other request is served from `out`
+  // by Cloudflare's asset layer without waking the Worker - headers, redirects
+  // and the 404 page behave exactly as in a pure static deploy, and the site
+  // stays portable to any plain web server (the assistant then shows its
+  // "not available" state and the demo).
+  //
+  // The Gemini key is a secret variable, never in this file:
+  //   npx wrangler secret put GEMINI_API_KEY      (or the dashboard)
+  // Locally it goes in `.dev.vars`, which is gitignored.
   //
   // Pages is the older product. Cloudflare still supports it but directs all
   // new investment at Workers, and a Cloudflare account created in 2026 may not
   // show a Pages tab at all. See DECISIONS.md entry 2.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ahmadreza-de",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-09-15",
 
   "assets": {
@@ -18,6 +27,12 @@
     // copied in from `public/` by the build and are read by Cloudflare rather
     // than served to visitors.
     "directory": "./out",
+
+    // Only these paths run the Worker first. Everything else is an asset.
+    "run_worker_first": ["/api/*"],
+
+    // The Worker's own way back to the assets (used only if the list above ever widens).
+    "binding": "ASSETS",
 
     // The export is directory-based (`/en/index.html`) because
     // `trailingSlash: true`. auto-trailing-slash resolves both `/en` and `/en/`
