@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
+import { useFocusOnFinePointer, useKeyboardInset, useNativeKeydown } from '@/components/apps/use-app-input';
 import {
   HOST,
   PORTFOLIO_COMMANDS,
@@ -45,31 +46,6 @@ export function TerminalApp(props: AppProps) {
   );
 }
 
-/**
- * How far an on-screen keyboard covers the bottom of the layout.
- *
- * Android Chrome shrinks the page itself (the desktop view asks for
- * `interactive-widget=resizes-content`), which leaves nothing covered. Safari
- * on iOS keeps the layout and overlays the keyboard; the visual viewport says
- * by how much, and the terminal lifts its input by that.
- */
-function useKeyboardInset(): number {
-  const [inset, setInset] = useState(0);
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-    const update = () => setInset(Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop)));
-    viewport.addEventListener('resize', update);
-    viewport.addEventListener('scroll', update);
-    update();
-    return () => {
-      viewport.removeEventListener('resize', update);
-      viewport.removeEventListener('scroll', update);
-    };
-  }, []);
-  return inset;
-}
-
 function Terminal({ appId }: AppProps) {
   const t = useTranslations('terminal');
   const [shell, setShell] = useState<ShellState>(initialShell);
@@ -88,11 +64,7 @@ function Terminal({ appId }: AppProps) {
     if (output) output.scrollTop = output.scrollHeight;
   }, [shell.lines, inset]);
 
-  // A precise pointer gets the cursor straight away. On a touchscreen that
-  // would throw the keyboard over the screen before the visitor asked for it.
-  useEffect(() => {
-    if (window.matchMedia('(pointer: fine)').matches) inputRef.current?.focus({ preventScroll: true });
-  }, []);
+  useFocusOnFinePointer(inputRef);
 
   useEffect(() => {
     if (!shell.exited) return;
@@ -112,13 +84,7 @@ function Terminal({ appId }: AppProps) {
     run(input);
   };
 
-  /**
-   * The keys a terminal answers. Attached to the input natively, not through
-   * React: Next hydrates the whole document, so React's own listener sits on
-   * the document - the same node as the desktop's Alt+Shift+Arrow listener -
-   * and could not stop it. Stopped at the input, a handled key never gets
-   * there.
-   */
+  /** The keys a terminal answers; `useNativeKeydown` attaches them to the input itself. */
   const onKeyDown = (event: KeyboardEvent) => {
     const handled = () => {
       event.preventDefault();
@@ -163,17 +129,7 @@ function Terminal({ appId }: AppProps) {
       setRecall(null);
     }
   };
-  const keyHandler = useRef(onKeyDown);
-  useLayoutEffect(() => {
-    keyHandler.current = onKeyDown;
-  });
-  useEffect(() => {
-    const field = inputRef.current;
-    if (!field) return;
-    const listener = (event: KeyboardEvent) => keyHandler.current(event);
-    field.addEventListener('keydown', listener);
-    return () => field.removeEventListener('keydown', listener);
-  }, []);
+  useNativeKeydown(inputRef, onKeyDown);
 
   /** A click in the output puts the cursor back in the input - unless it selected text to copy. */
   const onOutputClick = (event: MouseEvent<HTMLDivElement>) => {
