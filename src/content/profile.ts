@@ -26,11 +26,11 @@ export const RESUME = {
 } as const;
 
 /**
- * The contact address. A placeholder until Ahmadreza confirms the real one;
- * while `available` is false the page renders no mailto link at all, so the
- * placeholder can never be mailed or scraped.
+ * The contact address, confirmed by Ahmadreza in Phase 7. `available` still
+ * gates every mailto link. Before launch the address must really receive mail
+ * (TODO.md, Phase 13): the Impressum depends on a working contact.
  */
 export const EMAIL = {
   address: 'kontakt@ahmadreza.de',
-  available: false,
+  available: true,
 } as const;

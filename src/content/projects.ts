@@ -1,0 +1,21 @@
+/**
+ * Projects, as typed data. Text lives in `messages/apps/terminal/<locale>.json`
+ * under `projects.<id>`. So far there is one project that certainly exists:
+ * this site. Which others belong here is owed (TODO.md).
+ */
+export interface Project {
+  id: 'ahmados';
+  /** Machine text: identical in every language. */
+  url: string;
+  source: string;
+  stack: readonly string[];
+}
+
+export const projects: readonly Project[] = [
+  {
+    id: 'ahmados',
+    url: 'https://ahmadreza.de',
+    source: 'https://github.com/ahmadrezataherieng-gif/ahmadreza-de',
+    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers'],
+  },
+];
