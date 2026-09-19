@@ -18,7 +18,8 @@ const cache = new Map<string, Promise<AbstractIntlMessages>>();
 function loadPuzzleMessages(locale: Locale): Promise<AbstractIntlMessages> {
   let pending = cache.get(locale);
   if (!pending) {
-    pending = import(`@/messages/${locale}.json`).then((module: { default: Record<string, AbstractIntlMessages> }) => ({
+    // The apps' own copy (messages/apps/) is not the journey's business.
+    pending = import(/* webpackExclude: /[\\/]apps[\\/]/ */ `@/messages/${locale}.json`).then((module: { default: Record<string, AbstractIntlMessages> }) => ({
       puzzles: module.default.puzzles ?? {},
       mode: module.default.mode ?? {},
     }));

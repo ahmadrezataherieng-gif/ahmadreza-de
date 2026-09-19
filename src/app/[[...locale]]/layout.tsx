@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
@@ -24,7 +24,7 @@ import { returningRedirectScript } from '@/lib/returning';
 type LayoutParams = { locale?: string[] };
 
 /**
- * Picks the journey's motion tier (DECISIONS.md 46).
+ * Picks the motion tier for the journey and the desktop (DECISIONS.md 46).
  *
  * `full` - a mouse on a wide screen with enough cores and memory: every depth
  * layer, the camera dolly and the pointer tilt.
@@ -80,6 +80,22 @@ async function viewTitle(locale: Locale, view: View): Promise<string> {
   }
   const tOs = await getTranslations({ locale, namespace: 'os' });
   return `${tOs('title')} — ${t('author')}`;
+}
+
+/**
+ * The desktop asks Android's on-screen keyboard to shrink the page rather than
+ * cover it, so a phone app's input (the Terminal's prompt) stays in view. The
+ * other views keep the default: the journey's pinned stages must not jump when
+ * a puzzle's keyboard opens.
+ */
+export async function generateViewport({ params }: { params: Promise<LayoutParams> }): Promise<Viewport> {
+  const { locale: segments } = await params;
+  const view = matchSegments(segments)?.view;
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    ...(view === 'desktop' ? { interactiveWidget: 'resizes-content' as const } : {}),
+  };
 }
 
 export async function generateMetadata({
@@ -153,6 +169,8 @@ export default async function LocaleLayout({
             <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
           </>
         ) : null}
+        {/* The desktop's apps animate by the same tiers (Traceroute's packet). */}
+        {view === 'desktop' ? <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} /> : null}
       </head>
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>

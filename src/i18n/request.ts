@@ -7,6 +7,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    // The apps' own copy (messages/apps/) loads with each app, never with a page.
+    messages: (await import(/* webpackExclude: /[\\/]apps[\\/]/ */ `../messages/${locale}.json`)).default,
   };
 });

@@ -4,10 +4,10 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static export: the site is served as plain files by nginx on our own VPS.
+  // Static export: Cloudflare Workers serve `out/` as plain static assets.
   output: 'export',
   images: { unoptimized: true },
-  // nginx serves directory indexes, so emit `/de/index.html` style folders.
+  // Emit `/journey/index.html` style folders; wrangler's `auto-trailing-slash` matches.
   trailingSlash: true,
   reactStrictMode: true,
 };
