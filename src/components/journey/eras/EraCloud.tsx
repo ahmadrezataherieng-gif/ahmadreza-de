@@ -3,6 +3,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { AssistantTeaser } from '@/components/journey/AssistantTeaser';
 import { EraTitle } from '@/components/journey/eras/EraTitle';
 import { asStringList } from '@/lib/message-shapes';
 import { cn } from '@/lib/cn';
@@ -238,19 +239,18 @@ export function EraCloud({ headingId }: { headingId: string }) {
                   {line}
                 </p>
               ))}
+              <AssistantTeaser />
             </div>
           </Panel>
 
           {/* --- the prompt --- */}
           <Panel title={t('visual.promptLabel')} className="ao-cue sm:col-span-2" style={cue(0.68)}>
             {/*
-              PHASE 8 MOUNT POINT - AI assistant.
-
-              This is a picture of a prompt, not a working one: no input element,
-              no request, no key. Phase 8 builds the real assistant as a desktop
-              app that talks to the Gemini proxy on Cloudflare; if a live prompt
-              ever appears in Act 1, it replaces the children of this element.
-              The Gemini API key never reaches the browser - see CLAUDE.md.
+              The assistant's mount point. What is drawn here is a picture of a
+              prompt, not a working one: no input, no request, no key. The
+              working assistant is the desktop app (Phase 8); the teaser below
+              only points to it, and reaches the page after it has loaded, never
+              in the static HTML. The Gemini key never reaches the browser.
             */}
             <div data-assistant-mount="journey-prompt" className="flex flex-col gap-2">
               <div className="flex items-center gap-2 rounded-control border border-edge bg-background px-3 py-2">
