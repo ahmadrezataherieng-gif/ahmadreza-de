@@ -1421,3 +1421,77 @@ load only when their description matches the task.
 - **Quiet checks.** Every verify script takes `--quiet`: failures in full, passes
   only as a count. `matrix.mjs` runs the whole matrix that way, one line per
   configuration. `trace.mjs` (a profiler) and `serve.mjs` are left as they are.
+
+---
+
+## 52. The Assistant and its proxy, Phase 8A (no key yet)
+
+Built so that connecting the real Gemini key (Phase 8B) is a setting, not code.
+
+- **A Worker script beside the static assets, not Pages Functions.** The site is
+  a Worker with static assets (entry 2), so the proxy is that Worker's `main`.
+  `assets.run_worker_first: ["/api/*"]` sends only `/api/*` to it; everything
+  else is answered by the asset layer without running any code, so `_headers`,
+  `_redirects` and the 404 page are untouched. It has to be listed: with
+  `not_found_handling: "404-page"` set, an unmatched `/api/assistant` would get
+  the 404 page and the Worker would never run. `npx wrangler deploy --dry-run`
+  accepted the config and bundled the Worker (71 kB, unminified).
+- **`worker/` sits outside `src/`.** `npm run build` still emits only `out/`;
+  nothing under `src/` imports `worker/`, and without the Worker (any plain web
+  server, `next dev`) the app finds `/api/assistant` missing and shows its
+  labelled demo. Wrangler bundles it with esbuild. Its modules import each other
+  with relative `.ts` paths (`allowImportingTsExtensions` in tsconfig, which
+  `noEmit` permits) so `npm test` runs them in plain node. The one limit shared
+  with the app is in `src/lib/assistant-limits.ts`.
+- **The material is built, not written.** `worker/sources.ts` reads `src/content/`
+  (about, eras, projects, tickets, profile) and the German message files, joins
+  them by their shared ids and hands them to `buildContext`. About 5 kB. German
+  only: it is the source language, and the prompt tells the model to answer in
+  the visitor's language. What the site does not say (start date, earlier
+  stations, language levels, anything private) is listed as "not known", derived
+  from the `null`s in the content, so "I don't know" has a reason. The tickets
+  are labelled invented.
+- **Limits.** 5 requests a minute and 30 an hour per IP, in memory. That is a
+  floor: each isolate counts on its own. The wall is a Cloudflare rate-limiting
+  rule (Phase 8B); I did not add a `ratelimits` binding to `wrangler.jsonc`
+  because I could not verify its syntax against a deploy. Question 400 characters,
+  body 2000, answer 900 characters and 400 output tokens, 8 s timeout.
+- **Own origin only** means the request's `Origin` must equal the request URL's
+  origin, so it holds on ahmadreza.de, www and workers.dev alike without a list.
+  A request with no `Origin` is refused: the site's own `fetch` always sends one.
+  A GET (the readiness probe) needs none, and reveals only ready or not.
+- **The key** goes in the `x-goog-api-key` header, not the URL. Nothing in
+  `worker/` calls `console`: `observability` is on, so a log line would be kept.
+- **A refusal is the model's own word.** The prompt has it start with `REFUSED:`;
+  the Worker strips that and answers `refused`. A prompt Gemini's filters block is
+  also `refused`. "The material does not say" is a normal answer, not a refusal.
+- **The app asks first, with nothing in the request:** a GET on open says whether
+  the Worker has a key. Ready means live; anything else (no key, 404, HTML, an
+  unknown shape, a network error) means the demo, with the reason shown. A live
+  question that comes back "not configured" also drops to the demo. An
+  unanswered question returns to the input and leaves the transcript.
+- **The demo cannot pass for the live assistant.** Badge "Demo" on the banner and
+  on every demo message, a label that says "prepared answer, not AI", a banner
+  that says the same, and a live badge in another colour. Five topics; a question
+  that matches none is refused, never guessed. A test proves each language's
+  suggested question finds its own topic, an off-topic one finds none, and no
+  demo answer contains a number except "80".
+- **Phase copy:** idle, thinking, answered, refused, rateLimited, offline,
+  notConfigured, each in all three languages. Reduced motion: no typing, no
+  simulated thinking delay. Otherwise an answer types in about 1.5 s whatever its
+  length, the finished text always being in the page for a screen reader.
+- **Shared input hooks:** `apps/use-app-input.ts` now holds the Terminal's
+  `useKeyboardInset`, native keydown attachment and focus-only-with-a-fine-pointer;
+  the Terminal and the Assistant both use them.
+- **The journey's mount point** gets a one-line teaser to the desktop app, but
+  the static HTML gets only an empty box (`data-slot="prompt-line"`, height
+  reserved). The line and its copy (`messages/apps/assistant-journey/`) load when
+  the box is within half a screen of the viewport. The journey never talks to the
+  Worker. A check counts the word "assistant" in the journey HTML: still one,
+  the attribute that was there before.
+- **Model:** `gemini-2.5-flash-lite` unless `GEMINI_MODEL` says otherwise, with
+  thinking off (its tokens would count against the answer cap). A guess at a
+  sensible cheap default, not a decision: TODO.md, Phase 8B.
+- **Not verified:** the real Gemini API, the request shape it expects and its
+  response shape were never called (no key); the tests run against a fake. The
+  Worker was bundled by wrangler but never run under `wrangler dev` or deployed.

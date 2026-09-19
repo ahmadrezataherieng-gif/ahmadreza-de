@@ -92,6 +92,7 @@ Keep the two in sync.
 ## Folder structure — what belongs where
 
 ```
+worker/                     the Cloudflare Worker for /api/* only (the assistant proxy); never imported by src/
 scripts/                    project checks (check-pixel-font.mjs)
   test/                     plain-node tests of the pure modules and app data (`npm test`)
   verify/                   end-to-end browser checks over CDP (no dependencies)
@@ -180,7 +181,7 @@ npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out
 npm run lint
 npm run check:pixel-font   # every Press Start 2P string has real glyphs
-npm test        # plain-node tests: shell, traceroute, app data and copy
+npm test        # plain-node tests: shell, traceroute, app data and copy, the Assistant, the Worker
 ```
 
 `npm run build` must finish with zero TypeScript errors, zero build errors, and

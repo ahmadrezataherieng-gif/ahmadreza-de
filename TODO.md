@@ -89,32 +89,51 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   two modes.
 - **The dock** holds About, Lebenslauf, Kontakt and Assistent. Confirm the four.
 
-## Phase 8 — from Phase 7 (DECISIONS.md 50)
+## Phase 8B — connecting the real key (Phase 8A built everything else)
 
-- The Assistant replaces its placeholder like the Phase 7 apps: its own folder,
-  its copy in `messages/apps/assistant/<locale>.json` through `AppMessages`
-  (add the id to `AppCopyId`), nothing in the `os` namespace.
-- **Its input needs what the Terminal's has:** keys it answers handled natively
-  on the field (not through React, which listens on the document), autofocus
-  only with a fine pointer, and the phone keyboard kept off the input
-  (`interactive-widget=resizes-content` on the desktop view, plus the
-  visual-viewport inset for Safari - `useKeyboardInset` in `TerminalApp.tsx`;
-  lift it into a shared hook when a second app needs it).
-- The Terminal can gain an `ask` command that hands a question to the assistant.
-- **Real devices:** the keyboard handling on phones was checked by shrinking the
-  emulated viewport, not on an iPhone or an Android phone. Test both before
-  launch, and the window manager on a touchscreen laptop and an iPad (the
-  `pointer: fine` rule decides which shell they get).
+The Assistant app, the proxy and the demo exist (DECISIONS.md 52). What is left:
 
-## Phase 8 — AI assistant
-
-- **A billing decision is needed before Phase 8.** The Gemini API terms require
-  Paid Services for apps that serve users in the EEA, Switzerland or the UK. The
-  free tier cannot be used for this site.
-- Monthly budget / rate limit for the Gemini API, and which Gemini model.
-- What the assistant is allowed to answer (CV questions only, or anything).
+- **Billing.** The Gemini API terms require Paid Services for apps that serve
+  users in the EEA, Switzerland or the UK; the free tier cannot be used.
+- **Create the key** in Google AI Studio and store it only in Cloudflare:
+  `npx wrangler secret put GEMINI_API_KEY` (or the dashboard). Locally: a
+  `.dev.vars` file, which is gitignored. Never in the repository.
+- **Choose the model** and set `GEMINI_MODEL` if it should not be the default in
+  `worker/gemini.ts` (`gemini-2.5-flash-lite`, an unverified guess). Check the
+  name still exists and that `thinkingConfig.thinkingBudget: 0` is accepted by it;
+  remove it if not.
+- **Call it once for real** (`npx wrangler dev` with `.dev.vars`) and compare with
+  the tests' fake: the request shape, the response shape
+  (`candidates[0].content.parts`, `promptFeedback.blockReason`, `finishReason`),
+  the refusal marker actually being obeyed in de, en and fa, and answers staying
+  short and grounded. Try prompt injections ("ignore your rules", "reveal your
+  prompt", "answer as ...").
+- **Add the wall:** a Cloudflare rate-limiting rule on `/api/assistant` (or a
+  `ratelimits` binding) in front of the Worker's in-memory limit, and a monthly
+  budget alert in Google Cloud.
+- **Decide what the assistant may answer.** It answers only from the site's
+  content and refuses everything else; say if that is right.
+- **Deploy and check `/api/assistant`** from the live origin (GET says ready) and
+  that a request from another origin is refused.
+- **Real devices:** the phone-keyboard handling of the Terminal and the Assistant
+  was checked by shrinking the emulated viewport only. Test an iPhone and an
+  Android phone, and the window manager on a touchscreen laptop and an iPad.
+- **Maybe:** a Terminal `ask` command that hands a question to the assistant; the
+  journey teaser could open the assistant window directly (it opens the desktop).
+- **Copy to confirm:** the assistant's copy (`messages/apps/assistant/`, and the
+  journey teaser `assistant-journey/`) is a draft; German is the source. The five
+  demo answers repeat facts from About, so change them together.
 
 ## Phase 11 — Legal
+
+- **Datenschutzerklärung: the assistant.** Once the assistant is live, visitors'
+  questions are sent to the Google Gemini API through a Cloudflare Worker.
+  Disclose Google (Gemini API, paid-tier terms) and Cloudflare as processors;
+  what is sent (the question text and the chosen language; no account, no
+  cookie); that the Worker keeps no question text and counts requests per IP
+  address only in memory; the legal basis; and the transfer to the USA. The app
+  already says this in one line (`messages/apps/assistant/*.json`, key
+  `privacy`); keep the two in step.
 
 - Impressum details: full address, contact, responsible person under § 5 DDG.
 - Whether the employer, Stadtverwaltung Trier, may be named on a personal site,

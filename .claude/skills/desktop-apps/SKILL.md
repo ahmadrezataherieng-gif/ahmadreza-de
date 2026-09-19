@@ -58,8 +58,31 @@ in Act 1 unlock extra apps.
 
 ## The apps (Act 3, Phase 7)
 
-About, Terminal, Tickets and Traceroute are real; Contact, Timeline, CV and the
-Assistant are still placeholders. Read DECISIONS.md 50 first.
+About, Terminal, Tickets, Traceroute and (Phase 8A) the Assistant are real;
+Contact, Timeline and CV are still placeholders. Read DECISIONS.md 50 first, and
+52 for the Assistant.
+
+- **The Assistant** (`apps/assistant/`) talks to `/api/assistant` (the Worker in
+  `worker/`, see the `deployment-legal` skill). On open it sends a bare GET; a
+  Worker with a key means **live**, anything else means the **demo**: five
+  prepared answers, labelled "Demo" on the banner and on every message, and a
+  question matching none is refused, never guessed. The demo must never look like
+  a live answer - keep the badge, the label and the copy that says "not AI".
+  Its logic (`assistant.ts`: reply parsing, demo matching) is pure and tested; its
+  seven phases (idle, thinking, answered, refused, rateLimited, offline,
+  notConfigured) each have copy in `messages/apps/assistant/<locale>.json`, and
+  the root carries `data-assistant-mode` and `data-assistant-state` for the
+  checks. Under reduced motion an answer is simply there. The privacy line
+  (questions go to Google's Gemini API once live) must stay in the app and in the
+  Datenschutzerklärung together.
+- **`apps/use-app-input.ts`** holds what any app with a text field needs:
+  `useKeyboardInset`, `useNativeKeydown` (the input handles its keys itself so
+  the desktop's Alt+Shift+Arrow listener never sees them) and
+  `useFocusOnFinePointer`. Use them; do not copy them.
+- **The journey's mount point** (`data-assistant-mount`, in EraCloud) shows a
+  picture of a prompt plus `AssistantTeaser`, a client-only line to the desktop.
+  Nothing about the assistant may be in the journey's or the landing page's
+  static HTML: the teaser renders an empty box and loads its line when near.
 
 - **An app is its own lazy chunk, with its own copy.** Its words live in
   `messages/apps/<app>/<locale>.json`, never in the `os` namespace (which the

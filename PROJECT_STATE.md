@@ -12,7 +12,8 @@ Last updated: 2026-09-19
 - [x] **Phase 5.5B** — Era-to-era crossings, CSS 3D depth, motion tiers
 - [x] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [x] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
-- [ ] **Phase 8** — AI assistant app and server-side Cloudflare proxy function
+- [x] **Phase 8A** — Assistant app, labelled demo and the proxy Worker, built without a key
+- [ ] **Phase 8B** — connect the real Gemini key (TODO.md, Phase 8B)
 - [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
@@ -80,7 +81,9 @@ Last updated: 2026-09-19
     status, sort.
   - **Traceroute:** a labelled simulation over four prepared routes, the packet
     travelling hop by hop with its latency, and where the time went.
-  - Contact, Timeline, CV and the Assistant are still placeholders.
+  - **Assistant** (Phase 8A, DECISIONS.md 52): live when the proxy has a key, otherwise a demo that says so on a badge, a banner and every message - five prepared answers, no guessing. Seven visible states, reduced motion shows the finished answer, and a line about Gemini in the app itself. On open it sends one bare GET to learn whether the Worker has a key.
+  - Contact, Timeline and CV are still placeholders.
+- **The proxy** (`worker/`, Phase 8A): a Cloudflare Worker answering only `/api/*` (`assets.run_worker_first`), the rest of the site served from `out/` as before. Own-origin only, 5 requests a minute and 30 an hour per IP (in memory), question 400 characters, answer 900, 8 s timeout, nothing logged, the model's material built from `src/content/` at build time. No key is set: it answers "not configured". Run under `wrangler dev`, it served the assets, the 404, the redirects and the headers unchanged and answered the API paths; the real Gemini API has never been called.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
   real Chrome through both modes, all puzzles, the gates and the landing page;
   `boundaries.mjs` screenshots every crossing and checks that no frame is blank
@@ -138,6 +141,19 @@ Phase 7 (`scripts/verify/sizes.mjs`, gzip -6):
 | Journey HTML, gzipped | de 39.9 · en 37.6 · fa 35.7 kB | de 40.0 · en 37.7 · fa 35.7 kB (limit 48) |
 | Desktop HTML, gzipped | de 4.6 · en 4.4 · fa 5.0 kB | de 4.8 · en 4.6 · fa 5.1 kB |
 
+Phase 8A (`scripts/verify/sizes.mjs`, gzip -6):
+
+| | Before 8A | After 8A |
+|---|---|---|
+| Route First Load JS (Next) | 135 kB | 135 kB (limit 250) |
+| Landing: JS / CSS loaded | 135.1 / 20.4 kB | 135.2 / 20.5 kB |
+| Journey: JS / CSS loaded | 223.9 / 20.4 kB | 224.1 / 20.5 kB |
+| Desktop: JS / CSS loaded | 145.1 / 20.4 kB | **145.2** / 20.5 kB |
+| Assistant on open (code + copy) | - | **6.3 kB** (4.5 + copy 1.8 in de) |
+| Journey teaser, when near the viewport | - | 1.3 kB (1.05 + copy 0.25) |
+| Landing / Journey / Desktop HTML | unchanged | unchanged (journey de 40.0 kB) |
+| Worker bundle (wrangler, unminified) | - | 71 kB |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -156,9 +172,10 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- Contact, Timeline, CV and the Assistant (Phase 8), and the seven bonus apps
+- Contact, Timeline and CV, and the seven bonus apps
   (Phase 9), are placeholders.
-- The phone keyboard handling (Terminal) was checked in emulation only.
+- The phone keyboard handling (Terminal, Assistant) was checked in emulation only.
+- The Gemini key, and everything that needs it: TODO.md, Phase 8B.
 - Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).

@@ -22,7 +22,7 @@ is a template string: a regex in it needs its backslashes doubled (`\\b`), or
 
 ## Which setups exist
 
-The matrix run through Phase 7 (each configuration is one command; `node scripts/verify/matrix.mjs` runs them all quietly):
+The matrix run through Phase 8A (each configuration is one command; `node scripts/verify/matrix.mjs` runs them all quietly). `apps.mjs` also covers the Assistant: the demo against a server with no Worker, every live state against a stubbed `fetch`, and that the journey and landing HTML stay free of it:
 
 - `apps.mjs`: 1280 in de, en, fa; 768 x 1024 in de and fa; 380 x 800 with `--touch` in de, en, fa; `--reduce` at 1280 and at 380 touch in fa.
 - `desktop.mjs`: 1280 de and fa; 768 x 1024; 380 x 800 `--touch` en; `--reduce` at 380 touch.
