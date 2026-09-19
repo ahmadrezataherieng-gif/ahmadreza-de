@@ -687,20 +687,16 @@
     },
     "apps": {
       "about": {
-        "title": "About me",
-        "body": "Who Ahmadreza is and what he is learning as an apprentice IT specialist for systems integration at Stadtverwaltung Trier – he introduces himself in full here."
+        "title": "About me"
       },
       "terminal": {
-        "title": "Terminal",
-        "body": "A shell in the browser for exploring this website – with the commands administrators use every day."
+        "title": "Terminal"
       },
       "tickets": {
-        "title": "Tickets",
-        "body": "A small ticket system of the kind used in IT support: log an incident, triage it, solve it."
+        "title": "Tickets"
       },
       "traceroute": {
-        "title": "Traceroute",
-        "body": "Follow the stops a data packet makes on its way through the network, hop by hop."
+        "title": "Traceroute"
       },
       "assistant": {
         "title": "Assistant",

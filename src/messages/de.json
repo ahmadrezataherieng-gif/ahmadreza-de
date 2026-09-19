@@ -688,20 +688,16 @@
     },
     "apps": {
       "about": {
-        "title": "Über mich",
-        "body": "Wer Ahmadreza ist und was er in seiner Ausbildung zum Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier lernt – hier stellt er sich ausführlich vor."
+        "title": "Über mich"
       },
       "terminal": {
-        "title": "Terminal",
-        "body": "Eine Shell im Browser, mit der Sie diese Website erkunden können – mit den Befehlen, die Administratoren täglich benutzen."
+        "title": "Terminal"
       },
       "tickets": {
-        "title": "Tickets",
-        "body": "Ein kleines Ticketsystem, wie es im IT-Support verwendet wird: Störungen aufnehmen, einordnen und lösen."
+        "title": "Tickets"
       },
       "traceroute": {
-        "title": "Traceroute",
-        "body": "Verfolgen Sie, über welche Stationen ein Datenpaket durchs Netz reist – Sprung für Sprung."
+        "title": "Traceroute"
       },
       "assistant": {
         "title": "Assistent",

@@ -1,0 +1,46 @@
+{
+  "simulation": "Simulation: Ein Browser kann kein echtes traceroute ausführen. Die Routen sind vorbereitet, von einem angenommenen Heimanschluss in Frankfurt am Main aus, mit Adressen, die für Beispiele reserviert sind. Die Zeiten sind nicht gemessen, aber ehrlich: Keine Station ist schneller, als Licht in der Glasfaser es erlaubt.",
+  "intro": "Eine Verbindung ist eine Kette von Maschinen, und jedes Glied kostet Zeit. traceroute schickt Pakete mit wachsender Lebensdauer los: Jeder Router auf dem Weg zieht eins ab, und wo sie bei null ankommt, meldet sich der Router zurück. So verrät sich jede Station – mit Namen und der Zeit für Hin- und Rückweg.",
+  "formLabel": "Traceroute starten",
+  "targetLabel": "Ziel",
+  "targetPlaceholder": "z. B. ahmadreza.de",
+  "run": "Starten",
+  "prepared": "Vorbereitete Ziele",
+  "targets": {
+    "router": "Ihr Router",
+    "ahmadreza": "Diese Website",
+    "newyork": "New York",
+    "tokyo": "Tokio"
+  },
+  "mapped": "Für „{host}“ gibt es keine eigene Route. Die Simulation zeigt stattdessen die vorbereitete Route „{route}“ – so ähnlich sähe der Weg dorthin aus.",
+  "unknownHost": "„{host}“ ist kein gültiger Rechnername und keine IPv4-Adresse.",
+  "hopsLabel": "Stationen auf dem Weg",
+  "roles": {
+    "homeRouter": "Ihr Router zu Hause",
+    "ispAccess": "Zugangsknoten Ihres Providers",
+    "ispCore": "Kernnetz des Providers",
+    "exchange": "Internetknoten Frankfurt",
+    "carrier": "Netz eines Transitanbieters",
+    "subsea": "Am anderen Ende eines Seekabels",
+    "hosting": "Rechenzentrum am Ziel",
+    "edge": "Auslieferungsserver in Frankfurt",
+    "destination": "Ziel",
+    "silent": "Ein Router, der nicht antwortet"
+  },
+  "silentNote": "Viele Netzbetreiber schalten die Antwort auf traceroute ab. Das Paket kommt trotzdem durch.",
+  "jumpBadge": "größter Sprung",
+  "status": {
+    "idle": "Wählen Sie ein Ziel.",
+    "running": "Paket unterwegs …",
+    "done": "Ziel erreicht."
+  },
+  "summary": "{hops, plural, one {# Station} other {# Stationen}}, {ms, number, ::.0} ms bis zum Ziel und zurück.",
+  "jump": "Den größten Sprung macht die Zeit zwischen Station {from, number} und {to, number}: plus {delta, number, ::.0} ms.",
+  "why": {
+    "lan": "Im eigenen Netz ist der Weg eine einzige Station, und die Antwort kommt in unter einer Millisekunde.",
+    "ispAccess": "Die meiste Zeit kostet das erste Stück: die Leitung von Ihrem Router zum Provider. Danach geht es über schnelle Glasfaser weiter, und die Website wird von einem Server ganz in der Nähe ausgeliefert.",
+    "subsea": "Hier überquert das Paket einen Ozean durch ein Seekabel. Licht braucht in Glasfaser etwa 5 ms für 1000 km – für Hin- und Rückweg das Doppelte. Diese Zeit kann kein Router verkürzen.",
+    "carrier": "Hier legt das Paket eine lange Strecke über Land zurück. Auch dort bestimmt vor allem die Entfernung die Zeit."
+  },
+  "raw": "Ausgabe wie im Terminal"
+}

@@ -1,0 +1,46 @@
+{
+  "simulation": "Simulation: a browser cannot run a real traceroute. The routes are prepared, starting from an assumed home connection in Frankfurt am Main, with addresses reserved for examples. The times are not measured, but they are honest: no hop is faster than light in glass fibre allows.",
+  "intro": "A connection is a chain of machines, and every link costs time. traceroute sends packets with a growing lifetime: every router on the way takes one off, and where it reaches zero, that router reports back. So every hop gives itself away - with its name and the time there and back.",
+  "formLabel": "Start a traceroute",
+  "targetLabel": "Target",
+  "targetPlaceholder": "e.g. ahmadreza.de",
+  "run": "Start",
+  "prepared": "Prepared targets",
+  "targets": {
+    "router": "Your router",
+    "ahmadreza": "This website",
+    "newyork": "New York",
+    "tokyo": "Tokyo"
+  },
+  "mapped": "There is no route of its own for \"{host}\". The simulation shows the prepared route \"{route}\" instead - the way there would look much like it.",
+  "unknownHost": "\"{host}\" is neither a valid host name nor an IPv4 address.",
+  "hopsLabel": "Hops along the way",
+  "roles": {
+    "homeRouter": "Your router at home",
+    "ispAccess": "Your provider's access node",
+    "ispCore": "Provider's core network",
+    "exchange": "Internet exchange, Frankfurt",
+    "carrier": "A transit carrier's network",
+    "subsea": "At the far end of a subsea cable",
+    "hosting": "Data centre at the destination",
+    "edge": "Delivery server in Frankfurt",
+    "destination": "Destination",
+    "silent": "A router that does not answer"
+  },
+  "silentNote": "Many network operators switch off the reply to traceroute. The packet still gets through.",
+  "jumpBadge": "biggest jump",
+  "status": {
+    "idle": "Choose a target.",
+    "running": "Packet on its way …",
+    "done": "Destination reached."
+  },
+  "summary": "{hops, plural, one {# hop} other {# hops}}, {ms, number, ::.0} ms to the destination and back.",
+  "jump": "The biggest jump in time comes between hop {from, number} and {to, number}: plus {delta, number, ::.0} ms.",
+  "why": {
+    "lan": "Inside your own network the way is a single hop, and the reply comes back in under a millisecond.",
+    "ispAccess": "Most of the time goes on the first stretch: the line from your router to your provider. After that it runs over fast fibre, and the website is delivered by a server close by.",
+    "subsea": "Here the packet crosses an ocean through a subsea cable. Light in glass fibre needs about 5 ms per 1000 km - twice that there and back. No router can shorten that time.",
+    "carrier": "Here the packet covers a long distance over land. There too, distance is what sets the time."
+  },
+  "raw": "Output as in a terminal"
+}

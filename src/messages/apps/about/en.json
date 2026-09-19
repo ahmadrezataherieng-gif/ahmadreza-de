@@ -1,0 +1,84 @@
+{
+  "eyebrow": "About me",
+  "name": "Ahmadreza Taheri",
+  "role": "Apprentice IT specialist for systems integration",
+  "intro": [
+    "I'm Ahmadreza Taheri, and I work in IT in Germany. I'm currently training as an IT specialist for systems integration at Stadtverwaltung Trier.",
+    "I'm interested in what happens beneath the surface: why a computer gets no address, which way a data packet takes through the network, what exactly is broken when someone says \"the internet isn't working\". My focus is on networks and Linux.",
+    "This website is my own project. It tells 80 years of computing history and explains along the way how computers still work today - and it shows how I approach technology: understand it first, then explain it."
+  ],
+  "actions": {
+    "label": "Contact and résumé",
+    "resume": "Download résumé (PDF)",
+    "resumePending": "Résumé coming soon",
+    "email": "Send an email"
+  },
+  "path": {
+    "title": "Path",
+    "since": "since <date></date>",
+    "range": "<start></start> – <end></end>",
+    "present": "today",
+    "stations": {
+      "apprenticeship": {
+        "title": "Apprenticeship as an IT specialist for systems integration",
+        "place": "Stadtverwaltung Trier",
+        "text": "A dual apprenticeship, split between the workplace and vocational school. It covers planning, setting up and running IT systems: networks, servers and workstations, user accounts, and supporting the people who work with all of it."
+      },
+      "earlier": {
+        "title": "Earlier stations",
+        "place": "",
+        "text": "School, studies and previous work will be added here."
+      }
+    }
+  },
+  "now": {
+    "title": "What I do today",
+    "text": [
+      "At work and at vocational school I'm learning to plan, set up and keep IT systems running - and to find the fault when they don't.",
+      "Alongside that I work on this website. The programs on this desktop show how I work: the terminal, the ticket system with real diagnosis paths, and traceroute, which makes a packet's journey visible."
+    ]
+  },
+  "skills": {
+    "title": "What I work with",
+    "areas": {
+      "network": {
+        "title": "Networks",
+        "skills": {
+          "tcpip": "TCP/IP and IPv4 addressing",
+          "subnetting": "Calculating and planning subnets",
+          "dnsDhcp": "DNS and DHCP",
+          "firewall": "Ports and firewall rules",
+          "wifi": "Wi-Fi fundamentals"
+        }
+      },
+      "systems": {
+        "title": "Systems",
+        "skills": {
+          "linux": "Linux: filesystem, permissions, services",
+          "shell": "Working in the shell",
+          "windows": "Setting up and maintaining Windows clients",
+          "accounts": "Users, groups and permissions"
+        }
+      },
+      "support": {
+        "title": "Support",
+        "skills": {
+          "troubleshooting": "Structured troubleshooting",
+          "tickets": "Working with tickets",
+          "documentation": "Documentation others can follow",
+          "hardware": "Testing and replacing hardware"
+        }
+      }
+    }
+  },
+  "languages": {
+    "title": "Languages",
+    "names": {
+      "de": "German",
+      "en": "English",
+      "fa": "Persian"
+    }
+  },
+  "placeholder": "To be added",
+  "placeholderDate": "date to follow"
+}

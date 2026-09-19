@@ -50,7 +50,10 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
 };
 
 const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
+  about: { width: 640, height: 520 },
   terminal: { width: 720, height: 460 },
+  tickets: { width: 860, height: 540 },
+  traceroute: { width: 640, height: 560 },
   assistant: { width: 480, height: 560 },
   timeline: { width: 760, height: 480 },
   cv: { width: 560, height: 420 },

@@ -1,0 +1,49 @@
+{
+  "outputLabel": "Terminalausgabe",
+  "inputLabel": "Befehl eingeben",
+  "inputHint": "Eingabetaste führt den Befehl aus, Tab ergänzt, Pfeil hoch und runter blättern durch frühere Befehle.",
+  "tryLabel": "Zum Ausprobieren:",
+  "motd": "Willkommen auf AhmadOS. Tippen Sie help für alle Befehle – oder fangen Sie mit about, skills oder projects an.",
+  "help": {
+    "portfolio": "Über Ahmadreza",
+    "shell": "Shell",
+    "commands": {
+      "about": "wer Ahmadreza ist",
+      "skills": "womit er arbeitet",
+      "projects": "woran er arbeitet",
+      "cv": "der Lebenslauf",
+      "contact": "so erreichen Sie ihn",
+      "ls": "Dateien auflisten, ls -a zeigt auch versteckte",
+      "cd": "Verzeichnis wechseln, cd .. geht eine Ebene hoch",
+      "cat": "Datei anzeigen",
+      "pwd": "aktuelles Verzeichnis",
+      "whoami": "wer Sie hier sind",
+      "echo": "Text ausgeben",
+      "history": "bisherige Befehle",
+      "uname": "Name des Systems",
+      "clear": "Bildschirm leeren",
+      "exit": "Terminal schließen"
+    },
+    "keys": "Tab ergänzt Befehle und Pfade, Pfeil hoch und runter holt frühere Befehle zurück, Strg+L leert den Bildschirm, Strg+C bricht die Zeile ab."
+  },
+  "projects": {
+    "more": "Weitere Projekte folgen.",
+    "site": "Website",
+    "source": "Quellcode",
+    "stack": "Technik",
+    "items": {
+      "ahmados": {
+        "name": "AhmadOS – diese Website",
+        "text": "80 Jahre Computergeschichte in sieben Epochen, jede mit einem Rätsel, das eine echte Grundlage der Informatik lehrt – und am Ende dieser Desktop. Eine statische Website ohne eigenen Server, in Deutsch, Englisch und Persisch."
+      }
+    }
+  },
+  "cv": {
+    "text": "Der Lebenslauf als PDF:",
+    "download": "Lebenslauf herunterladen",
+    "pending": "Der Lebenslauf folgt in Kürze. Bis dahin: Werdegang mit about, Kontakt mit contact."
+  },
+  "contact": {
+    "text": "Am schnellsten erreichen Sie Ahmadreza per E-Mail:"
+  }
+}

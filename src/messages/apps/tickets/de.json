@@ -1,0 +1,154 @@
+{
+  "heading": "Helpdesk",
+  "organisation": "Talweber Logistik",
+  "simulation": "Simulation: Firma, Personen und Fälle sind erfunden. Die Technik ist echt – jeder Befehl existiert, und so sieht seine Ausgabe aus.",
+  "filterLabel": "Nach Status filtern",
+  "all": "Alle",
+  "sortLabel": "Sortieren",
+  "sort": {
+    "priority": "Priorität",
+    "number": "Nummer"
+  },
+  "count": "{count, plural, =0 {Keine Tickets} one {# Ticket} other {# Tickets}}",
+  "empty": "Keine Tickets mit diesem Status.",
+  "listLabel": "Tickets",
+  "back": "Alle Tickets",
+  "status": {
+    "inProgress": "In Arbeit",
+    "waiting": "Wartet",
+    "resolved": "Gelöst"
+  },
+  "priority": {
+    "high": "Hoch",
+    "normal": "Normal",
+    "low": "Niedrig"
+  },
+  "priorityLabel": "Priorität {priority}",
+  "category": {
+    "network": "Netzwerk",
+    "printer": "Drucker",
+    "client": "Arbeitsplatz",
+    "account": "Konto",
+    "hardware": "Hardware"
+  },
+  "sections": {
+    "reported": "Gemeldet",
+    "diagnosis": "Diagnose",
+    "solution": "Lösung",
+    "plannedSolution": "Lösungsweg",
+    "lesson": "Was man daraus lernt"
+  },
+  "stepLabel": "Schritt {step}",
+  "noOutput": "(keine Ausgabe)",
+  "select": "Wählen Sie ein Ticket aus der Liste.",
+  "tickets": {
+    "no-network": {
+      "title": "Kein Netzwerk an Platz 14",
+      "reporter": "Buchhaltung, Platz 14",
+      "symptom": "Seit heute Morgen gehen weder Internet noch Netzlaufwerk. Das Kabel steckt, die Lampe an der Netzwerkbuchse leuchtet.",
+      "steps": [
+        "Zuerst die Adresse des Rechners: Sie beginnt mit 169.254. Eine solche Adresse gibt sich Windows selbst, wenn kein DHCP-Server antwortet. Das Kabel ist also in Ordnung – es fehlt die Adressvergabe.",
+        "Eine neue Anfrage an den DHCP-Server läuft ins Leere. Also liegt das Problem beim Server oder auf dem Weg dorthin, nicht an diesem PC.",
+        "Die Statistik auf dem DHCP-Server zeigt: Alle 200 Adressen des Bereichs sind vergeben. Die meisten gehören Smartphones aus dem Gäste-WLAN, das im selben Bereich hängt und Adressen acht Tage lang reserviert."
+      ],
+      "solution": "Das Gäste-WLAN bekam einen eigenen Adressbereich mit vier Stunden Leasedauer. Danach waren im Bürobereich wieder Adressen frei, und ipconfig /renew an Platz 14 funktionierte sofort.",
+      "lesson": "Eine Adresse, die mit 169.254 beginnt, bedeutet: Der Rechner hat niemanden gefunden, der ihm eine Adresse gibt. Die Suche beginnt dann beim DHCP, nicht beim Kabel."
+    },
+    "intranet-dns": {
+      "title": "Intranet nicht erreichbar, Internet geht",
+      "reporter": "Vertrieb, Laptop",
+      "symptom": "Externe Webseiten laden, aber intranet.talweber.example meldet „Server nicht gefunden“.",
+      "steps": [
+        "Der Intranet-Server antwortet auf seine IP-Adresse. Das Netz funktioniert also – das Problem liegt bei der Namensauflösung.",
+        "Die Namensabfrage geht an einen öffentlichen DNS-Server. Der kennt nur öffentliche Namen; interne Namen kennt nur der eigene DNS-Server der Firma.",
+        "DHCP ist zwar aktiv, aber der DNS-Server wurde von Hand eingetragen – offenbar bei einem Test im Homeoffice – und überschreibt den, den DHCP liefern würde."
+      ],
+      "solution": "DNS am Netzwerkadapter wieder auf „automatisch beziehen“ gestellt und mit ipconfig /flushdns den Zwischenspeicher geleert. Das Intranet lädt wieder.",
+      "lesson": "Name und Adresse sind zwei getrennte Schichten. Wer erst die IP-Adresse und dann den Namen testet, weiß nach zwei Befehlen, welche Schicht kaputt ist."
+    },
+    "printer-postscript": {
+      "title": "Drucker druckt seitenweise Code",
+      "reporter": "Einkauf, 1. OG",
+      "symptom": "Statt der Rechnung kommen dutzende Seiten, die mit „%!PS-Adobe-3.0“ beginnen, voller Zeichen, die niemand lesen kann.",
+      "steps": [
+        "Die Konfigurationsseite direkt am Bedienfeld des Druckers druckt sauber. Der Drucker selbst ist in Ordnung.",
+        "Von einem anderen Rechner druckt dieselbe Datei richtig. Das Problem liegt also zwischen diesem einen PC und dem Drucker: beim Treiber.",
+        "Nach einem Update ist ein PostScript-Treiber eingetragen. Dieser Drucker versteht aber nur PCL und druckt den PostScript-Code deshalb einfach als Text aus."
+      ],
+      "solution": "Den passenden PCL-6-Treiber des Herstellers installiert und dem Drucker zugewiesen. Die Rechnung druckt, der Seitenstapel wanderte ins Altpapier.",
+      "lesson": "Jedes Glied der Kette einzeln testen – Gerät, Netz, Rechner. Dann findet man den Fehler, statt zu raten."
+    },
+    "print-queue": {
+      "title": "Niemand im Erdgeschoss kann drucken",
+      "reporter": "Lager, Erdgeschoss",
+      "symptom": "Alle Druckaufträge bleiben in der Warteschlange stehen. Neu starten der eigenen PCs hat nichts geändert.",
+      "steps": [
+        "Die Warteschlange auf dem Druckserver: Der erste Auftrag steht auf „Error“, alle anderen warten dahinter.",
+        "Der fehlerhafte Auftrag lässt sich löschen, bleibt aber auf „Deleting“ hängen. Der Druckdienst hält ihn fest.",
+        "Nach einem Neustart des Druckdienstes ist der hängende Auftrag weg, und die wartenden Aufträge laufen durch."
+      ],
+      "solution": "Hängenden Auftrag entfernt, Druckwarteschlange (Spooler) neu gestartet. Die Lagerliste wurde als PDF erneut gedruckt und lief ohne Fehler.",
+      "lesson": "Eine Warteschlange arbeitet der Reihe nach. Ein einziger hängender Auftrag blockiert alle dahinter – dasselbe Prinzip wie beim Stapelbetrieb im Rechenzentrum von 1956."
+    },
+    "account-lockout": {
+      "title": "Konto jeden Morgen gesperrt",
+      "reporter": "Versand, a.neumann",
+      "symptom": "Das Konto ist jeden Morgen gesperrt, obwohl das Passwort richtig eingegeben wird. Seit der Passwortänderung letzte Woche.",
+      "steps": [
+        "Auf dem Domänencontroller hält das Ereignis 4740 jede Sperre fest – und den Rechner, von dem die falschen Anmeldungen kamen. Es ist nicht ihr PC, sondern PC-LAGER-02.",
+        "Auf PC-LAGER-02 ist ein Netzlaufwerk mit gespeicherten Anmeldedaten verbunden – noch mit dem alten Passwort. Der Rechner versucht es damit immer wieder, bis das Konto gesperrt ist.",
+        "Die gespeicherten Anmeldedaten gelöscht."
+      ],
+      "solution": "Konto entsperrt, veraltete Anmeldedaten auf PC-LAGER-02 entfernt und das Laufwerk neu verbunden. Seitdem keine Sperre mehr.",
+      "lesson": "Eine Kontosperre kommt oft von einem vergessenen Gerät, das ein altes Passwort immer wieder probiert. Das Ereignis 4740 nennt den Absender."
+    },
+    "slow-pc": {
+      "title": "PC extrem langsam",
+      "reporter": "Büro, PC-BUERO-09",
+      "symptom": "Seit Montag brauchen Programme Minuten zum Starten. Manchmal reagiert der PC gar nicht.",
+      "steps": [
+        "Erst messen: Der Prozessor ist kaum ausgelastet, die Festplatte dagegen durchgehend zu 100 Prozent. Der Engpass ist der Datenträger.",
+        "Das Laufwerk C: ist fast voll – 1,8 GB frei. Windows kann weder Updates entpacken noch die Auslagerungsdatei vergrößern.",
+        "Im Rechner steckt noch eine mechanische Festplatte. Sie ist gesund, aber für einen heutigen Arbeitsplatz zu langsam."
+      ],
+      "solution": "Kurzfristig: große Videoaufnahmen aus dem Profil auf das Netzlaufwerk verschoben, jetzt sind über 100 GB frei. Dauerhaft: Eine SSD ist bestellt; das Ticket wartet auf die Lieferung.",
+      "lesson": "Erst messen, dann handeln: Prozessor, Arbeitsspeicher, Datenträger. Der Engpass liegt selten dort, wo man ihn vermutet."
+    },
+    "dock-display": {
+      "title": "Zweiter Monitor bleibt schwarz",
+      "reporter": "Controlling, Platz 3",
+      "symptom": "Nach dem Umzug an einen anderen Platz bleibt der zweite Monitor schwarz. Der erste funktioniert.",
+      "steps": [
+        "Die Lampe am Monitor leuchtet orange: Er hat Strom, bekommt aber kein Bild.",
+        "Das Kabel gegen eines getauscht, das sicher funktioniert: weiterhin schwarz. Das Kabel war es also nicht.",
+        "Den Laptop ohne Dockingstation direkt an den Monitor angeschlossen: Bild. Der Fehler liegt in der Dockingstation – ihre Firmware ist deutlich älter als die an anderen Plätzen."
+      ],
+      "solution": "Firmware der Dockingstation aktualisiert, danach laufen beide Monitore. Die übrigen Stationen desselben Modells stehen jetzt auf der Liste für das nächste Update.",
+      "lesson": "Tauschen Sie ein Teil gegen eines, das sicher funktioniert. Jeder Tausch halbiert die Liste der Verdächtigen."
+    },
+    "meeting-wifi": {
+      "title": "WLAN bricht im Besprechungsraum ab",
+      "reporter": "Geschäftsführung, Besprechungsraum 2",
+      "symptom": "In Videokonferenzen reißt die Verbindung immer wieder ab, nur in diesem Raum.",
+      "steps": [
+        "Der Laptop hängt im 2,4-GHz-Band auf Kanal 3, bei mäßigem Signal.",
+        "Die Nachbarnetze funken auf Kanal 1 und 6. Kanal 3 überlappt mit beiden: Im 2,4-GHz-Band überschneiden sich nur die Kanäle 1, 6 und 11 nicht.",
+        "Der Access Point im Raum kann auch 5 GHz, dort ist aber die Bandsteuerung abgeschaltet – die Laptops bleiben im vollen 2,4-GHz-Band."
+      ],
+      "solution": "Access Point auf Kanal 11 gestellt und 5 GHz mit Bandsteuerung eingeschaltet. Die Laptops verbinden sich jetzt im 5-GHz-Band; das Ticket bleibt eine Woche offen, um die nächsten Konferenzen zu beobachten.",
+      "lesson": "Funk ist ein geteiltes Medium. Wer im 2,4-GHz-Band zwischen den Kanälen 1, 6 und 11 funkt, stört zwei Nachbarn auf einmal."
+    },
+    "share-access": {
+      "title": "Abteilungsordner nicht sichtbar",
+      "reporter": "Einkauf, l.krause",
+      "symptom": "Die neue Kollegin sieht den Abteilungsordner nicht, obwohl sie heute Morgen in die Gruppe aufgenommen wurde.",
+      "steps": [
+        "Im Verzeichnis ist sie Mitglied der Gruppe Einkauf-RW. Die Berechtigung ist also richtig gesetzt.",
+        "Ihre laufende Sitzung kennt die Gruppe aber nicht: Die Gruppenliste wird bei der Anmeldung einmal festgelegt, und sie hat sich vor der Aufnahme angemeldet.",
+        "Nach Ab- und wieder Anmelden steht die Gruppe in der Liste."
+      ],
+      "solution": "Einmal ab- und wieder angemeldet – der Ordner ist da. Kein Rechte-Problem, nur eine Frage des Zeitpunkts.",
+      "lesson": "Gruppenmitgliedschaften wirken erst ab der nächsten Anmeldung: Die Rechte werden beim Anmelden in ein Zugriffstoken geschrieben, und das ändert sich danach nicht mehr."
+    }
+  }
+}

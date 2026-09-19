@@ -1,0 +1,49 @@
+{
+  "outputLabel": "Terminal output",
+  "inputLabel": "Enter a command",
+  "inputHint": "Enter runs the command, Tab completes, arrow up and down step through earlier commands.",
+  "tryLabel": "Try:",
+  "motd": "Welcome to AhmadOS. Type help to see every command - or start with about, skills or projects.",
+  "help": {
+    "portfolio": "About Ahmadreza",
+    "shell": "Shell",
+    "commands": {
+      "about": "who Ahmadreza is",
+      "skills": "what he works with",
+      "projects": "what he works on",
+      "cv": "the résumé",
+      "contact": "how to reach him",
+      "ls": "list files, ls -a shows hidden ones too",
+      "cd": "change directory, cd .. goes up one level",
+      "cat": "show a file",
+      "pwd": "current directory",
+      "whoami": "who you are here",
+      "echo": "print text",
+      "history": "earlier commands",
+      "uname": "the system's name",
+      "clear": "clear the screen",
+      "exit": "close the terminal"
+    },
+    "keys": "Tab completes commands and paths, arrow up and down bring back earlier commands, Ctrl+L clears the screen, Ctrl+C abandons the line."
+  },
+  "projects": {
+    "more": "More projects to follow.",
+    "site": "Website",
+    "source": "Source code",
+    "stack": "Built with",
+    "items": {
+      "ahmados": {
+        "name": "AhmadOS - this website",
+        "text": "80 years of computing history in seven eras, each with a puzzle that teaches a real foundation of computing - and this desktop at the end. A static website without a server of its own, in German, English and Persian."
+      }
+    }
+  },
+  "cv": {
+    "text": "The résumé as a PDF:",
+    "download": "Download résumé",
+    "pending": "The résumé is coming soon. Until then: his path with about, contact details with contact."
+  },
+  "contact": {
+    "text": "The quickest way to reach Ahmadreza is email:"
+  }
+}

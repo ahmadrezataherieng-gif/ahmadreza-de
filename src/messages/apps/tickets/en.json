@@ -1,0 +1,154 @@
+{
+  "heading": "Helpdesk",
+  "organisation": "Talweber Logistik",
+  "simulation": "Simulation: the company, the people and the cases are made up. The technology is real - every command exists, and this is what its output looks like.",
+  "filterLabel": "Filter by status",
+  "all": "All",
+  "sortLabel": "Sort",
+  "sort": {
+    "priority": "Priority",
+    "number": "Number"
+  },
+  "count": "{count, plural, =0 {No tickets} one {# ticket} other {# tickets}}",
+  "empty": "No tickets with this status.",
+  "listLabel": "Tickets",
+  "back": "All tickets",
+  "status": {
+    "inProgress": "In progress",
+    "waiting": "Waiting",
+    "resolved": "Resolved"
+  },
+  "priority": {
+    "high": "High",
+    "normal": "Normal",
+    "low": "Low"
+  },
+  "priorityLabel": "Priority {priority}",
+  "category": {
+    "network": "Network",
+    "printer": "Printer",
+    "client": "Workstation",
+    "account": "Account",
+    "hardware": "Hardware"
+  },
+  "sections": {
+    "reported": "Reported",
+    "diagnosis": "Diagnosis",
+    "solution": "Solution",
+    "plannedSolution": "Way forward",
+    "lesson": "What it teaches"
+  },
+  "stepLabel": "Step {step}",
+  "noOutput": "(no output)",
+  "select": "Choose a ticket from the list.",
+  "tickets": {
+    "no-network": {
+      "title": "No network at desk 14",
+      "reporter": "Accounting, desk 14",
+      "symptom": "Since this morning neither the internet nor the network drive works. The cable is plugged in and the light on the network socket is on.",
+      "steps": [
+        "First the computer's address: it starts with 169.254. Windows gives itself an address like that when no DHCP server answers. So the cable is fine - what is missing is an address.",
+        "A fresh request to the DHCP server goes unanswered. The problem lies with the server or on the way to it, not with this PC.",
+        "The statistics on the DHCP server show all 200 addresses in the range are taken. Most belong to smartphones on the guest Wi-Fi, which shares the range and keeps each address for eight days."
+      ],
+      "solution": "The guest Wi-Fi got its own address range with a four-hour lease. Addresses in the office range were free again, and ipconfig /renew at desk 14 worked at once.",
+      "lesson": "An address starting with 169.254 means the computer found no one to give it an address. The search starts at DHCP, not at the cable."
+    },
+    "intranet-dns": {
+      "title": "Intranet unreachable, internet works",
+      "reporter": "Sales, laptop",
+      "symptom": "External websites load, but intranet.talweber.example says \"server not found\".",
+      "steps": [
+        "The intranet server answers on its IP address. So the network works - the problem is name resolution.",
+        "The name lookup goes to a public DNS server. It only knows public names; internal names are known only to the company's own DNS server.",
+        "DHCP is on, but the DNS server was entered by hand - apparently during a test while working from home - and overrides the one DHCP would supply."
+      ],
+      "solution": "Set DNS on the network adapter back to \"obtain automatically\" and cleared the cache with ipconfig /flushdns. The intranet loads again.",
+      "lesson": "A name and an address are two separate layers. Test the IP address first, then the name, and two commands tell you which layer is broken."
+    },
+    "printer-postscript": {
+      "title": "Printer prints pages of code",
+      "reporter": "Purchasing, 1st floor",
+      "symptom": "Instead of the invoice, dozens of pages come out starting with \"%!PS-Adobe-3.0\", full of characters nobody can read.",
+      "steps": [
+        "The configuration page printed straight from the printer's control panel comes out clean. The printer itself is fine.",
+        "The same file prints correctly from another computer. So the problem lies between this one PC and the printer: the driver.",
+        "After an update, a PostScript driver is assigned. This printer only understands PCL, so it prints the PostScript code as plain text."
+      ],
+      "solution": "Installed the manufacturer's PCL 6 driver and assigned it to the printer. The invoice prints; the pile of pages went to recycling.",
+      "lesson": "Test each link in the chain on its own - device, network, computer. Then you find the fault instead of guessing."
+    },
+    "print-queue": {
+      "title": "Nobody on the ground floor can print",
+      "reporter": "Warehouse, ground floor",
+      "symptom": "Every print job stays in the queue. Restarting their own PCs changed nothing.",
+      "steps": [
+        "The queue on the print server: the first job shows \"Error\", every other job waits behind it.",
+        "The broken job can be deleted but stays stuck on \"Deleting\". The print service is holding on to it.",
+        "After restarting the print service the stuck job is gone and the waiting jobs go through."
+      ],
+      "solution": "Removed the stuck job and restarted the print spooler. The warehouse list was printed again as a PDF and went through without errors.",
+      "lesson": "A queue works in order. A single stuck job blocks everything behind it - the same principle as batch processing in the computer centre of 1956."
+    },
+    "account-lockout": {
+      "title": "Account locked every morning",
+      "reporter": "Shipping, a.neumann",
+      "symptom": "The account is locked every morning even though the password is typed correctly. Ever since the password change last week.",
+      "steps": [
+        "On the domain controller, event 4740 records every lockout - and the computer the bad sign-ins came from. It is not her PC but PC-LAGER-02.",
+        "PC-LAGER-02 has a network drive connected with stored credentials - still with the old password. The computer keeps retrying with it until the account locks.",
+        "Deleted the stored credentials."
+      ],
+      "solution": "Unlocked the account, removed the stale credentials on PC-LAGER-02 and reconnected the drive. No lockout since.",
+      "lesson": "A lockout often comes from a forgotten device retrying an old password. Event 4740 names the sender."
+    },
+    "slow-pc": {
+      "title": "PC extremely slow",
+      "reporter": "Office, PC-BUERO-09",
+      "symptom": "Since Monday, programs take minutes to start. Sometimes the PC does not respond at all.",
+      "steps": [
+        "Measure first: the processor is barely busy, but the disk is at 100 percent the whole time. The bottleneck is the drive.",
+        "Drive C: is almost full - 1.8 GB free. Windows can neither unpack updates nor grow the page file.",
+        "The computer still has a spinning hard disk. It is healthy, but too slow for a workstation today."
+      ],
+      "solution": "Short term: moved large video recordings from the profile to the network drive; over 100 GB are free now. For good: an SSD is on order; the ticket is waiting for the delivery.",
+      "lesson": "Measure, then act: processor, memory, disk. The bottleneck is rarely where you expect it."
+    },
+    "dock-display": {
+      "title": "Second monitor stays black",
+      "reporter": "Controlling, desk 3",
+      "symptom": "After moving to another desk, the second monitor stays black. The first one works.",
+      "steps": [
+        "The monitor's light is orange: it has power but gets no picture.",
+        "Swapped the cable for one known to work: still black. So it was not the cable.",
+        "Connected the laptop straight to the monitor without the docking station: picture. The fault is in the docking station - its firmware is much older than at the other desks."
+      ],
+      "solution": "Updated the docking station's firmware; both monitors work now. The other docks of the same model are on the list for the next update.",
+      "lesson": "Swap a part for one you know works. Every swap halves the list of suspects."
+    },
+    "meeting-wifi": {
+      "title": "Wi-Fi drops in the meeting room",
+      "reporter": "Management, meeting room 2",
+      "symptom": "The connection keeps dropping during video calls, only in this room.",
+      "steps": [
+        "The laptop sits on channel 3 in the 2.4 GHz band, with a middling signal.",
+        "The neighbouring networks transmit on channels 1 and 6. Channel 3 overlaps both: in the 2.4 GHz band only channels 1, 6 and 11 do not overlap.",
+        "The access point in the room can do 5 GHz as well, but band steering is off - so the laptops stay in the crowded 2.4 GHz band."
+      ],
+      "solution": "Moved the access point to channel 11 and switched on 5 GHz with band steering. The laptops now connect at 5 GHz; the ticket stays open for a week to watch the next calls.",
+      "lesson": "Radio is a shared medium. Transmit between channels 1, 6 and 11 in the 2.4 GHz band and you disturb two neighbours at once."
+    },
+    "share-access": {
+      "title": "Department folder not visible",
+      "reporter": "Purchasing, l.krause",
+      "symptom": "The new colleague cannot see the department folder, although she was added to the group this morning.",
+      "steps": [
+        "In the directory she is a member of the group Einkauf-RW. So the permission is set correctly.",
+        "Her running session does not know the group, though: the list of groups is fixed once at sign-in, and she signed in before she was added.",
+        "After signing out and back in, the group is in the list."
+      ],
+      "solution": "Signed out and back in once - the folder is there. Not a permissions problem, just a question of timing.",
+      "lesson": "Group memberships take effect at the next sign-in: permissions are written into an access token when you sign in, and it does not change after that."
+    }
+  }
+}
