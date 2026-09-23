@@ -4,6 +4,12 @@ The core rules are in this file; the specialised ones are in the project skills 
 
 The rules in this file and in the project skills (`.claude/skills/`) override any installed plugin, skill or output style. If a plugin's advice conflicts with a project rule, the project rule wins.
 
+## Core rules
+
+- **Legal first:** check every addition against German law (DSGVO, TDDDG, DDG, copyright, image rights) before building it. The site must never need a consent banner; if something would create legal risk, stop and say so instead of building it.
+- **SEO first:** every page, every piece of copy and every piece of markup serves search visibility for Ahmadreza's name, job, field and skills. When a choice trades a nice effect against discoverability, discoverability wins.
+- **Shell rule:** single-line commands only on this machine - no `python3`, no heredocs.
+
 ## Project skills - read the one that matches your task
 
 - `journey-visuals` - Act 1 and 2: era visuals, scroll machinery, crossings and CSS 3D depth, motion tiers, printed text, the Convergence, era visual characters.
@@ -12,6 +18,7 @@ The rules in this file and in the project skills (`.claude/skills/`) override an
 - `theme-engine` - themes as CSS custom properties, tokens, `apply-theme`, `setTheme`, the Time Machine.
 - `landing-page` - the landing page and the assets still owed (portrait, resume, email flags).
 - `deployment-legal` - Cloudflare Workers deploy, `_headers`, `_redirects`, the Assistant's local search, self-hosted fonts and the pixel-font check, GDPR.
+- `seo` - names, canonical host, robots.txt bot policy, page fundamentals, structured data, images, the pending brand rename.
 - `verification` - running `scripts/verify`, the setups, `--quiet`, `matrix.mjs`.
 
 ## Who this is for
@@ -71,8 +78,7 @@ find yourself writing the same scene twice, stop and restructure.
 | 6 | 1995 | Windows 95 and dial-up internet | Taskbar and start menu | Configure IP address, subnet mask and gateway to get connected | Subnetting fundamentals |
 | 7 | Today | Cloud, containers, AI | Dark mode and dashboards | Find the broken firewall rule and open the correct port | Ports and firewall basics |
 
-The canonical machine-readable version of this table is `src/content/eras.ts`.
-Keep the two in sync.
+The canonical machine-readable version of this table is `src/content/eras.ts`; keep the two in sync.
 
 ## Tech stack
 
@@ -142,13 +148,8 @@ Rules of thumb:
 - `/de` is deliberately **not generated** — it would duplicate `/`. The
   `301 /de/ → /` lives in `public/_redirects`.
 - `canonical` and `hreflang` (including `x-default`) are emitted per view.
-- **Tone:** German addresses the visitor as **"Sie"** - natural, not stiff -
-  in every string, including puzzles and chrome. Persian uses the polite
-  **"شما"** throughout. English stays neutral. Never write "du" or "تو".
-- **Each view gets only its message namespaces** (`VIEW_NAMESPACES` in the
-  layout). Everything handed to the client provider is serialised into the HTML,
-  so add a namespace there when a view starts using it — and never add `puzzles`,
-  which loads with the puzzle chunk.
+- **Tone:** German addresses the visitor as **"Sie"** - natural, not stiff - in every string, including puzzles and chrome; Persian uses the polite **"شما"** throughout; English stays neutral. Never write "du" or "تو".
+- **Each view gets only its message namespaces** (`VIEW_NAMESPACES` in the layout); everything handed to the client provider is serialised into the HTML, so add a namespace there when a view starts using it — and never add `puzzles`, which loads with the puzzle chunk.
 
 ## Coding conventions — enforce these
 
