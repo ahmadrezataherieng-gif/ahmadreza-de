@@ -8,7 +8,7 @@ test('robots.txt: allows everything, names every AI bot the owner chose, points 
   const robots = read('public/robots.txt');
   const lines = robots.split(/\r?\n/).filter((line) => line && !line.startsWith('#'));
   assert.ok(!lines.some((line) => /^Disallow:\s*\S/i.test(line)), 'nothing disallowed');
-  assert.ok(!/crawl-delay/i.test(robots), 'no crawl-delay');
+  assert.ok(!lines.some((line) => /^crawl-delay/i.test(line)), 'no crawl-delay');
   for (const bot of ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'GPTBot', 'ClaudeBot', 'CCBot', 'Google-Extended', 'meta-externalagent']) {
     assert.ok(lines.includes(`User-agent: ${bot}`), bot);
   }
