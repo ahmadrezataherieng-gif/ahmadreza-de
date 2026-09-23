@@ -1,6 +1,6 @@
 ---
 name: desktop-apps
-description: "Read before touching the Amonel OS desktop (Act 3): src/components/os/, src/components/apps/, the window manager, taskbar, launcher, mobile home screen, the app registry, or any app (About, Terminal, Tickets, Traceroute, Assistant, Contact, Timeline, CV, bonus apps) and its per-app copy."
+description: "Read before touching the Amonel OS desktop (Act 3): src/components/os/, src/components/apps/, the window manager, taskbar, launcher, mobile home screen, the app registry, or any app (About, Terminal, Tickets, Traceroute, Assistant, Computer-Quiz, Contact, Timeline, CV, bonus apps) and its per-app copy."
 ---
 
 ### Act 3 — Amonel OS
@@ -63,9 +63,9 @@ in Act 1 unlock extra apps.
 
 ## The apps (Act 3, Phase 7)
 
-About, Terminal, Tickets, Traceroute and (Phase 7/8) the Assistant are real;
-Contact, Timeline and CV are still placeholders. Read DECISIONS.md 50 first, and
-53 for the Assistant.
+About, Terminal, Tickets, Traceroute, (Phase 7/8) the Assistant and (Phase 9B)
+the Computer-Quiz are real; Contact, Timeline and CV are still placeholders.
+Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
 
 - **The Assistant** (`apps/assistant/`) is a local search over `src/content/`,
   built by `src/lib/search/` and run entirely in the visitor's browser. It talks
@@ -84,6 +84,22 @@ Contact, Timeline and CV are still placeholders. Read DECISIONS.md 50 first, and
   simply there. The app presents itself honestly as a search, never as an AI,
   and the privacy line says nothing a visitor types ever leaves the device -
   keep that true of both the app and the Datenschutzerklärung.
+- **The Computer-Quiz** (`apps/quiz/`, Phase 9B, DECISIONS.md 55) is a base
+  app, on the desktop, home screen and launcher but not in the dock (the dock
+  is for recruiters). Ten questions a round from the bank in
+  `src/content/quiz.ts` (structure) and `messages/apps/quiz/` (every word);
+  `quiz.ts` picks the round (every era once before any twice), shuffles the
+  options and scores it, pure and tested in `scripts/test/quiz.test.mjs`.
+  Rules: **never an IQ, intelligence or aptitude test**, in name or copy - it
+  measures knowledge of computer history and basics, and the result lines talk
+  about the round, never the visitor (the test rejects such words). Every
+  question goes back to one era's one truth and every explanation names its
+  era. Right and wrong are words plus a tick or cross, never colour alone; one
+  live region announces verdicts and the score; option labels are `<bdi>`, and
+  any option whose meaning depends on order uses Persian digits and "،" in fa.
+  The best score is one number in `amonel.quiz.v1` (`store/quiz-store.ts`);
+  add any new key to the storage list in the `deployment-legal` skill. The
+  Assistant's search must never import the quiz or its copy - the test checks.
 - **`apps/use-app-input.ts`** holds what any app with a text field needs:
   `useKeyboardInset`, `useNativeKeydown` (the input handles its keys itself so
   the desktop's Alt+Shift+Arrow listener never sees them) and

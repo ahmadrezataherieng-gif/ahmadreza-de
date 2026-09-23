@@ -1610,3 +1610,59 @@ the site needs was copied in.
 - **Storage keys** moved from `ahmados.*` to `amonel.*`. The site is not
   deployed, so no visitor loses progress; after launch a key rename would
   need a migration.
+
+## 55. The Computer-Quiz, a base app, Phase 9B
+
+**Decision, made by Ahmadreza:** a computer-knowledge quiz on the Amonel OS
+desktop, always available (a base app, never locked). It measures knowledge of
+computer history and basics, nothing else: it is never called or presented as
+an IQ, intelligence or aptitude test, and its result copy speaks about the
+round, never about the visitor.
+
+**Decided while building it (proposed to Ahmadreza, record changes here):**
+
+- **The name:** "Computer-Quiz" (de), "Computer Quiz" (en), "کوییز رایانه"
+  (fa - "رایانه" as the rest of the Persian copy says). App id `quiz`. The
+  intro says it is "keine Prüfung, keine Bewertung".
+- **Not in the mobile dock.** The dock holds the four apps a recruiter came
+  for (About, Lebenslauf, Kontakt, Assistent); the quiz is for the curious
+  visitor and sits on the home screen, the desktop and in the launcher.
+- **Where the questions live:** the project's existing split. Structure in
+  `src/content/quiz.ts` (id, era, option ids, the correct option id); every
+  word - question, options, explanation, era labels, result lines - in
+  `messages/apps/quiz/<locale>.json`, loaded with the app through
+  `AppMessages`. 30 questions: four per era, five for 1995 and today.
+  Each goes back to its era's one truth; where a fact was not certain, a
+  safer question was chosen (no claims about ENIAC's internals, "brought to a
+  wide audience" rather than "invented" for the Macintosh).
+- **A round** (`components/apps/quiz/quiz.ts`, pure and tested): ten
+  questions, every era once before any era twice, so all seven eras appear
+  and three of them twice; question order and option order shuffled each
+  round. After each answer: right or wrong in words and a mark (tick, cross),
+  the right answer named, the era, and a one- or two-sentence explanation
+  that names the era itself. At the end: the score, one of four friendly
+  lines, the eras with a wrong answer, and "Neue Runde".
+- **The missed eras are names, not links.** A link that opens the journey at
+  an era is not cheap here: a returning visitor is redirected from
+  `/amonel/` to the desktop (DECISIONS.md 49), Play mode gates every era
+  after the first, and the journey has no deep-link entry today. A link that
+  landed on the landing page or the first gate would mislead, so the list
+  names the eras; the line for a low score points to the journey in words.
+- **The best score** is one number in `localStorage` under `amonel.quiz.v1`,
+  through a small persisted zustand store (`store/quiz-store.ts`) - the unlock
+  store's pattern, its own key so only the quiz's chunk ever loads it. No
+  round history, no answers, no cookie, no request. It is listed with the
+  site's other browser storage in the `deployment-legal` skill for the
+  Datenschutzerklärung (Phase 11).
+- **The Assistant never sees it.** The local search imports named content
+  modules and four named copy files; neither `content/quiz.ts` nor the quiz
+  copy is among them. `scripts/test/quiz.test.mjs` fails if the search code
+  ever mentions the quiz or a quiz question or explanation lands in the
+  index, so a visitor cannot get quiz answers from the Assistant.
+- **Accessibility:** the options are buttons in a group labelled by the
+  question; after an answer they stay focusable (`aria-disabled`), so focus is
+  never lost; one polite live region announces each verdict with its
+  explanation and the final score; each new question and the result take
+  focus at their heading. Option labels sit in `<bdi>`, and the one ordering
+  question uses Persian digits and commas in fa, because "2, 5, 10" would
+  display reversed in a right-to-left line and change the answer.

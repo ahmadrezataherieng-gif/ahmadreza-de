@@ -71,6 +71,21 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - **Traceroute** copy (`messages/apps/traceroute/`), and the Terminal's help
   and welcome lines (`messages/apps/terminal/`).
 
+### Phase 9B — the Computer-Quiz (draft, needs native-speaker proofreading)
+
+- **All quiz copy is a draft** (`messages/apps/quiz/{de,en,fa}.json`): the
+  intro, the 30 questions with their options and explanations, the era labels
+  and the four result lines. German is the source; have a native speaker read
+  the German and the Persian, and check the English.
+- **The name:** "Computer-Quiz" / "Computer Quiz" / "کوییز رایانه". Confirm, or
+  choose another - never anything that sounds like a test of the person.
+- **The facts:** every answer was chosen to be safe and textbook-level; still
+  read them once as the person the site introduces. Structure and right answers
+  are in `src/content/quiz.ts`.
+- **Maybe later:** links from the result to the journey at a missed era, once
+  the journey has a deep-link entry that respects Play-mode gates and the
+  returning-visitor redirect (DECISIONS.md 55).
+
 ## After launch
 
 - **The first era added after launch will be 1977: the Apple II.** It needs its
@@ -88,8 +103,8 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   Amonel, `/amonel/` (DECISIONS.md 54).
 - **Check "Amonel" in the DPMA and EUIPO registers** before any commercial use
   (the brand kit's own rule; Phase 11).
-- **A computer-knowledge quiz app.** Never call it, or present it as, an IQ
-  test.
+- ~~A computer-knowledge quiz app~~ - done in Phase 9B: the Computer-Quiz
+  (DECISIONS.md 55). Its copy is still a draft, see below.
 - **Anonymous counters on `/api/*`** - e.g. how many visitors solved each
   puzzle. The only visitor data this site ever collects; see the
   `deployment-legal` skill and DECISIONS.md 53.
@@ -127,6 +142,10 @@ What is left:
   journey teaser `assistant-journey/`) is a draft; German is the source.
 
 ## Phase 11 — Legal
+
+- **Browser storage to disclose:** the list in the `deployment-legal` skill
+  ("Browser storage"). Since Phase 9B it includes the quiz's best score,
+  `amonel.quiz.v1`.
 
 - **The assistant needs no Datenschutzerklärung entry of its own.** It is a
   local search that never leaves the visitor's browser - no processor, no

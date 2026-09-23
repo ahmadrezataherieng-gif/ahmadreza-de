@@ -15,7 +15,8 @@ Last updated: 2026-09-23
 - [x] **Phase 8A** — Assistant app, labelled demo and the proxy Worker, built without a key
 - [x] **Phase 8B** — the assistant becomes a local search; no Gemini, no key (DECISIONS.md 53)
 - [x] **Phase 9A** — Rebrand to Amonel: names, the `/amonel/` route with 301s, titles, logos and icons (DECISIONS.md 54)
-- [ ] **Phase 9B** and on — Unlockable apps, easter eggs, Time Machine theme switcher
+- [x] **Phase 9B** — the Computer-Quiz, a base app (DECISIONS.md 55)
+- [ ] **Phase 9C** and on — anonymous counters, unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
@@ -74,7 +75,7 @@ Last updated: 2026-09-23
   minimise, maximise, cascade, z-order, keyboard control, Alt+Shift+Arrow
   cycling, RTL mirroring - with a taskbar (launcher, window buttons, clock,
   language switcher, résumé control). Phones and touch tablets get a home screen
-  with a dock; apps open fullscreen and the browser's Back closes them. Eight
+  with a dock; apps open fullscreen and the browser's Back closes them. Nine
   base apps and seven bonus apps are registered. Locked bonus apps name the era
   whose puzzle unlocks them.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
@@ -91,6 +92,7 @@ Last updated: 2026-09-23
   - **Traceroute:** a labelled simulation over four prepared routes, the packet
     travelling hop by hop with its latency, and where the time went.
   - **Assistant** (Phase 8B, DECISIONS.md 53): a local search over `src/content/`, built by `src/lib/search/` and run entirely in the visitor's browser - no Worker call, no key, no external AI service. It normalises a question (case, diacritics, Persian letter and digit variants) and matches it against an index built at build time, returning the best passages labelled with their source, or an honest "nothing found" with the example questions again. Four visible states (idle, searching, answered, noMatch), reduced motion shows the finished answer.
+  - **Computer-Quiz** (Phase 9B, DECISIONS.md 55): ten questions a round from a bank of 30, every era asked at least once, each going back to its era's one truth; after each answer right or wrong in words and a mark, the right answer, the era and a short explanation; at the end the score, a friendly line, the eras worth a second look and "Neue Runde". Never presented as a test of the visitor. The best score is one number in this browser (`amonel.quiz.v1`). Keyboard-playable, verdicts and score announced live, right to left in Persian, fullscreen on phones. Not in the dock, and never in the Assistant's index.
   - Contact, Timeline and CV are still placeholders.
 - **The Worker** (`worker/`, Phase 8A, gutted in Phase 8B): answers only `/api/*` (`assets.run_worker_first`) with a plain 404, reserved for Phase 9's anonymous counters; the rest of the site is served from `out/` as before. The Gemini proxy that used to live here is gone (DECISIONS.md 53), still in the git history.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
@@ -176,6 +178,18 @@ Worker costs almost nothing.
 | Worker bundle (`wrangler deploy --dry-run`) | 71 kB unminified | **under 1 kB** - the Gemini proxy is gone |
 | Landing / Journey / Desktop HTML | unchanged | unchanged |
 
+Phase 9B (`scripts/verify/sizes.mjs`, gzip -6): the quiz is its own lazy
+chunk; the other views grow only by the `quiz` id and storage key in the shared
+code and a few new utility classes in the one stylesheet.
+
+| | Before 9B | After 9B |
+|---|---|---|
+| Landing / Journey / Desktop: JS loaded | 135.2 / 224.7 / 145.8 kB | 135.3 / 224.8 / 145.9 kB |
+| Stylesheet | 20.9 kB | 21.0 kB |
+| Computer-Quiz on open (code + copy, de) | - | **9.5 kB** (4.2 code + 5.3 copy with the question bank) |
+| Landing / Journey HTML | de 9.5 / 40.3 kB | unchanged |
+| Desktop HTML | de 4.9 · en 4.7 · fa 5.3 kB | de 4.9 · en 4.8 · fa 5.3 kB (the window title) |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -196,6 +210,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 - Contact, Timeline and CV, and the seven bonus apps
   (Phase 9), are placeholders.
+- The quiz copy is a draft awaiting native-speaker proofreading (TODO.md).
 - The phone keyboard handling (Terminal, Assistant) was checked in emulation only.
 - Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or

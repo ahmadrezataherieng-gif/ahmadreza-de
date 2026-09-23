@@ -57,8 +57,8 @@ available.**
 
 Solving era *N*'s puzzle awards an **artifact**, and each artifact unlocks
 exactly one **bonus app** on the Amonel OS desktop. Base apps (About, Terminal,
-Tickets, Traceroute, Assistant, Contact, Timeline, CV) are always available to
-everyone. The mapping lives in `src/content/eras.ts`; the state lives in
+Tickets, Traceroute, Assistant, Contact, Timeline, CV, Computer-Quiz) are
+always available to everyone. The mapping lives in `src/content/eras.ts`; the state lives in
 `src/store/unlock-store.ts` and is persisted to `localStorage`.
 
 ### Puzzles (Phase 5)

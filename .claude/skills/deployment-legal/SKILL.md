@@ -70,6 +70,18 @@ maps, video, captchas, CDNs. Everything the site needs is self-hosted (see
 Fonts, below). This is what keeps the site free of a consent banner - see the
 Legal-first core rule in CLAUDE.md.
 
+**Browser storage** - the complete list, for the Datenschutzerklärung (Phase
+11). All of it stays on the visitor's device, is never sent anywhere, and is
+what the visitor asked for by using the feature; no cookies. Add every new key
+here, in `STORAGE_KEYS` (`src/lib/constants.ts`), in the same change:
+
+| Key | Storage | Holds | Since |
+|---|---|---|---|
+| `amonel.unlocks.v1` | localStorage | journey progress: mode, passed eras, artifacts, badges, reached the desktop | Phase 2 |
+| `amonel.theme.v1` | localStorage | reserved for the chosen theme; defined in `STORAGE_KEYS`, nothing writes it yet | - |
+| `amonel.replay` | sessionStorage | this tab asked to see the journey again | Phase 6 |
+| `amonel.quiz.v1` | localStorage | the Computer-Quiz's best score, one number | Phase 9B |
+
 **Cloudflare features that set cookies stay off:** Bot Fight Mode, Rate
 Limiting Rules, Waiting Room, Always Online. Turning any of these on without
 checking their cookie behaviour first would undo the "no consent banner"
