@@ -1,4 +1,4 @@
-import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config';
+import { defaultLocale, isLocale, locales, type Locale } from './i18n-config.ts';
 
 /**
  * URL shape.
@@ -9,6 +9,11 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  *   /             /en/            /fa/             the landing page
  *   /amonel/      /en/amonel/     /fa/amonel/      Act 1 and the Convergence (the journey)
  *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the Amonel OS desktop
+ *   /impressum/   /en/impressum/  /fa/impressum/   the Impressum (§ 5 DDG)
+ *   /datenschutz/ /en/datenschutz/ /fa/datenschutz/ the Datenschutzerklärung
+ *
+ * The two legal pages keep their German slug in every language: it is what a
+ * German court, a recruiter and a crawler all look for.
  *
  * All of it is one optional catch-all segment (`app/[[...locale]]`) rather than
  * middleware, because `output: 'export'` produces plain files and never runs
@@ -16,7 +21,7 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  * locale early enough to emit a correct static `lang` and `dir`.
  */
 
-export const views = ['landing', 'journey', 'desktop'] as const;
+export const views = ['landing', 'journey', 'desktop', 'imprint', 'privacy'] as const;
 export type View = (typeof views)[number];
 
 /**
@@ -28,12 +33,16 @@ const VIEW_PATHS: Record<View, string> = {
   landing: '/',
   journey: '/amonel',
   desktop: '/desktop',
+  imprint: '/impressum',
+  privacy: '/datenschutz',
 };
 
 /** The path segment of each view that has one. */
 const VIEW_SEGMENTS: Record<Exclude<View, 'landing'>, string> = {
   journey: 'amonel',
   desktop: 'desktop',
+  imprint: 'impressum',
+  privacy: 'datenschutz',
 };
 
 export interface RouteMatch {

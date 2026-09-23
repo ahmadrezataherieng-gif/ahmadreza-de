@@ -1929,3 +1929,48 @@ emulated), the tone itself (headless Chrome has no speakers - the
 AudioContext and its scheduling run, nothing is heard), the PNG download
 dialog (the check captures the blob), and a browser with storage blocked
 outright (tested in node with a throwing stand-in).
+
+## 58. Impressum, Datenschutzerklärung and the legal links, Phase 11 (2026-09-23)
+
+**Decided by Ahmadreza:** the Impressum names him by his legal name,
+**Ahmadreza Taheri Momrabadi**, with a postal address in Trier and the e-mail
+address he chose for it; **no phone number** (a private, non-commercial
+job-search site; § 5 DDG's "second fast channel" is his risk to weigh,
+ROADMAP LEG-07). The address and e-mail appear on the two legal pages and
+nowhere else.
+
+**Decided while building it:**
+
+- **One source, two renderers.** The legal text is data in
+  `messages/legal/{de,en,fa}.json`; `components/legal/LegalPage` renders it on
+  the site and `scripts/build-soon.mjs` on the coming-soon page. A section or
+  block with `scope: site` or `scope: soon` appears on only one of them, so
+  each page describes only what happens on it (the coming-soon page has no
+  counters, no Assistant, one storage entry `ao-lang` and system fonts).
+- **The German slug in every language** (`/en/impressum/`, `/fa/datenschutz/`):
+  what a German court, a recruiter and a crawler look for. German is binding;
+  en and fa say so and link to it.
+- **`noindex, follow`** on both legal pages: they add nothing to ranking for
+  the name, and a search for the name should not surface a home address.
+  They stay out of the sitemap (Phase 10).
+- **Never in a client chunk.** The legal JSON is imported only by the server
+  component; both template imports over `messages/` exclude `legal/` (the
+  puzzle loader's context was pulling it into a lazy client chunk).
+  `scripts/test/legal.test.mjs` pins that, that only `LegalPage` imports
+  `content/legal.ts`, that the three languages share one structure, and that
+  the storage table equals `STORAGE_KEYS` (minus the unused theme key).
+- **One click from every page:** a footer on the landing and legal pages; the
+  top bar of the window manager; the home screen under the language switcher;
+  on the journey a small chrome corner of its own - top-start on phones
+  (the header sits at the bottom there, and the links did not fit in it at
+  375 px), bottom-start on wide screens; the desktop's noscript block.
+- **The coming-soon page moved into the repo** (`soon/`, CR-1053), so its
+  legal links and pages are versioned with the real ones.
+
+**Written from an audit of the real data flows:** no external request of
+any kind in `src/` or `public/` (fonts self-hosted, no CDN, no analytics);
+no cookies; five storage keys; the counters' `fetch` to `/api/*` on the
+same origin; the Assistant local. **To weigh before launch:** `observability`
+is on in `wrangler.jsonc`, so Cloudflare keeps Worker logs of `/api/*` calls
+for a few days; the Datenschutzerklärung says so. Turning invocation logs
+off would make that sentence unnecessary.

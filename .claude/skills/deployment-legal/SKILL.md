@@ -112,7 +112,27 @@ Datenschutzerklärung (Phase 11) must name Cloudflare as a US processor, with
 the EU-US Data Privacy Framework and Standard Contractual Clauses as the
 transfer basis.
 
-### Datenschutzerklärung (Phase 11, not built yet) - it must say
+### The legal pages (built 2026-09-23, DECISIONS.md 58)
+
+- `/impressum/` and `/datenschutz/` in every locale (German slug in en and
+  fa), rendered by `components/legal/LegalPage.tsx` from
+  `messages/legal/{de,en,fa}.json`; the address and e-mail only in
+  `content/legal.ts`, imported by nothing else. `noindex, follow`. German is
+  binding. Status in CONTENT_REVIEW.md: **LEGAL – owner must verify** - never
+  CONTENT-TODO, never marked final without Ahmadreza.
+- **Any change to what the site stores, sends or loads changes the
+  Datenschutzerklärung in the same change** - all three languages; the storage
+  table is pinned to `STORAGE_KEYS` by `scripts/test/legal.test.mjs`.
+- The legal links (`LegalLinks` in `components/ui/SiteFooter.tsx`) are one
+  click from every page: landing and legal footers, the desktop top bar, the
+  home screen, the journey's own chrome corner.
+- **The coming-soon page** lives in `soon/` (`index.html`, `wrangler.jsonc`,
+  Worker `ahmadreza-soon`). `npm run build:soon` writes `soon/dist/` with the
+  legal pages rendered from the same JSON (`scope: "soon"` sections), then
+  `npx wrangler deploy` from `soon/`. It is the only thing deployed until
+  launch.
+
+### Datenschutzerklärung - it must say (built; keep it true)
 
 - Cloudflare as a US processor, with the DPF and SCCs as transfer basis (above).
 - The browser storage list above, all of it the visitor's own feature.
@@ -129,12 +149,13 @@ transfer basis.
 - That **the site operator stores no IP addresses**, no identifiers and no
   per-visitor records.
 
-### Impressum (Phase 11, not built yet)
+### Impressum (built)
 
 - Full legal name: **Ahmadreza Taheri Momrabadi** (see the `seo` skill for
   where this name may and may not appear).
-- A real postal address, a working e-mail, and a second fast contact channel.
-- Reachable within **two clicks from every page**, labelled exactly
+- A real postal address and a working e-mail. **No phone number**, by
+  Ahmadreza's choice (2026-09-23) - never add a contact form instead.
+- Reachable in **one click from every page**, labelled exactly
   **"Impressum"**.
 - **No EU ODR link** - that platform closed in July 2025. Do not add one.
 

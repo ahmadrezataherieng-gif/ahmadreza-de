@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { apps } from '@/components/apps/registry';
 import { AppIcon } from '@/components/os/AppIcon';
 import { AmonelOsLockup } from '@/components/ui/Brand';
+import { LegalLinks } from '@/components/ui/SiteFooter';
 import { LockedNotice } from '@/components/os/LockedNotice';
 import { Taskbar } from '@/components/os/Taskbar';
 import { WindowLayer } from '@/components/os/WindowLayer';
@@ -66,6 +67,7 @@ export function DesktopShell() {
           >
             {t('replay')}
           </button>
+          <LegalLinks className="gap-x-4" linkClassName="p-0 hover:no-underline focus-visible:text-ink" />
         </span>
       </div>
 

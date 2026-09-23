@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { DesktopFrame } from '@/components/os/DesktopFrame';
 import { DesktopShellLoader } from '@/components/os/DesktopShellLoader';
+import { LegalLinks } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
@@ -28,12 +29,13 @@ export async function Desktop({ locale }: { locale: Locale }) {
         <DesktopShellLoader />
       </div>
       <noscript>
-        <p className="absolute inset-x-0 top-[40%] mx-auto max-w-md px-6 text-center font-body text-ink">
+        <div className="absolute inset-x-0 top-[40%] mx-auto max-w-md px-6 text-center font-body text-ink">
           {t('noscript')}{' '}
           <a href={viewHref(locale, 'landing')} className="text-accent underline">
             {t('home')}
           </a>
-        </p>
+          <LegalLinks className="mt-3 justify-center text-xs" />
+        </div>
       </noscript>
     </main>
   );

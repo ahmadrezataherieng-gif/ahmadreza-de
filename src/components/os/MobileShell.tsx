@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 import type { AppId } from '@/content/eras';
+import { LegalLinks } from '@/components/ui/SiteFooter';
 import { apps, dockAppIds, getApp } from '@/components/apps/registry';
 import { AppGlyph } from '@/components/apps/icons';
 import { AppIcon } from '@/components/os/AppIcon';
@@ -97,6 +98,7 @@ export function MobileShell() {
             {t('home')}
           </Link>
           <LanguageSwitcher />
+          <LegalLinks className="justify-center" />
         </div>
       </div>
 

@@ -1,0 +1,270 @@
+{
+  "updated": "Last updated: 23 September 2026",
+  "bindingNote": "This English translation is provided for convenience only. Only the German version is legally binding:",
+  "bindingLink": "German version",
+  "backHome": "Back to the home page",
+  "country": "Germany",
+  "emailLabel": "E-mail",
+  "imprint": {
+    "title": "Imprint",
+    "description": "Imprint (legal notice) of the private website of Ahmadreza Taheri under § 5 DDG and § 18 (2) MStV.",
+    "sections": [
+      {
+        "heading": "Information under § 5 DDG (German Digital Services Act)",
+        "blocks": [
+          {
+            "type": "contact"
+          }
+        ]
+      },
+      {
+        "heading": "Responsible for the content under § 18 (2) MStV (German Interstate Media Treaty)",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Ahmadreza Taheri Momrabadi, address as above."
+          }
+        ]
+      },
+      {
+        "heading": "About this website",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This is a private, non-commercial website. Its only purpose is to present me and my work as part of my job search (a portfolio). No goods or services are offered, and there is no advertising."
+          }
+        ]
+      },
+      {
+        "heading": "Liability for links",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This website contains a few links to third-party websites. Their providers are responsible for their content. No legal violations were apparent when the links were set; should I become aware of one, I will remove the link immediately."
+          }
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "description": "Privacy policy of Ahmadreza Taheri's website: no cookies, no tracking, no third-party services - what is actually processed when you visit.",
+    "sections": [
+      {
+        "heading": "Summary",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "This website sets no cookies and uses no tracking, no analytics and no advertising.",
+              "It loads nothing from third-party servers: fonts, images and code come only from this domain.",
+              "Your IP address is processed only by the host, Cloudflare, to deliver and protect the site. I do not store IP addresses myself.",
+              "What you do on the site (progress, best scores, a picture) stays in your browser's storage on your device."
+            ],
+            "scope": "site"
+          },
+          {
+            "type": "list",
+            "items": [
+              "This website sets no cookies and uses no tracking, no analytics and no advertising.",
+              "It loads nothing from third-party servers.",
+              "Your IP address is processed only by the host, Cloudflare, to deliver and protect the site. I do not store IP addresses myself."
+            ],
+            "scope": "soon"
+          }
+        ]
+      },
+      {
+        "heading": "Controller",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The controller responsible for data processing on this website within the meaning of the General Data Protection Regulation (GDPR) is:"
+          },
+          {
+            "type": "contact"
+          },
+          {
+            "type": "p",
+            "text": "There is no data protection officer; one is not required for a private website."
+          }
+        ]
+      },
+      {
+        "heading": "Hosting and delivery by Cloudflare",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This website is delivered through Cloudflare (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA). With every page request, Cloudflare processes technically necessary data: your IP address, date and time, the requested address, the amount of data transferred, the status code, the previously visited page (referrer) if your browser sends it, and your browser and operating system (user agent)."
+          },
+          {
+            "type": "p",
+            "text": "The purpose is to deliver the website to you, run it reliably and protect it against attacks and abuse, for example denial-of-service attacks. The legal basis is Art. 6(1)(f) GDPR; my legitimate interest is a working and secure website."
+          },
+          {
+            "type": "p",
+            "text": "Cloudflare processes this data as a processor under its Data Processing Addendum (Art. 28 GDPR) and deletes it as soon as it is no longer needed for these purposes. I do not analyse server logs and do not store IP addresses myself."
+          },
+          {
+            "type": "p",
+            "text": "Cloudflare operates data centres worldwide; a transfer to the USA is possible. Cloudflare, Inc. is certified under the EU-US Data Privacy Framework, for which the European Commission adopted an adequacy decision on 10 July 2023 (Art. 45 GDPR). In addition, the contract with Cloudflare includes the European Commission's Standard Contractual Clauses (Art. 46(2)(c) GDPR)."
+          },
+          {
+            "type": "p",
+            "text": "The connection to this website is encrypted with TLS (HTTPS)."
+          }
+        ]
+      },
+      {
+        "heading": "No cookies, no third-party services",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This website sets no cookies. It embeds no third-party content: no fonts from Google Fonts or any other server (all fonts are loaded from this domain), no content delivery networks, no maps, videos, social media plugins, captchas or analytics tools. That is why there is no cookie banner.",
+            "scope": "site"
+          },
+          {
+            "type": "p",
+            "text": "This website sets no cookies. It embeds no third-party content: no fonts from Google Fonts or any other server (this page uses the fonts on your device), no content delivery networks, no maps, videos, social media plugins, captchas or analytics tools. That is why there is no cookie banner.",
+            "scope": "soon"
+          },
+          {
+            "type": "p",
+            "text": "Links to other websites (for example to the source code on GitHub) are plain links. Only when you click one do you leave this website; the other provider's privacy policy then applies.",
+            "scope": "site"
+          }
+        ]
+      },
+      {
+        "heading": "Storage in your browser",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Some features remember your state in your browser's storage (localStorage or sessionStorage). This data stays on your device, is never sent to me or to anyone else and contains nothing about who you are:"
+          },
+          {
+            "type": "table",
+            "head": [
+              "Name",
+              "Storage",
+              "Content and purpose"
+            ],
+            "rows": [
+              [
+                "amonel.unlocks.v1",
+                "localStorage",
+                "Your progress on the journey: chosen mode, passed and watched eras, artifacts and badges found, whether you reached the desktop. This also determines which bonus apps are unlocked."
+              ],
+              [
+                "amonel.replay",
+                "sessionStorage",
+                "Remembers, in this tab only, that you want to see the journey again; deleted when the tab is closed."
+              ],
+              [
+                "amonel.quiz.v1",
+                "localStorage",
+                "Your best result in the Computer Quiz, one number."
+              ],
+              [
+                "amonel.snake.v1",
+                "localStorage",
+                "Your best score in Snake, one number."
+              ],
+              [
+                "amonel.paint.v1",
+                "localStorage",
+                "Your current picture in Pixel Paint (at most 16 KB); written only once you draw."
+              ]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Storing and reading these entries is strictly necessary for the feature you explicitly use to work as you expect (§ 25(2) no. 2 TDDDG, the German Telecommunications Digital Services Data Protection Act). No consent is required. Where personal data is involved at all, the legal basis is Art. 6(1)(f) GDPR."
+          },
+          {
+            "type": "p",
+            "text": "You can delete these entries at any time by clearing this domain's site data in your browser. The website keeps working; only your progress starts again."
+          }
+        ]
+      },
+      {
+        "heading": "Storage in your browser",
+        "scope": "soon",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This page remembers the language you chose in your browser's storage (localStorage, entry \"ao-lang\", content: de, en or fa). The entry stays on your device and is never transmitted. It is strictly necessary to keep the language you chose on your next visit (§ 25(2) no. 2 TDDDG); no consent is required. You can delete it at any time by clearing this domain's site data in your browser."
+          }
+        ]
+      },
+      {
+        "heading": "Anonymous counters",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The website counts anonymously how often certain things happen and shows the totals publicly. Counted are: a puzzle solved in \"Play\" mode, a finished quiz round, a finished game of Snake, reaching the end of the journey, the mode chosen on the home page, and opening an app."
+          },
+          {
+            "type": "p",
+            "text": "Your browser sends only the name of the event, for example \"quiz.completed\", to this website. Only that name and a total are stored. No IP addresses, identifiers, per-visit timestamps, scores or anything about you or your device are stored; the numbers cannot be linked to any person. Totals under ten are not shown."
+          },
+          {
+            "type": "p",
+            "text": "Nothing is stored on or read from your device for counting - no cookie and no storage entry - so no consent under § 25 TDDDG is required. Your IP address is processed only by Cloudflare in transit, as described under \"Hosting and delivery by Cloudflare\", including to protect the counting interface against abuse by limiting requests per IP address (Art. 6(1)(f) GDPR). For troubleshooting, Cloudflare may log requests to this interface (time, address, status code) for a few days."
+          }
+        ]
+      },
+      {
+        "heading": "The Assistant",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The Assistant on the desktop is a search over this website's content that runs entirely in your browser. What you type there never leaves your device: it is not sent to any server or AI service and is not stored."
+          }
+        ]
+      },
+      {
+        "heading": "Contact by e-mail",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If you e-mail me, I process your address, your name if you give it, and the content of your message to answer your enquiry. If it concerns an application or a possible employment, the legal basis is Art. 6(1)(b) GDPR, otherwise Art. 6(1)(f) GDPR (my legitimate interest in answering enquiries). I delete messages once they are dealt with, unless statutory retention obligations apply."
+          },
+          {
+            "type": "p",
+            "text": "My mailbox is operated by Google (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland). Your e-mail is therefore stored on Google's servers, and a transfer to the USA is possible. Google LLC is certified under the EU-US Data Privacy Framework. See Google's privacy policy: https://policies.google.com/privacy"
+          }
+        ]
+      },
+      {
+        "heading": "Your rights",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You have the right of access to the data stored about you (Art. 15 GDPR), to rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18) and data portability (Art. 20). Just e-mail me."
+          },
+          {
+            "type": "p",
+            "text": "Right to object (Art. 21 GDPR): where processing is based on Art. 6(1)(f) GDPR, you may object to it at any time on grounds relating to your particular situation."
+          },
+          {
+            "type": "p",
+            "text": "You also have the right to lodge a complaint with a data protection supervisory authority (Art. 77 GDPR). The authority responsible for me is: Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz, Germany, https://www.datenschutz.rlp.de"
+          }
+        ]
+      },
+      {
+        "heading": "No automated decisions",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "There is no automated decision-making or profiling within the meaning of Art. 22 GDPR. You are under no legal or contractual obligation to provide me with data; without the technically necessary processing by Cloudflare, however, the website cannot be accessed."
+          }
+        ]
+      }
+    ]
+  }
+}

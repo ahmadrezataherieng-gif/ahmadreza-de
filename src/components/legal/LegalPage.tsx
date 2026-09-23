@@ -1,0 +1,162 @@
+import { getTranslations } from 'next-intl/server';
+
+import { AmonelLogo } from '@/components/ui/Brand';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { SiteFooter } from '@/components/ui/SiteFooter';
+import { UseTheme } from '@/components/theme/UseTheme';
+import { LEGAL_CONTACT } from '@/content/legal';
+import { linkify, sectionsFor, type LegalBlock, type LegalCopy, type LegalKind } from '@/lib/legal-doc';
+import { viewHref } from '@/lib/routing';
+import type { Locale } from '@/lib/i18n-config';
+
+/** The legal copy of one locale. Server-only: it never reaches the client bundle. */
+export async function loadLegalCopy(locale: Locale): Promise<LegalCopy> {
+  return (await import(`@/messages/legal/${locale}.json`)).default as LegalCopy;
+}
+
+function Text({ text }: { text: string }) {
+  return (
+    <>
+      {linkify(text).map((part, index) =>
+        part.href ? (
+          <a key={index} href={part.href} rel="noopener noreferrer" dir="ltr" className="break-all text-accent underline underline-offset-2">
+            {part.text}
+          </a>
+        ) : (
+          <span key={index}>{part.text}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function Block({ block, copy }: { block: LegalBlock; copy: LegalCopy }) {
+  switch (block.type) {
+    case 'p':
+      return (
+        <p>
+          <Text text={block.text} />
+        </p>
+      );
+    case 'list':
+      return (
+        <ul className="flex list-disc flex-col gap-2 ps-5">
+          {block.items.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      );
+    case 'table':
+      return (
+        <div className="overflow-x-auto rounded-control border border-edge">
+          <table className="w-full border-collapse text-start text-sm">
+            <thead className="bg-surface">
+              <tr>
+                {block.head.map((cell) => (
+                  <th key={cell} scope="col" className="border-b border-edge px-3 py-2 text-start font-mono text-xs text-muted">
+                    {cell}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row) => (
+                <tr key={row[0]} className="align-top">
+                  {row.map((cell, index) => (
+                    <td key={index} className="border-b border-edge px-3 py-2">
+                      {index < 2 ? (
+                        <code dir="ltr" className="font-mono text-xs whitespace-nowrap">
+                          {cell}
+                        </code>
+                      ) : (
+                        cell
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case 'contact':
+      // The postal address and e-mail appear on these two pages only.
+      return (
+        <address className="not-italic">
+          <span dir="ltr" className="block">
+            {LEGAL_CONTACT.name}
+          </span>
+          <span dir="ltr" className="block">
+            {LEGAL_CONTACT.street}
+          </span>
+          <span dir="ltr" className="block">
+            {LEGAL_CONTACT.postcodeCity}
+          </span>
+          <span className="block">{copy.country}</span>
+          <span className="mt-3 block">
+            {copy.emailLabel}:{' '}
+            <a href={`mailto:${LEGAL_CONTACT.email}`} dir="ltr" className="text-accent underline underline-offset-2">
+              {LEGAL_CONTACT.email}
+            </a>
+          </span>
+        </address>
+      );
+  }
+}
+
+/**
+ * The Impressum or the Datenschutzerklärung. Not a placeholder: the text is
+ * legal copy the owner verifies (CONTENT_REVIEW.md, "LEGAL – owner must
+ * verify"). German is binding; the English and Persian pages say so and link
+ * to it. A plain, server-rendered document in the `modern` theme - no journey
+ * or desktop code loads here.
+ */
+export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalKind }) {
+  const copy = await loadLegalCopy(locale);
+  const document = copy[kind];
+  const tSite = await getTranslations('site');
+
+  return (
+    <div className="min-h-dvh bg-background text-ink">
+      <UseTheme id="modern" />
+      <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
+        <a href={viewHref(locale, 'landing')} aria-label={copy.backHome} className="rounded-control">
+          <AmonelLogo uid={`ao-legal-logo-${kind}`} label={tSite('brand')} className="h-7 w-auto" />
+        </a>
+        <LanguageSwitcher />
+      </header>
+
+      <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 pt-10 pb-12 font-body text-[0.95rem] leading-relaxed sm:px-8">
+        <div className="flex flex-col gap-3">
+          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{document.title}</h1>
+          <p className="font-mono text-xs text-muted">{copy.updated}</p>
+          {copy.bindingNote ? (
+            <p className="rounded-control border border-edge bg-surface px-4 py-3 text-sm">
+              {copy.bindingNote}{' '}
+              <a href={viewHref('de', kind)} hrefLang="de" lang="de" className="text-accent underline underline-offset-2">
+                {copy.bindingLink}
+              </a>
+            </p>
+          ) : null}
+        </div>
+
+        {sectionsFor(document, 'site').map((section) => (
+          <section key={section.heading} className="flex flex-col gap-3">
+            <h2 className="font-display text-lg font-bold">{section.heading}</h2>
+            {section.blocks.map((block, index) => (
+              <Block key={index} block={block} copy={copy} />
+            ))}
+          </section>
+        ))}
+
+        <p>
+          <a href={viewHref(locale, 'landing')} className="font-mono text-sm text-accent underline underline-offset-4">
+            {copy.backHome}
+          </a>
+        </p>
+      </main>
+
+      <SiteFooter className="mx-auto w-full max-w-3xl border-t border-edge px-5 py-5 sm:px-8" />
+    </div>
+  );
+}

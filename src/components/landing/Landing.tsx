@@ -8,6 +8,7 @@ import { Portrait } from '@/components/landing/Portrait';
 import { ResumeLink } from '@/components/landing/ResumeLink';
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { PORTRAIT } from '@/content/profile';
 import { asStatList } from '@/lib/message-shapes';
@@ -110,7 +111,9 @@ export async function Landing() {
         </div>
       </div>
 
-      <JourneyHint label={t('hint')} />
+      {/* The hint sits just above the footer, whose legal links close every page. */}
+      <JourneyHint label={t('hint')} className="bottom-10" />
+      <SiteFooter className="mx-auto flex w-full max-w-6xl justify-center px-5 pb-4 sm:justify-end sm:px-8" />
     </main>
   );
 }

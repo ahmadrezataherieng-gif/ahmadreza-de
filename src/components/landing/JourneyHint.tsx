@@ -1,5 +1,6 @@
 import { themeToCssVars } from '@/lib/apply-theme';
 import { getTheme } from '@/lib/themes';
+import { cn } from '@/lib/cn';
 
 /**
  * A restrained hint that something unusual follows: seven marks along the foot
@@ -15,9 +16,9 @@ const LAMP_SCOPE_CSS = `[data-theme-scope="era1946"]{${Object.entries(themeToCss
   .map(([name, value]) => `${name}:${value}`)
   .join(';')}}`;
 
-export function JourneyHint({ label }: { label: string }) {
+export function JourneyHint({ label, className }: { label: string; className?: string }) {
   return (
-    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 pb-6" aria-hidden="true">
+    <div className={cn('absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 pb-6', className)} aria-hidden="true">
       <style>{LAMP_SCOPE_CSS}</style>
       <div className="flex items-center gap-3 sm:gap-5" dir="ltr">
         <span data-theme-scope="era1946" className="ao-lamp block h-2 w-2" />

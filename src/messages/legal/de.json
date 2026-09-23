@@ -1,0 +1,270 @@
+{
+  "updated": "Stand: 23. September 2026",
+  "bindingNote": "",
+  "bindingLink": "",
+  "backHome": "Zur Startseite",
+  "country": "Deutschland",
+  "emailLabel": "E-Mail",
+  "imprint": {
+    "title": "Impressum",
+    "description": "Impressum der privaten Website von Ahmadreza Taheri: Anbieterkennzeichnung nach § 5 DDG und § 18 Abs. 2 MStV.",
+    "sections": [
+      {
+        "heading": "Angaben gemäß § 5 DDG",
+        "blocks": [
+          {
+            "type": "contact"
+          }
+        ]
+      },
+      {
+        "heading": "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Ahmadreza Taheri Momrabadi, Anschrift wie oben."
+          }
+        ]
+      },
+      {
+        "heading": "Art der Website",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Dies ist eine private, nicht kommerzielle Website. Sie dient ausschließlich der Vorstellung meiner Person und meiner Arbeit im Rahmen der Stellensuche (Portfolio). Es werden keine Waren oder Dienstleistungen angeboten, und es gibt keine Werbung."
+          }
+        ]
+      },
+      {
+        "heading": "Haftung für Links",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Diese Website enthält wenige Links zu Websites Dritter. Für deren Inhalte ist der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar; sollte mir ein Rechtsverstoß bekannt werden, entferne ich den Link umgehend."
+          }
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "description": "Datenschutzerklärung der Website von Ahmadreza Taheri: keine Cookies, kein Tracking, keine externen Dienste - was beim Besuch tatsächlich verarbeitet wird.",
+    "sections": [
+      {
+        "heading": "Das Wichtigste in Kürze",
+        "blocks": [
+          {
+            "type": "list",
+            "items": [
+              "Diese Website setzt keine Cookies, verwendet kein Tracking, keine Analysewerkzeuge und keine Werbung.",
+              "Sie lädt nichts von fremden Servern: Schriften, Bilder und Programmcode kommen ausschließlich von dieser Domain.",
+              "Ihre IP-Adresse wird nur vom Hoster Cloudflare verarbeitet, um die Seite auszuliefern und zu schützen. Ich selbst speichere keine IP-Adressen.",
+              "Was Sie auf der Website tun (Fortschritt, Bestwerte, ein Bild), bleibt im Speicher Ihres Browsers auf Ihrem Gerät."
+            ],
+            "scope": "site"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Diese Website setzt keine Cookies, verwendet kein Tracking, keine Analysewerkzeuge und keine Werbung.",
+              "Sie lädt nichts von fremden Servern.",
+              "Ihre IP-Adresse wird nur vom Hoster Cloudflare verarbeitet, um die Seite auszuliefern und zu schützen. Ich selbst speichere keine IP-Adressen."
+            ],
+            "scope": "soon"
+          }
+        ]
+      },
+      {
+        "heading": "Verantwortlicher",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:"
+          },
+          {
+            "type": "contact"
+          },
+          {
+            "type": "p",
+            "text": "Einen Datenschutzbeauftragten gibt es nicht; er ist für eine private Website nicht vorgeschrieben."
+          }
+        ]
+      },
+      {
+        "heading": "Hosting und Auslieferung durch Cloudflare",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Die Website wird über Cloudflare ausgeliefert (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA). Beim Aufruf jeder Seite verarbeitet Cloudflare technisch notwendige Daten: Ihre IP-Adresse, Datum und Uhrzeit, die aufgerufene Adresse, die übertragene Datenmenge, den Statuscode, die zuvor besuchte Seite (Referrer), soweit Ihr Browser sie sendet, sowie Browser und Betriebssystem (User-Agent)."
+          },
+          {
+            "type": "p",
+            "text": "Zweck ist, Ihnen die Website auszuliefern, sie stabil zu betreiben und vor Angriffen und Missbrauch zu schützen, zum Beispiel vor Überlastungsangriffen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse liegt in einer funktionierenden und sicheren Website."
+          },
+          {
+            "type": "p",
+            "text": "Cloudflare verarbeitet diese Daten als Auftragsverarbeiter auf Grundlage seines Auftragsverarbeitungsvertrags (Data Processing Addendum) nach Art. 28 DSGVO und löscht sie, sobald sie für diese Zwecke nicht mehr benötigt werden. Ich selbst werte keine Server-Protokolle aus und speichere keine IP-Adressen."
+          },
+          {
+            "type": "p",
+            "text": "Cloudflare betreibt Rechenzentren weltweit; eine Übermittlung in die USA ist möglich. Cloudflare, Inc. ist nach dem EU-US Data Privacy Framework zertifiziert, für das die EU-Kommission am 10. Juli 2023 einen Angemessenheitsbeschluss erlassen hat (Art. 45 DSGVO). Zusätzlich enthält der Vertrag mit Cloudflare die Standardvertragsklauseln der EU-Kommission (Art. 46 Abs. 2 lit. c DSGVO)."
+          },
+          {
+            "type": "p",
+            "text": "Die Verbindung zu dieser Website ist per TLS (HTTPS) verschlüsselt."
+          }
+        ]
+      },
+      {
+        "heading": "Keine Cookies, keine externen Dienste",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Diese Website setzt keine Cookies. Sie bindet keine Inhalte von Drittanbietern ein: keine Schriften von Google Fonts oder anderen Servern (alle Schriften werden von dieser Domain geladen), keine Content-Delivery-Netzwerke, keine Karten, Videos, Social-Media-Plugins, Captchas oder Analysewerkzeuge. Deshalb gibt es auch kein Cookie-Banner.",
+            "scope": "site"
+          },
+          {
+            "type": "p",
+            "text": "Diese Website setzt keine Cookies. Sie bindet keine Inhalte von Drittanbietern ein: keine Schriften von Google Fonts oder anderen Servern (diese Seite verwendet die Schriften Ihres Geräts), keine Content-Delivery-Netzwerke, keine Karten, Videos, Social-Media-Plugins, Captchas oder Analysewerkzeuge. Deshalb gibt es auch kein Cookie-Banner.",
+            "scope": "soon"
+          },
+          {
+            "type": "p",
+            "text": "Links zu anderen Websites (zum Beispiel zum Quellcode auf GitHub) sind einfache Verweise. Erst wenn Sie einen solchen Link anklicken, verlassen Sie diese Website; dann gilt die Datenschutzerklärung des jeweiligen Anbieters.",
+            "scope": "site"
+          }
+        ]
+      },
+      {
+        "heading": "Speicher in Ihrem Browser",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Einige Funktionen merken sich Ihren Stand im Speicher Ihres Browsers (localStorage oder sessionStorage). Diese Daten bleiben auf Ihrem Gerät, werden nie an mich oder an Dritte übertragen und enthalten keine Angaben zu Ihrer Person:"
+          },
+          {
+            "type": "table",
+            "head": [
+              "Name",
+              "Speicher",
+              "Inhalt und Zweck"
+            ],
+            "rows": [
+              [
+                "amonel.unlocks.v1",
+                "localStorage",
+                "Ihr Fortschritt auf der Reise: gewählter Modus, bestandene und angesehene Epochen, gefundene Fundstücke und Abzeichen, ob Sie den Desktop erreicht haben. Daraus ergibt sich, welche Bonus-Apps freigeschaltet sind."
+              ],
+              [
+                "amonel.replay",
+                "sessionStorage",
+                "Merkt sich nur in diesem Tab, dass Sie die Reise noch einmal sehen wollen; wird beim Schließen des Tabs gelöscht."
+              ],
+              [
+                "amonel.quiz.v1",
+                "localStorage",
+                "Ihr bestes Ergebnis im Computer-Quiz, eine Zahl."
+              ],
+              [
+                "amonel.snake.v1",
+                "localStorage",
+                "Ihr bester Punktestand in Snake, eine Zahl."
+              ],
+              [
+                "amonel.paint.v1",
+                "localStorage",
+                "Ihr aktuelles Bild in Pixel Paint (höchstens 16 KB); wird erst geschrieben, wenn Sie zeichnen."
+              ]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Das Speichern und Auslesen dieser Einträge ist unbedingt erforderlich, damit die von Ihnen ausdrücklich genutzte Funktion so arbeitet, wie Sie es erwarten (§ 25 Abs. 2 Nr. 2 TDDDG). Eine Einwilligung ist dafür nicht nötig. Soweit überhaupt personenbezogene Daten betroffen sind, ist die Rechtsgrundlage Art. 6 Abs. 1 lit. f DSGVO."
+          },
+          {
+            "type": "p",
+            "text": "Sie können diese Einträge jederzeit löschen, indem Sie in Ihrem Browser die Website-Daten für diese Domain entfernen. Die Website funktioniert danach weiter; nur Ihr Fortschritt beginnt von vorn."
+          }
+        ]
+      },
+      {
+        "heading": "Speicher in Ihrem Browser",
+        "scope": "soon",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Diese Seite merkt sich die von Ihnen gewählte Sprache im Speicher Ihres Browsers (localStorage, Eintrag „ao-lang“, Inhalt: de, en oder fa). Der Eintrag bleibt auf Ihrem Gerät und wird nie übertragen. Er ist unbedingt erforderlich, damit die von Ihnen gewählte Sprache beim nächsten Besuch erhalten bleibt (§ 25 Abs. 2 Nr. 2 TDDDG); eine Einwilligung ist dafür nicht nötig. Sie können ihn jederzeit löschen, indem Sie die Website-Daten für diese Domain in Ihrem Browser entfernen."
+          }
+        ]
+      },
+      {
+        "heading": "Anonyme Zähler",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Die Website zählt anonym, wie oft bestimmte Dinge geschehen, und zeigt die Summen öffentlich an. Gezählt werden: ein Rätsel, das im Modus „Selbst lösen“ gelöst wurde, eine beendete Quiz-Runde, ein beendetes Snake-Spiel, das Erreichen des Endes der Reise, der gewählte Modus auf der Startseite und das Öffnen einer App."
+          },
+          {
+            "type": "p",
+            "text": "Dabei sendet Ihr Browser nur den Namen des Ereignisses, zum Beispiel „quiz.completed“, an diese Website. Gespeichert wird ausschließlich dieser Name und eine Gesamtzahl. Es werden keine IP-Adressen, keine Kennungen, keine Zeitpunkte pro Besuch, kein Ergebnis und nichts über Sie oder Ihr Gerät gespeichert; die Zahlen lassen sich keiner Person zuordnen. Summen unter zehn werden nicht angezeigt."
+          },
+          {
+            "type": "p",
+            "text": "Für das Zählen wird nichts auf Ihrem Gerät gespeichert oder ausgelesen - kein Cookie und kein Speichereintrag -, daher ist keine Einwilligung nach § 25 TDDDG erforderlich. Ihre IP-Adresse verarbeitet dabei nur Cloudflare während der Übertragung, wie unter „Hosting und Auslieferung durch Cloudflare“ beschrieben, auch um die Zähl-Schnittstelle durch eine Begrenzung der Anfragen je IP-Adresse vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO). Zur Fehlersuche kann Cloudflare Aufrufe dieser Schnittstelle (Zeitpunkt, Adresse, Statuscode) für wenige Tage protokollieren."
+          }
+        ]
+      },
+      {
+        "heading": "Der Assistent",
+        "scope": "site",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Der Assistent auf dem Desktop ist eine Suche über die Inhalte dieser Website, die vollständig in Ihrem Browser läuft. Was Sie dort eingeben, verlässt Ihr Gerät nicht: Es wird an keinen Server und an keinen KI-Dienst gesendet und nicht gespeichert."
+          }
+        ]
+      },
+      {
+        "heading": "Kontakt per E-Mail",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Wenn Sie mir eine E-Mail schreiben, verarbeite ich Ihre Adresse, Ihren Namen, soweit Sie ihn angeben, und den Inhalt Ihrer Nachricht, um Ihre Anfrage zu beantworten. Geht es um eine Bewerbung oder ein mögliches Arbeitsverhältnis, ist die Rechtsgrundlage Art. 6 Abs. 1 lit. b DSGVO, sonst Art. 6 Abs. 1 lit. f DSGVO (mein berechtigtes Interesse, Anfragen zu beantworten). Ich lösche die Nachrichten, sobald sie erledigt sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen."
+          },
+          {
+            "type": "p",
+            "text": "Mein E-Mail-Postfach wird von Google betrieben (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland). Ihre E-Mail wird daher auf Servern von Google gespeichert; dabei ist eine Übermittlung in die USA möglich. Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert. Näheres in der Datenschutzerklärung von Google: https://policies.google.com/privacy"
+          }
+        ]
+      },
+      {
+        "heading": "Ihre Rechte",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Sie haben das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18) und Datenübertragbarkeit (Art. 20). Wenden Sie sich dafür einfach per E-Mail an mich."
+          },
+          {
+            "type": "p",
+            "text": "Widerspruchsrecht (Art. 21 DSGVO): Soweit eine Verarbeitung auf Art. 6 Abs. 1 lit. f DSGVO beruht, können Sie ihr aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen."
+          },
+          {
+            "type": "p",
+            "text": "Sie haben außerdem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Für mich zuständig ist: Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz, https://www.datenschutz.rlp.de"
+          }
+        ]
+      },
+      {
+        "heading": "Keine automatisierten Entscheidungen",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Es findet keine automatisierte Entscheidungsfindung und kein Profiling im Sinne von Art. 22 DSGVO statt. Sie sind weder gesetzlich noch vertraglich verpflichtet, mir Daten bereitzustellen; ohne die technisch notwendige Verarbeitung durch Cloudflare lässt sich die Website jedoch nicht aufrufen."
+          }
+        ]
+      }
+    ]
+  }
+}

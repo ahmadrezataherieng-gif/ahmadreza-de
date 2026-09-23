@@ -1,0 +1,344 @@
+<!doctype html>
+<!-- The temporary coming-soon page on ahmadreza.de (Worker ahmadreza-soon). Its
+     copy is placeholder like the rest of the site: CONTENT-TODO CR-1053. Build the
+     deployable folder with: node scripts/build-soon.mjs -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier</title>
+<meta name="description" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier. Das Portfolio AhmadOS entsteht gerade.">
+<link rel="canonical" href="https://ahmadreza.de/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ahmadreza Taheri — Fachinformatiker für Systemintegration">
+<meta property="og:description" content="Das Portfolio AhmadOS entsteht gerade: 80 Jahre Computergeschichte in 90 Sekunden.">
+<meta property="og:url" content="https://ahmadreza.de/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0e13'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23f0a44a' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Ahmadreza Taheri","url":"https://ahmadreza.de","jobTitle":"Fachinformatiker für Systemintegration (in Ausbildung)","address":{"@type":"PostalAddress","addressLocality":"Trier","addressCountry":"DE"},"knowsLanguage":["de","en","fa"],"knowsAbout":["Systemintegration","Netzwerke","Linux","IT-Support"]}
+</script>
+<style>
+  :root{
+    --bg:#080a0f; --panel:#0e1219; --edge:#1d2531;
+    --ink:#e9edf5; --muted:#8e9bb0;
+    --amber:#f0a44a; --green:#5de2a4; --blue:#6aa9ff;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(60vw 60vw at 78% 18%,rgba(240,164,74,.16),transparent 60%),
+      radial-gradient(50vw 50vw at 12% 82%,rgba(106,169,255,.13),transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 100%);
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:22px 20px 56px;display:flex;flex-direction:column;min-height:100%}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+  .langs{display:flex;gap:6px}
+  .langs button{
+    font-family:var(--mono);font-size:12px;color:var(--muted);background:transparent;
+    border:1px solid var(--edge);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.18s;
+  }
+  .langs button:hover{color:var(--ink);border-color:#31405a}
+  .langs button[aria-pressed="true"]{color:#0b0e13;background:var(--amber);border-color:var(--amber);font-weight:700}
+
+  main{flex:1;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:center;padding-top:36px}
+  @media(min-width:900px){main{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:56px;padding-top:56px}}
+
+  .status{
+    display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--green);
+    border:1px solid rgba(93,226,164,.32);background:rgba(93,226,164,.07);
+    border-radius:999px;padding:7px 14px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+
+  h1{
+    margin:20px 0 0;font-weight:800;line-height:.94;letter-spacing:-.03em;
+    font-size:clamp(2.9rem,10vw,5.6rem);
+  }
+  h1 .last{display:block;font-weight:300;color:var(--muted);font-size:clamp(1.4rem,4.6vw,2.4rem);letter-spacing:-.01em;margin-top:.35rem}
+  .role{margin:18px 0 0;font-size:clamp(1rem,2.4vw,1.2rem);line-height:1.5;color:var(--ink);max-width:34ch}
+  .lede{margin:14px 0 0;color:var(--muted);line-height:1.65;max-width:46ch}
+  .lede b{color:var(--amber);font-weight:600}
+
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0;padding:0;list-style:none}
+  .facts li{
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    border:1px solid var(--edge);border-radius:8px;padding:7px 11px;background:rgba(255,255,255,.02)
+  }
+  .facts li b{color:var(--ink);font-weight:600}
+
+  .terminal{
+    margin:30px 0 0;border:1px solid var(--edge);border-radius:12px;background:var(--panel);
+    box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden;max-width:520px
+  }
+  .bar{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--edge);background:rgba(255,255,255,.02)}
+  .bar i{width:10px;height:10px;border-radius:50%;background:#2a3444;display:block}
+  .bar i:first-child{background:#3d4a5e}
+  .term-body{padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.85}
+  .term-body .p{color:var(--green)}
+  .term-body .c{color:var(--ink)}
+  .term-body .o{color:var(--muted)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:-2px;animation:blink 1.05s steps(1) infinite}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+  .scene{position:relative;width:100%;max-width:520px;margin:0 auto}
+  .scene svg{width:100%;height:auto;display:block;overflow:visible}
+  .float-a{animation:floatA 7s ease-in-out infinite}
+  .float-b{animation:floatB 9s ease-in-out infinite}
+  .float-c{animation:floatC 8s ease-in-out infinite}
+  @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
+  @keyframes floatC{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .spin{transform-box:fill-box;transform-origin:center;animation:spin 16s linear infinite}
+  .spin-rev{transform-box:fill-box;transform-origin:center;animation:spin 22s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .flow{stroke-dasharray:5 9;animation:flow 2.4s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-28}}
+  .glow{animation:glow 3.2s ease-in-out infinite}
+  @keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}
+  .lamp{animation:lamp 2.6s ease-in-out infinite}
+  .lamp:nth-of-type(2){animation-delay:.5s}
+  .lamp:nth-of-type(3){animation-delay:1s}
+  .lamp:nth-of-type(4){animation-delay:1.5s}
+  @keyframes lamp{0%,100%{opacity:.25}50%{opacity:1}}
+
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--edge);
+    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center;
+    font-size:13px;color:var(--muted)}
+  footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(240,164,74,.5)}
+  footer a:hover{color:var(--amber)}
+  .legal{display:flex;gap:16px}
+  .copy{font-family:var(--mono);font-size:12px}
+
+  html[dir="rtl"] .role,html[dir="rtl"] .lede{max-width:40ch}
+  html[dir="rtl"] h1{letter-spacing:0}
+  html[dir="rtl"] .term-body{direction:ltr;text-align:left}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    .cursor{opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="tag" data-t="tag">AhmadOS · v1.0 im Aufbau</span>
+    <nav class="langs" aria-label="Sprache">
+      <button type="button" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-lang="fa" aria-pressed="false">FA</button>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <span class="status"><span class="dot"></span><span data-t="status">Seite entsteht gerade</span></span>
+
+      <h1>Ahmadreza<span class="last">Taheri</span></h1>
+
+      <p class="role" data-t="role">Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier.</p>
+
+      <p class="lede" data-t="lede">Hier entsteht <b>AhmadOS</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.</p>
+
+      <ul class="facts">
+        <li><b data-t="f1">Systemintegration</b></li>
+        <li><b>Netzwerke</b> · <b>Linux</b></li>
+        <li data-t="f3">Trier, Deutschland</li>
+        <li>DE · EN · FA</li>
+      </ul>
+
+      <div class="terminal" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="term-body">
+          <div><span class="p">ahmadreza@ahmados</span><span class="o">:~$</span> <span class="c">status</span></div>
+          <div class="o" data-t="t1">build: 8 von 13 Phasen abgeschlossen</div>
+          <div class="o" data-t="t2">nächster schritt: feinschliff und start</div>
+          <div><span class="p">ahmadreza@ahmados</span><span class="o">:~$</span> <span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" aria-hidden="true">
+      <svg viewBox="0 0 460 420" role="img">
+        <defs>
+          <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0d1a16"/><stop offset="1" stop-color="#07100d"/>
+          </linearGradient>
+          <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#1b2230"/><stop offset="1" stop-color="#11161f"/>
+          </linearGradient>
+          <radialGradient id="orb">
+            <stop offset="0" stop-color="#9ec8ff"/><stop offset="55%" stop-color="#3f7fe0"/><stop offset="100%" stop-color="#16305c"/>
+          </radialGradient>
+          <linearGradient id="phone" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#202a3a"/><stop offset="1" stop-color="#131a26"/>
+          </linearGradient>
+        </defs>
+
+        <!-- connecting data lines -->
+        <path class="flow" d="M150 190 C 210 150, 250 150, 300 128" fill="none" stroke="#f0a44a" stroke-opacity=".55" stroke-width="2"/>
+        <path class="flow" d="M160 250 C 220 290, 260 300, 312 296" fill="none" stroke="#6aa9ff" stroke-opacity=".5" stroke-width="2"/>
+
+        <!-- CRT terminal, the old machine -->
+        <g class="float-a">
+          <rect x="24" y="140" width="140" height="118" rx="14" fill="url(#metal)" stroke="#2b3547" stroke-width="2"/>
+          <rect x="38" y="154" width="112" height="78" rx="9" fill="url(#screen)" stroke="#204035" stroke-width="2"/>
+          <g class="glow">
+            <rect x="48" y="166" width="44" height="5" rx="2.5" fill="#5de2a4" opacity=".85"/>
+            <rect x="48" y="178" width="72" height="5" rx="2.5" fill="#5de2a4" opacity=".55"/>
+            <rect x="48" y="190" width="30" height="5" rx="2.5" fill="#5de2a4" opacity=".7"/>
+            <rect x="48" y="206" width="10" height="12" rx="2" fill="#5de2a4"/>
+          </g>
+          <rect x="70" y="258" width="48" height="10" rx="4" fill="#1a2230"/>
+          <rect x="54" y="268" width="80" height="8" rx="4" fill="#212b3b"/>
+          <!-- ENIAC lamps -->
+          <circle class="lamp" cx="40" cy="246" r="4" fill="#f0a44a"/>
+          <circle class="lamp" cx="54" cy="246" r="4" fill="#f0a44a"/>
+          <circle class="lamp" cx="68" cy="246" r="4" fill="#f0a44a"/>
+          <circle class="lamp" cx="82" cy="246" r="4" fill="#f0a44a"/>
+        </g>
+
+        <!-- smartphone, the modern machine -->
+        <g class="float-b">
+          <rect x="300" y="212" width="98" height="176" rx="20" fill="url(#phone)" stroke="#2b3547" stroke-width="2"/>
+          <rect x="310" y="228" width="78" height="140" rx="12" fill="#0a1017" stroke="#1d2635"/>
+          <rect x="336" y="219" width="26" height="4" rx="2" fill="#2b3547"/>
+          <g class="glow">
+            <rect x="320" y="242" width="40" height="6" rx="3" fill="#6aa9ff" opacity=".9"/>
+            <rect x="320" y="256" width="58" height="6" rx="3" fill="#6aa9ff" opacity=".45"/>
+            <rect x="320" y="270" width="48" height="6" rx="3" fill="#6aa9ff" opacity=".6"/>
+          </g>
+          <rect x="320" y="292" width="58" height="34" rx="8" fill="#141d2b" stroke="#22304a"/>
+          <rect x="330" y="304" width="38" height="5" rx="2.5" fill="#8e9bb0" opacity=".7"/>
+          <rect x="330" y="314" width="22" height="5" rx="2.5" fill="#8e9bb0" opacity=".45"/>
+          <circle cx="349" cy="352" r="11" fill="#141d2b" stroke="#22304a"/>
+          <circle cx="349" cy="352" r="4" fill="#f0a44a" class="glow"/>
+        </g>
+
+        <!-- AI core -->
+        <g class="float-c">
+          <circle cx="330" cy="104" r="34" fill="url(#orb)" opacity=".92"/>
+          <circle cx="330" cy="104" r="34" fill="none" stroke="#9ec8ff" stroke-opacity=".35"/>
+          <g class="spin">
+            <ellipse cx="330" cy="104" rx="60" ry="22" fill="none" stroke="#6aa9ff" stroke-opacity=".55" stroke-width="2"/>
+            <circle cx="390" cy="104" r="4" fill="#9ec8ff"/>
+          </g>
+          <g class="spin-rev">
+            <ellipse cx="330" cy="104" rx="22" ry="60" fill="none" stroke="#f0a44a" stroke-opacity=".45" stroke-width="2"/>
+            <circle cx="330" cy="44" r="3.5" fill="#f0a44a"/>
+          </g>
+          <g class="glow" opacity=".9">
+            <circle cx="318" cy="98" r="3" fill="#eaf3ff"/>
+            <circle cx="338" cy="110" r="2.5" fill="#eaf3ff"/>
+            <circle cx="330" cy="92" r="2" fill="#eaf3ff"/>
+            <path d="M318 98 L330 92 L338 110 Z" fill="none" stroke="#eaf3ff" stroke-opacity=".5"/>
+          </g>
+        </g>
+
+        <!-- punch card, where it all started -->
+        <g class="float-c" opacity=".95">
+          <rect x="40" y="316" width="150" height="66" rx="6" fill="#141a24" stroke="#2b3547" stroke-width="2" transform="rotate(-6 115 349)"/>
+          <g transform="rotate(-6 115 349)" fill="#f0a44a" opacity=".85">
+            <rect x="54" y="330" width="9" height="7" rx="1.5"/>
+            <rect x="70" y="344" width="9" height="7" rx="1.5"/>
+            <rect x="86" y="330" width="9" height="7" rx="1.5"/>
+            <rect x="102" y="358" width="9" height="7" rx="1.5"/>
+            <rect x="118" y="344" width="9" height="7" rx="1.5"/>
+            <rect x="134" y="330" width="9" height="7" rx="1.5"/>
+            <rect x="150" y="358" width="9" height="7" rx="1.5"/>
+            <rect x="166" y="344" width="9" height="7" rx="1.5"/>
+          </g>
+          <path d="M46 322 L188 312" stroke="#5de2a4" stroke-opacity=".5" stroke-width="2" transform="rotate(-6 115 349)"/>
+        </g>
+      </svg>
+    </section>
+  </main>
+
+  <footer>
+    <span data-t="foot">Das vollständige Portfolio folgt in Kürze.</span>
+    <nav class="legal" aria-label="Rechtliches" data-t-label="legal">
+      <a href="/impressum/" data-legal="impressum" data-t="imprint">Impressum</a>
+      <a href="/datenschutz/" data-legal="datenschutz" data-t="privacy">Datenschutz</a>
+    </nav>
+    <span class="copy">© <span id="y"></span> Ahmadreza Taheri · Trier</span>
+  </footer>
+</div>
+
+<script>
+  const T = {
+    de:{dir:"ltr",lang:"de",
+      tag:"AhmadOS · v1.0 im Aufbau",
+      status:"Seite entsteht gerade",
+      role:"Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier.",
+      lede:'Hier entsteht <b>AhmadOS</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.',
+      f1:"Systemintegration", f3:"Trier, Deutschland",
+      t1:"build: 8 von 13 Phasen abgeschlossen",
+      t2:"nächster schritt: feinschliff und start",
+      foot:"Das vollständige Portfolio folgt in Kürze.",
+      imprint:"Impressum", privacy:"Datenschutz", legal:"Rechtliches", prefix:"",
+      title:"Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier"},
+    en:{dir:"ltr",lang:"en",
+      tag:"AhmadOS · v1.0 in progress",
+      status:"This site is being built",
+      role:"IT specialist for systems integration, training at the city administration of Trier.",
+      lede:'<b>AhmadOS</b> is on its way — a portfolio that also shows how computers really work: 80 years of computing in 90 seconds, from the punch card to the cloud.',
+      f1:"Systems integration", f3:"Trier, Germany",
+      t1:"build: 8 of 13 phases complete",
+      t2:"next step: polish and launch",
+      foot:"The full portfolio is coming soon.",
+      imprint:"Imprint", privacy:"Privacy", legal:"Legal", prefix:"/en",
+      title:"Ahmadreza Taheri — IT specialist for systems integration, Trier"},
+    fa:{dir:"rtl",lang:"fa",
+      tag:"AhmadOS · نسخه ۱٫۰ در حال ساخت",
+      status:"این صفحه در حال ساخت است",
+      role:"کارآموز رشته‌ی فناوری اطلاعات، گرایش یکپارچه‌سازی سیستم‌ها، در شهرداری تریر.",
+      lede:'<b>AhmadOS</b> در راه است؛ نمونه‌کاری که در کنار معرفی من نشان می‌دهد کامپیوتر واقعاً چطور کار می‌کند: ۸۰ سال تاریخ کامپیوتر در ۹۰ ثانیه، از کارت پانچ تا ابر.',
+      f1:"یکپارچه‌سازی سیستم‌ها", f3:"تریر، آلمان",
+      t1:"build: 8 of 13 phases complete",
+      t2:"next step: polish and launch",
+      foot:"نسخه‌ی کامل به‌زودی منتشر می‌شود.",
+      imprint:"اطلاعات ناشر", privacy:"حریم خصوصی", legal:"اطلاعات حقوقی", prefix:"/fa",
+      title:"احمدرضا طاهری — فناوری اطلاعات، تریر"}
+  };
+  const btns=[...document.querySelectorAll('[data-lang]')];
+  function set(l){
+    const t=T[l]; if(!t) return;
+    document.documentElement.lang=t.lang;
+    document.documentElement.dir=t.dir;
+    document.title=t.title;
+    document.querySelectorAll('[data-t]').forEach(el=>{
+      const v=t[el.dataset.t]; if(v!=null) el.innerHTML=v;
+    });
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
+    document.querySelectorAll('[data-legal]').forEach(a=>a.setAttribute('href',t.prefix+'/'+a.dataset.legal+'/'));
+    document.querySelectorAll('[data-t-label]').forEach(el=>el.setAttribute('aria-label',t[el.dataset.tLabel]));
+    try{localStorage.setItem('ao-lang',l)}catch(e){}
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lang)));
+  document.getElementById('y').textContent=new Date().getFullYear();
+  try{
+    const saved=localStorage.getItem('ao-lang');
+    if(saved&&T[saved])set(saved);
+    else{const n=(navigator.language||'de').slice(0,2);if(T[n])set(n);}
+  }catch(e){}
+</script>
+</body>
+</html>

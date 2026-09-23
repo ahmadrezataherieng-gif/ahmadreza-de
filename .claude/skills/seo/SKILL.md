@@ -32,6 +32,9 @@ without asking first - this was a deliberate choice, not an oversight.
 
 ### Every page
 
+- The legal pages (`/impressum/`, `/datenschutz/`, en, fa) are the exception:
+  `noindex, follow` and never in the sitemap, so a search for the name does
+  not surface a home address (DECISIONS.md 58).
 - One `<h1>`.
 - A `<title>` that starts with the name for identity pages.
 - A meta description.

@@ -19,6 +19,7 @@ import { getTheme, type ThemeId } from '@/lib/themes';
 
 import { EraSection } from '@/components/journey/EraSection';
 import { CONVERGENCE_ID, Convergence } from '@/components/journey/Convergence';
+import { LegalLinks } from '@/components/ui/SiteFooter';
 import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { ModeSwitch } from '@/components/journey/ModeSwitch';
@@ -679,6 +680,13 @@ export function Journey() {
         <span className="h-4 w-px bg-edge" aria-hidden="true" />
         <LanguageSwitcher />
       </header>
+
+      {/* The legal pages, one click from every era (§ 5 DDG), in the corner
+          the other chrome leaves free: top-start on phones, where the header
+          sits at the bottom, and bottom-start on wide screens. */}
+      <div className="ao-journey-chrome ao-themed ao-chrome-backdrop fixed start-4 top-4 z-[var(--ao-z-modal)] rounded-control border border-edge md:top-auto md:bottom-4">
+        <LegalLinks className="gap-x-0 text-[10px] sm:text-xs" linkClassName="px-2 py-1" />
+      </div>
 
       <div className="ao-journey-chrome fixed top-4 end-4 z-[var(--ao-z-modal)] flex items-center gap-2">
         <ModeSwitch />

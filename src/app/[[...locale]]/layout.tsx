@@ -20,6 +20,7 @@ import { dirForLocale, htmlLang, type Locale } from '@/lib/i18n-config';
 import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
 import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
+import { loadLegalCopy } from '@/components/legal/LegalPage';
 
 type LayoutParams = { locale?: string[] };
 
@@ -68,6 +69,10 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
   journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'mode'],
   // No era, journey or puzzle copy: the desktop loads none of that code either.
   desktop: ['site', 'nav', 'languages', 'os'],
+  // The legal text itself is server-rendered from messages/legal/ and never
+  // handed to the client; only the language switcher needs messages there.
+  imprint: ['site', 'nav', 'languages'],
+  privacy: ['site', 'nav', 'languages'],
 };
 
 /**
@@ -79,6 +84,9 @@ async function viewTitle(locale: Locale, view: View): Promise<string> {
   const t = await getTranslations({ locale, namespace: 'site' });
   // CONTENT-TODO CR-1043
   if (view === 'landing') return `${t('title')} | ${t('brand')}`;
+  if (view === 'imprint' || view === 'privacy') {
+    return `${(await loadLegalCopy(locale))[view].title} – ${t('author')} | ${t('brand')}`;
+  }
   const page =
     view === 'journey'
       ? (await getTranslations({ locale, namespace: 'landing' }))('journeyTitle')
@@ -113,12 +121,17 @@ export async function generateMetadata({
   const { locale, view } = match;
   const t = await getTranslations({ locale, namespace: 'site' });
   const title = await viewTitle(locale, view);
+  const legal = view === 'imprint' || view === 'privacy' ? (await loadLegalCopy(locale))[view] : null;
+  const description = legal ? legal.description : t('description');
 
   return {
     metadataBase: new URL(SITE_URL),
     // CONTENT-TODO CR-1044
     title,
-    description: t('description'),
+    description,
+    // The legal pages carry the home address: kept out of search results for
+    // the name, while their links are still followed (DECISIONS.md 58).
+    ...(legal ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical: viewHref(locale, view),
       languages: {
@@ -143,7 +156,7 @@ export async function generateMetadata({
       type: view === 'landing' ? 'profile' : 'website',
       locale: htmlLang[locale],
       title,
-      description: t('description'),
+      description,
       siteName: t('brand'),
       url: viewHref(locale, view),
     },

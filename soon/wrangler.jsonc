@@ -1,0 +1,18 @@
+{
+  // The temporary "coming soon" page on ahmadreza.de - a Worker of its own,
+  // separate from the real site (../wrangler.jsonc). Removed once the real site
+  // takes the domain (ROADMAP.md, DEP-06).
+  //
+  // Deploy from this folder, after `node scripts/build-soon.mjs` in the root:
+  //   npx wrangler deploy
+  "name": "ahmadreza-soon",
+  "compatibility_date": "2026-09-20",
+  "assets": {
+    // Built by scripts/build-soon.mjs: index.html plus the legal pages.
+    "directory": "./dist",
+    // /impressum and /impressum/ both resolve to impressum/index.html.
+    "html_handling": "auto-trailing-slash"
+  },
+  // Keep the apex bound to this Worker (idempotent if it already is).
+  "routes": [{ "pattern": "ahmadreza.de", "custom_domain": true }]
+}

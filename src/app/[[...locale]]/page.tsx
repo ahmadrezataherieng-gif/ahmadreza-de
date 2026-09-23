@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { JourneyLoader } from '@/components/journey/JourneyLoader';
 import { Landing } from '@/components/landing/Landing';
+import { LegalPage } from '@/components/legal/LegalPage';
 import { Desktop } from '@/components/os/Desktop';
 import { eras } from '@/content/eras';
 import { matchSegments } from '@/lib/routing';
@@ -19,6 +20,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 
   if (view === 'landing') return <Landing />;
   if (view === 'desktop') return <Desktop locale={locale} />;
+  if (view === 'imprint' || view === 'privacy') return <LegalPage locale={locale} kind={view} />;
 
   const t = await getTranslations({ locale, namespace: 'site' });
   const tEras = await getTranslations({ locale, namespace: 'eras' });

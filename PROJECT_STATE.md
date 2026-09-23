@@ -27,16 +27,17 @@ is left lives in ROADMAP.md.
 - [ ] **Phase 9D-2** — network tools and the Time Machine theme switcher (slots registered)
 - [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
-- [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
+- [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58); owner verification, CSP and the pre-launch legal check open (ROADMAP.md LEG-*)
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
 - [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
 
 ## What exists
 
 - **Build:** Next.js 15 static export, Tailwind v4, TypeScript strict. `npm run
-  build` emits nine pages - the landing page, the journey and the desktop in de
-  (`/`, `/amonel/`, `/desktop/`), en (`/en/…`) and fa (`/fa/…`) - into a
-  static `out/`, plus the
+  build` emits fifteen pages - the landing page, the journey, the desktop, the
+  Impressum and the Datenschutzerklärung in de
+  (`/`, `/amonel/`, `/desktop/`, `/impressum/`, `/datenschutz/`), en (`/en/…`)
+  and fa (`/fa/…`) - into a static `out/`, plus the
   Amonel icon set (SVG and ICO favicons, Apple touch icon, web manifest). Deployment config for Cloudflare Workers with static assets is in
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
 - **Landing page** (`/`): name, role, bold key facts, two mode cards, the résumé
@@ -285,5 +286,10 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
-- Legal pages, sitemap, JSON-LD, `llms.txt`.
+- Sitemap, JSON-LD, `llms.txt`, robots.txt, the Open Graph image, a custom 404.
+- **Legal pages** (Phase 11, DECISIONS.md 58): built in all three languages
+  from `messages/legal/`, `noindex`, the address only in `content/legal.ts`;
+  status "LEGAL – owner must verify". The coming-soon page now lives in
+  `soon/` with the same legal pages (`npm run build:soon`); its deploy waits
+  for a Cloudflare login (ROADMAP.md LEG-04, OWN-08).
 - Deployment.

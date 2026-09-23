@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1051 entries.**
+Generated from the codebase on 2026-09-23. **1055 entries.**
 
 ## How to use this file
 
@@ -19,15 +19,16 @@ Generated from the codebase on 2026-09-23. **1051 entries.**
 
 | Type | Entries |
 |---|---|
-| long text | 92 |
+| long text | 91 |
 | short text | 207 |
-| single word / label | 257 |
+| single word / label | 258 |
 | button | 64 |
 | puzzle / game | 353 |
 | alt text | 1 |
 | SEO / meta | 14 |
 | other | 63 |
-| **Total** | **1051** |
+| legal (not placeholder; LEGAL – owner must verify) | 4 |
+| **Total** | **1055** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1421,8 +1422,6 @@ Nothing to mark in code yet. Registered so they are not forgotten; each gets rea
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1029 | Impressum (`/impressum/` in de, en, fa) - Phase 11 | long text | de / en / fa | PLACEHOLDER | Legal notice (DDG §5): full name, address, contact; must be written with the owner, not guessed |
-| CR-1030 | Datenschutzerklärung (privacy policy, de, en, fa) - Phase 11 | long text | de / en / fa | PLACEHOLDER | GDPR privacy notice: hosting (Cloudflare), anonymous counters, local storage; lawyer-grade wording |
 | CR-1031 | 404 page (currently the Next.js default, no `not-found.tsx`) | short text | de / en / fa | PLACEHOLDER | Custom not-found text in de, en, fa with a link home |
 | CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | PLACEHOLDER | Real timeline entries of the career path |
 | CR-1033 | Résumé PDF (`/files/ahmadreza-taheri-lebenslauf.pdf`) - file itself | other | de / en / fa | PLACEHOLDER | The actual CV document, in which languages |
@@ -1469,3 +1468,17 @@ Titles, descriptions, Open Graph, manifest and everything search engines and lin
 | CR-1050 | Open Graph / social preview image and its alt text | SEO / meta | de / en / fa | PLACEHOLDER | Share image and description per language |
 | CR-1051 | Per-view meta descriptions (journey, desktop currently reuse the site description) | SEO / meta | de / en / fa | PLACEHOLDER | Distinct description for /amonel/ and /desktop/ in de, en, fa |
 
+## 26. Legal pages, legal links and the coming-soon page
+
+The Impressum and the Datenschutzerklärung are **not placeholders**: they were written from an audit of the real data flows (2026-09-23) and are legal text. Their status is **LEGAL – owner must verify** until Ahmadreza has read and approved them (ideally with a lawyer or the Verbraucherzentrale). German is binding; en and fa say so and link to it. The postal address and e-mail live only in `src/content/legal.ts`.
+
+**Files:** `src/messages/legal/{de,en,fa}.json`, `src/content/legal.ts`, `src/components/legal/LegalPage.tsx`, `scripts/build-soon.mjs`, `soon/index.html`
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number, by the owner's choice (2026-09-23) - check that against § 5 DDG |
+| CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the five storage keys (§ 25(2) Nr. 2 TDDDG), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
+| CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
+| CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Still says «AhmadOS» and «8 von 13 Phasen» (ROADMAP BR-02); was outside the repo until 2026-09-23 |
+| CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
+| CR-1055 | Coming-soon legal pages (`soon/dist/` `impressum/` and `datenschutz/` in de, en, fa, built by `scripts/build-soon.mjs` from the same JSON with scope `soon`) | legal | de / en / fa | LEGAL – owner must verify | Same text as CR-1029 and CR-1030 minus the counters, the Assistant and the site's storage table; plus the `ao-lang` storage entry and system fonts |

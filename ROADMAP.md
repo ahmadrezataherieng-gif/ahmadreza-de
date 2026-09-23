@@ -27,10 +27,10 @@ Recount after each change (one line in Git Bash):
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 15 | 0 | 1 | 16 |
+| P0 | 11 | 1 | 5 | 17 |
 | P1 | 25 | 6 | 1 | 32 |
-| P2 | 15 | 2 | 0 | 17 |
-| **total** | **55** | **8** | **2** | **65** |
+| P2 | 16 | 2 | 0 | 18 |
+| **total** | **52** | **9** | **6** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -74,10 +74,10 @@ Recount after each change (one line in Git Bash):
 
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
-| LEG-01 | **Impressum** at `/impressum/` (+ `/en/`, `/fa/`), § 5 DDG and § 18 Abs. 2 MStV, legal name "Ahmadreza Taheri Momrabadi" (the only place it may appear). | missing | P0 | Claude Code + Ahmadreza | OWN-07 |
-| LEG-02 | **Datenschutzerklärung** at `/datenschutz/` (+ en, fa), written from an audit of the real data flows: Cloudflare hosting and logs, no external requests, the browser storage table, the anonymous counters, the local assistant, email contact, rights, LfDI RLP. German binding. | missing | P0 | Claude Code + Ahmadreza | OWN-07 |
-| LEG-03 | **Legal links in the footer of every view** (landing, journey, desktop, About, 404) - one click from every page, labelled exactly "Impressum" / "Datenschutz". | missing | P0 | Claude Code | LEG-01, LEG-02 |
-| LEG-04 | **Legal pages and links on the live "coming soon" page** (`ahmadreza-soon`), deployed to production. | missing | P0 | Claude Code | LEG-01, LEG-02 |
+| LEG-01 | **Impressum** at `/impressum/` (+ `/en/`, `/fa/`), § 5 DDG and § 18 Abs. 2 MStV, legal name "Ahmadreza Taheri Momrabadi" (the only place it may appear). Built 2026-09-23 (DECISIONS.md 58), `noindex`. | done | P0 | Claude Code + Ahmadreza | OWN-07 |
+| LEG-02 | **Datenschutzerklärung** at `/datenschutz/` (+ en, fa), written from an audit of the real data flows: Cloudflare hosting and logs, no external requests, the browser storage table, the anonymous counters, the local assistant, email contact, rights, LfDI RLP. German binding. Built 2026-09-23; the audit found no external request, so nothing had to be self-hosted. | done | P0 | Claude Code + Ahmadreza | OWN-07 |
+| LEG-03 | **Legal links in the footer of every view** (landing, journey, desktop, About, 404) - one click from every page, labelled exactly "Impressum" / "Datenschutz". Done for every existing view: landing and legal footers, desktop top bar, home screen, journey chrome corner; new pages (About, 404) must add `SiteFooter`. | done | P0 | Claude Code | LEG-01, LEG-02 |
+| LEG-04 | **Legal pages and links on the live "coming soon" page** (`ahmadreza-soon`), deployed to production. Built in `soon/` (`npm run build:soon`). | partial | P0 | Claude Code | LEG-01, LEG-02 |
 | LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. | missing | P0 | Claude Code + Ahmadreza | all feature work |
 | LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. | missing | P1 | Claude Code | - |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 |
@@ -126,7 +126,9 @@ Recount after each change (one line in Git Bash):
 | OWN-04 | **German proofreading by a native speaker** (and Persian); all copy is a draft. | missing | P1 | Ahmadreza | FIN-01 |
 | OWN-05 | **About/CV facts**: apprenticeship start and end date, earlier stations, language levels, skill list, projects (TODO.md, Phase 7). | missing | P1 | Ahmadreza | - |
 | OWN-06 | **Decide the GitHub repo link** is public on the site (Projects). | missing | P2 | Ahmadreza | - |
-| OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. | missing | P0 | Ahmadreza | - |
+| OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. Given 2026-09-23; used only in `src/content/legal.ts`. | done | P0 | Ahmadreza | - |
+| OWN-08 | **Cloudflare login for deploys** (`npx wrangler login` on this machine, or deploy `soon/` yourself): nothing can be deployed without it. | missing | P0 | Ahmadreza | - |
+| OWN-09 | **Make `kontakt@ahmadreza.de` or the Gmail address the one contact**: the site shows `kontakt@ahmadreza.de`, the legal pages the Gmail address the owner chose. Both are fine legally once DEP-01 works; decide whether to keep two. | missing | P2 | Ahmadreza | DEP-01 |
 
 ## After launch
 
