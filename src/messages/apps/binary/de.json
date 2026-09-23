@@ -1,0 +1,81 @@
+{
+  "intro": "Für einen Computer ist Text eine Folge von Zahlen. Tippen Sie etwas ein und sehen Sie, welche Bytes daraus werden – oder schreiben Sie Bytes und lesen Sie den Text.",
+  "tabsLabel": "Umwandlung wählen",
+  "tabs": {
+    "bytes": "Text & Bytes",
+    "morse": "Morse"
+  },
+  "bytes": {
+    "sourceLabel": "Eingabe als",
+    "formats": {
+      "text": "Text",
+      "binary": "Binär",
+      "hex": "Hex",
+      "decimal": "Dezimal"
+    },
+    "inputLabel": "Eingabe: {format}",
+    "placeholders": {
+      "text": "Text eingeben",
+      "binary": "z. B. 01001000 01101001",
+      "hex": "z. B. 48 69",
+      "decimal": "z. B. 72 105"
+    },
+    "summary": "{chars, plural, one {# Zeichen} other {# Zeichen}}, {bytes, plural, one {# Byte} other {# Bytes}} in UTF-8.",
+    "errors": {
+      "empty": "Geben Sie etwas ein.",
+      "invalidDigit": "Hier steht ein Zeichen, das in diesem Format keine Ziffer ist.",
+      "incompleteByte": "Die Ziffern ergeben keine ganzen Bytes: Binär braucht Gruppen von 8, Hex von 2 Ziffern.",
+      "outOfRange": "Ein Byte reicht von 0 bis 255.",
+      "invalidUtf8": "Diese Bytes sind kein gültiges UTF-8 – vermutlich fehlt ein Teil eines Zeichens.",
+      "tooLong": "Das ist zu lang für diese Umwandlung. Bitte kürzen Sie die Eingabe."
+    },
+    "utf8Title": "Wie viele Bytes braucht ein Zeichen?",
+    "utf8Explain": "UTF-8 speichert jedes Zeichen in 1 bis 4 Bytes: lateinische Buchstaben und Ziffern in 1 Byte, Umlaute und persische Buchstaben in 2, das Eurozeichen in 3, die meisten Emojis in 4. Deshalb ist ein persischer Text in Bytes etwa doppelt so lang wie ein deutscher mit gleich vielen Buchstaben.",
+    "tableCaption": "Jedes Zeichen mit seinem Unicode-Codepunkt und seinen UTF-8-Bytes",
+    "table": {
+      "char": "Zeichen",
+      "codePoint": "Codepunkt",
+      "bytes": "Bytes",
+      "bits": "Bits"
+    },
+    "byteCount": "{count, plural, one {# Byte} other {# Bytes}}",
+    "truncated": "Gezeigt sind die ersten {count} Zeichen.",
+    "bitsLegend": "Jedes Kästchen ist ein Bit: gefüllt bedeutet 1, leer bedeutet 0. Acht Bits sind ein Byte."
+  },
+  "morse": {
+    "directionLabel": "Richtung",
+    "directions": {
+      "toMorse": "Text → Morse",
+      "toText": "Morse → Text"
+    },
+    "inputLabel": {
+      "toMorse": "Text",
+      "toText": "Morsezeichen"
+    },
+    "placeholders": {
+      "toMorse": "Text eingeben",
+      "toText": "z. B. ... --- ... (Wörter mit / trennen)"
+    },
+    "output": {
+      "toMorse": "Morsezeichen",
+      "toText": "Text"
+    },
+    "unsupported": "Dafür gibt es kein Morsezeichen:",
+    "unsupportedNote": "Das internationale Morsealphabet kennt nur die 26 lateinischen Buchstaben, é, die Ziffern und einige Satzzeichen – keine Umlaute, kein ß und keine persischen Buchstaben. Diese Zeichen werden ausgelassen.",
+    "unknown": "Diese Folge ist kein Morsezeichen:",
+    "signalTitle": "Als Signal",
+    "play": "Abspielen",
+    "playSound": "Ton abspielen",
+    "stop": "Stopp",
+    "volume": "Lautstärke",
+    "volumeValue": "{percent} Prozent",
+    "playing": "Das Signal wird abgespielt.",
+    "finished": "Das Signal ist zu Ende.",
+    "stopped": "Das Signal wurde gestoppt.",
+    "speed": "Langsames Tempo, fünf Wörter pro Minute: etwa {seconds} Sekunden.",
+    "noAudio": "Dieser Browser kann keinen Ton erzeugen; das Licht funktioniert trotzdem.",
+    "timelineLabel": "Das Signal als Zeitleiste: {code}",
+    "timelineNote": "Ein Punkt dauert eine Einheit, ein Strich drei. Zwischen Buchstaben ist drei Einheiten Pause, zwischen Wörtern sieben.",
+    "truth": "Auch Morse ist eine Codierung: Jedes Zeichen wird zu einem Muster aus kurz und lang – so wie ein Computer jedes Zeichen zu einem Muster aus 0 und 1 macht."
+  }
+}

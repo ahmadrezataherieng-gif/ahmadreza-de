@@ -47,7 +47,7 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   // Bonus apps (Phase 9D-1, DECISIONS.md 57). The rest share one stand-in:
   // network tools and the Time Machine arrive in 9D-2, the scheduler and the
   // file tree later.
-  binary: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  binary: load(() => import('@/components/apps/binary/BinaryApp'), 'BinaryApp'),
   scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   filesystem: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   snake: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),

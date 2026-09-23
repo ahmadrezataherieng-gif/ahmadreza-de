@@ -1,0 +1,81 @@
+{
+  "intro": "To a computer, text is a row of numbers. Type something and see which bytes it becomes – or write bytes and read the text.",
+  "tabsLabel": "Choose a conversion",
+  "tabs": {
+    "bytes": "Text & bytes",
+    "morse": "Morse"
+  },
+  "bytes": {
+    "sourceLabel": "Input as",
+    "formats": {
+      "text": "Text",
+      "binary": "Binary",
+      "hex": "Hex",
+      "decimal": "Decimal"
+    },
+    "inputLabel": "Input: {format}",
+    "placeholders": {
+      "text": "Type some text",
+      "binary": "e.g. 01001000 01101001",
+      "hex": "e.g. 48 69",
+      "decimal": "e.g. 72 105"
+    },
+    "summary": "{chars, plural, one {# character} other {# characters}}, {bytes, plural, one {# byte} other {# bytes}} in UTF-8.",
+    "errors": {
+      "empty": "Type something.",
+      "invalidDigit": "There is a character here that is not a digit in this format.",
+      "incompleteByte": "The digits do not make whole bytes: binary needs groups of 8 digits, hex groups of 2.",
+      "outOfRange": "A byte goes from 0 to 255.",
+      "invalidUtf8": "These bytes are not valid UTF-8 – part of a character is probably missing.",
+      "tooLong": "That is too long for this converter. Please shorten the input."
+    },
+    "utf8Title": "How many bytes does a character need?",
+    "utf8Explain": "UTF-8 stores every character in 1 to 4 bytes: Latin letters and digits in 1 byte, umlauts and Persian letters in 2, the euro sign in 3, most emoji in 4. That is why a Persian text takes about twice as many bytes as an English one with the same number of letters.",
+    "tableCaption": "Each character with its Unicode code point and its UTF-8 bytes",
+    "table": {
+      "char": "Character",
+      "codePoint": "Code point",
+      "bytes": "Bytes",
+      "bits": "Bits"
+    },
+    "byteCount": "{count, plural, one {# byte} other {# bytes}}",
+    "truncated": "Showing the first {count} characters.",
+    "bitsLegend": "Each box is one bit: filled means 1, empty means 0. Eight bits make a byte."
+  },
+  "morse": {
+    "directionLabel": "Direction",
+    "directions": {
+      "toMorse": "Text → Morse",
+      "toText": "Morse → text"
+    },
+    "inputLabel": {
+      "toMorse": "Text",
+      "toText": "Morse code"
+    },
+    "placeholders": {
+      "toMorse": "Type some text",
+      "toText": "e.g. ... --- ... (separate words with /)"
+    },
+    "output": {
+      "toMorse": "Morse code",
+      "toText": "Text"
+    },
+    "unsupported": "There is no Morse code for:",
+    "unsupportedNote": "International Morse code only knows the 26 Latin letters, é, the digits and a few punctuation marks – no umlauts, no ß and no Persian letters. These characters are left out.",
+    "unknown": "This sequence is not a Morse character:",
+    "signalTitle": "As a signal",
+    "play": "Play",
+    "playSound": "Play sound",
+    "stop": "Stop",
+    "volume": "Volume",
+    "volumeValue": "{percent} percent",
+    "playing": "The signal is playing.",
+    "finished": "The signal has ended.",
+    "stopped": "The signal was stopped.",
+    "speed": "Slow speed, five words a minute: about {seconds} seconds.",
+    "noAudio": "This browser cannot make a sound; the light still works.",
+    "timelineLabel": "The signal as a timeline: {code}",
+    "timelineNote": "A dot lasts one unit, a dash three. Letters are three units apart, words seven.",
+    "truth": "Morse is an encoding too: each character becomes a pattern of short and long – just as a computer turns each character into a pattern of 0 and 1."
+  }
+}
