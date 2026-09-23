@@ -51,17 +51,17 @@ const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
 /* --- the allowlist ----------------------------------------------------------- */
 
 test('allowlist: every era, every app, the quiz, the journey and both modes - built from the registries', () => {
-  assert.equal(COUNTER_NAMES.length, eraIds.length + appIds.length + 4);
+  assert.equal(COUNTER_NAMES.length, eraIds.length + appIds.length + 5);
   assert.equal(new Set(COUNTER_NAMES).size, COUNTER_NAMES.length);
   for (const id of eraIds) assert.ok(COUNTER_NAMES.includes(`era.${id}.solved`), id);
   for (const id of appIds) assert.ok(COUNTER_NAMES.includes(`app.${id}.opened`), id);
-  for (const name of ['quiz.completed', 'journey.completed', 'journey.mode.guided', 'journey.mode.interactive']) assert.ok(COUNTER_NAMES.includes(name), name);
+  for (const name of ['quiz.completed', 'snake.played', 'journey.completed', 'journey.mode.guided', 'journey.mode.interactive']) assert.ok(COUNTER_NAMES.includes(name), name);
   assert.equal(eraSolved('unix'), 'era.unix.solved');
   assert.equal(appOpened('quiz'), 'app.quiz.opened');
   assert.equal(modeChosen('interactive'), 'journey.mode.interactive');
   assert.equal(QUIZ_COMPLETED, 'quiz.completed');
   assert.equal(JOURNEY_COMPLETED, 'journey.completed');
-  for (const name of ['era.atari.solved', 'quiz.score', 'quiz.completed.7', '', 'app..opened']) assert.equal(isCounterName(name), false, name);
+  for (const name of ['era.atari.solved', 'quiz.score', 'quiz.completed.7', 'snake.score', 'snake.played.12', '', 'app..opened']) assert.equal(isCounterName(name), false, name);
 });
 
 test('allowlist: the Worker counts exactly these names - one list, not a copy', () => {
@@ -228,7 +228,7 @@ test('wiring: a guided auto-solve can never count - only onSolved counts, and gu
 test('wiring: the mode on the landing page, the Convergence (not Skip), and every app window', () => {
   assert.match(read('src/components/landing/ModeChoice.tsx'), /count\(modeChosen\(option\.mode\)\)/);
   const journey = read('src/components/journey/Journey.tsx');
-  assert.match(journey, /completeJourney\(\);\s*count\(JOURNEY_COMPLETED\);/);
+  assert.match(journey, /finishJourney\(\);\s*count\(JOURNEY_COMPLETED\);/);
   assert.doesNotMatch(read('src/components/journey/SkipToDesktop.tsx'), /count\(/);
   assert.match(read('src/components/os/Window.tsx'), /count\(appOpened\(id\)\)/);
   assert.match(read('src/components/os/MobileShell.tsx'), /count\(appOpened\(id\)\)/);
@@ -237,7 +237,16 @@ test('wiring: the mode on the landing page, the Convergence (not Skip), and ever
 /* --- nothing on the device ------------------------------------------------------ */
 
 test('storage: STORAGE_KEYS is unchanged, and the counters touch no storage and no cookie', () => {
-  assert.deepEqual(STORAGE_KEYS, { unlocks: 'amonel.unlocks.v1', theme: 'amonel.theme.v1', quiz: 'amonel.quiz.v1', replay: 'amonel.replay' });
+  // Phase 9D-1 added snake and paint, deliberately: both are in the storage
+  // table of the deployment-legal skill and in TODO.md for the privacy page.
+  assert.deepEqual(STORAGE_KEYS, {
+    unlocks: 'amonel.unlocks.v1',
+    theme: 'amonel.theme.v1',
+    quiz: 'amonel.quiz.v1',
+    snake: 'amonel.snake.v1',
+    paint: 'amonel.paint.v1',
+    replay: 'amonel.replay',
+  });
   for (const file of ['src/lib/count.ts', 'src/lib/counters.ts', 'src/lib/use-public-counts.ts', 'src/components/apps/about/VisitorStats.tsx', 'worker/api.ts']) {
     assert.doesNotMatch(read(file), /localStorage|sessionStorage|indexedDB|document\.cookie|Set-Cookie|caches\.open/i, file);
   }

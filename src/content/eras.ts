@@ -43,13 +43,13 @@ export const appIds = [
   'timeline',
   'cv',
   'quiz',
-  'punchcard-lab',
+  'binary',
   'scheduler',
   'filesystem',
-  'memory-map',
+  'snake',
   'paint',
-  'dialup',
-  'firewall',
+  'network-tools',
+  'time-machine',
 ] as const;
 
 export type AppId = (typeof appIds)[number];
@@ -71,7 +71,13 @@ export interface Era {
   descriptionKey: string;
   /** Awarded when the era's puzzle is solved. Wired up in Phase 5. */
   artifact: ArtifactId;
-  /** The bonus app that artifact unlocks. */
+  /**
+   * The bonus app this era's puzzle unlocks - the one place the mapping lives
+   * (the app registry derives `unlockedBy` from it). Each app echoes its era's
+   * truth: 1946 binary and Morse (text is numbers), 1981 Snake (a finite board,
+   * like finite memory), 1984 Pixel Paint (the GUI), 1995 network tools and
+   * today the Time Machine (Phase 9D-2). DECISIONS.md 57.
+   */
   unlocksApp: AppId;
   /** The real computing concept the puzzle teaches. Used for SEO copy later. */
   teaches: string;
@@ -86,7 +92,7 @@ export const eras: readonly Era[] = [
     nameKey: 'eniac.name',
     descriptionKey: 'eniac.description',
     artifact: 'punch-card',
-    unlocksApp: 'punchcard-lab',
+    unlocksApp: 'binary',
     teaches: 'binary and character encoding',
   },
   {
@@ -119,7 +125,7 @@ export const eras: readonly Era[] = [
     nameKey: 'dos.name',
     descriptionKey: 'dos.description',
     artifact: 'memory-chip',
-    unlocksApp: 'memory-map',
+    unlocksApp: 'snake',
     teaches: 'memory constraints',
   },
   {
@@ -141,7 +147,7 @@ export const eras: readonly Era[] = [
     nameKey: 'win95.name',
     descriptionKey: 'win95.description',
     artifact: 'dial-tone',
-    unlocksApp: 'dialup',
+    unlocksApp: 'network-tools',
     teaches: 'subnetting fundamentals',
   },
   {
@@ -153,7 +159,7 @@ export const eras: readonly Era[] = [
     nameKey: 'cloud.name',
     descriptionKey: 'cloud.description',
     artifact: 'firewall-key',
-    unlocksApp: 'firewall',
+    unlocksApp: 'time-machine',
     teaches: 'ports and firewall basics',
   },
 ];

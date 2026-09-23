@@ -64,6 +64,15 @@ export type ShellLine =
   | { kind: 'section'; section: PortfolioSection }
   | { kind: 'help' };
 
+/**
+ * Hidden commands: answered like any other, but never listed by `help` and
+ * never offered by Tab. The entry point for Phase 9D-3's easter eggs - empty
+ * until then. A command here gets the arguments and the state and returns the
+ * lines to print; machine text only, or message keys (`{ kind: 'message' }`).
+ */
+export type HiddenCommand = (args: readonly string[], state: ShellState) => ShellLine[];
+export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map();
+
 export interface ShellState {
   cwd: string;
   lines: readonly (ShellLine & { id: number })[];
@@ -231,8 +240,11 @@ export function runCommand(state: ShellState, input: string): ShellState {
       return out(...lines);
     }
 
-    default:
+    default: {
+      const hidden = HIDDEN_COMMANDS.get(command);
+      if (hidden) return out(...hidden(args, state));
       return out(error(`bash: ${command}: command not found`), { kind: 'text', text: "Type 'help' to see what this shell can do.", tone: 'muted' });
+    }
   }
 }
 

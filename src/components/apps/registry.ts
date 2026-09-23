@@ -1,6 +1,7 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 
-import { appIds, baseAppIds, type AppId } from '@/content/eras';
+import { appIds, baseAppIds, type AppId, type EraId } from '@/content/eras';
+import { unlockingEra } from '@/lib/unlocks';
 import type { AppProps } from '@/components/apps/types';
 
 /**
@@ -10,7 +11,8 @@ import type { AppProps } from '@/components/apps/types';
  * (`os.apps.<id>.title`), how big its window opens, and the component it runs -
  * loaded on demand, so opening one app never downloads the others. The glyph
  * lives in `icons.tsx` under the same id. Which bonus app an era's puzzle
- * unlocks is data in `content/eras.ts`, not here.
+ * unlocks is data in `content/eras.ts` (`unlocksApp`); `unlockedBy` here is
+ * derived from it, so the mapping is never typed twice.
  */
 export interface AppDefinition {
   id: AppId;
@@ -18,6 +20,8 @@ export interface AppDefinition {
   kind: 'base' | 'bonus';
   /** Message key under the `os` namespace. */
   titleKey: `apps.${AppId}.title`;
+  /** The era whose puzzle unlocks a bonus app; null for a base app. */
+  unlockedBy: EraId | null;
   /** Default window size in CSS pixels; clamped to the desktop on open. */
   size: { width: number; height: number };
   Component: LazyExoticComponent<ComponentType<AppProps>>;
@@ -40,14 +44,16 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   timeline: load(() => import('@/components/apps/timeline/TimelineApp'), 'TimelineApp'),
   cv: load(() => import('@/components/apps/cv/CvApp'), 'CvApp'),
   quiz: load(() => import('@/components/apps/quiz/QuizApp'), 'QuizApp'),
-  // The seven bonus apps are Phase 9; until then they share one stand-in.
-  'punchcard-lab': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  // Bonus apps (Phase 9D-1, DECISIONS.md 57). The rest share one stand-in:
+  // network tools and the Time Machine arrive in 9D-2, the scheduler and the
+  // file tree later.
+  binary: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   filesystem: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
-  'memory-map': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  snake: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   paint: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
-  dialup: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
-  firewall: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  'network-tools': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  'time-machine': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
 };
 
 const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
@@ -60,6 +66,9 @@ const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
   cv: { width: 560, height: 420 },
   contact: { width: 480, height: 360 },
   quiz: { width: 560, height: 600 },
+  binary: { width: 640, height: 580 },
+  snake: { width: 480, height: 600 },
+  paint: { width: 760, height: 600 },
 };
 
 const DEFAULT_SIZE: AppDefinition['size'] = { width: 560, height: 400 };
@@ -68,6 +77,7 @@ export const apps: readonly AppDefinition[] = appIds.map((id) => ({
   id,
   kind: baseAppIds.includes(id) ? 'base' : 'bonus',
   titleKey: `apps.${id}.title`,
+  unlockedBy: unlockingEra(id)?.id ?? null,
   size: SIZES[id] ?? DEFAULT_SIZE,
   Component: COMPONENTS[id],
 }));

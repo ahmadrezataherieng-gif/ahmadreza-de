@@ -54,6 +54,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
   const solvePuzzle = useUnlockStore((state) => state.solvePuzzle);
   const revealPuzzle = useUnlockStore((state) => state.revealPuzzle);
   const skipPuzzle = useUnlockStore((state) => state.skipPuzzle);
+  const watchPuzzle = useUnlockStore((state) => state.watchPuzzle);
   const earnLegend = useUnlockStore((state) => state.earnLegend);
   const solved = useUnlockStore((state) => state.artifacts.includes(artifact));
   const passed = useUnlockStore((state) => state.passedEras.includes(eraId));
@@ -166,6 +167,13 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
 
   const title = t('title');
   const guidedDone = reduced || progress >= GUIDED_END;
+
+  // A demonstration watched to its end unlocks the era's bonus app - never the
+  // artifact, a badge or a count, which stay a solve by hand's (DECISIONS.md 57).
+  // Under reduced motion the finished frame is all there is to watch.
+  useEffect(() => {
+    if (guided && guidedDone) watchPuzzle(eraId);
+  }, [guided, guidedDone, watchPuzzle, eraId]);
   const hasTrick = erasWithTrick.includes(eraId);
   const insiderEarned = !hasTrick || legend || (guided ? guidedDone : passed);
   const insiderNote = (

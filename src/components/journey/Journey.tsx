@@ -13,7 +13,7 @@ import { useThemeStore } from '@/store/theme-store';
 import { useUnlockStore } from '@/store/unlock-store';
 import { usePuzzleProgressStore } from '@/store/puzzle-progress-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
-import { setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
+import { scrollToEra, setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
 import { themeToCssVars } from '@/lib/apply-theme';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
@@ -93,7 +93,7 @@ export function Journey() {
   const setProgress = useJourneyStore((state) => state.setProgress);
   const setTheme = useThemeStore((state) => state.setTheme);
   const markEraVisited = useUnlockStore((state) => state.markEraVisited);
-  const completeJourney = useUnlockStore((state) => state.completeJourney);
+  const finishJourney = useUnlockStore((state) => state.finishJourney);
   const setPuzzleProgress = usePuzzleProgressStore((state) => state.setProgress);
 
   /* --- smooth scrolling ------------------------------------------------- */
@@ -531,7 +531,8 @@ export function Journey() {
         // A closed gate also ends the page; that is not the desktop.
         if (!journeyCompleted && entry.eraId === null && (progress >= 0.98 || atPageEnd)) {
           journeyCompleted = true;
-          completeJourney();
+          // Reaching the end also unlocks every bonus app (DECISIONS.md 57).
+          finishJourney();
           count(JOURNEY_COMPLETED);
           container.dataset.handover = '';
           window.setTimeout(() => leaveForDesktop(desktopHref, { replace: true }), HAND_OVER_MS);
@@ -565,7 +566,14 @@ export function Journey() {
     // bound is stale after that, so re-measure.
     let cancelled = false;
     void document.fonts.ready.then(() => {
-      if (!cancelled) ScrollTrigger.refresh();
+      if (cancelled) return;
+      ScrollTrigger.refresh();
+      // A locked desktop app links to the era that unlocks it (/amonel/#era-4).
+      // The browser's own jump happens before any bound is measured, so land
+      // there again through Lenis once they are. A closed Play gate before it
+      // still ends the page: the visitor meets that gate first, as intended.
+      const target = /^#era-[1-9]$/.test(window.location.hash) ? window.location.hash.slice(1) : null;
+      if (target) requestAnimationFrame(() => scrollToEra(target, true));
     });
 
     // Any section that changes height moves every boundary after it: an era's
@@ -604,7 +612,7 @@ export function Journey() {
       cancelAnimationFrame(limitFrame);
       context.revert();
     };
-  }, [completeJourney, desktopHref, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
+  }, [finishJourney, desktopHref, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
 
   /* --- the pointer tilts the camera, on the full tier only --------------- */
   useEffect(() => {

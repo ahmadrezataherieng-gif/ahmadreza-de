@@ -667,9 +667,10 @@
     },
     "locked": {
       "label": "Locked",
-      "message": "{year, select, today {Solve today’s puzzle to unlock “{app}”.} other {Solve the {year} puzzle to unlock “{app}”.}}",
+      "message": "{year, select, today {Today’s puzzle unlocks “{app}” – solved yourself, with “Show solution” or by watching.} other {The {year} puzzle unlocks “{app}” – solved yourself, with “Show solution” or by watching.}}",
+      "orFinish": "Follow the journey to its end and every app unlocks at once.",
       "dismiss": "Dismiss",
-      "play": "To the journey",
+      "play": "{year, select, today {To today’s puzzle} other {To the {year} puzzle}}",
       "iconLabel": "{app} (locked)"
     },
     "mobile": {
@@ -719,26 +720,33 @@
       "quiz": {
         "title": "Computer Quiz"
       },
-      "punchcard-lab": {
-        "title": "Punch card lab"
+      "binary": {
+        "title": "Binary & Morse",
+        "description": "Turn text into bits, bytes, hex and Morse code – and back."
       },
       "scheduler": {
-        "title": "Batch planner"
+        "title": "Batch planner",
+        "description": "Work through jobs in order, like a 1956 mainframe."
       },
       "filesystem": {
-        "title": "File tree"
+        "title": "File tree",
+        "description": "Explore a filesystem as a tree."
       },
-      "memory-map": {
-        "title": "Memory map"
+      "snake": {
+        "title": "Snake",
+        "description": "The snake game on a finite board – like finite memory."
       },
       "paint": {
-        "title": "Pixel painter"
+        "title": "Pixel Paint",
+        "description": "Paint pixel pictures with palettes from 1 bit to 8 bits."
       },
-      "dialup": {
-        "title": "Dial-up"
+      "network-tools": {
+        "title": "Network tools",
+        "description": "Follow addresses, masks and routes through a network."
       },
-      "firewall": {
-        "title": "Firewall"
+      "time-machine": {
+        "title": "Time Machine",
+        "description": "Dress the desktop in the look of an earlier era."
       }
     }
   }

@@ -306,7 +306,7 @@ if (layout === 'desktop') {
   // From the launcher: windows may cover the icon column by now.
   await clickOn('[data-action="launcher"]');
   await sleep(300);
-  await clickOn('[data-launcher] [data-app="firewall"]');
+  await clickOn('[data-launcher] [data-app="time-machine"]');
   const todayNotice = await js(`document.querySelector('[data-locked-notice]')?.textContent ?? ''`);
   check('desktop icon: the last era says "today", not a year', !/2024/.test(todayNotice) && todayNotice.length > 10, todayNotice);
   await clickOn('[data-action="locked-dismiss"]');
@@ -347,7 +347,7 @@ if (layout === 'desktop') {
   await clickOn('[data-action="mobile-back"]');
   await sleep(700);
   check('mobile: the back button closes the app', (await rectOf('[data-mobile-app]')) === null);
-  await clickOn('.ao-home [data-app="dialup"]');
+  await clickOn('.ao-home [data-app="network-tools"]');
   const notice = await js(`document.querySelector('[data-locked-notice]')?.textContent ?? ''`);
   check('mobile: a locked app names the puzzle that unlocks it', /1995/.test(notice), notice);
   await b.shot(`${TAG}-locked`);

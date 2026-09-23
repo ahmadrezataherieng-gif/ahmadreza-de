@@ -16,6 +16,7 @@ export type JourneyModeName = 'guided' | 'interactive';
 export type CounterName =
   | `era.${EraId}.solved`
   | 'quiz.completed'
+  | 'snake.played'
   | 'journey.completed'
   | `journey.mode.${JourneyModeName}`
   | `app.${AppId}.opened`;
@@ -25,12 +26,15 @@ export const modeChosen = (mode: JourneyModeName): CounterName => `journey.mode.
 export const appOpened = (id: AppId): CounterName => `app.${id}.opened`;
 
 export const QUIZ_COMPLETED: CounterName = 'quiz.completed';
+/** A Snake game played to its end - never the score (Phase 9D-1, DECISIONS.md 57). */
+export const SNAKE_PLAYED: CounterName = 'snake.played';
 /** Reached the Convergence - not the Skip control, which never saw it. */
 export const JOURNEY_COMPLETED: CounterName = 'journey.completed';
 
 export const COUNTER_NAMES: readonly CounterName[] = [
   ...eraIds.map(eraSolved),
   QUIZ_COMPLETED,
+  SNAKE_PLAYED,
   JOURNEY_COMPLETED,
   modeChosen('guided'),
   modeChosen('interactive'),

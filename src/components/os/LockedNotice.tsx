@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { getApp } from '@/components/apps/registry';
-import { eraYearArgument, unlockingEra } from '@/components/apps/unlock';
+import { eraSectionHash, eraYearArgument, unlockingEra } from '@/components/apps/unlock';
 import { LockGlyph } from '@/components/apps/icons';
 import { replayJourney } from '@/components/os/replay';
 import type { Locale } from '@/lib/i18n-config';
@@ -12,8 +12,9 @@ import { cn } from '@/lib/cn';
 import { useShellStore } from '@/store/shell-store';
 
 /**
- * What activating a locked bonus app says: which era's puzzle unlocks it, with
- * a way into the journey. A status message, announced politely and not
+ * What activating a locked bonus app says: what the app is, which era's puzzle
+ * unlocks it - or that finishing the journey unlocks them all - with a way
+ * straight to that era in the journey (DECISIONS.md 57). A status message, announced politely and not
  * focus-stealing; it stays until dismissed (Escape, its button, or opening
  * another app) rather than timing out on a slow reader.
  */
@@ -22,6 +23,7 @@ export function LockedNotice({ className }: { className?: string }) {
   const locale = useLocale() as Locale;
   const appId = useShellStore((store) => store.lockedNotice);
   const dismiss = useShellStore((store) => store.dismissLocked);
+  const era = appId ? unlockingEra(appId) : undefined;
 
   useEffect(() => {
     if (!appId) return;
@@ -45,18 +47,22 @@ export function LockedNotice({ className }: { className?: string }) {
           <p className="min-w-0 flex-1 font-body text-sm text-ink">
             <span className="sr-only">{t('locked.label')}: </span>
             {t('locked.message', {
-              year: eraYearArgument(unlockingEra(appId)),
+              year: eraYearArgument(era),
               app: t(getApp(appId).titleKey),
-            })}
+            })}{' '}
+            {t('locked.orFinish')}
+            {t.has(`apps.${appId}.description`) ? (
+              <span className="mt-1 block text-xs text-muted">{t(`apps.${appId}.description`)}</span>
+            ) : null}
           </p>
           <span className="flex shrink-0 gap-2">
             <button
               type="button"
               data-action="locked-play"
-              onClick={() => replayJourney(locale)}
+              onClick={() => replayJourney(locale, eraSectionHash(era))}
               className="ao-themed cursor-pointer rounded-control border border-accent px-3 py-1 font-mono text-xs text-accent hover:bg-surface focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             >
-              {t('locked.play')}
+              {t('locked.play', { year: eraYearArgument(era) })}
             </button>
             <button
               type="button"

@@ -668,9 +668,10 @@
     },
     "locked": {
       "label": "Gesperrt",
-      "message": "{year, select, today {Lösen Sie das Rätsel von heute, um „{app}“ freizuschalten.} other {Lösen Sie das Rätsel von {year}, um „{app}“ freizuschalten.}}",
+      "message": "{year, select, today {„{app}“ wird mit dem Rätsel von heute freigeschaltet – ob selbst gelöst, mit „Lösung zeigen“ oder beim Zuschauen.} other {„{app}“ wird mit dem Rätsel von {year} freigeschaltet – ob selbst gelöst, mit „Lösung zeigen“ oder beim Zuschauen.}}",
+      "orFinish": "Wer die Reise bis zum Ende geht, schaltet alle Programme auf einmal frei.",
       "dismiss": "Hinweis schließen",
-      "play": "Zur Reise",
+      "play": "{year, select, today {Zum Rätsel von heute} other {Zum Rätsel von {year}}}",
       "iconLabel": "{app} (gesperrt)"
     },
     "mobile": {
@@ -720,26 +721,33 @@
       "quiz": {
         "title": "Computer-Quiz"
       },
-      "punchcard-lab": {
-        "title": "Lochkarten-Labor"
+      "binary": {
+        "title": "Binär & Morse",
+        "description": "Text in Bits, Bytes, Hex und Morsezeichen verwandeln – und zurück."
       },
       "scheduler": {
-        "title": "Stapelplaner"
+        "title": "Stapelplaner",
+        "description": "Aufträge der Reihe nach abarbeiten, wie ein Großrechner von 1956."
       },
       "filesystem": {
-        "title": "Dateibaum"
+        "title": "Dateibaum",
+        "description": "Ein Dateisystem als Baum erkunden."
       },
-      "memory-map": {
-        "title": "Speicherkarte"
+      "snake": {
+        "title": "Snake",
+        "description": "Das Spiel mit der Schlange auf einem begrenzten Feld – wie begrenzter Speicher."
       },
       "paint": {
-        "title": "Pixelmaler"
+        "title": "Pixelmaler",
+        "description": "Pixelbilder malen, mit Farbpaletten von 1 Bit bis 8 Bit."
       },
-      "dialup": {
-        "title": "Einwahl"
+      "network-tools": {
+        "title": "Netzwerk-Werkzeuge",
+        "description": "Adressen, Masken und Wege im Netz nachvollziehen."
       },
-      "firewall": {
-        "title": "Firewall"
+      "time-machine": {
+        "title": "Zeitmaschine",
+        "description": "Den Desktop in das Aussehen einer früheren Epoche versetzen."
       }
     }
   }

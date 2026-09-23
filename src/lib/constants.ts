@@ -9,6 +9,10 @@ export const STORAGE_KEYS = {
   theme: 'amonel.theme.v1',
   /** The Computer-Quiz's best score, one number (DECISIONS.md 55). */
   quiz: 'amonel.quiz.v1',
+  /** Snake's best score in this browser, one number (DECISIONS.md 57). */
+  snake: 'amonel.snake.v1',
+  /** Pixel Paint's current drawing, autosaved in this browser (DECISIONS.md 57). */
+  paint: 'amonel.paint.v1',
   /** sessionStorage: this tab asked to see the journey again (DECISIONS.md 49). */
   replay: 'amonel.replay',
 } as const;

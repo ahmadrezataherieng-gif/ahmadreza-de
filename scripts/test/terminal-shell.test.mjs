@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
+  HIDDEN_COMMANDS,
   HOME,
   complete,
   displayPath,
@@ -142,4 +143,11 @@ test('scrollback is bounded', () => {
   assert.ok(state.lines.length <= 400);
   const ids = state.lines.map((line) => line.id);
   assert.equal(new Set(ids).size, ids.length, 'line ids stay unique');
+});
+
+test('hidden commands: the registry is empty until 9D-3, and help and Tab never list it', () => {
+  assert.equal(HIDDEN_COMMANDS.size, 0);
+  const state = run('nosuchcommand');
+  assert.match(JSON.stringify(state.lines.at(-2)), /command not found/);
+  assert.equal(complete(initialShell(), 'nosuch').input, 'nosuch');
 });

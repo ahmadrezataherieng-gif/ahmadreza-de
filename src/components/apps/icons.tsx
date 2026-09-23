@@ -66,10 +66,12 @@ const GLYPHS: Record<AppId, ReactNode> = {
       <path d="M9.5 9.6a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2.1v.4M12 17.2v.1" />
     </>
   ),
-  'punchcard-lab': (
+  binary: (
     <>
-      <path d="M3.5 6.5h14l3 3v8h-17z" />
-      <path d="M7 10v1.5M10 13v1.5M13 10v1.5M16 13v1.5M7 13v1.5" />
+      <rect x="4" y="4" width="5" height="7" rx="2.5" />
+      <path d="M13.5 5.5L15.5 4v7M13.5 11h4" />
+      <circle cx="5" cy="17" r="1" />
+      <path d="M9 17h4M16.5 17h3.5" />
     </>
   ),
   scheduler: (
@@ -88,10 +90,11 @@ const GLYPHS: Record<AppId, ReactNode> = {
       <path d="M12 7.5v4.5M6.5 16.5V12h11v4.5" />
     </>
   ),
-  'memory-map': (
+  snake: (
     <>
-      <rect x="6" y="6" width="12" height="12" rx="1.5" />
-      <path d="M9.5 9.5h5v5h-5zM9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" />
+      <path d="M4 18.5h8.5a3 3 0 000-6h-4a3 3 0 010-6H17" />
+      <circle cx="18.5" cy="6.5" r="1.5" />
+      <rect x="16.5" y="15.5" width="3" height="3" rx=".5" />
     </>
   ),
   paint: (
@@ -100,16 +103,16 @@ const GLYPHS: Record<AppId, ReactNode> = {
       <path d="M6.5 12.5c-2 .5-3 2.2-3 4.5v2.5H6c2.3 0 4-1 4.5-3" />
     </>
   ),
-  dialup: (
+  'network-tools': (
     <>
       <rect x="3.5" y="12" width="17" height="6.5" rx="1.5" />
       <path d="M7 15.3h2M8.5 9a5 5 0 017 0M6 6.5a8.5 8.5 0 0112 0" />
     </>
   ),
-  firewall: (
+  'time-machine': (
     <>
-      <path d="M12 3.5l7.5 3v5.5c0 4.2-3 7.3-7.5 8.5-4.5-1.2-7.5-4.3-7.5-8.5V6.5z" />
-      <path d="M8 11h8M8 14.5h8M12 11v3.5M9.5 7.8V11M14.5 14.5v3" />
+      <path d="M4.5 12a7.5 7.5 0 102.2-5.3" />
+      <path d="M4.5 4v3.5H8M12 8v4.5l3 2" />
     </>
   ),
 };
