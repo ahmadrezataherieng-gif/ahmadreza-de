@@ -1422,7 +1422,7 @@ Nothing to mark in code yet. Registered so they are not forgotten; each gets rea
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1031 | 404 page (currently the Next.js default, no `not-found.tsx`) | short text | de / en / fa | PLACEHOLDER | Custom not-found text in de, en, fa with a link home |
+| CR-1031 | 404 page: `notFound.*` in `src/messages/{de,en,fa}.json` + the title pattern in `src/app/not-found.tsx` (built 2026-09-23) | short text | de / en / fa | PLACEHOLDER | One page in all three languages (a stray URL has no locale): title, one sentence, links home, journey, desktop; noindex. Now (de): «Seite nicht gefunden» |
 | CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | PLACEHOLDER | Real timeline entries of the career path |
 | CR-1033 | Résumé PDF (`/files/ahmadreza-taheri-lebenslauf.pdf`) - file itself | other | de / en / fa | PLACEHOLDER | The actual CV document, in which languages |
 | CR-1034 | Portrait photo (`/images/portrait.jpg`) - file itself | other | de / en / fa | PLACEHOLDER | Real photo, rights and consent, final alt text |
@@ -1461,12 +1461,12 @@ Titles, descriptions, Open Graph, manifest and everything search engines and lin
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1046 | JSON-LD structured data (Person, WebSite, hreflang) - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | Job title, knowsAbout, sameAs links, per-language descriptions |
+| CR-1046 | JSON-LD (Person, WebSite, ProfilePage): `src/lib/structured-data.ts` + `site.persianName`, `site.jobTitle`, `site.knowsAbout` in `src/messages/{de,en,fa}.json` (built 2026-09-23) | SEO / meta | de / en / fa | PLACEHOLDER | Job title, knowsAbout list per language; `image` and `sameAs` wait for the portrait and the profiles (ROADMAP OWN-01, OWN-03) |
 | CR-1047 | `public/robots.txt` - bot policy (built 2026-09-23) | SEO / meta | all (machine text) | PLACEHOLDER | Allows every crawler and names the AI answering and training bots, by the owner’s decision; confirm the list is still wanted |
 | CR-1048 | `src/app/sitemap.ts` - `out/sitemap.xml` (built 2026-09-23) | SEO / meta | de / en / fa | PLACEHOLDER | Nine URLs with hreflang alternates and x-default; legal pages left out (noindex); priorities 1 landing, 0.8 others |
-| CR-1049 | llms.txt and the text fallback for crawlers - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | Plain-text summary of the person and the site |
+| CR-1049 | `public/llms.txt` - summary for AI crawlers (built 2026-09-23); the static text fallback for crawlers is ROADMAP SEO-10 | SEO / meta | en (with the Persian name) | PLACEHOLDER | Who he is, role, employer, focus, languages, contact e-mail, the three parts of the site, links. Only facts the site already states; confirm each, and whether the employer may be named (ROADMAP LEG-08) |
 | CR-1050 | Open Graph / social preview image and its alt text | SEO / meta | de / en / fa | PLACEHOLDER | Share image and description per language |
-| CR-1051 | Per-view meta descriptions (journey, desktop currently reuse the site description) | SEO / meta | de / en / fa | PLACEHOLDER | Distinct description for /amonel/ and /desktop/ in de, en, fa |
+| CR-1051 | `site.journeyDescription`, `site.desktopDescription` in `src/messages/{de,en,fa}.json`, used in `generateMetadata` (built 2026-09-23) | SEO / meta | de / en / fa | PLACEHOLDER | Distinct snippets for /amonel/ and /desktop/; drafts run 140-190 characters, Google shows about 155 - shorten in the review |
 
 ## 26. Legal pages, legal links and the coming-soon page
 

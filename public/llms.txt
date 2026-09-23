@@ -1,0 +1,38 @@
+# Ahmadreza Taheri (احمدرضا طاهری)
+
+<!-- CONTENT-TODO CR-1049: placeholder summary for AI crawlers, written from facts the site already states. Review with the owner. -->
+
+> Ahmadreza Taheri is an IT specialist in training for systems integration (German: "Fachinformatiker für Systemintegration in Ausbildung") at the city administration of Trier (Stadtverwaltung Trier), Germany. His focus is networks and Linux. He works in German, English and Persian. ahmadreza.de is his portfolio: an interactive history of computing that teaches how computers work while introducing him.
+
+## About the person
+
+- Name: Ahmadreza Taheri; in Persian: احمدرضا طاهری
+- Role: Fachinformatiker für Systemintegration in Ausbildung (IT specialist for systems integration, apprentice)
+- Employer during the apprenticeship: Stadtverwaltung Trier (city administration of Trier)
+- Location: Trier, Germany
+- Focus: systems integration, networks, Linux, IT support
+- Languages: German, English, Persian
+- Contact: kontakt@ahmadreza.de
+
+## About the site
+
+The site is called Amonel. It has three parts:
+
+- The landing page, with who he is and how to reach him.
+- The journey (Amonel): seven eras of computing - 1946 ENIAC, 1956 mainframes, 1971 UNIX, 1981 IBM PC and MS-DOS, 1984 Macintosh, 1995 Windows 95 and dial-up, and today's cloud - each with one lasting truth about computers and a small puzzle.
+- The desktop (Amonel OS): a browser desktop with apps - About, a terminal, helpdesk tickets, traceroute, a local search assistant and a computer quiz.
+
+## Pages
+
+- [Home (German)](https://ahmadreza.de/): name, role, contact
+- [Home (English)](https://ahmadreza.de/en/)
+- [Home (Persian)](https://ahmadreza.de/fa/)
+- [The journey (German)](https://ahmadreza.de/amonel/): 80 years of computing in seven eras
+- [The journey (English)](https://ahmadreza.de/en/amonel/)
+- [The desktop (German)](https://ahmadreza.de/desktop/): Amonel OS
+- [The desktop (English)](https://ahmadreza.de/en/desktop/)
+
+## Optional
+
+- [Source code](https://github.com/ahmadrezataherieng-gif/ahmadreza-de)
+- [Impressum](https://ahmadreza.de/impressum/)

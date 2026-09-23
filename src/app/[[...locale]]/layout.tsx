@@ -4,16 +4,6 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
-import '@fontsource/jetbrains-mono/latin-400.css';
-import '@fontsource/jetbrains-mono/latin-700.css';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-700.css';
-import '@fontsource/inter/latin-ext-400.css';
-import '@fontsource-variable/vazirmatn/index.css';
-import '@fontsource/vt323/latin-400.css';
-import '@fontsource/press-start-2p/latin-400.css';
-import '@/styles/globals.css';
-
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
 import { dirForLocale, htmlLang, type Locale } from '@/lib/i18n-config';
@@ -21,6 +11,7 @@ import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/rout
 import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
 import { loadLegalCopy } from '@/components/legal/LegalPage';
+import { serialiseJsonLd, structuredData } from '@/lib/structured-data';
 
 type LayoutParams = { locale?: string[] };
 
@@ -122,7 +113,15 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'site' });
   const title = await viewTitle(locale, view);
   const legal = view === 'imprint' || view === 'privacy' ? (await loadLegalCopy(locale))[view] : null;
-  const description = legal ? legal.description : t('description');
+  // Each view its own description, so no two pages share a search snippet.
+  // CONTENT-TODO CR-1051
+  const description = legal
+    ? legal.description
+    : view === 'journey'
+      ? t('journeyDescription')
+      : view === 'desktop'
+        ? t('desktopDescription')
+        : t('description');
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -181,9 +180,29 @@ export default async function LocaleLayout({
     Object.entries(allMessages).filter(([namespace]) => VIEW_NAMESPACES[view].includes(namespace)),
   );
 
+  // Structured data on every indexed page; the noindex legal pages carry none.
+  const tSite = await getTranslations({ locale, namespace: 'site' });
+  const jsonLd =
+    view === 'imprint' || view === 'privacy'
+      ? null
+      : serialiseJsonLd(
+          structuredData({
+            name: tSite('author'),
+            persianName: tSite('persianName'),
+            jobTitle: tSite('jobTitle'),
+            knowsAbout: tSite.raw('knowsAbout') as string[],
+            inLanguage: htmlLang[locale],
+            siteName: tSite('brand'),
+            description: tSite('description'),
+            pageUrl: `${SITE_URL}${viewHref(locale, view)}`,
+            isProfilePage: view === 'landing',
+          }),
+        );
+
   return (
     <html lang={htmlLang[locale]} dir={dirForLocale(locale)} suppressHydrationWarning>
       <head>
+        {jsonLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} /> : null}
         {/* The journey's motion tier, decided before the first paint so nothing
             shifts afterwards. Inline and tiny on purpose: it has to run before
             the first frame, and it only sets one attribute. */}

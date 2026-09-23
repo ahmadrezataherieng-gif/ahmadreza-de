@@ -28,9 +28,9 @@ Recount after each change (one line in Git Bash):
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
-| P1 | 23 | 6 | 3 | 32 |
+| P1 | 20 | 6 | 6 | 32 |
 | P2 | 16 | 2 | 0 | 18 |
-| **total** | **49** | **8** | **10** | **67** |
+| **total** | **46** | **8** | **13** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -57,15 +57,15 @@ Recount after each change (one line in Git Bash):
 |---|---|---|---|---|---|
 | SEO-01 | **robots.txt** allowing all crawlers, explicitly including the AI bots (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, CCBot, Google-Extended, meta-externalagent), plus the sitemap line. Built 2026-09-23: `public/robots.txt`, pinned by `scripts/test/seo.test.mjs`. | done | P1 | Claude Code | - |
 | SEO-02 | **sitemap.xml** with every generated URL and its hreflang alternates (`xhtml:link`), generated at build time from `allRouteSegments()`. Built 2026-09-23: `src/app/sitemap.ts` → `out/sitemap.xml`, nine URLs, legal pages left out. | done | P1 | Claude Code | - |
-| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" and the legal name, `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. | missing | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) |
-| SEO-04 | **llms.txt**: a plain-text summary of the person and the site for AI crawlers. | missing | P1 | Claude Code | - |
+| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" (never the legal name, owner 2026-09-23), `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. Built 2026-09-23 (`src/lib/structured-data.ts`, in every indexed page's head); `image` and `sameAs` **waiting for owner** (OWN-01, OWN-03). | partial | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) |
+| SEO-04 | **llms.txt**: a plain-text summary of the person and the site for AI crawlers. Built 2026-09-23: `public/llms.txt`, facts the site already states, both spellings of the name. | done | P1 | Claude Code | - |
 | SEO-05 | **Open Graph share image**: one 1200 x 630 PNG per language (or one shared), `og:image`, `og:image:alt`, `twitter:card`. | missing | P1 | Claude Code | BR-01 for the final version |
-| SEO-06 | **Per-page meta descriptions**: the journey and the desktop reuse `site.description`; each view (and each new page) needs its own. | partial | P1 | Claude Code | - |
+| SEO-06 | **Per-page meta descriptions**: the journey and the desktop reuse `site.description`; each view (and each new page) needs its own. Done 2026-09-23: `site.journeyDescription`, `site.desktopDescription`; legal pages have their own; drafts run 140-190 characters (CR-1051). | done | P1 | Claude Code | - |
 | SEO-07 | **hreflang + canonical** per view incl. `x-default` - done for the nine pages; every new page (legal, About, 404 excluded) must emit them too. | done | P1 | Claude Code | - |
 | SEO-08 | **Persian name "احمدرضا طاهری" coverage**: in `site.title`/`author` (fa) and About (fa) today; missing in JSON-LD, llms.txt, the static fa About page, the fa OG image alt. | partial | P1 | Claude Code | SEO-03, SEO-04, SEO-09 |
 | SEO-09 | **Static, indexable About pages** at `/ueber-mich/`, `/en/about/`, `/fa/about/` (URL to be confirmed): real HTML text from `content/about.ts`, one h1, linked from landing and footer. | missing | P1 | Claude Code | - |
 | SEO-10 | **Journey text fallback**: today a screen-reader-only list of the eras; expand to the full SEO layer (one truth, insider detail, puzzle summary per era) as real static text. | partial | P1 | Claude Code | - |
-| SEO-11 | **Custom 404 page**: localised, on-brand, `noindex`, links home / desktop / journey; replaces Next's default `404.html` that `not_found_handling: "404-page"` serves. | missing | P1 | Claude Code | - |
+| SEO-11 | **Custom 404 page**: localised, on-brand, `noindex`, links home / desktop / journey; replaces Next's default `404.html` that `not_found_handling: "404-page"` serves. Built 2026-09-23: `src/app/not-found.tsx`, one page in all three languages (a stray URL has no locale), real 404 status, noindex; fonts and CSS moved to the root layout so it is styled. | done | P1 | Claude Code | - |
 | SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 |
 | SEO-13 | Web manifest is German only (`name`, `description`). | partial | P2 | Claude Code | - |
 | SEO-14 | Landing titles run over 60 characters (de 66, en 64, fa 66): **waiting for owner** decision on the wording (never shorten the name). | missing | P2 | Ahmadreza | FIN-01 |

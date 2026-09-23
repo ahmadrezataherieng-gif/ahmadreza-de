@@ -286,7 +286,14 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
-- JSON-LD, `llms.txt`, the Open Graph image, a custom 404. (robots.txt and `sitemap.xml` exist since 2026-09-23: every crawler allowed, AI bots named; nine URLs with hreflang, legal pages left out.)
+- The Open Graph image, the static About pages, the full journey text
+  fallback (ROADMAP SEO-05, SEO-09, SEO-10).
+- **SEO layer, built 2026-09-23** (Phase 10, partly): `robots.txt` (every
+  crawler, the AI bots named), `sitemap.xml` (nine URLs with hreflang, legal
+  pages left out), `llms.txt`, JSON-LD (Person with the Persian name, WebSite,
+  ProfilePage on the landing page; no image or `sameAs` yet), a description
+  per view, and a trilingual 404 page with a real 404 status. The fonts and
+  the stylesheet are imported by the root layout now, so the 404 is styled.
 - **Legal pages** (Phase 11, DECISIONS.md 58): built in all three languages
   from `messages/legal/`, `noindex`, the address only in `content/legal.ts`;
   status "LEGAL – owner must verify". The coming-soon page now lives in

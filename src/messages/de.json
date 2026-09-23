@@ -4,7 +4,17 @@
     "brand": "Amonel",
     "tagline": "80 Jahre Computergeschichte in 90 Sekunden",
     "description": "Portfolio von Ahmadreza Taheri, Auszubildender Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Ein interaktives Betriebssystem im Browser.",
-    "author": "Ahmadreza Taheri"
+    "journeyDescription": "80 Jahre Computergeschichte in sieben Epochen, von ENIAC bis zur Cloud, jede mit einem kleinen Rätsel. Ein interaktives Portfolio von Ahmadreza Taheri, angehender Fachinformatiker in Trier.",
+    "desktopDescription": "Amonel OS, der Desktop von Ahmadreza Taheri im Browser: Über mich, Terminal, Helpdesk-Tickets, Traceroute und Computer-Quiz eines angehenden Fachinformatikers für Systemintegration.",
+    "author": "Ahmadreza Taheri",
+    "persianName": "احمدرضا طاهری",
+    "jobTitle": "Fachinformatiker für Systemintegration (in Ausbildung)",
+    "knowsAbout": [
+      "Systemintegration",
+      "Netzwerke",
+      "Linux",
+      "IT-Support"
+    ]
   },
   "nav": {
     "journey": "Die Reise",
@@ -751,5 +761,12 @@
         "description": "Den Desktop in das Aussehen einer früheren Epoche versetzen."
       }
     }
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "text": "Diese Adresse gibt es auf ahmadreza.de nicht oder nicht mehr. Einer dieser Wege führt weiter:",
+    "home": "Zur Startseite",
+    "journey": "Die Reise",
+    "desktop": "Zum Desktop"
   }
 }

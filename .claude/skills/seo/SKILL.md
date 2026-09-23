@@ -8,9 +8,10 @@ description: "Read before touching titles, meta tags, headings, structured data,
 - Display name everywhere: **"Ahmadreza Taheri"**.
 - Persian spelling: **"احمدرضا طاهری"**.
 - Legal full name: **"Ahmadreza Taheri Momrabadi"** (first name Ahmadreza,
-  family name Taheri Momrabadi). This appears **only** in the Impressum and as
-  an `alternateName` in structured data - never in visible copy anywhere else
-  on the site.
+  family name Taheri Momrabadi). This appears **only** in the Impressum (and
+  the Datenschutzerklärung's controller block) - never anywhere else on the
+  site, **not in structured data either** (Ahmadreza, 2026-09-23; this
+  replaces the earlier `alternateName` plan).
 
 ### Canonical host
 
@@ -85,12 +86,15 @@ never sees it.
   `node scripts/brand-icons.mjs`. Every logo on a page is inline SVG or CSS,
   never an image file.
 
-### Structured data (Phase 10, not built yet)
+### Structured data (built 2026-09-23, `src/lib/structured-data.ts`)
 
-- **Person:** `name`, `alternateName` (both the Persian spelling and the
-  legal full name), `jobTitle`, address `addressLocality: "Trier"`,
-  `knowsAbout`, `image`, `sameAs` once the owner's profiles are ready.
-- **ProfilePage** and **WebSite**.
+- **Person:** `name`, `alternateName` (the Persian spelling only - never the
+  legal name), `jobTitle`, address `addressLocality: "Trier"` (never a street),
+  `knowsAbout`, `knowsLanguage`, `email`; add `image` with the portrait and
+  `sameAs` once the owner's profiles are ready.
+- **WebSite** on every indexed page, **ProfilePage** on the landing page, all
+  linked by `@id`. The legal pages carry none. Rendered in the locale layout's
+  `<head>`; pinned by `scripts/test/seo.test.mjs`.
 
 ### Search console verification
 
