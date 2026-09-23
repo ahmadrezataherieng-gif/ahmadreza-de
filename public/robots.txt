@@ -1,0 +1,28 @@
+# ahmadreza.de - every crawler is welcome, AI crawlers included.
+#
+# The owner's explicit decision (the `seo` skill): the site exists to be found
+# for Ahmadreza Taheri's name, job and skills, by search engines and by AI
+# answer engines alike. Do not narrow this, add a crawl-delay or block any of
+# the bots below without asking him first.
+# CONTENT-TODO CR-1047
+
+User-agent: *
+Allow: /
+
+# AI answering and search bots
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+Allow: /
+
+# AI training bots
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: meta-externalagent
+Allow: /
+
+Sitemap: https://ahmadreza.de/sitemap.xml

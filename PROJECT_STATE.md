@@ -286,7 +286,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
-- Sitemap, JSON-LD, `llms.txt`, robots.txt, the Open Graph image, a custom 404.
+- JSON-LD, `llms.txt`, the Open Graph image, a custom 404. (robots.txt and `sitemap.xml` exist since 2026-09-23: every crawler allowed, AI bots named; nine URLs with hreflang, legal pages left out.)
 - **Legal pages** (Phase 11, DECISIONS.md 58): built in all three languages
   from `messages/legal/`, `noindex`, the address only in `content/legal.ts`;
   status "LEGAL – owner must verify". The coming-soon page now lives in

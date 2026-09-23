@@ -1462,8 +1462,8 @@ Titles, descriptions, Open Graph, manifest and everything search engines and lin
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1046 | JSON-LD structured data (Person, WebSite, hreflang) - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | Job title, knowsAbout, sameAs links, per-language descriptions |
-| CR-1047 | robots.txt bot policy - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | Which crawlers are allowed |
-| CR-1048 | sitemap.xml - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | URL list with hreflang alternates |
+| CR-1047 | `public/robots.txt` - bot policy (built 2026-09-23) | SEO / meta | all (machine text) | PLACEHOLDER | Allows every crawler and names the AI answering and training bots, by the owner’s decision; confirm the list is still wanted |
+| CR-1048 | `src/app/sitemap.ts` - `out/sitemap.xml` (built 2026-09-23) | SEO / meta | de / en / fa | PLACEHOLDER | Nine URLs with hreflang alternates and x-default; legal pages left out (noindex); priorities 1 landing, 0.8 others |
 | CR-1049 | llms.txt and the text fallback for crawlers - Phase 10 | SEO / meta | de / en / fa | PLACEHOLDER | Plain-text summary of the person and the site |
 | CR-1050 | Open Graph / social preview image and its alt text | SEO / meta | de / en / fa | PLACEHOLDER | Share image and description per language |
 | CR-1051 | Per-view meta descriptions (journey, desktop currently reuse the site description) | SEO / meta | de / en / fa | PLACEHOLDER | Distinct description for /amonel/ and /desktop/ in de, en, fa |

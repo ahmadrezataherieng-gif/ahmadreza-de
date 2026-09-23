@@ -28,9 +28,9 @@ Recount after each change (one line in Git Bash):
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
-| P1 | 25 | 6 | 1 | 32 |
+| P1 | 23 | 6 | 3 | 32 |
 | P2 | 16 | 2 | 0 | 18 |
-| **total** | **51** | **8** | **8** | **67** |
+| **total** | **49** | **8** | **10** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -55,8 +55,8 @@ Recount after each change (one line in Git Bash):
 
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
-| SEO-01 | **robots.txt** allowing all crawlers, explicitly including the AI bots (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, CCBot, Google-Extended, meta-externalagent), plus the sitemap line. | missing | P1 | Claude Code | - |
-| SEO-02 | **sitemap.xml** with every generated URL and its hreflang alternates (`xhtml:link`), generated at build time from `allRouteSegments()`. | missing | P1 | Claude Code | - |
+| SEO-01 | **robots.txt** allowing all crawlers, explicitly including the AI bots (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, CCBot, Google-Extended, meta-externalagent), plus the sitemap line. Built 2026-09-23: `public/robots.txt`, pinned by `scripts/test/seo.test.mjs`. | done | P1 | Claude Code | - |
+| SEO-02 | **sitemap.xml** with every generated URL and its hreflang alternates (`xhtml:link`), generated at build time from `allRouteSegments()`. Built 2026-09-23: `src/app/sitemap.ts` → `out/sitemap.xml`, nine URLs, legal pages left out. | done | P1 | Claude Code | - |
 | SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" and the legal name, `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. | missing | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) |
 | SEO-04 | **llms.txt**: a plain-text summary of the person and the site for AI crawlers. | missing | P1 | Claude Code | - |
 | SEO-05 | **Open Graph share image**: one 1200 x 630 PNG per language (or one shared), `og:image`, `og:image:alt`, `twitter:card`. | missing | P1 | Claude Code | BR-01 for the final version |
