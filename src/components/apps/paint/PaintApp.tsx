@@ -5,7 +5,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
-import { useNativeKeydown } from '@/components/apps/use-app-input';
+import { capture, useNativeKeydown } from '@/components/apps/use-app-input';
 import {
   blank,
   convertPalette,
@@ -89,6 +89,7 @@ function Paint({ appId }: AppProps) {
   // What was on the canvas when the app opened: nothing is written to storage
   // until the visitor changes it, so opening Paint alone stores nothing.
   const opened = useRef(picture);
+  const changed = useRef(false);
   const palette = palettes[picture.palette];
   const [tool, setTool] = useState<Tool>('pencil');
   const [color, setColor] = useState(() => palettes[picture.palette].ink);
@@ -128,7 +129,8 @@ function Paint({ appId }: AppProps) {
   /* --- autosave ------------------------------------------------------------------ */
 
   useEffect(() => {
-    if (picture === opened.current) return;
+    if (picture === opened.current && !changed.current) return;
+    changed.current = true;
     const timer = window.setTimeout(() => {
       const text = encodePicture(picture);
       try {
@@ -222,7 +224,7 @@ function Paint({ appId }: AppProps) {
     setKeyboard(false);
     const cell = cellOf(event);
     if (tool === 'pencil' || tool === 'eraser') {
-      event.currentTarget.setPointerCapture(event.pointerId);
+      capture(event.currentTarget, event.pointerId);
       const ink = tool === 'eraser' ? palette.background : color;
       const pixels = paint(picture.pixels, picture.size, [cell], ink);
       stroke.current = { pointer: event.pointerId, last: cell, pixels };

@@ -39,7 +39,7 @@
       "bits": "Bits"
     },
     "byteCount": "{count, plural, one {# Byte} other {# Bytes}}",
-    "truncated": "Gezeigt sind die ersten {count} Zeichen.",
+    "truncated": "Gezeigt sind die ersten {count, number} Zeichen.",
     "bitsLegend": "Jedes Kästchen ist ein Bit: gefüllt bedeutet 1, leer bedeutet 0. Acht Bits sind ein Byte."
   },
   "morse": {
@@ -68,11 +68,11 @@
     "playSound": "Ton abspielen",
     "stop": "Stopp",
     "volume": "Lautstärke",
-    "volumeValue": "{percent} Prozent",
+    "volumeValue": "{percent, number} Prozent",
     "playing": "Das Signal wird abgespielt.",
     "finished": "Das Signal ist zu Ende.",
     "stopped": "Das Signal wurde gestoppt.",
-    "speed": "Langsames Tempo, fünf Wörter pro Minute: etwa {seconds} Sekunden.",
+    "speed": "Langsames Tempo, fünf Wörter pro Minute: etwa {seconds, number} Sekunden.",
     "noAudio": "Dieser Browser kann keinen Ton erzeugen; das Licht funktioniert trotzdem.",
     "timelineLabel": "Das Signal als Zeitleiste: {code}",
     "timelineNote": "Ein Punkt dauert eine Einheit, ein Strich drei. Zwischen Buchstaben ist drei Einheiten Pause, zwischen Wörtern sieben.",

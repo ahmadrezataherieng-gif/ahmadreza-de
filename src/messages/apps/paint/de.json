@@ -1,6 +1,6 @@
 {
   "canvasRole": "Zeichenfläche",
-  "canvasLabel": "Zeichenfläche {size} × {size} Pixel, Cursor bei Spalte {x}, Zeile {y}, Werkzeug: {tool}",
+  "canvasLabel": "Zeichenfläche {size, number} × {size, number} Pixel, Cursor bei Spalte {x, number}, Zeile {y, number}, Werkzeug: {tool}",
   "canvasHelp": "Mit Maus, Finger oder Stift malen. Mit der Tastatur: Pfeiltasten bewegen den Cursor (mit Umschalt in Viererschritten), Leertaste oder Eingabe benutzt das Werkzeug. Strg+Z macht rückgängig, Strg+Y wiederholt.",
   "toolsLabel": "Werkzeuge",
   "tools": {
@@ -14,7 +14,7 @@
   "clear": "Leeren",
   "grid": "Raster",
   "sizeLabel": "Größe",
-  "sizeConfirm": "Eine neue Größe beginnt ein leeres Bild mit {size} × {size} Pixeln. Das jetzige Bild lässt sich danach mit „Rückgängig“ zurückholen.",
+  "sizeConfirm": "Eine neue Größe beginnt ein leeres Bild mit {size, number} × {size, number} Pixeln. Das jetzige Bild lässt sich danach mit „Rückgängig“ zurückholen.",
   "sizeConfirmYes": "Neues Bild beginnen",
   "sizeConfirmNo": "Abbrechen",
   "paletteLabel": "Palette",
@@ -32,9 +32,9 @@
       "note": "8 Bit pro Pixel ergeben 256 Farben gleichzeitig, wie im VGA-Modus von 1987. Welche 256 es waren, legte das Programm fest; hier sind es die 16 von oben, ein Farbwürfel und Graustufen."
     }
   },
-  "memory": "Dieses Bild braucht so {bytes} Bytes Speicher ({size} × {size} Pixel × {depth} Bit).",
+  "memory": "Dieses Bild braucht so {bytes} Bytes Speicher ({size, number} × {size, number} Pixel × {depth, number} Bit).",
   "colorLabel": "Farbe",
-  "swatch": "Farbe {index} von {count}: {hex}",
+  "swatch": "Farbe {index, number} von {count, number}: {hex}",
   "download": "Als PNG herunterladen",
   "saveNote": "Das Bild wird nur in diesem Browser gespeichert und nirgendwohin hochgeladen. Der Download entsteht hier auf Ihrem Gerät.",
   "saveFailed": "Automatisches Speichern ist in diesem Browser gerade nicht möglich. Sie können weitermalen und das Bild herunterladen.",
@@ -44,7 +44,7 @@
     "redone": "Wiederholt.",
     "cleared": "Bild geleert.",
     "palette": "Palette gewechselt: {name}. Jede Farbe wurde durch die nächstliegende ersetzt.",
-    "size": "Neues Bild, {size} × {size} Pixel.",
+    "size": "Neues Bild, {size, number} × {size, number} Pixel.",
     "downloaded": "Das PNG wurde erstellt."
   }
 }

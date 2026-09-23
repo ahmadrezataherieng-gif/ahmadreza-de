@@ -5,7 +5,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
-import { useNativeKeydown } from '@/components/apps/use-app-input';
+import { capture, useNativeKeydown } from '@/components/apps/use-app-input';
 import {
   isFinished,
   keyDirection,
@@ -266,7 +266,7 @@ function Snake({ appId }: AppProps) {
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse') return;
     swipe.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
-    event.currentTarget.setPointerCapture(event.pointerId);
+    capture(event.currentTarget, event.pointerId);
   };
   const onPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
     const origin = swipe.current;

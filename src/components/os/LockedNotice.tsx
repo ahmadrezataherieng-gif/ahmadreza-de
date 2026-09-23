@@ -44,7 +44,8 @@ export function LockedNotice({ className }: { className?: string }) {
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-edge text-muted">
             <LockGlyph className="h-3.5 w-3.5" />
           </span>
-          <p className="min-w-0 flex-1 font-body text-sm text-ink">
+          {/* A basis wide enough to read: on a phone the buttons wrap below the text. */}
+          <p className="min-w-0 flex-1 basis-52 font-body text-sm text-ink">
             <span className="sr-only">{t('locked.label')}: </span>
             {t('locked.message', {
               year: eraYearArgument(era),
@@ -55,7 +56,7 @@ export function LockedNotice({ className }: { className?: string }) {
               <span className="mt-1 block text-xs text-muted">{t(`apps.${appId}.description`)}</span>
             ) : null}
           </p>
-          <span className="flex shrink-0 gap-2">
+          <span className="ms-auto flex shrink-0 gap-2">
             <button
               type="button"
               data-action="locked-play"

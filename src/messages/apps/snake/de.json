@@ -4,7 +4,7 @@
   "boardRole": "Spielfeld",
   "boardLabel": "Snake-Spielfeld",
   "overlay": {
-    "ready": "Starten Sie mit „Start“ oder einer Pfeiltaste.",
+    "ready": "Starten Sie mit „Start“, einer Pfeiltaste oder einem Wisch über das Feld.",
     "paused": "Pause. Weiter mit der Leertaste oder „Weiter“.",
     "over": "Vorbei – {score, plural, one {# Punkt} other {# Punkte}}.",
     "won": "Das ganze Feld ist gefüllt. Mehr Platz gibt es nicht."
@@ -30,6 +30,6 @@
     "paused": "Pause.",
     "resumed": "Das Spiel läuft weiter.",
     "over": "Spiel vorbei mit {score, plural, one {# Punkt} other {# Punkten}}.",
-    "won": "Das Feld ist voll: {score} Punkte."
+    "won": "Das Feld ist voll: {score, number} Punkte."
   }
 }

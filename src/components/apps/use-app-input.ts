@@ -63,3 +63,17 @@ export function useNativeKeydown(ref: RefObject<HTMLElement | null>, handler: (e
     return () => field.removeEventListener('keydown', listener);
   }, [ref]);
 }
+
+/**
+ * Keep a pointer's moves on the element that took its down event, so a stroke
+ * or a swipe that leaves the canvas still ends there. The browser refuses it
+ * for a pointer it no longer considers active (a pen lifted mid-event, some
+ * emulated input) - the stroke must go on without it rather than throw.
+ */
+export function capture(element: Element, pointerId: number): void {
+  try {
+    element.setPointerCapture(pointerId);
+  } catch {
+    // Not capturable: moves outside the element are simply not seen.
+  }
+}

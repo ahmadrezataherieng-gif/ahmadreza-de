@@ -668,8 +668,8 @@
     },
     "locked": {
       "label": "Gesperrt",
-      "message": "{year, select, today {„{app}“ wird mit dem Rätsel von heute freigeschaltet – ob selbst gelöst, mit „Lösung zeigen“ oder beim Zuschauen.} other {„{app}“ wird mit dem Rätsel von {year} freigeschaltet – ob selbst gelöst, mit „Lösung zeigen“ oder beim Zuschauen.}}",
-      "orFinish": "Wer die Reise bis zum Ende geht, schaltet alle Programme auf einmal frei.",
+      "message": "{year, select, today {Das Rätsel von heute schaltet „{app}“ frei – selbst gelöst, gezeigt oder angeschaut.} other {Das Rätsel von {year} schaltet „{app}“ frei – selbst gelöst, gezeigt oder angeschaut.}}",
+      "orFinish": "Am Ende der Reise sind alle Programme frei.",
       "dismiss": "Hinweis schließen",
       "play": "{year, select, today {Zum Rätsel von heute} other {Zum Rätsel von {year}}}",
       "iconLabel": "{app} (gesperrt)"

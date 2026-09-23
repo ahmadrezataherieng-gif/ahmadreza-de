@@ -39,7 +39,7 @@
       "bits": "Bits"
     },
     "byteCount": "{count, plural, one {# byte} other {# bytes}}",
-    "truncated": "Showing the first {count} characters.",
+    "truncated": "Showing the first {count, number} characters.",
     "bitsLegend": "Each box is one bit: filled means 1, empty means 0. Eight bits make a byte."
   },
   "morse": {
@@ -68,11 +68,11 @@
     "playSound": "Play sound",
     "stop": "Stop",
     "volume": "Volume",
-    "volumeValue": "{percent} percent",
+    "volumeValue": "{percent, number} percent",
     "playing": "The signal is playing.",
     "finished": "The signal has ended.",
     "stopped": "The signal was stopped.",
-    "speed": "Slow speed, five words a minute: about {seconds} seconds.",
+    "speed": "Slow speed, five words a minute: about {seconds, number} seconds.",
     "noAudio": "This browser cannot make a sound; the light still works.",
     "timelineLabel": "The signal as a timeline: {code}",
     "timelineNote": "A dot lasts one unit, a dash three. Letters are three units apart, words seven.",

@@ -4,7 +4,7 @@
   "boardRole": "game board",
   "boardLabel": "Snake board",
   "overlay": {
-    "ready": "Press “Start” or an arrow key to begin.",
+    "ready": "Press “Start”, an arrow key, or swipe across the board to begin.",
     "paused": "Paused. Space or “Resume” to go on.",
     "over": "Game over – {score, plural, one {# point} other {# points}}.",
     "won": "The whole board is full. There is no more room."
@@ -30,6 +30,6 @@
     "paused": "Paused.",
     "resumed": "The game is running again.",
     "over": "Game over with {score, plural, one {# point} other {# points}}.",
-    "won": "The board is full: {score} points."
+    "won": "The board is full: {score, number} points."
   }
 }

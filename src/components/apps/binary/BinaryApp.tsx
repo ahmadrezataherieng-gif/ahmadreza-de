@@ -201,7 +201,7 @@ function BytesPanel() {
           {BYTE_FORMATS.filter((format) => format !== source).map((format) => (
             <div key={format} className="flex flex-col gap-0.5">
               <dt className="font-mono text-[11px] tracking-wide text-muted uppercase">{t(`formats.${format}`)}</dt>
-              <dd dir="ltr" className="font-mono text-xs leading-relaxed break-all text-ink rtl:text-right" data-binary-output={format}>
+              <dd dir="ltr" className="font-mono text-xs leading-relaxed break-words text-ink rtl:text-right" data-binary-output={format}>
                 {formatBytes(result.bytes, format)}
               </dd>
             </div>
@@ -388,7 +388,7 @@ function MorsePanel() {
       <div className="flex flex-col gap-1" aria-live="polite">
         <p className="font-mono text-[11px] tracking-wide text-muted uppercase">{t(`output.${direction}`)}</p>
         {direction === 'toMorse' ? (
-          <p dir="ltr" data-morse-output="" className="min-h-6 font-mono text-base leading-relaxed tracking-wider break-all text-ink rtl:text-right">
+          <p dir="ltr" data-morse-output="" className="min-h-6 font-mono text-base leading-relaxed tracking-wider break-words text-ink rtl:text-right">
             {code || '—'}
           </p>
         ) : (

@@ -667,8 +667,8 @@
     },
     "locked": {
       "label": "Locked",
-      "message": "{year, select, today {Today’s puzzle unlocks “{app}” – solved yourself, with “Show solution” or by watching.} other {The {year} puzzle unlocks “{app}” – solved yourself, with “Show solution” or by watching.}}",
-      "orFinish": "Follow the journey to its end and every app unlocks at once.",
+      "message": "{year, select, today {Today’s puzzle unlocks “{app}” – solved, shown or watched.} other {The {year} puzzle unlocks “{app}” – solved, shown or watched.}}",
+      "orFinish": "At the end of the journey, every app is unlocked.",
       "dismiss": "Dismiss",
       "play": "{year, select, today {To today’s puzzle} other {To the {year} puzzle}}",
       "iconLabel": "{app} (locked)"

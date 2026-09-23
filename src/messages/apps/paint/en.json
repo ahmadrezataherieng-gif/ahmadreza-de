@@ -1,6 +1,6 @@
 {
   "canvasRole": "drawing canvas",
-  "canvasLabel": "Canvas {size} × {size} pixels, cursor at column {x}, row {y}, tool: {tool}",
+  "canvasLabel": "Canvas {size, number} × {size, number} pixels, cursor at column {x, number}, row {y, number}, tool: {tool}",
   "canvasHelp": "Paint with a mouse, finger or pen. With the keyboard: the arrow keys move the cursor (with Shift in steps of four), Space or Enter uses the tool. Ctrl+Z undoes, Ctrl+Y redoes.",
   "toolsLabel": "Tools",
   "tools": {
@@ -14,7 +14,7 @@
   "clear": "Clear",
   "grid": "Grid",
   "sizeLabel": "Size",
-  "sizeConfirm": "A new size starts an empty {size} × {size} picture. You can bring the current one back afterwards with “Undo”.",
+  "sizeConfirm": "A new size starts an empty {size, number} × {size, number} picture. You can bring the current one back afterwards with “Undo”.",
   "sizeConfirmYes": "Start a new picture",
   "sizeConfirmNo": "Cancel",
   "paletteLabel": "Palette",
@@ -32,9 +32,9 @@
       "note": "8 bits per pixel make 256 colours at once, as in the VGA mode of 1987. The program chose which 256; here they are the 16 above, a colour cube and greys."
     }
   },
-  "memory": "This picture needs {bytes} bytes of memory like this ({size} × {size} pixels × {depth} bits).",
+  "memory": "This picture needs {bytes} bytes of memory like this ({size, number} × {size, number} pixels × {depth, number} bits).",
   "colorLabel": "Colour",
-  "swatch": "Colour {index} of {count}: {hex}",
+  "swatch": "Colour {index, number} of {count, number}: {hex}",
   "download": "Download as PNG",
   "saveNote": "The picture is saved in this browser only and never uploaded. The download is made right here on your device.",
   "saveFailed": "Autosave is not possible in this browser right now. You can keep painting and download the picture.",
@@ -44,7 +44,7 @@
     "redone": "Redone.",
     "cleared": "Picture cleared.",
     "palette": "Palette changed: {name}. Every colour was replaced by the closest one.",
-    "size": "New picture, {size} × {size} pixels.",
+    "size": "New picture, {size, number} × {size, number} pixels.",
     "downloaded": "The PNG was created."
   }
 }
