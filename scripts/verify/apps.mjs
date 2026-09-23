@@ -399,6 +399,51 @@ const assistant = async () => {
   }
 };
 
+/** The Computer-Quiz (Phase 9B): played by keyboard, verdicts in words and live, the best score stored locally. */
+const quiz = async () => {
+  const root = content('quiz');
+  const Q = (selector) => `${root} ${selector}`;
+  check('quiz: says it grades nobody', /keine Prüfung|not an exam|نه امتحان/.test(await js(`document.querySelector('${root}').textContent`)));
+  check(`quiz: reads ${RTL ? 'right to left' : 'left to right'}`, (await js(`getComputedStyle(document.querySelector('${root}')).direction`)) === (RTL ? 'rtl' : 'ltr'));
+  await js(`localStorage.removeItem('amonel.quiz.v1'); true`);
+  await reveal(Q('[data-action="quiz-start"]'), 'quiz');
+  await clickOn(Q('[data-action="quiz-start"]'));
+  check('quiz: a round starts, focus on the question', await until(`!!document.activeElement?.matches('${Q('[data-quiz-question] h2')}')`, 2000));
+  check('quiz: three or four options, real buttons in a labelled group', await js(`(() => {
+    const group = document.querySelector('${Q('[role="group"]')}');
+    const options = group?.querySelectorAll('button[data-quiz-option]').length ?? 0;
+    return !!group?.getAttribute('aria-labelledby') && options >= 3 && options <= 4;
+  })()`));
+  // An isolated label with no letters falls back to left to right; in Persian that reverses "۲، ۵، ۱۰".
+  check('quiz: every option label has the direction of its own script', await js(`[...document.querySelectorAll('${Q('[data-quiz-option] bdi')}')].every((e) => e.getAttribute('dir') === ([...e.textContent].some((c) => c.charCodeAt(0) >= 0x0600 && c.charCodeAt(0) <= 0x06ff) ? 'rtl' : 'ltr'))`));
+  // Keyboard only: Tab to the first option, Enter.
+  await press('Tab');
+  check('quiz: Tab reaches an option, with a visible focus ring', await js(`(() => { const e = document.activeElement; return !!e?.matches('[data-quiz-option]') && getComputedStyle(e).boxShadow !== 'none'; })()`));
+  await press('Enter');
+  check('quiz: Enter answers', await until(`!!document.querySelector('${Q('[data-quiz-answered]')}')`, 1500));
+  check('quiz: the verdict is announced live', await js(`(() => { const l = document.querySelector('${Q('[data-quiz-announcement]')}'); return l.getAttribute('aria-live') === 'polite' && l.textContent.length > 20; })()`));
+  check('quiz: right and wrong are words and a mark, not only colour', await js(`(() => { const r = document.querySelector('${Q('[data-quiz-state="right"]')}'); return !!r && !!r.querySelector('svg path') && r.textContent.length > r.querySelector('bdi').textContent.length; })()`));
+  check('quiz: the feedback names the era', await js(`/\\d{4}|[۰-۹]{4}|Heute|Today|امروز/.test(document.querySelector('${Q('[data-quiz-feedback]')}')?.textContent ?? '')`));
+  check('quiz: nothing overflows sideways', await noOverflow('quiz'));
+  for (let i = 0; i < 10; i++) {
+    if (i > 0) await js(`(() => { document.querySelector('${Q('[data-quiz-option]')}').click(); return true; })()`);
+    await sleep(80);
+    await js(`(() => { document.querySelector('${Q('[data-action="quiz-next"]')}').click(); return true; })()`);
+    await sleep(80);
+  }
+  check('quiz: ten questions, then the result', await until(`!!document.querySelector('${Q('[data-quiz-result]')}')`, 2000));
+  const result = await js(`(() => ({
+    score: Number(document.querySelector('${Q('[data-quiz-result]')}').dataset.quizResult),
+    live: document.querySelector('${Q('[data-quiz-announcement]')}').textContent,
+    stored: localStorage.getItem('amonel.quiz.v1'),
+    focus: document.activeElement?.tagName,
+  }))()`);
+  check('quiz: the score is announced, focus on the result', result.live.length > 5 && result.focus === 'H2', result);
+  check('quiz: the best score is stored in this browser, one number', JSON.parse(result.stored ?? '{}').state?.best === result.score, result.stored);
+  await clickOn(Q('[data-action="quiz-again"]'));
+  check('quiz: a new round starts at the first question', await until(`!!document.querySelector('${Q('[data-quiz-question]')}') && !document.querySelector('${Q('[data-quiz-answered]')}')`, 2000));
+};
+
 /** The journey and the landing page carry nothing of the assistant in their HTML, and no AI claim anywhere. */
 async function assistantStaysOutOfStaticHtml() {
   const html = await js(`(async () => ({
@@ -409,6 +454,7 @@ async function assistantStaysOutOfStaticHtml() {
   // One name was already there before Phase 8: the mount point's attribute. The teaser adds nothing named so.
   const names = (html.journey.match(/assistant/gi) ?? []).length;
   check('journey: the assistant adds nothing to its HTML', names === 1 && !/gemini/i.test(html.journey), { names });
+  check('landing page and journey: nothing of the quiz in their HTML', !/quiz/i.test(html.landing) && !/quiz/i.test(html.journey));
   check('journey: the teaser box is an empty slot', /data-slot="prompt-line"[^>]*><\/div>/.test(html.journey));
 }
 
@@ -433,6 +479,10 @@ const smallChecks = {
     check('assistant 300x200: the field and the send button are in view', (await inside(A('[data-assistant-input]'), 'assistant')) && (await inside(A('[data-action="assistant-send"]'), 'assistant')));
     check('assistant 300x200: the state line is in view', await inside(A('[data-assistant-status]'), 'assistant'));
   },
+  quiz: async () => {
+    await reveal(`${content('quiz')} [data-quiz-question] h2`, 'quiz');
+    check('quiz 300x200: the question is in view', await inside(`${content('quiz')} [data-quiz-question] h2`, 'quiz'));
+  },
   traceroute: async () => {
     await reveal(`${content('traceroute')} [data-trace-input]`, 'traceroute');
     check('traceroute 300x200: the target field scrolls into view', await inside(`${content('traceroute')} [data-trace-input]`, 'traceroute'));
@@ -444,6 +494,7 @@ await windowRound('about', about);
 await windowRound('traceroute', traceroute);
 await windowRound('tickets', tickets);
 await windowRound('assistant', assistant);
+await windowRound('quiz', quiz);
 await assistantStaysOutOfStaticHtml();
 await windowRound('terminal', terminal);
 

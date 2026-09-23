@@ -284,7 +284,7 @@ if (layout === 'desktop') {
   await clickOn('[data-action="launcher"]');
   await sleep(300);
   check('launcher: opens', await js(`!document.querySelector('[data-launcher]').hidden`));
-  check('launcher: lists all fifteen apps', (await js(`document.querySelectorAll('[data-launcher] [data-app]').length`)) === 15);
+  check('launcher: lists all sixteen apps', (await js(`document.querySelectorAll('[data-launcher] [data-app]').length`)) === 16);
   check('launcher: focus moves into it', await activeIn('[data-launcher]'));
   await b.shot(`${TAG}-launcher`);
   await clickOn('[data-launcher] [data-app="paint"]');
@@ -329,7 +329,7 @@ if (layout === 'desktop') {
   await b.shot(`${TAG}-home`);
   const dock = await js(`[...document.querySelectorAll('[data-dock] [data-app]')].map((e) => e.dataset.app)`);
   check('mobile: the dock holds About, CV, Contact, Assistant', JSON.stringify(dock) === JSON.stringify(['about', 'cv', 'contact', 'assistant']), dock);
-  check('mobile: the grid holds the other eleven', (await js(`document.querySelectorAll('.ao-home [data-app]').length`)) === 11);
+  check('mobile: the grid holds the other twelve', (await js(`document.querySelectorAll('.ao-home [data-app]').length`)) === 12);
   const lengthBefore = await js('history.length');
   await clickOn('.ao-home [data-app="terminal"]');
   await sleep(500);
