@@ -49,7 +49,7 @@ f=fine&&wide&&c>=4&&m>=4?'full':'light';}d.dataset.tier=f;}catch(e){document.doc
 export const dynamicParams = false;
 
 /**
- * `/`, `/journey`, `/desktop`, and the same under `/en` and `/fa`.
+ * `/`, `/amonel` (the journey), `/desktop`, and the same under `/en` and `/fa`.
  * `/de` is deliberately not generated: it would duplicate `/`, and
  * `public/_redirects` 301s it home.
  */

@@ -20,13 +20,13 @@ test('worker: every /api/* path is a plain 404, reserved for Phase 9', async () 
 test('worker: anything else falls through to the asset binding, unreachable while run_worker_first lists only /api/*', async () => {
   const calls = [];
   const env = { ASSETS: { fetch: async (request) => { calls.push(request.url); return new Response('asset'); } } };
-  const response = await worker.fetch(new Request('https://ahmadreza.de/journey/'), env);
+  const response = await worker.fetch(new Request('https://ahmadreza.de/amonel/'), env);
   assert.equal(await response.text(), 'asset');
-  assert.deepEqual(calls, ['https://ahmadreza.de/journey/']);
+  assert.deepEqual(calls, ['https://ahmadreza.de/amonel/']);
 });
 
 test('worker: without the asset binding it is still an honest 404, never a crash', async () => {
-  const response = await worker.fetch(new Request('https://ahmadreza.de/journey/'), {});
+  const response = await worker.fetch(new Request('https://ahmadreza.de/amonel/'), {});
   assert.equal(response.status, 404);
 });
 

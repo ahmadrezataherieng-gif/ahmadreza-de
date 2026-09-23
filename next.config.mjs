@@ -7,7 +7,7 @@ const nextConfig = {
   // Static export: Cloudflare Workers serve `out/` as plain static assets.
   output: 'export',
   images: { unoptimized: true },
-  // Emit `/journey/index.html` style folders; wrangler's `auto-trailing-slash` matches.
+  // Emit `/amonel/index.html` style folders; wrangler's `auto-trailing-slash` matches.
   trailingSlash: true,
   reactStrictMode: true,
 };

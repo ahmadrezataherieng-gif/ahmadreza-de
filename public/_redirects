@@ -6,6 +6,19 @@
 #
 # Syntax: [source] [destination] [status]
 
+# The journey moved to /amonel/ with the rebrand (Phase 9A). Old links and
+# search results keep working. Both spellings of each path, so neither depends
+# on the asset layer's trailing-slash handling. First match wins, so
+# these sit above the /de/* catch-all.
+/journey        /amonel/     301
+/journey/       /amonel/     301
+/en/journey     /en/amonel/  301
+/en/journey/    /en/amonel/  301
+/fa/journey     /fa/amonel/  301
+/fa/journey/    /fa/amonel/  301
+/de/journey     /amonel/     301
+/de/journey/    /amonel/     301
+
 # German is the default locale and lives at the root path. /de would be a
 # duplicate of /, so it is never generated - send anyone who guesses it home.
 # This replaces what used to be an nginx rule.

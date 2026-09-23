@@ -37,7 +37,7 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `nav-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}`;
 const STORE = 'amonel.unlocks.v1';
 const LANDING = `${BASE}${PREFIX}/`;
-const JOURNEY = `${BASE}${PREFIX}/journey/`;
+const JOURNEY = `${BASE}${PREFIX}/amonel/`;
 const DESKTOP = `${BASE}${PREFIX}/desktop/`;
 
 // --quiet: failures in full, passes only in the final count.
@@ -140,9 +140,9 @@ if (!REDUCE) {
 await b.goto(LANDING, 2500);
 await freshStore();
 await b.goto(LANDING, 3000);
-await clickOn('a[href*="journey"]');
+await clickOn('a[href*="amonel"]');
 await sleep(8000);
-check('landing card opens the journey', await isAt('journey'));
+check('landing card opens the journey', await isAt('amonel'));
 await js('window.scrollTo(0, document.documentElement.scrollHeight); true');
 await sleep(1500);
 await js('window.scrollTo(0, document.documentElement.scrollHeight); true');
@@ -166,7 +166,7 @@ for (let index = 1; index <= eraCount; index++) {
   if (index === 3) {
     await js('history.back(); true');
     await sleep(5000);
-    check('Back after Zum Desktop returns to the journey, not redirected', await isAt('journey'), await pathname());
+    check('Back after Zum Desktop returns to the journey, not redirected', await isAt('amonel'), await pathname());
   }
 }
 
@@ -188,7 +188,7 @@ for (const held of [false, true]) {
   if (held) {
     await js('history.back(); true');
     await sleep(5000);
-    check('Back after leaving a held puzzle returns to the journey', await isAt('journey'), await pathname());
+    check('Back after leaving a held puzzle returns to the journey', await isAt('amonel'), await pathname());
   }
 }
 
@@ -218,18 +218,18 @@ check('returning: a direct visit to the journey goes to the desktop', await isAt
 await sleep(1000);
 await clickOn('[data-action="replay"]');
 await sleep(6000);
-check('returning: "Reise erneut ansehen" opens the journey', await isAt('journey'), await pathname());
+check('returning: "Reise erneut ansehen" opens the journey', await isAt('amonel'), await pathname());
 await b.reload(6000);
-check('returning: a reload of the replayed journey stays', await isAt('journey'), await pathname());
+check('returning: a reload of the replayed journey stays', await isAt('amonel'), await pathname());
 
 await b.goto(DESKTOP, 4000);
 await b.goto(JOURNEY, 5000);
 check('returning: back on the desktop, the next direct visit redirects again', await isAt('desktop'), await pathname());
 
 await b.goto(LANDING, 3500);
-await clickOn('[data-mode-option], a[href*="journey"]');
+await clickOn('[data-mode-option], a[href*="amonel"]');
 await sleep(6000);
-check('returning: a mode card still opens the journey', await isAt('journey'), await pathname());
+check('returning: a mode card still opens the journey', await isAt('amonel'), await pathname());
 
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;

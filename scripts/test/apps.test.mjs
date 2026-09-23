@@ -112,7 +112,7 @@ test('Traceroute: prepared targets resolve to themselves', () => {
     assert.equal(target.mapped, false);
     assert.equal(target.route.id, route.id);
   }
-  assert.equal(resolveTarget(routes, 'https://www.ahmadreza.de/journey/').route.id, 'ahmadreza');
+  assert.equal(resolveTarget(routes, 'https://www.ahmadreza.de/amonel/').route.id, 'ahmadreza');
   assert.equal(cleanHost('  HTTPS://Example.ORG:443/path?q=1 '), 'example.org');
 });
 

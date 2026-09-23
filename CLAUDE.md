@@ -135,7 +135,7 @@ Rules of thumb:
 - `de` is the default locale and is served **without a prefix**; `en` at `/en`,
   `fa` at `/fa` with `dir="rtl"`.
 - Three views per locale: the **landing page** at `/` (`/en/`, `/fa/`), the
-  **journey** at `/journey/` (`/en/journey/`, `/fa/journey/`) and the
+  **journey** at `/amonel/` (`/en/amonel/`, `/fa/amonel/`; the old `/journey/` URLs 301 there) and the
   **desktop** at `/desktop/` (`/en/desktop/`, `/fa/desktop/`).
 - All of it is one **optional catch-all segment** `app/[[...locale]]`, not
   middleware: `output: 'export'` never runs middleware, and the catch-all is the

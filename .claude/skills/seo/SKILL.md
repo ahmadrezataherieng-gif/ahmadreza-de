@@ -47,12 +47,27 @@ Static, indexable About pages in all three locales are planned. The About
 visitor clicks the icon, so a crawler that does not execute the desktop shell
 never sees it.
 
-### The journey route rename
+### Brand and the journey route (Phase 9A, done)
 
-The journey route (`/journey/`) will be renamed after the new brand name -
-**which is not decided yet.** Do not rename `/journey/`, its folder, or
-anything that assumes that slug, until the brand name is given. See TODO.md,
-Phase 9.
+- The site's brand is **"Amonel"**. **"Amonel OS"** only where the text is
+  about the operating system (desktop, windows, terminal, boot log). In
+  Persian the brand stays in Latin letters.
+- The brand never replaces the name: the person is always "Ahmadreza Taheri",
+  and the landing `<h1>` is his name, never the logo.
+- The journey lives at `/amonel/` (`/en/amonel/`, `/fa/amonel/`). The old
+  `/journey/` URLs 301 there (`public/_redirects`, checked by
+  `scripts/test/redirects.test.mjs`) - keep those rules. Inside the code the
+  view is still called `journey`, and so is `components/journey/`.
+
+### Titles
+
+- Landing: the name first, then the job, then the brand:
+  `Ahmadreza Taheri – Fachinformatiker für Systemintegration | Amonel`
+  (`site.title` per locale).
+- Every other page: `<Page name> – Ahmadreza Taheri | Amonel`.
+- Aim for 60 characters or fewer. The landing titles run over (de 66, en 64,
+  fa 66 characters); that was accepted rather than cutting the name or the
+  job - report any new title that runs over, never shorten the name to fit.
 
 ### Images
 

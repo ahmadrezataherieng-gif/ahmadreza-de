@@ -51,7 +51,7 @@ async function measure(view, url, afterLoad) {
 
 const views = [
   ['landing', `${BASE}/`],
-  ['journey', `${BASE}/journey/`],
+  ['journey', `${BASE}/amonel/`],
   ['desktop', `${BASE}/desktop/`],
 ];
 
@@ -97,7 +97,7 @@ if (results.journey) {
 }
 
 say('\nHTML per view and locale (gzip -6):');
-for (const view of ['', 'journey', 'desktop']) {
+for (const view of ['', 'amonel', 'desktop']) {
   const cells = ['', 'en', 'fa'].map((locale) => {
     const file = path.join(OUT_DIR, locale, view, 'index.html');
     return existsSync(file) ? kb(gz(readFileSync(file))) : '-';
@@ -114,7 +114,7 @@ if (QUIET) {
     const perApp = Object.entries(appRows).map(([app, rows]) => `${app} ${kb(rows.filter((row) => !base.has(row.file)).reduce((t, r) => t + r.gz, 0))}`);
     console.log(`on open: ${perApp.join(', ')}`);
   }
-  const html = ['', 'journey', 'desktop'].map((view) => {
+  const html = ['', 'amonel', 'desktop'].map((view) => {
     const cells = ['', 'en', 'fa'].map((locale) => {
       const page = path.join(OUT_DIR, locale, view, 'index.html');
       return existsSync(page) ? kb(gz(readFileSync(page))) : '-';

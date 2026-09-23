@@ -38,11 +38,11 @@ const TAG = `perf-${WIDTH}-${TIER}-cpu${CPU}-${MODE}${process.env.VERIFY_GPU ? '
 const b = await launch({ width: WIDTH, height: HEIGHT, touch: WIDTH < 768, tag: TAG });
 
 // Watch mode: no gate stands in the way of a full scroll.
-await b.goto(`${BASE}${PREFIX}/journey/?tier=${TIER}`, 2000);
+await b.goto(`${BASE}${PREFIX}/amonel/?tier=${TIER}`, 2000);
 await b.evaluate(
   `localStorage.setItem('amonel.unlocks.v1', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: ${MODE === 'open' ? "['eniac','batch','unix','dos','macintosh','win95','cloud']" : '[]'}, legendEras: [], hasCompletedJourney: false, mode: '${MODE === 'open' ? 'interactive' : 'guided'}' }, version: 2 })); true`,
 );
-await b.goto(`${BASE}${PREFIX}/journey/?tier=${TIER}`, 9000);
+await b.goto(`${BASE}${PREFIX}/amonel/?tier=${TIER}`, 9000);
 
 if (CPU > 1) await b.send('Emulation.setCPUThrottlingRate', { rate: CPU });
 await sleep(1500);

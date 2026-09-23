@@ -403,7 +403,7 @@ const assistant = async () => {
 async function assistantStaysOutOfStaticHtml() {
   const html = await js(`(async () => ({
     landing: await (await fetch('${PREFIX}/')).text(),
-    journey: await (await fetch('${PREFIX}/journey/')).text(),
+    journey: await (await fetch('${PREFIX}/amonel/')).text(),
   }))()`);
   check('landing page: no assistant, Gemini or AI claim in its HTML', !/assistant|gemini/i.test(html.landing));
   // One name was already there before Phase 8: the mount point's attribute. The teaser adds nothing named so.

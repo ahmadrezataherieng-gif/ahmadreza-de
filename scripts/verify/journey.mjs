@@ -27,7 +27,7 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 // The motion tier is chosen from the device before first paint; ?tier= forces
 // one, so both paths can be walked at any width.
 const TIER = args.tier === 'light' || args.tier === 'full' ? args.tier : null;
-const JOURNEY = `${BASE}${PREFIX}/journey/${TIER ? `?tier=${TIER}` : ''}`;
+const JOURNEY = `${BASE}${PREFIX}/amonel/${TIER ? `?tier=${TIER}` : ''}`;
 const ERAS = ['eniac', 'batch', 'unix', 'dos', 'macintosh', 'win95', 'cloud'];
 const STORE = 'amonel.unlocks.v1';
 
@@ -150,11 +150,11 @@ check('landing: the confirmed email is a link', landing.mailto === 1, landing.ma
 check('landing: no horizontal overflow', landing.overflow <= 0, landing.overflow);
 
 const cardIndex = MODE === 'watch' ? 0 : 1;
-const card = await js(`(() => { const el = document.querySelectorAll('a[href*="journey"]')[${cardIndex}]; el.scrollIntoView({ block: 'center' }); const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
+const card = await js(`(() => { const el = document.querySelectorAll('a[href*="amonel"]')[${cardIndex}]; el.scrollIntoView({ block: 'center' }); const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
 await sleep(400);
 await b.click(card.x, card.y);
 await sleep(9000);
-check('landing card opens the journey', (await js('location.pathname')).includes('journey'));
+check('landing card opens the journey', (await js('location.pathname')).includes('amonel'));
 check('mode stored', (await store()).mode === (MODE === 'watch' ? 'guided' : 'interactive'));
 if (TIER) {
   // The mode is persisted, so reloading with the tier forced keeps the run.

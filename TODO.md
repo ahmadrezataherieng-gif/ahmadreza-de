@@ -84,9 +84,10 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 
 ## Phase 9 — planned additions
 
-- **The brand rename**, and the journey route rename that follows it
-  (`/journey/` renamed to something built on the new brand) - once Ahmadreza
-  gives the name. Do not rename anything before then; see the `seo` skill.
+- ~~The brand rename and the journey route rename~~ - done in Phase 9A:
+  Amonel, `/amonel/` (DECISIONS.md 54).
+- **Check "Amonel" in the DPMA and EUIPO registers** before any commercial use
+  (the brand kit's own rule; Phase 11).
 - **A computer-knowledge quiz app.** Never call it, or present it as, an IQ
   test.
 - **Anonymous counters on `/api/*`** - e.g. how many visitors solved each

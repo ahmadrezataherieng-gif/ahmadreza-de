@@ -7,7 +7,7 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  * Persian are prefixed. Every locale has three views:
  *
  *   /             /en/            /fa/             the landing page
- *   /journey/     /en/journey/    /fa/journey/     Act 1 and the Convergence
+ *   /amonel/      /en/amonel/     /fa/amonel/      Act 1 and the Convergence (the journey)
  *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the Amonel OS desktop
  *
  * All of it is one optional catch-all segment (`app/[[...locale]]`) rather than
@@ -19,16 +19,20 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
 export const views = ['landing', 'journey', 'desktop'] as const;
 export type View = (typeof views)[number];
 
-/** URL path of each view, without the locale prefix. */
+/**
+ * URL path of each view, without the locale prefix. The journey's URL carries
+ * the brand name (Phase 9A); inside the code the view is still `journey`. The
+ * old `/journey/` URLs 301 here (`public/_redirects`).
+ */
 const VIEW_PATHS: Record<View, string> = {
   landing: '/',
-  journey: '/journey',
+  journey: '/amonel',
   desktop: '/desktop',
 };
 
 /** The path segment of each view that has one. */
 const VIEW_SEGMENTS: Record<Exclude<View, 'landing'>, string> = {
-  journey: 'journey',
+  journey: 'amonel',
   desktop: 'desktop',
 };
 
@@ -78,7 +82,7 @@ export function localePrefix(locale: Locale): string {
   return locale === defaultLocale ? '' : `/${locale}`;
 }
 
-/** Build an in-app href for a locale. `path` is locale-independent, e.g. '/journey'. */
+/** Build an in-app href for a locale. `path` is locale-independent, e.g. '/amonel'. */
 export function localeHref(locale: Locale, path = '/'): string {
   const normalised = path === '/' ? '/' : path.replace(/\/$/, '');
   const prefix = localePrefix(locale);

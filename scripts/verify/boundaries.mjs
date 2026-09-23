@@ -45,11 +45,11 @@ const results = [];
 let failures = 0;
 
 // Watch mode, so no gate stands in the way of the crossings.
-await b.goto(`${BASE}${PREFIX}/journey/?tier=${TIER}`, 2000);
+await b.goto(`${BASE}${PREFIX}/amonel/?tier=${TIER}`, 2000);
 await b.evaluate(
   `localStorage.setItem('amonel.unlocks.v1', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: [], legendEras: [], hasCompletedJourney: false, mode: 'guided' }, version: 2 })); true`,
 );
-await b.goto(`${BASE}${PREFIX}/journey/?tier=${TIER}`, 9000);
+await b.goto(`${BASE}${PREFIX}/amonel/?tier=${TIER}`, 9000);
 if (!QUIET) console.log('tier', await b.evaluate('document.documentElement.dataset.tier'));
 
 /** Document y at which the crossing into `id` stands at progress `p`. */
