@@ -39,6 +39,7 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   contact: load(() => import('@/components/apps/contact/ContactApp'), 'ContactApp'),
   timeline: load(() => import('@/components/apps/timeline/TimelineApp'), 'TimelineApp'),
   cv: load(() => import('@/components/apps/cv/CvApp'), 'CvApp'),
+  quiz: load(() => import('@/components/apps/quiz/QuizApp'), 'QuizApp'),
   // The seven bonus apps are Phase 9; until then they share one stand-in.
   'punchcard-lab': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
@@ -58,6 +59,7 @@ const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
   timeline: { width: 760, height: 480 },
   cv: { width: 560, height: 420 },
   contact: { width: 480, height: 360 },
+  quiz: { width: 560, height: 600 },
 };
 
 const DEFAULT_SIZE: AppDefinition['size'] = { width: 560, height: 400 };

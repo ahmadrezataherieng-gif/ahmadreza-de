@@ -1,0 +1,255 @@
+{
+  "heading": "Computer Quiz",
+  "intro": "Ten questions on the history and basics of computing, across the seven eras of the journey: from bits to paths and memory, all the way to ports and firewalls. After each answer you learn what lies behind it.",
+  "scope": "A quiz about computer knowledge – not an exam, not an assessment. Your best score stays in this browser only.",
+  "start": "Start a round",
+  "best": "Your best score: {best, number} of {total, number}",
+  "progress": "Question {current, number} of {total, number}",
+  "scoreSoFar": "{score, number} correct",
+  "optionsLabel": "Answers",
+  "correct": "Correct.",
+  "wrong": "Not quite.",
+  "rightAnswerIs": "The right answer: {answer}",
+  "yourAnswer": "Your answer",
+  "rightAnswer": "Right answer",
+  "era": "Era: {era}",
+  "next": "Next question",
+  "finish": "See the result",
+  "result": {
+    "heading": "Your result",
+    "score": "{score, number} of {total, number} correct",
+    "bands": {
+      "all": "All correct. Every era is covered – from the punch card to the firewall.",
+      "most": "Strong. Only a few questions were tricky.",
+      "half": "A good start. The explanations show what lies behind the other questions.",
+      "start": "This round was a tricky one. Every new round shuffles the questions, and the journey explains each era step by step."
+    },
+    "newBest": "New best score.",
+    "revisit": "These eras are worth a second look:",
+    "again": "New round"
+  },
+  "eras": {
+    "eniac": "1946 · ENIAC and punch cards",
+    "batch": "1956 · Mainframes and batch processing",
+    "unix": "1971 · UNIX",
+    "dos": "1981 · IBM PC and MS-DOS",
+    "macintosh": "1984 · Macintosh",
+    "win95": "1995 · Windows 95 and dial-up",
+    "cloud": "Today · Cloud, containers and AI"
+  },
+  "questions": {
+    "byte-bits": {
+      "question": "How many bits make up a byte almost everywhere today?",
+      "options": { "a": "4", "b": "8", "c": "10", "d": "16" },
+      "explanation": "Eight bits give 256 patterns of on and off – enough for every letter of the Latin alphabet plus digits and symbols. That is the truth of the 1946 era: text is numbers."
+    },
+    "ascii-a": {
+      "question": "Which number stands for the capital letter “A” in ASCII?",
+      "options": { "a": "1", "b": "97", "c": "65", "d": "128" },
+      "explanation": "“A” is 65, in binary 01000001; the lowercase “a” is 97. The truth of the 1946 era: to the computer, every character is a number."
+    },
+    "three-bits": {
+      "question": "How many different patterns can 3 bits form?",
+      "options": { "a": "8", "b": "3", "c": "6", "d": "9" },
+      "explanation": "Each bit doubles the possibilities: 2 × 2 × 2 = 8, from 000 to 111. That is how, in the 1946 era, on and off become a whole alphabet."
+    },
+    "binary-five": {
+      "question": "Which binary number stands for the decimal number 5?",
+      "options": { "a": "110", "b": "111", "c": "011", "d": "101" },
+      "explanation": "101 means 1 × 4 + 0 × 2 + 1 × 1 = 5: each digit is worth twice the one to its right. That is the truth of the 1946 era – numbers and text are patterns of bits."
+    },
+    "shortest-first": {
+      "question": "Three jobs are waiting for a computer. They take 10, 2 and 5 minutes. In which order is their total waiting time shortest?",
+      "options": { "a": "2, 5, 10", "b": "10, 5, 2", "c": "5, 2, 10", "d": "10, 2, 5" },
+      "explanation": "Short jobs first: together they then wait 0 + 2 + 7 = 9 minutes instead of up to 25. The rule is called “shortest job first” – scheduling as in the 1956 era."
+    },
+    "first-os": {
+      "question": "What did the first operating systems of the mid-1950s take care of?",
+      "options": {
+        "a": "Colour graphics on the screen",
+        "b": "Connections between computers",
+        "c": "That the computer worked through one job after another without a pause",
+        "d": "Operating the computer with a mouse"
+      },
+      "explanation": "A mainframe was expensive, and every idle minute between two jobs cost money. The operating system of the 1956 era handled the changeover itself: a computer hates waiting."
+    },
+    "batch-meaning": {
+      "question": "What does batch processing mean?",
+      "options": {
+        "a": "The computer reacts instantly to every keystroke",
+        "b": "Jobs are collected and worked through one after another without intervention",
+        "c": "Several computers share one file",
+        "d": "Data is backed up to hard disks in batches"
+      },
+      "explanation": "In the batch operation of the 1956 era, you handed in a deck of punch cards and collected the printout later. Who came next was decided by the order in the batch."
+    },
+    "scheduler": {
+      "question": "Which part of an operating system decides which program gets processor time next?",
+      "options": { "a": "The filesystem", "b": "The bootloader", "c": "The keyboard driver", "d": "The scheduler" },
+      "explanation": "The scheduler shares out processor time – today many times per second, in the 1956 era still job by job."
+    },
+    "root": {
+      "question": "What is the topmost directory of a UNIX filesystem called?",
+      "options": { "a": "/", "b": "~", "c": "C:\\", "d": ".." },
+      "explanation": "Everything hangs from the root “/”, including every additional disk and every USB stick. That is the tree of the 1971 era: every file has a path that starts there."
+    },
+    "dot-dot": {
+      "question": "Where does the command “cd ..” take you?",
+      "options": {
+        "a": "To the home directory",
+        "b": "To the root directory /",
+        "c": "To the parent directory",
+        "d": "To the directory you visited last"
+      },
+      "explanation": "In every directory, “..” is the name of the level above. That is how you have climbed up the tree since the 1971 era."
+    },
+    "absolute-path": {
+      "question": "Which of these paths is absolute?",
+      "options": { "a": "docs/notes.txt", "b": "/home/ada/notes.txt", "c": "../notes.txt", "d": "notes.txt" },
+      "explanation": "An absolute path starts at the root “/” and works from anywhere; the others depend on where you are standing. A lesson from the 1971 era."
+    },
+    "pwd": {
+      "question": "What does the command “pwd” show?",
+      "options": {
+        "a": "The user's password",
+        "b": "The contents of a file",
+        "c": "The files in the directory",
+        "d": "The path of the current directory"
+      },
+      "explanation": "pwd stands for “print working directory” and shows where in the tree you are. It is part of the UNIX toolkit from the 1971 era."
+    },
+    "conventional-memory": {
+      "question": "How much memory could programs use directly under MS-DOS on the IBM PC?",
+      "options": { "a": "64 KB", "b": "16 MB", "c": "640 KB", "d": "1 GB" },
+      "explanation": "The famous 640 KB of “conventional memory”: the rest of the first megabyte was reserved for the graphics card and the BIOS. The truth of the 1981 era: memory is finite."
+    },
+    "kibibyte": {
+      "question": "How many bytes are in a kibibyte (KiB)?",
+      "options": { "a": "1024", "b": "1000", "c": "512" },
+      "explanation": "In the DOS world of the 1981 era, people said “kilobyte” and meant 1024 bytes, 2 to the power of 10. Today that is precisely a kibibyte; an SI kilobyte is 1000 bytes."
+    },
+    "ram-power": {
+      "question": "What happens to the contents of memory (RAM) when the power fails?",
+      "options": {
+        "a": "They are backed up automatically",
+        "b": "They are lost",
+        "c": "They are kept until the next start"
+      },
+      "explanation": "RAM holds data only while power flows. That is why people saved to floppy disk in the 1981 era – and why you still save today."
+    },
+    "free-memory": {
+      "question": "Under MS-DOS, a program reports: not enough memory. What typically helped?",
+      "options": {
+        "a": "Defragmenting the hard disk",
+        "b": "Turning up the screen brightness",
+        "c": "Inserting a second floppy disk",
+        "d": "Leaving out drivers or loading them into upper memory"
+      },
+      "explanation": "Every driver in CONFIG.SYS and AUTOEXEC.BAT took up part of the 640 KB. Anyone who wanted to start a large program in the DOS world of the 1981 era cleared out memory first."
+    },
+    "wimp": {
+      "question": "What does the abbreviation WIMP stand for?",
+      "options": {
+        "a": "Windows, Icons, Menus, Pointer",
+        "b": "Wireless Internet Mail Protocol",
+        "c": "Word, Image, Media, Print",
+        "d": "Windows Internal Memory Page"
+      },
+      "explanation": "Windows, icons, menus and a pointer: the four building blocks the Macintosh brought to a wide audience in the 1984 era, and which still shape every interface today."
+    },
+    "macintosh-1984": {
+      "question": "What did the Macintosh bring to a wide audience in 1984?",
+      "options": {
+        "a": "The first web browser",
+        "b": "A graphical interface with a mouse",
+        "c": "A colour touchscreen",
+        "d": "The first hard disk"
+      },
+      "explanation": "Graphical interfaces existed before in research labs, for example at Xerox. In the 1984 era, the Macintosh put windows and the mouse on many people's desks."
+    },
+    "point-and-choose": {
+      "question": "What is the idea behind a graphical interface?",
+      "options": {
+        "a": "Typing commands faster",
+        "b": "Running programs without memory",
+        "c": "Pointing and choosing instead of memorising commands"
+      },
+      "explanation": "What you can see, you do not have to remember: a menu shows the commands, the mouse picks one. The truth of the 1984 era: pointing is easier than remembering."
+    },
+    "copy-shortcut": {
+      "question": "Which key combination copies the selection on a Mac?",
+      "options": { "a": "Command + V", "b": "Command + C", "c": "Command + X", "d": "Command + Z" },
+      "explanation": "C for copy; V pastes, X cuts, Z undoes. In the 1984 era the Macintosh showed these shortcuts right next to the menu commands – whoever saw them often learned them along the way."
+    },
+    "ip-address": {
+      "question": "What is an IP address for?",
+      "options": {
+        "a": "It encrypts the connection",
+        "b": "It sets the speed",
+        "c": "It caches web pages",
+        "d": "It identifies a device on the network so packets can find it"
+      },
+      "explanation": "No address, no destination: every packet carries the IP addresses of its sender and receiver. The truth of the 1995 era: a network needs addresses."
+    },
+    "ipv4-bits": {
+      "question": "How many bits does an IPv4 address have?",
+      "options": { "a": "8", "b": "64", "c": "32", "d": "128" },
+      "explanation": "32 bits, written as four numbers from 0 to 255, such as 192.168.1.20. IPv6 uses 128 bits because IPv4 addresses ran short; in the 1995 era, Windows 95 spoke only IPv4."
+    },
+    "gateway": {
+      "question": "What does the default gateway do?",
+      "options": {
+        "a": "It forwards packets to destinations outside the local network",
+        "b": "It translates domain names into addresses",
+        "c": "It hands out passwords",
+        "d": "It connects printers over USB"
+      },
+      "explanation": "Everything that is not on the local network goes to the gateway, usually the router. In Windows 95, in the 1995 era, it had its own tab in the TCP/IP settings."
+    },
+    "same-network": {
+      "question": "Subnet mask 255.255.255.0: which address is on the same network as 192.168.1.20?",
+      "options": { "a": "192.168.2.20", "b": "192.168.1.200", "c": "10.168.1.20", "d": "192.168.10.1" },
+      "explanation": "This mask says: the first three numbers are the network, the last one is the device. 192.168.1.200 shares the first three with 192.168.1.20 – the arithmetic behind the network puzzle of the 1995 era."
+    },
+    "prefix-24": {
+      "question": "Which subnet mask does the notation /24 stand for?",
+      "options": { "a": "255.0.0.0", "b": "255.255.0.0", "c": "255.255.255.255", "d": "255.255.255.0" },
+      "explanation": "/24 means the first 24 of the 32 bits are the network: three full groups of eight – 255.255.255.0. Addresses and masks are the truth of the 1995 era."
+    },
+    "https-port": {
+      "question": "On which port does a web server accept HTTPS connections by default?",
+      "options": { "a": "80", "b": "443", "c": "22", "d": "25" },
+      "explanation": "443 for HTTPS, 80 for unencrypted HTTP. A firewall today opens exactly the ports a service needs – and no more."
+    },
+    "ssh-port": {
+      "question": "Which service uses port 22 by default?",
+      "options": { "a": "SSH", "b": "HTTP", "c": "DNS", "d": "SMTP" },
+      "explanation": "Today admins use SSH to manage servers and containers remotely, encrypted. That makes port 22 one of the first a firewall deliberately controls."
+    },
+    "port-purpose": {
+      "question": "What are ports for?",
+      "options": {
+        "a": "They give a computer's address on the network",
+        "b": "They measure bandwidth",
+        "c": "They direct a connection to the right program on a computer",
+        "d": "They encrypt the data"
+      },
+      "explanation": "The IP address finds the computer, the port finds the program on it. Today a single server often runs many services side by side, each behind its own port."
+    },
+    "first-match": {
+      "question": "A firewall checks its rules from top to bottom, and the first match applies. Rule 1: block everything. Rule 2: allow port 443. What happens to a connection on port 443?",
+      "options": { "a": "It is blocked", "b": "It is allowed", "c": "It is redirected to port 80" },
+      "explanation": "Rule 1 matches everything and applies first; rule 2 never gets its turn. The allow rule has to sit above the block – the principle behind today's firewall puzzle."
+    },
+    "container": {
+      "question": "What is a container, for example with Docker?",
+      "options": {
+        "a": "A physical server in a data centre",
+        "b": "An encrypted folder for passwords",
+        "c": "Another word for a hard disk",
+        "d": "A program with everything it needs, isolated from others on the same system"
+      },
+      "explanation": "A container brings its program along with its libraries and runs sealed off, on a laptop just as in the cloud. The truth of today: programs run isolated, in many places at once."
+    }
+  }
+}

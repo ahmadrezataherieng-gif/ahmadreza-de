@@ -42,6 +42,7 @@ export const appIds = [
   'contact',
   'timeline',
   'cv',
+  'quiz',
   'punchcard-lab',
   'scheduler',
   'filesystem',
@@ -167,6 +168,7 @@ export const baseAppIds: readonly AppId[] = [
   'contact',
   'timeline',
   'cv',
+  'quiz',
 ];
 
 export function getEra(id: EraId): Era {

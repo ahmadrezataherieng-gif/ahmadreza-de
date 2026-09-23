@@ -716,6 +716,9 @@
         "title": "Résumé",
         "body": "The résumé as a PDF to download."
       },
+      "quiz": {
+        "title": "Computer Quiz"
+      },
       "punchcard-lab": {
         "title": "Punch card lab"
       },

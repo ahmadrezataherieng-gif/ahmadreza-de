@@ -60,6 +60,12 @@ const GLYPHS: Record<AppId, ReactNode> = {
       <path d="M14 3.5v4h4M9 12h6M9 15h6M9 18h3.5" />
     </>
   ),
+  quiz: (
+    <>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+      <path d="M9.5 9.6a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2.1v.4M12 17.2v.1" />
+    </>
+  ),
   'punchcard-lab': (
     <>
       <path d="M3.5 6.5h14l3 3v8h-17z" />

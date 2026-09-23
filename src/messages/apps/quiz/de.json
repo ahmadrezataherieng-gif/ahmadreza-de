@@ -1,0 +1,255 @@
+{
+  "heading": "Computer-Quiz",
+  "intro": "Zehn Fragen zu Geschichte und Grundlagen des Computers, quer durch die sieben Epochen der Reise: vom Bit über Pfade und Speicher bis zu Ports und Firewalls. Nach jeder Antwort erfahren Sie, was dahintersteckt.",
+  "scope": "Ein Quiz über Computerwissen – keine Prüfung, keine Bewertung. Ihr Bestwert bleibt nur in diesem Browser.",
+  "start": "Runde starten",
+  "best": "Ihr Bestwert: {best, number} von {total, number}",
+  "progress": "Frage {current, number} von {total, number}",
+  "scoreSoFar": "{score, number} richtig",
+  "optionsLabel": "Antworten",
+  "correct": "Richtig.",
+  "wrong": "Leider nicht.",
+  "rightAnswerIs": "Richtig ist: {answer}",
+  "yourAnswer": "Ihre Antwort",
+  "rightAnswer": "Richtige Antwort",
+  "era": "Epoche: {era}",
+  "next": "Nächste Frage",
+  "finish": "Zum Ergebnis",
+  "result": {
+    "heading": "Ihr Ergebnis",
+    "score": "{score, number} von {total, number} richtig",
+    "bands": {
+      "all": "Alle richtig. Jede Epoche sitzt – von der Lochkarte bis zur Firewall.",
+      "most": "Stark. Nur wenige Fragen hatten es in sich.",
+      "half": "Ein guter Anfang. Die Erklärungen zeigen, was hinter den übrigen Fragen steckt.",
+      "start": "Diese Runde war knifflig. Jede neue Runde mischt die Fragen neu, und die Reise erklärt jede Epoche Schritt für Schritt."
+    },
+    "newBest": "Neuer Bestwert.",
+    "revisit": "Diese Epochen lohnen einen zweiten Blick:",
+    "again": "Neue Runde"
+  },
+  "eras": {
+    "eniac": "1946 · ENIAC und Lochkarten",
+    "batch": "1956 · Großrechner und Stapelverarbeitung",
+    "unix": "1971 · UNIX",
+    "dos": "1981 · IBM PC und MS-DOS",
+    "macintosh": "1984 · Macintosh",
+    "win95": "1995 · Windows 95 und Einwahl",
+    "cloud": "Heute · Cloud, Container und KI"
+  },
+  "questions": {
+    "byte-bits": {
+      "question": "Aus wie vielen Bits besteht ein Byte heute praktisch überall?",
+      "options": { "a": "4", "b": "8", "c": "10", "d": "16" },
+      "explanation": "Acht Bits ergeben 256 Muster aus An und Aus – genug für jeden Buchstaben des lateinischen Alphabets samt Ziffern und Zeichen. Das ist die Wahrheit der Epoche 1946: Text ist Zahlen."
+    },
+    "ascii-a": {
+      "question": "Welche Zahl steht im ASCII-Code für den Großbuchstaben „A“?",
+      "options": { "a": "1", "b": "97", "c": "65", "d": "128" },
+      "explanation": "„A“ ist 65, binär 01000001; das kleine „a“ ist 97. Die Wahrheit der Epoche 1946: Für den Rechner ist jedes Zeichen eine Zahl."
+    },
+    "three-bits": {
+      "question": "Wie viele verschiedene Muster lassen sich mit 3 Bits bilden?",
+      "options": { "a": "8", "b": "3", "c": "6", "d": "9" },
+      "explanation": "Jedes Bit verdoppelt die Möglichkeiten: 2 × 2 × 2 = 8, von 000 bis 111. So wird in der Epoche 1946 aus An und Aus ein ganzes Alphabet."
+    },
+    "binary-five": {
+      "question": "Welche Binärzahl steht für die Dezimalzahl 5?",
+      "options": { "a": "110", "b": "111", "c": "011", "d": "101" },
+      "explanation": "101 bedeutet 1 × 4 + 0 × 2 + 1 × 1 = 5: Jede Stelle ist doppelt so viel wert wie die rechts daneben. Das ist die Wahrheit der Epoche 1946 – Zahlen und Text sind Muster aus Bits."
+    },
+    "shortest-first": {
+      "question": "Drei Jobs warten auf einen Rechner. Sie dauern 10, 2 und 5 Minuten. In welcher Reihenfolge warten sie zusammen am kürzesten?",
+      "options": { "a": "2, 5, 10", "b": "10, 5, 2", "c": "5, 2, 10", "d": "10, 2, 5" },
+      "explanation": "Kurze Jobs zuerst: Dann warten sie zusammen 0 + 2 + 7 = 9 Minuten statt bis zu 25. Diese Regel heißt „Shortest Job First“ – Planung wie in der Epoche 1956."
+    },
+    "first-os": {
+      "question": "Wofür sorgten die ersten Betriebssysteme Mitte der 1950er-Jahre?",
+      "options": {
+        "a": "Für farbige Grafik auf dem Bildschirm",
+        "b": "Für Verbindungen zwischen Rechnern",
+        "c": "Dass der Rechner einen Job nach dem anderen ohne Pause abarbeitet",
+        "d": "Für die Bedienung mit einer Maus"
+      },
+      "explanation": "Ein Großrechner war teuer, und jede Minute Leerlauf zwischen zwei Jobs kostete Geld. Das Betriebssystem der Epoche 1956 übernahm den Wechsel selbst: Ein Rechner hasst Warten."
+    },
+    "batch-meaning": {
+      "question": "Was bedeutet Stapelverarbeitung?",
+      "options": {
+        "a": "Der Rechner reagiert sofort auf jeden Tastendruck",
+        "b": "Jobs werden gesammelt und nacheinander ohne Eingriff abgearbeitet",
+        "c": "Mehrere Rechner teilen sich eine Datei",
+        "d": "Daten werden in Stapeln auf Festplatten gesichert"
+      },
+      "explanation": "Im Stapelbetrieb der Epoche 1956 gab man einen Stapel Lochkarten ab und holte später den Ausdruck. Wer wann drankam, entschied die Reihenfolge im Stapel."
+    },
+    "scheduler": {
+      "question": "Welcher Teil eines Betriebssystems entscheidet, welches Programm als Nächstes Rechenzeit bekommt?",
+      "options": { "a": "Das Dateisystem", "b": "Der Bootloader", "c": "Der Tastaturtreiber", "d": "Der Scheduler" },
+      "explanation": "Der Scheduler verteilt die Rechenzeit – heute viele Male pro Sekunde, in der Epoche 1956 noch Job für Job."
+    },
+    "root": {
+      "question": "Wie heißt das oberste Verzeichnis eines UNIX-Dateisystems?",
+      "options": { "a": "/", "b": "~", "c": "C:\\", "d": ".." },
+      "explanation": "Alles hängt an der Wurzel „/“, auch jede weitere Festplatte und jeder USB-Stick. Das ist der Baum der Epoche 1971: Jede Datei hat einen Pfad, der dort beginnt."
+    },
+    "dot-dot": {
+      "question": "Wohin führt der Befehl „cd ..“?",
+      "options": {
+        "a": "Ins Home-Verzeichnis",
+        "b": "Ins Wurzelverzeichnis /",
+        "c": "Ins übergeordnete Verzeichnis",
+        "d": "Ins zuletzt besuchte Verzeichnis"
+      },
+      "explanation": "„..“ ist in jedem Verzeichnis der Name für die Ebene darüber. So klettert man seit der Epoche 1971 im Baum nach oben."
+    },
+    "absolute-path": {
+      "question": "Welcher dieser Pfade ist absolut?",
+      "options": { "a": "docs/notes.txt", "b": "/home/ada/notes.txt", "c": "../notes.txt", "d": "notes.txt" },
+      "explanation": "Ein absoluter Pfad beginnt an der Wurzel „/“ und gilt von überall aus; die anderen hängen davon ab, wo man gerade steht. Eine Lehre aus der Epoche 1971."
+    },
+    "pwd": {
+      "question": "Was zeigt der Befehl „pwd“ an?",
+      "options": {
+        "a": "Das Passwort des Benutzers",
+        "b": "Den Inhalt einer Datei",
+        "c": "Die Dateien im Verzeichnis",
+        "d": "Den Pfad des aktuellen Verzeichnisses"
+      },
+      "explanation": "pwd steht für „print working directory“ und zeigt, wo im Baum Sie gerade stehen. Er gehört zum Handwerkszeug der UNIX-Welt aus der Epoche 1971."
+    },
+    "conventional-memory": {
+      "question": "Wie viel Arbeitsspeicher konnten Programme unter MS-DOS auf dem IBM PC direkt nutzen?",
+      "options": { "a": "64 KB", "b": "16 MB", "c": "640 KB", "d": "1 GB" },
+      "explanation": "Die berühmten 640 KB „konventioneller Speicher“: Der Rest des ersten Megabytes war für Grafikkarte und BIOS reserviert. Die Wahrheit der Epoche 1981: Speicher ist endlich."
+    },
+    "kibibyte": {
+      "question": "Wie viele Bytes hat ein Kibibyte (KiB)?",
+      "options": { "a": "1024", "b": "1000", "c": "512" },
+      "explanation": "In der DOS-Welt der Epoche 1981 sagte man „Kilobyte“ und meinte 1024 Bytes, also 2 hoch 10. Heute heißt das genau Kibibyte; ein Kilobyte sind nach SI 1000 Bytes."
+    },
+    "ram-power": {
+      "question": "Was passiert mit dem Inhalt des Arbeitsspeichers (RAM), wenn der Strom ausfällt?",
+      "options": {
+        "a": "Er wird automatisch gesichert",
+        "b": "Er geht verloren",
+        "c": "Er bleibt bis zum nächsten Start erhalten"
+      },
+      "explanation": "RAM hält Daten nur, solange Strom fließt. Deshalb speicherte man in der Epoche 1981 auf Diskette – und deshalb speichern Sie heute noch."
+    },
+    "free-memory": {
+      "question": "Ein Programm meldet unter MS-DOS: zu wenig Speicher. Was half typischerweise?",
+      "options": {
+        "a": "Die Festplatte defragmentieren",
+        "b": "Den Bildschirm heller stellen",
+        "c": "Eine zweite Diskette einlegen",
+        "d": "Treiber weglassen oder in den oberen Speicher laden"
+      },
+      "explanation": "Jeder Treiber aus CONFIG.SYS und AUTOEXEC.BAT belegte einen Teil der 640 KB. Wer in der DOS-Welt der Epoche 1981 ein großes Programm starten wollte, räumte zuerst den Speicher auf."
+    },
+    "wimp": {
+      "question": "Wofür steht die Abkürzung WIMP?",
+      "options": {
+        "a": "Windows, Icons, Menus, Pointer",
+        "b": "Wireless Internet Mail Protocol",
+        "c": "Word, Image, Media, Print",
+        "d": "Windows Internal Memory Page"
+      },
+      "explanation": "Fenster, Symbole, Menüs und Zeiger: die vier Bausteine, die der Macintosh in der Epoche 1984 einem breiten Publikum brachte und die bis heute jede Oberfläche prägen."
+    },
+    "macintosh-1984": {
+      "question": "Was brachte der Macintosh 1984 einem breiten Publikum?",
+      "options": {
+        "a": "Den ersten Internetbrowser",
+        "b": "Eine grafische Oberfläche mit Maus",
+        "c": "Einen Touchscreen in Farbe",
+        "d": "Die erste Festplatte"
+      },
+      "explanation": "Grafische Oberflächen gab es schon vorher in Forschungslabors, etwa bei Xerox. Der Macintosh brachte Fenster und Maus in der Epoche 1984 auf die Schreibtische vieler Menschen."
+    },
+    "point-and-choose": {
+      "question": "Welche Idee steckt hinter einer grafischen Oberfläche?",
+      "options": {
+        "a": "Befehle schneller tippen",
+        "b": "Programme ohne Arbeitsspeicher ausführen",
+        "c": "Zeigen und auswählen statt Befehle auswendig lernen"
+      },
+      "explanation": "Was man sieht, muss man sich nicht merken: Ein Menü zeigt die Befehle, die Maus wählt einen aus. Die Wahrheit der Epoche 1984: Zeigen ist leichter als Erinnern."
+    },
+    "copy-shortcut": {
+      "question": "Welche Tastenkombination kopiert auf dem Mac die Auswahl?",
+      "options": { "a": "Befehlstaste + V", "b": "Befehlstaste + C", "c": "Befehlstaste + X", "d": "Befehlstaste + Z" },
+      "explanation": "C wie „copy“; V fügt ein, X schneidet aus, Z macht rückgängig. Der Macintosh zeigte diese Kürzel in der Epoche 1984 direkt neben den Menübefehlen – wer sie oft sah, lernte sie nebenbei."
+    },
+    "ip-address": {
+      "question": "Wozu dient eine IP-Adresse?",
+      "options": {
+        "a": "Sie verschlüsselt die Verbindung",
+        "b": "Sie legt die Geschwindigkeit fest",
+        "c": "Sie speichert Webseiten zwischen",
+        "d": "Sie kennzeichnet ein Gerät im Netz, damit Pakete es finden"
+      },
+      "explanation": "Ohne Adresse kein Ziel: Jedes Paket trägt die IP-Adressen von Absender und Empfänger. Die Wahrheit der Epoche 1995: Ein Netz braucht Adressen."
+    },
+    "ipv4-bits": {
+      "question": "Wie viele Bits hat eine IPv4-Adresse?",
+      "options": { "a": "8", "b": "64", "c": "32", "d": "128" },
+      "explanation": "32 Bits, geschrieben als vier Zahlen von 0 bis 255, etwa 192.168.1.20. IPv6 nutzt 128 Bits, weil die IPv4-Adressen knapp wurden; Windows 95 sprach in der Epoche 1995 nur IPv4."
+    },
+    "gateway": {
+      "question": "Welche Aufgabe hat das Standardgateway?",
+      "options": {
+        "a": "Es leitet Pakete an Ziele außerhalb des eigenen Netzes weiter",
+        "b": "Es übersetzt Domainnamen in Adressen",
+        "c": "Es vergibt Passwörter",
+        "d": "Es verbindet Drucker per USB"
+      },
+      "explanation": "Alles, was nicht im eigenen Netz liegt, geht an das Gateway, meist den Router. In Windows 95, der Epoche 1995, hatte es in den TCP/IP-Einstellungen eine eigene Registerkarte."
+    },
+    "same-network": {
+      "question": "Subnetzmaske 255.255.255.0: Welche Adresse liegt im selben Netz wie 192.168.1.20?",
+      "options": { "a": "192.168.2.20", "b": "192.168.1.200", "c": "10.168.1.20", "d": "192.168.10.1" },
+      "explanation": "Diese Maske sagt: Die ersten drei Zahlen bilden das Netz, die letzte das Gerät. 192.168.1.200 teilt die ersten drei mit 192.168.1.20 – die Rechnung hinter dem Netzwerk-Rätsel der Epoche 1995."
+    },
+    "prefix-24": {
+      "question": "Welche Subnetzmaske entspricht der Schreibweise /24?",
+      "options": { "a": "255.0.0.0", "b": "255.255.0.0", "c": "255.255.255.255", "d": "255.255.255.0" },
+      "explanation": "/24 heißt: Die ersten 24 der 32 Bits sind das Netz, also drei volle Achtergruppen – 255.255.255.0. Adressen und Masken sind die Wahrheit der Epoche 1995."
+    },
+    "https-port": {
+      "question": "Auf welchem Port nimmt ein Webserver HTTPS-Verbindungen standardmäßig an?",
+      "options": { "a": "80", "b": "443", "c": "22", "d": "25" },
+      "explanation": "443 für HTTPS, 80 für unverschlüsseltes HTTP. Eine Firewall von heute öffnet genau die Ports, die ein Dienst braucht – und keinen mehr."
+    },
+    "ssh-port": {
+      "question": "Welcher Dienst nutzt standardmäßig Port 22?",
+      "options": { "a": "SSH", "b": "HTTP", "c": "DNS", "d": "SMTP" },
+      "explanation": "Über SSH verwalten Admins heute Server und Container verschlüsselt aus der Ferne. Port 22 ist deshalb einer der ersten, die eine Firewall bewusst regelt."
+    },
+    "port-purpose": {
+      "question": "Wozu dienen Ports?",
+      "options": {
+        "a": "Sie geben die Adresse eines Rechners im Netz an",
+        "b": "Sie messen die Bandbreite",
+        "c": "Sie ordnen eine Verbindung dem richtigen Programm auf einem Rechner zu",
+        "d": "Sie verschlüsseln die Daten"
+      },
+      "explanation": "Die IP-Adresse findet den Rechner, der Port das Programm darauf. Heute laufen auf einem Server oft viele Dienste nebeneinander, jeder hinter seinem eigenen Port."
+    },
+    "first-match": {
+      "question": "Eine Firewall prüft ihre Regeln von oben nach unten, die erste passende gilt. Regel 1: alles blockieren. Regel 2: Port 443 erlauben. Was passiert mit einer Verbindung auf Port 443?",
+      "options": { "a": "Sie wird blockiert", "b": "Sie wird erlaubt", "c": "Sie wird auf Port 80 umgeleitet" },
+      "explanation": "Regel 1 passt auf alles und gilt zuerst; Regel 2 kommt nie zum Zug. Die Erlaubnis muss über der Sperre stehen – das Prinzip hinter dem Firewall-Rätsel von heute."
+    },
+    "container": {
+      "question": "Was ist ein Container, etwa mit Docker?",
+      "options": {
+        "a": "Ein physischer Server im Rechenzentrum",
+        "b": "Ein verschlüsselter Ordner für Passwörter",
+        "c": "Ein anderes Wort für eine Festplatte",
+        "d": "Ein Programm mit allem, was es braucht, isoliert von anderen auf demselben System"
+      },
+      "explanation": "Ein Container bringt sein Programm samt Bibliotheken mit und läuft abgeschottet, auf dem Laptop genauso wie in der Cloud. Die Wahrheit von heute: Programme laufen isoliert, an vielen Orten zugleich."
+    }
+  }
+}

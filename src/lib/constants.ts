@@ -7,6 +7,8 @@ export const SITE_AUTHOR = 'Ahmadreza Taheri';
 export const STORAGE_KEYS = {
   unlocks: 'amonel.unlocks.v1',
   theme: 'amonel.theme.v1',
+  /** The Computer-Quiz's best score, one number (DECISIONS.md 55). */
+  quiz: 'amonel.quiz.v1',
   /** sessionStorage: this tab asked to see the journey again (DECISIONS.md 49). */
   replay: 'amonel.replay',
 } as const;

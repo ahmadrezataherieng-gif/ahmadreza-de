@@ -717,6 +717,9 @@
         "title": "Lebenslauf",
         "body": "Der Lebenslauf als PDF zum Herunterladen."
       },
+      "quiz": {
+        "title": "Computer-Quiz"
+      },
       "punchcard-lab": {
         "title": "Lochkarten-Labor"
       },
