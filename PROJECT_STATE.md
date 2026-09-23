@@ -81,9 +81,9 @@ Last updated: 2026-09-19
     status, sort.
   - **Traceroute:** a labelled simulation over four prepared routes, the packet
     travelling hop by hop with its latency, and where the time went.
-  - **Assistant** (Phase 8A, DECISIONS.md 52): live when the proxy has a key, otherwise a demo that says so on a badge, a banner and every message - five prepared answers, no guessing. Seven visible states, reduced motion shows the finished answer, and a line about Gemini in the app itself. On open it sends one bare GET to learn whether the Worker has a key.
+  - **Assistant** (Phase 8B, DECISIONS.md 53): a local search over `src/content/`, built by `src/lib/search/` and run entirely in the visitor's browser - no Worker call, no key, no external AI service. It normalises a question (case, diacritics, Persian letter and digit variants) and matches it against an index built at build time, returning the best passages labelled with their source, or an honest "nothing found" with the example questions again. Four visible states (idle, searching, answered, noMatch), reduced motion shows the finished answer.
   - Contact, Timeline and CV are still placeholders.
-- **The proxy** (`worker/`, Phase 8A): a Cloudflare Worker answering only `/api/*` (`assets.run_worker_first`), the rest of the site served from `out/` as before. Own-origin only, 5 requests a minute and 30 an hour per IP (in memory), question 400 characters, answer 900, 8 s timeout, nothing logged, the model's material built from `src/content/` at build time. No key is set: it answers "not configured". Run under `wrangler dev`, it served the assets, the 404, the redirects and the headers unchanged and answered the API paths; the real Gemini API has never been called.
+- **The Worker** (`worker/`, Phase 8A, gutted in Phase 8B): answers only `/api/*` (`assets.run_worker_first`) with a plain 404, reserved for Phase 9's anonymous counters; the rest of the site is served from `out/` as before. The Gemini proxy that used to live here is gone (DECISIONS.md 53), still in the git history.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
   real Chrome through both modes, all puzzles, the gates and the landing page;
   `boundaries.mjs` screenshots every crossing and checks that no frame is blank
@@ -154,6 +154,19 @@ Phase 8A (`scripts/verify/sizes.mjs`, gzip -6):
 | Landing / Journey / Desktop HTML | unchanged | unchanged (journey de 40.0 kB) |
 | Worker bundle (wrangler, unminified) | - | 71 kB |
 
+Phase 8B (`scripts/verify/sizes.mjs`, gzip -6): the assistant's brain moved
+from the Worker into its own chunk, so opening it now costs more, and the
+Worker costs almost nothing.
+
+| | Before 8B | After 8B |
+|---|---|---|
+| Route First Load JS (Next) | 135 kB | 136 kB (limit 250) |
+| Landing / Journey / Desktop: JS loaded | 135.1 / 223.9 / 145.1 kB | 135.2 / 224.1 / 145.2 kB (unchanged - the search ships only in the Assistant's own lazy chunk) |
+| Assistant on open, fresh (code + its own copy) | 6.3 kB | **9.1 kB** (7.5 code + 1.6 copy in de) |
+| Assistant on open, fresh (+ About/Terminal/Tickets copy the search also needs) | - | **15.7 kB** total (already cached if those apps were opened first) |
+| Worker bundle (`wrangler deploy --dry-run`) | 71 kB unminified | **under 1 kB** - the Gemini proxy is gone |
+| Landing / Journey / Desktop HTML | unchanged | unchanged |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -175,7 +188,6 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - Contact, Timeline and CV, and the seven bonus apps
   (Phase 9), are placeholders.
 - The phone keyboard handling (Terminal, Assistant) was checked in emulation only.
-- The Gemini key, and everything that needs it: TODO.md, Phase 8B.
 - Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).

@@ -247,10 +247,10 @@ export function EraCloud({ headingId }: { headingId: string }) {
           <Panel title={t('visual.promptLabel')} className="ao-cue sm:col-span-2" style={cue(0.68)}>
             {/*
               The assistant's mount point. What is drawn here is a picture of a
-              prompt, not a working one: no input, no request, no key. The
-              working assistant is the desktop app (Phase 8); the teaser below
-              only points to it, and reaches the page after it has loaded, never
-              in the static HTML. The Gemini key never reaches the browser.
+              prompt, not a working one: no input, no search. The working
+              assistant is the desktop app (Phase 8); the teaser below only
+              points to it, and reaches the page after it has loaded, never in
+              the static HTML.
             */}
             <div data-assistant-mount="journey-prompt" className="flex flex-col gap-2">
               <div className="flex items-center gap-2 rounded-control border border-edge bg-background px-3 py-2">

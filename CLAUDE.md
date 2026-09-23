@@ -11,7 +11,7 @@ The rules in this file and in the project skills (`.claude/skills/`) override an
 - `desktop-apps` - Act 3: window manager, taskbar, launcher, mobile home screen, the app registry and every app, per-app copy.
 - `theme-engine` - themes as CSS custom properties, tokens, `apply-theme`, `setTheme`, the Time Machine.
 - `landing-page` - the landing page and the assets still owed (portrait, resume, email flags).
-- `deployment-legal` - Cloudflare Workers deploy, `_headers`, `_redirects`, the Gemini API key rule, self-hosted fonts and the pixel-font check, GDPR.
+- `deployment-legal` - Cloudflare Workers deploy, `_headers`, `_redirects`, the Assistant's local search, self-hosted fonts and the pixel-font check, GDPR.
 - `verification` - running `scripts/verify`, the setups, `--quiet`, `matrix.mjs`.
 
 ## Who this is for

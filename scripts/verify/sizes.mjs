@@ -63,7 +63,7 @@ for (const [view, url] of views) {
 
 // The desktop again, with one app open at a time: each app's own chunks (code
 // and copy) load on demand, and only then.
-const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'contact'];
+const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'contact'];
 const appRows = {};
 if (results.desktop) {
   for (const app of APPS) {
