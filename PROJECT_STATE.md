@@ -17,7 +17,9 @@ Last updated: 2026-09-23
 - [x] **Phase 9A** — Rebrand to Amonel: names, the `/amonel/` route with 301s, titles, logos and icons (DECISIONS.md 54)
 - [x] **Phase 9B** — the Computer-Quiz, a base app (DECISIONS.md 55)
 - [x] **Phase 9C** — anonymous public counters on `/api/*`, Worker + D1, not deployed (DECISIONS.md 56)
-- [ ] **Phase 9D** and on — unlockable apps, easter eggs, Time Machine theme switcher
+- [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
+- [ ] **Phase 9D-2** — network tools and the Time Machine theme switcher (slots registered)
+- [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
@@ -77,8 +79,32 @@ Last updated: 2026-09-23
   cycling, RTL mirroring - with a taskbar (launcher, window buttons, clock,
   language switcher, résumé control). Phones and touch tablets get a home screen
   with a dock; apps open fullscreen and the browser's Back closes them. Nine
-  base apps and seven bonus apps are registered. Locked bonus apps name the era
-  whose puzzle unlocks them.
+  base apps and seven bonus apps are registered.
+- **Bonus apps and their unlocks** (Phase 9D-1, DECISIONS.md 57): each era's
+  puzzle unlocks one bonus app however it was seen solved - by hand, shown, or
+  watched in Guided mode - and reaching the Convergence unlocks all seven.
+  Locked ones stay visible, dimmed with a padlock; opening one says what it is,
+  which era unlocks it, that the journey's end unlocks everything, and links to
+  that era (`/amonel/#era-N`, which the journey now honours). Artifacts, badges
+  and counters are still a solve by hand's alone. The state is the existing
+  `amonel.unlocks.v1` (store v3), sanitised on read: broken storage means
+  locked, never a crash.
+  - **Binary & Morse** (1946): text to UTF-8 bytes in binary, hex and decimal and
+    back, with the reason when bytes are not text; a table of bytes per
+    character (Latin 1, Persian 2, emoji 4) with the bits drawn; international
+    Morse both ways, unsupported characters named; a tone (Web Audio, on a
+    click only, with Stop and volume) and a light kept under 3 flashes a second,
+    a static timeline instead under reduced motion. Stores nothing.
+  - **Snake** (1981): canvas game coloured by `--ao-snake-*` tokens (a phosphor
+    set under the 1971 theme, the 9D-2 hook), arrows/WASD, Space/P, swipe and a
+    touch pad, pauses when hidden or unfocused; best score in `amonel.snake.v1`;
+    a finished game counts `snake.played`, shown from ten.
+  - **Pixel Paint** (1984): 16/32/64 px, pencil, eraser, fill, picker, undo/redo;
+    1-bit, 16-colour (CGA/EGA) and 256-colour palettes as colour depths with a
+    note each; autosave in `amonel.paint.v1` after the first change; a 512 px
+    PNG made in the browser; mouse, touch, pen and keyboard.
+  - Network tools (1995) and the Time Machine (today) are 9D-2 slots; the
+    scheduler (1956) and file tree (1971) are still the stand-in.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
   own copy file per language:
   - **About:** who Ahmadreza is, his path, what he does now, skills by area,
@@ -103,7 +129,8 @@ Last updated: 2026-09-23
   `desktop.mjs` drives the window manager (mouse, touch, keyboard) and the home
   screen; `apps.mjs` uses each core app, from 300 x 200 to maximised and
   fullscreen on a phone; `npm test` runs the pure modules and checks the app
-  data and copy in plain node; `navigation.mjs` the hand-over, Zum Desktop from every era and the
+  data and copy in plain node; `bonus.mjs` the unlocks and the three bonus apps
+  (Phase 9D-1); `navigation.mjs` the hand-over, Zum Desktop from every era and the
   returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
   so all of them can run against the real export. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 197 lines, three core rules plus pointers; its specialised rules live in `.claude/skills/` (`seo` added in Phase 8B).
 
@@ -204,6 +231,22 @@ loads, because the landing page, the journey and the desktop all count.
 | Landing / Journey / Desktop HTML | de 9.4 / 40.3 / 4.9 kB | de 9.5 / 40.3 / 4.9 kB |
 | Worker bundle (`wrangler deploy --dry-run`) | under 1 kB | 4.2 kB, **1.8 kB gzip** |
 
+Phase 9D-1 (`scripts/verify/sizes.mjs`, gzip -6): each bonus app is its own
+lazy chunk. The landing page and the journey grow only by the unlock logic in
+the shared route chunk (sanitised storage, watched eras, the finished journey)
+and a few new utility classes in the one stylesheet; no app code reaches them.
+
+| | Before 9D-1 | After 9D-1 |
+|---|---|---|
+| Route First Load JS (Next) | 136 kB | 137 kB (limit 250) |
+| Landing / Journey / Desktop: JS loaded | 135.9 / 225.7 / 146.6 kB | **136.6 / 226.7 / 147.5 kB** (+0.7 / +1.0 / +0.9) |
+| Stylesheet | 21.0 kB | 21.7 kB |
+| Binary & Morse on open (code + copy, de) | - | **7.7 kB** (6.1 + 1.6) |
+| Snake on open | - | **6.0 kB** (5.2 + 0.8) |
+| Pixel Paint on open | - | **7.6 kB** (6.4 + 1.2) |
+| Landing / Journey HTML | de 9.5 / 40.3 kB | unchanged |
+| Desktop HTML | de 4.9 · en 4.7 · fa 5.2 kB | de 5.2 · en 5.0 · fa 5.5 kB (the bonus apps' descriptions in `os`) |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -222,8 +265,11 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- Contact, Timeline and CV, and the seven bonus apps
-  (Phase 9), are placeholders.
+- Contact, Timeline and CV are placeholders, and four bonus apps (scheduler,
+  file tree, network tools, Time Machine) share the stand-in.
+- The bonus apps' copy (Phase 9D-1) is a draft awaiting native-speaker
+  proofreading (TODO.md). The Morse tone has only run in headless Chrome,
+  where nothing is heard; touch and pen were emulated.
 - The quiz copy is a draft awaiting native-speaker proofreading (TODO.md).
 - The counter copy (Phase 9C) is a draft too, and the counters have only run
   under `wrangler dev --local` and against a CDP stub: the real D1, the edge

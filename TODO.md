@@ -99,6 +99,30 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - **Placement:** the stats sit at the very end of About. If you would rather
   not have them there, a `stats` command in the Terminal is the alternative.
 
+### Phase 9D-1 - the bonus apps (draft, needs native-speaker proofreading)
+
+- **All new copy is a draft; German is the source, have German and Persian
+  read by a native speaker:**
+  - `messages/apps/binary/{de,en,fa}.json` (Binary & Morse), including the
+    Persian names for the formats (دودویی، هگز، دهدهی) and "نویسه" for character;
+  - `messages/apps/snake/{de,en,fa}.json`; the app keeps the name "Snake" in
+    every language;
+  - `messages/apps/paint/{de,en,fa}.json` ("Pixelmaler" / "Pixel Paint" /
+    "نقاش پیکسلی"), including the palette notes;
+  - in `messages/{de,en,fa}.json`: `os.locked.message`, `os.locked.orFinish`,
+    `os.locked.play` and every `os.apps.<bonus id>.title` and `.description`.
+- **Facts to confirm in the copy:** the CGA/EGA brown (colour 6), VGA mode
+  13h in 1987 with 262,144 colours, the first Macintosh drawing in 1 bit,
+  and "international Morse = ITU-R M.1677-1, no umlauts".
+- **The era mapping** (DECISIONS.md 57): 1946 Binary & Morse, 1981 Snake, 1984
+  Paint, 1995 network tools, today the Time Machine. Change it in
+  `src/content/eras.ts` if you prefer another.
+- **The locked notice on the window manager** sits at the bottom centre and,
+  now that it carries a description line, covers the lowest desktop icon on
+  a tall 768 px screen until dismissed (Escape, its button, or another app).
+  On phones it no longer overlaps. Moving it (e.g. beside the icon column) is
+  a small Phase 12 layout task.
+
 ## After launch
 
 - **The first era added after launch will be 1977: the Apple II.** It needs its
@@ -121,8 +145,18 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - ~~Anonymous counters on `/api/*`~~ - done in Phase 9C (DECISIONS.md 56). The
   D1 database and the rate-limiting rule are created by hand at deploy time
   (Phase 13, below).
-- Unlockable apps, easter eggs, the Time Machine theme switcher - already this
-  phase's scope in PROJECT_STATE.md.
+- ~~Unlockable apps~~ - Phase 9D-1 (DECISIONS.md 57): the unlocks, Binary &
+  Morse, Snake and Pixel Paint.
+- **Phase 9D-2:** network tools (the 1995 slot, `network-tools`) and the Time
+  Machine (the `time-machine` slot) - both registered and locked on the
+  stand-in. The Time Machine can restyle Snake through the `--ao-snake-*`
+  tokens (the phosphor set under the 1971 theme is the example).
+- **Phase 9D-3:** easter eggs through `HIDDEN_COMMANDS` in the Terminal's
+  `shell.ts` (empty today), and GSAP DrawSVG.
+- The scheduler (1956) and the file tree (1971) are still stand-ins; no phase
+  is planned for them yet.
+- **The quiz could link its missed eras now** - the journey honours
+  `#era-N` since 9D-1 (DECISIONS.md 55 had ruled that out for lack of one).
 - **The free GSAP plugins** (MorphSVG, DrawSVG) are candidates for this phase
   or Phase 12. **Never ScrollSmoother** - decided by Ahmadreza.
 
@@ -156,9 +190,15 @@ What is left:
 
 ## Phase 11 — Legal
 
-- **Browser storage to disclose:** the list in the `deployment-legal` skill
-  ("Browser storage"). Since Phase 9B it includes the quiz's best score,
-  `amonel.quiz.v1`.
+- **Browser storage to disclose (§ 25 TDDDG table):** the list in the
+  `deployment-legal` skill ("Browser storage"). Since Phase 9B it includes the
+  quiz's best score, `amonel.quiz.v1`; since Phase 9D-1 also
+  `amonel.snake.v1` (Snake's best score, one number) and `amonel.paint.v1`
+  (Pixel Paint's current picture, at most 16 KB, written only after the
+  visitor draws), and `amonel.unlocks.v1` now also holds which puzzles were
+  watched in Guided mode and whether the journey was finished. All of it is
+  the visitor's own feature, stays on the device and needs no consent
+  (§ 25 (2) Nr. 2 TDDDG). The counters add `snake.played` to what is counted.
 
 - **The anonymous counters must be in the Datenschutzerklärung** (Phase 9C):
   what is counted, that no IP, identifier or device storage is involved (so

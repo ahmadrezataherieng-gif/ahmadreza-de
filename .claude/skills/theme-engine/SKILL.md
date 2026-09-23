@@ -28,6 +28,13 @@ How it works:
 classes.** One state change restyles the whole document, and it costs no React
 re-render — components read tokens from CSS, not from context.
 
+**Canvas apps follow the theme through tokens too** (Phase 9D-1): Snake
+paints with `--ao-snake-*`, which default to the theme's own tokens and
+switch to a phosphor-green set under `[data-theme='era1971']` or
+`data-snake-skin='phosphor'`. It repaints when `<html>`'s `data-theme` or
+`style` changes, so the Time Machine needs no Snake-specific code - add an
+era's set in `globals.css` to restyle it.
+
 Switching a theme manually:
 
 ```ts

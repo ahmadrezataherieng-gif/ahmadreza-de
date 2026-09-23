@@ -49,8 +49,12 @@ in Act 1 unlock extra apps.
   the router's state), so Back closes them. Never touch `scrollRestoration`.
 - **Apps** are rows in `apps/registry.ts` (id, kind, title key, default size,
   lazy component; the glyph lives in `icons.tsx`). Phase 7 replaces a base app's
-  component in its folder; the window stays. Locked bonus apps say which era's
-  puzzle unlocks them (`unlock.ts`; the last era is "today", never a year).
+  component in its folder; the window stays. Locked bonus apps stay visible,
+  dimmed with a padlock; opening one shows the notice: what the app is
+  (`os.apps.<id>.description`), which era unlocks it (`unlock.ts`; the last era
+  is "today", never a year), that the journey's end unlocks all, and a button
+  to `/amonel/#era-N` (a replay, so no returning-visitor redirect). The
+  registry's `unlockedBy` is derived from `eras.ts`; never type the mapping twice.
 - **Zustand selectors must return stable values.** A selector that builds a new
   array of new objects never compares equal and re-renders forever (React error
   185) - select the store's own objects, or primitives.
@@ -66,6 +70,33 @@ in Act 1 unlock extra apps.
 About, Terminal, Tickets, Traceroute, (Phase 7/8) the Assistant and (Phase 9B)
 the Computer-Quiz are real; Contact, Timeline and CV are still placeholders.
 Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
+The bonus apps (Phase 9D-1): Binary & Morse, Snake and Pixel Paint are real;
+the scheduler, file tree, network tools and Time Machine share the stand-in
+(`bonus/BonusApp.tsx`). Read DECISIONS.md 57.
+
+- **Bonus apps follow the same rules as base apps** (own chunk, own copy,
+  pure tested logic in `binary/codec.ts`, `snake/game.ts`, `paint/paint.ts`),
+  plus: nothing plays or flashes unasked (Morse sound and light only on a
+  click; the light stays under 3 flashes a second, tested); under reduced
+  motion no light, a static timeline; a game pauses when the tab hides, the
+  browser window blurs or another window takes focus.
+- **A canvas reads its colours from tokens** (`--ao-snake-*` in
+  `globals.css`, resolved through a hidden probe element), never from
+  literals. Pixel Paint's palettes are the picture's data and are computed
+  from the hardware rules, not typed as colour values.
+- **Game and drawing gestures:** the surface gets `touch-action: none`
+  (`.ao-snake-board`, `.ao-paint-canvas`) so it never scrolls the page; pointer
+  events serve mouse, touch and pen; `capture()` from `use-app-input.ts`
+  guards `setPointerCapture`, which throws for a pointer the browser no
+  longer tracks. Boards and canvases are never mirrored in Persian.
+- **Storage:** Snake's best score (`amonel.snake.v1`) and Paint's picture
+  (`amonel.paint.v1`, only after a change, at most 16 KB) - fail-safe through
+  `lib/safe-storage.ts`. A new key goes into `STORAGE_KEYS`, the
+  `deployment-legal` table and TODO.md together.
+- **Numbers in copy** use `{n, number}` or plural `#`: a bare `{n}` is
+  stringified and shows Latin digits in Persian.
+- **The Terminal's `HIDDEN_COMMANDS`** (`terminal/shell.ts`) is the entry for
+  Phase 9D-3's easter eggs: answered like any command, never in `help` or Tab.
 
 - **The Assistant** (`apps/assistant/`) is a local search over `src/content/`,
   built by `src/lib/search/` and run entirely in the visitor's browser. It talks

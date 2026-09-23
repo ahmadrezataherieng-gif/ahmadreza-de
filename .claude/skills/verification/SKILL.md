@@ -12,6 +12,7 @@ node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/apps.mjs [--width 380] [--locale fa] [--reduce] [--touch]
+node scripts/verify/bonus.mjs [--width 380] [--locale fa] [--reduce] [--touch] [--api]
 node scripts/verify/sizes.mjs
 node scripts/verify/worker-local.mjs          # against `npx wrangler dev --local --port 8787`
 ```
@@ -41,6 +42,7 @@ The matrix run through Phase 8A (each configuration is one command; `node script
 - `navigation.mjs`: 1280 de and fa; 380 `--touch` en; `--reduce`.
 - `journey.mjs`: `--mode play` at 1280 de, 380 touch, fa, 768 x 1024, `--reduce`; `--mode watch` at 1280 and `--reduce`.
 - `--api` (Phase 9C): `apps.mjs` at 1280 de and 380 touch fa; `journey.mjs --mode play` at 1280 de and fa, `--mode watch` at 1280.
+- `bonus.mjs` (Phase 9D-1): the unlocks (locked icons, the notice and its `#era-N` link, all unlocked after the journey) and Binary & Morse, Snake and Pixel Paint used for real, with what each stores. 1280 de and fa, 768 x 1024, 380 x 800 `--touch` en, `--reduce` at 380 touch fa, and `--api` at 1280 de and 380 touch fa. `sizes.mjs` opens the three apps too (it seeds a finished journey).
 - `boundaries.mjs`, `perf.mjs`, `sizes.mjs` when the journey, its motion or the bundles changed.
 - Also, every phase: `npm run build`, `npm run lint`, `npm run check:pixel-font`, `npm test`. What "done" means for a phase is in CLAUDE.md, under Commands.
 

@@ -50,16 +50,22 @@ available.**
 - Returning visitors go **straight to the desktop**: a direct visit to the
   journey redirects there, and the landing page leads with "Zum Desktop"
   (DECISIONS.md 49).
-- Solving a puzzle unlocks a bonus app. A shown solution opens the gate only.
+- Seeing a puzzle solved unlocks its bonus app - by hand, by "Lösung zeigen"
+  or by watching it in Guided mode - and finishing the journey unlocks them
+  all (DECISIONS.md 57). Artifacts, badges and counters stay a solve by hand's.
 - **Recruiters must never be stuck behind a game.**
 
 ## The unlock mechanic
 
-Solving era *N*'s puzzle awards an **artifact**, and each artifact unlocks
-exactly one **bonus app** on the Amonel OS desktop. Base apps (About, Terminal,
+Solving era *N*'s puzzle by hand awards an **artifact**; seeing it solved in
+any way (by hand, shown, or watched in Guided mode: `watchPuzzle`) unlocks
+exactly one **bonus app** on the Amonel OS desktop, and reaching the
+Convergence (`finishJourney`, not Zum Desktop) unlocks all of them. Base apps (About, Terminal,
 Tickets, Traceroute, Assistant, Contact, Timeline, CV, Computer-Quiz) are
-always available to everyone. The mapping lives in `src/content/eras.ts`; the state lives in
-`src/store/unlock-store.ts` and is persisted to `localStorage`.
+always available to everyone. The mapping lives in `src/content/eras.ts`; the state and its
+logic live in `src/lib/unlocks.ts` (pure, node-tested), bound to React in
+`src/store/unlock-store.ts` and persisted to `localStorage` - sanitised on
+read, so broken storage means "locked", never a crash.
 
 ### Puzzles (Phase 5)
 
@@ -75,7 +81,8 @@ always available to everyone. The mapping lives in `src/content/eras.ts`; the st
   demonstration `inert`.
 - Guided playback and "Lösung zeigen" never award artifacts or badges. Only an
   interactive solve calls `solvePuzzle`; a shown solution calls `revealPuzzle`,
-  which opens the gate only. Tricks are reported through the definition's
+  which opens the gate and unlocks the era's app, nothing more; a guided
+  demonstration played to its end calls `watchPuzzle` (the app only). Tricks are reported through the definition's
   `usedTrick`, in play only.
 - **Gates** (`gate.ts`, `PuzzleGate.tsx`): the resolver calls `measureGates` and
   `tickGate`; the page end is set with `setScrollLimit()` in lenis-controller.

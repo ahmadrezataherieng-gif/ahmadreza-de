@@ -1796,3 +1796,136 @@ binding, `caches.default` on a custom domain (it is a no-op on workers.dev),
 the rate-limiting rule, and `run_worker_first` in production. Locally:
 `wrangler dev --local` with a local D1, and the browser checks against a CDP
 stub of `/api`.
+
+---
+
+## 57. Bonus-app unlocks and the first three bonus apps, Phase 9D-1
+
+**Decision, made by Ahmadreza:** bonus apps start locked and stay visible
+(dimmed, with a padlock). Each era's puzzle unlocks one; finishing the
+journey unlocks all of them, even with no puzzle solved. Guided mode's
+auto-solve unlocks too - it is still never counted. Three bonus apps are
+built now: Snake, Pixel Paint and a Binary/Morse converter. Phase 9D-2 adds
+network tools and the Time Machine, 9D-3 easter eggs.
+
+**Decided while building it (proposed to Ahmadreza, record changes here):**
+
+- **The mapping** stays where it always was, `unlocksApp` in
+  `src/content/eras.ts`; the app registry derives `unlockedBy` from it, so it
+  is never typed twice. Each app echoes its era's truth:
+  | Era | App | Why |
+  |---|---|---|
+  | 1946 | `binary` Binary & Morse | text is numbers |
+  | 1956 | `scheduler` (later) | - |
+  | 1971 | `filesystem` (later) | - |
+  | 1981 | `snake` Snake | a finite board fills up, like 640 KB |
+  | 1984 | `paint` Pixel Paint | the GUI; 1-bit pictures |
+  | 1995 | `network-tools` (9D-2 slot) | a network needs addresses |
+  | today | `time-machine` (9D-2 slot) | the end of the timeline looks back |
+  The ids `punchcard-lab`, `memory-map`, `dialup` and `firewall` are gone;
+  nothing had shipped or been counted under them (the counters are not
+  deployed), so renaming cost nothing. Snake is 1981 rather than the 1970s
+  arcade because the journey has no arcade era and 1981's truth fits.
+- **What unlocks an app:** its era's puzzle seen solved in any way - by hand,
+  by "Lösung zeigen", or by watching the guided demonstration to its end -
+  or the journey finished. The puzzle skill used to say a shown solution
+  opens the gate only; for apps that would have been odd (switch to Watch
+  and the app unlocks anyway), so a shown solution unlocks the app too.
+  **Artifacts, Legende badges and the public counters stay a solve by hand's
+  alone** - nothing about those changed.
+- **"Watched" in Guided mode** is the demonstration reaching its end, which
+  in Guided mode means scrolled past. Scrolling fast, or the deep link below
+  gliding past earlier eras, counts; that is what Guided mode is. Under
+  reduced motion the finished frame is the demonstration, so an era counts
+  once its puzzle segment is mounted (one era ahead).
+- **"Finished the journey"** is the Convergence reached (where
+  `journey.completed` is counted), not Zum Desktop - that skips the journey.
+  It is a new flag, `journeyFinished`, next to the old `hasCompletedJourney`
+  (reached the desktop by any way, which drives the returning-visitor
+  redirect and is unchanged).
+- **Storage:** no new key for unlocks. The existing `amonel.unlocks.v1` goes
+  to store version 3 with two new fields, `watchedEras` and `journeyFinished`;
+  v2 data migrates with both empty (a v2 visitor who reached the desktop may
+  have skipped, so nobody gains an app they had not earned). Everything read
+  from storage is sanitised (unknown ids dropped, only real booleans), and a
+  storage that throws or holds broken JSON reads as "nothing unlocked" - the
+  page never crashes, progress is then just not remembered. The logic moved
+  into `src/lib/unlocks.ts` so plain node tests the real state creator and
+  persist options in a vanilla zustand store (`scripts/test/unlocks.test.mjs`).
+- **The locked notice** says what the app is (a one-line description per
+  bonus app in `os.apps.<id>.description`), which era unlocks it "solved,
+  shown or watched", that the end of the journey unlocks everything, and has
+  **"Zum Rätsel von 1981"**, which opens `/amonel/#era-4` as a replay (no
+  returning-visitor redirect). The journey now honours `#era-N` once its
+  layout is measured, through `scrollToEra`. In Play mode a closed gate
+  before that era still ends the page, so the visitor meets that gate first -
+  the puzzle rule holds. (DECISIONS.md 55 said the journey had no deep link;
+  now it has one, so the quiz could link its missed eras later.)
+- **Two new keys, both the visitor's own feature (§ 25 (2) Nr. 2 TDDDG):**
+  `amonel.snake.v1` (the best score, one number) and `amonel.paint.v1` (the
+  current picture, at most 16 KB, written only after the visitor changes it).
+  Both are in `STORAGE_KEYS`, the storage table of the `deployment-legal`
+  skill and TODO.md for the privacy page; the test that pins `STORAGE_KEYS`
+  was updated deliberately. Binary & Morse stores nothing.
+- **One new counter, `snake.played`:** a finished game, never the score -
+  the 9C rules unchanged (once per page load, in memory, nothing after a
+  failure, shown only from ten). Shown in Snake as "1.234 Spiele gespielt".
+
+**The apps**, each its own lazy chunk with its own copy file per language,
+their logic in pure, tested modules:
+
+- **Binary & Morse** (`apps/binary/`): text to UTF-8 bytes in binary, hex
+  and decimal and back, with the real reason when bytes are not text (a
+  digit that is not one, a partial byte, a byte over 255, invalid UTF-8); a
+  table of each character's code point, byte count and bits as cells - a
+  Latin letter 1 byte, a Persian letter 2, an emoji 4. Morse is ITU-R
+  M.1677-1 only: 26 letters, é, digits, the defined punctuation. Umlauts, ß
+  and Persian letters are named as unsupported, never transliterated. The
+  tone is Web Audio, created on the click (never autoplay), with Stop and a
+  volume slider. The light runs at 5 words a minute (240 ms per unit): dots
+  back to back are about 2 flashes a second, under WCAG 2.3.1's three - a
+  test holds that. Under reduced motion there is no light, only the static
+  timeline that is always drawn.
+- **Snake** (`apps/snake/`): 20 x 20, walls end the game (the board is
+  finite), queued turns so quick double turns work, speed rising a little
+  per meal with a floor. Arrows and WASD by physical key, Space/P pause; on
+  touch a swipe on the board (`touch-action: none`, so it never scrolls the
+  page) and a pad shown on coarse pointers. It pauses when the tab hides,
+  the browser window blurs or another Amonel OS window takes focus. No shake,
+  flash or sound. The board is not mirrored in Persian. Colours are the
+  `--ao-snake-*` tokens in `globals.css`, read by the canvas through a probe
+  element; they follow the theme, and a phosphor-green set applies under the
+  1971 theme or `data-snake-skin="phosphor"` - the hook the 9D-2 Time
+  Machine uses. The name is only "Snake".
+- **Pixel Paint** (`apps/paint/`): 16, 32 or 64 pixels square, one palette
+  index per pixel. Palettes are colour depths: 1 bit (black and white), 4 bit
+  (the 16 RGBI colours of CGA/EGA, brown included) and 8 bit (those 16, a
+  6x6x6 cube and 24 greys - one common 256-colour layout, said so honestly
+  in the note). **They are computed from their hardware rules, not typed as
+  colour values:** a palette is the picture's pixel data, not the site's
+  design, and the app's chrome still reads the theme tokens. Switching
+  palettes maps every pixel to the nearest colour (going down to 1 bit loses
+  colour, which is the lesson); the note shows the picture's size in bytes
+  per depth. Pencil (gapless lines), eraser, 4-way fill, picker, clear,
+  undo/redo (50 steps; a stroke is one step). A new size asks first and
+  stays undoable. Pointer events for mouse, touch and pen; the keyboard moves
+  a cursor on the canvas; the swatches are one radio group with arrow keys.
+  The PNG is 512 px, whole blocks per pixel, made in the browser and never
+  uploaded.
+
+**Future hooks, prepared and empty:** the `network-tools` and `time-machine`
+slots (registered, locked, on the shared stand-in); the `--ao-snake-*`
+token set; `HIDDEN_COMMANDS` in the Terminal's shell - answered like any
+command, never listed by `help` or offered by Tab - for 9D-3.
+
+**Sizes:** each app is its own chunk (Binary & Morse 7.7 kB with its copy,
+Snake 6.0 kB, Paint 7.6 kB, gzip). The landing page and the journey load
+0.7 and 1.0 kB more JavaScript: the fail-safe unlock logic and the new
+unlock fields in the shared route chunk, which every view needs. No app code
+reaches them. PROJECT_STATE.md has the table.
+
+**Not verified:** real devices (touch, pen and phone keyboards were
+emulated), the tone itself (headless Chrome has no speakers - the
+AudioContext and its scheduling run, nothing is heard), the PNG download
+dialog (the check captures the blob), and a browser with storage blocked
+outright (tested in node with a throwing stand-in).

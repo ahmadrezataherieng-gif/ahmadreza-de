@@ -87,10 +87,12 @@ here, in `STORAGE_KEYS` (`src/lib/constants.ts`), in the same change:
 
 | Key | Storage | Holds | Since |
 |---|---|---|---|
-| `amonel.unlocks.v1` | localStorage | journey progress: mode, passed eras, artifacts, badges, reached the desktop | Phase 2 |
+| `amonel.unlocks.v1` | localStorage | journey progress: mode, passed and watched eras, artifacts, badges, reached the desktop, finished the journey (which bonus apps are unlocked follows from these) | Phase 2, extended 9D-1 |
 | `amonel.theme.v1` | localStorage | reserved for the chosen theme; defined in `STORAGE_KEYS`, nothing writes it yet | - |
 | `amonel.replay` | sessionStorage | this tab asked to see the journey again | Phase 6 |
 | `amonel.quiz.v1` | localStorage | the Computer-Quiz's best score, one number | Phase 9B |
+| `amonel.snake.v1` | localStorage | Snake's best score, one number | Phase 9D-1 |
+| `amonel.paint.v1` | localStorage | Pixel Paint's current picture (size, palette, pixels), at most 16 KB, written only after the visitor draws | Phase 9D-1 |
 
 The anonymous counters add **no** key: "once per page load" is kept in memory.
 A test pins `STORAGE_KEYS` (`scripts/test/counters.test.mjs`).
@@ -115,8 +117,8 @@ transfer basis.
 - Cloudflare as a US processor, with the DPF and SCCs as transfer basis (above).
 - The browser storage list above, all of it the visitor's own feature.
 - **The anonymous counters** (Phase 9C, DECISIONS.md 56): what is counted (a
-  puzzle solved in Play mode, a finished quiz round, reaching the end of the
-  journey, the mode chosen, an app opened), that only a name and a total are
+  puzzle solved in Play mode, a finished quiz round, a finished Snake game,
+  reaching the end of the journey, the mode chosen, an app opened), that only a name and a total are
   stored, and that totals under ten are never shown.
 - That **Cloudflare processes the visitor's IP address in transit** only to
   deliver the site and protect it (including the rate limit on the counters),
