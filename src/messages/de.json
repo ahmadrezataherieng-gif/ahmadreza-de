@@ -304,7 +304,7 @@
           "portfolio-web-2b41   Running   ams",
           "ai-proxy-5c2b        Running   iad"
         ],
-        "promptLabel": "Frage an die KI",
+        "promptLabel": "Fragen Sie diese Website",
         "prompt": "Was ist ein Container?",
         "response": [
           "Ein Container bündelt ein Programm mit allem, was es zum Laufen braucht.",
@@ -702,8 +702,7 @@
         "title": "Traceroute"
       },
       "assistant": {
-        "title": "Assistent",
-        "body": "Ein KI-Assistent, der Ihre Fragen zu Ahmadrezas Werdegang und Fähigkeiten beantwortet."
+        "title": "Assistent"
       },
       "contact": {
         "title": "Kontakt",

@@ -303,7 +303,7 @@
           "portfolio-web-2b41   Running   ams",
           "ai-proxy-5c2b        Running   iad"
         ],
-        "promptLabel": "Ask the AI",
+        "promptLabel": "Ask this website",
         "prompt": "What is a container?",
         "response": [
           "A container bundles a program with everything it needs to run.",
@@ -701,8 +701,7 @@
         "title": "Traceroute"
       },
       "assistant": {
-        "title": "Assistant",
-        "body": "An AI assistant that answers your questions about Ahmadreza’s background and skills."
+        "title": "Assistant"
       },
       "contact": {
         "title": "Contact",

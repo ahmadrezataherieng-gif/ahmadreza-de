@@ -182,3 +182,11 @@ test('Traceroute: the summary finds where the time goes', () => {
   assert.equal(formatHop({ role: 'silent', host: null, ip: null, rtt: null, km: 0 }, 4), ' 5  * * *');
   assert.equal(formatHop(byId('router').hops[0], 0), ' 1  router.home.arpa (192.168.1.1)  0.610 ms  0.500 ms  0.490 ms');
 });
+
+test('the Assistant is never called an AI, in any language (DECISIONS.md 53)', () => {
+  for (const locale of LOCALES) {
+    const site = JSON.parse(readFileSync(new URL(`../../src/messages/${locale}.json`, import.meta.url), 'utf8'));
+    const claims = [JSON.stringify(site.os.apps.assistant), site.eras.cloud.visual.promptLabel];
+    for (const text of claims) assert.doesNotMatch(text, /\bKI\b|\bAI\b|هوش مصنوعی/, `${locale}: ${text}`);
+  }
+});
