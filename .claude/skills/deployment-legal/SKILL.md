@@ -56,6 +56,59 @@ from a local search over `src/content/` that runs in the visitor's browser
 no rate limit to configure. The site must never claim anywhere that questions
 go to an AI service, because they do not.
 
+### Visitor data — anonymous counts only
+
+The only visitor data this site will ever collect is **anonymous aggregate
+counts** - for example, how many visitors solved each puzzle (Phase 9,
+`/api/*`). Never add names, e-mail addresses, IP storage, identifiers, a
+comments section, or any form. Contact is a `mailto:` link only, nothing that
+submits to this site.
+
+**No analytics scripts, and no third-party requests of any kind** - fonts,
+maps, video, captchas, CDNs. Everything the site needs is self-hosted (see
+Fonts, below). This is what keeps the site free of a consent banner - see the
+Legal-first core rule in CLAUDE.md.
+
+**Cloudflare features that set cookies stay off:** Bot Fight Mode, Rate
+Limiting Rules, Waiting Room, Always Online. Turning any of these on without
+checking their cookie behaviour first would undo the "no consent banner"
+decision.
+
+Cloudflare's Data Processing Addendum is part of its self-serve terms. The
+Datenschutzerklärung (Phase 11) must name Cloudflare as a US processor, with
+the EU-US Data Privacy Framework and Standard Contractual Clauses as the
+transfer basis.
+
+### Impressum (Phase 11, not built yet)
+
+- Full legal name: **Ahmadreza Taheri Momrabadi** (see the `seo` skill for
+  where this name may and may not appear).
+- A real postal address, a working e-mail, and a second fast contact channel.
+- Reachable within **two clicks from every page**, labelled exactly
+  **"Impressum"**.
+- **No EU ODR link** - that platform closed in July 2025. Do not add one.
+
+### Stadtverwaltung Trier
+
+May only appear as the plain fact that Ahmadreza trains there: **no logo, no
+workplace photos, no internal information.** The Tickets app must stay
+fictional (see the `desktop-apps` skill - Talweber Logistik, not a real
+employer).
+
+### The portrait
+
+The photographer must grant **written usage rights** before the photo goes
+online. Do not publish the portrait (see the `landing-page` skill) without
+that confirmation from Ahmadreza.
+
+### Launch blocker: email must really work
+
+`kontakt@ahmadreza.de` must receive real mail (via Cloudflare Email Routing)
+**before the site goes live**. This is tested with a real message from
+outside, not assumed. The Impressum, the landing page, About, Contact and the
+Terminal all point at this address - do not deploy with an address that does
+not receive mail. TODO.md, Phase 13.
+
 ### Fonts — legal requirement, not a preference
 
 Fonts must **never** be loaded from the Google Fonts CDN at runtime. German case
