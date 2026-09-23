@@ -26,17 +26,17 @@ is left lives in ROADMAP.md.
 - [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
 - [ ] **Phase 9D-2** — network tools and the Time Machine theme switcher (slots registered)
 - [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
-- [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
-- [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58); owner verification, CSP and the pre-launch legal check open (ROADMAP.md LEG-*)
+- [~] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, per-view descriptions, 404, static About page done (DECISIONS.md 59); OG image and the full journey text fallback open
+- [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
 - [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
 
 ## What exists
 
 - **Build:** Next.js 15 static export, Tailwind v4, TypeScript strict. `npm run
-  build` emits fifteen pages - the landing page, the journey, the desktop, the
+  build` emits eighteen pages - the landing page, the journey, the desktop, About, the
   Impressum and the Datenschutzerklärung in de
-  (`/`, `/amonel/`, `/desktop/`, `/impressum/`, `/datenschutz/`), en (`/en/…`)
+  (`/`, `/amonel/`, `/desktop/`, `/about/`, `/impressum/`, `/datenschutz/`), en (`/en/…`)
   and fa (`/fa/…`) - into a static `out/`, plus the
   Amonel icon set (SVG and ICO favicons, Apple touch icon, web manifest). Deployment config for Cloudflare Workers with static assets is in
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
@@ -286,8 +286,12 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
-- The Open Graph image, the static About pages, the full journey text
-  fallback (ROADMAP SEO-05, SEO-09, SEO-10).
+- The Open Graph image and the full journey text fallback (ROADMAP SEO-05,
+  SEO-10).
+- **Static About page** (`/about/`, en, fa; DECISIONS.md 59): the About app's
+  component rendered on the server, linked from every page footer, in the
+  sitemap. **CSP** in `_headers` (everything `'self'`); `serve.mjs --headers`
+  runs the checks under it.
 - **SEO layer, built 2026-09-23** (Phase 10, partly): `robots.txt` (every
   crawler, the AI bots named), `sitemap.xml` (nine URLs with hreflang, legal
   pages left out), `llms.txt`, JSON-LD (Person with the Persian name, WebSite,

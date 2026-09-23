@@ -60,11 +60,16 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
   journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'mode'],
   // No era, journey or puzzle copy: the desktop loads none of that code either.
   desktop: ['site', 'nav', 'languages', 'os'],
+  // The About app's own copy (messages/apps/about/) is merged in below.
+  about: ['site', 'nav', 'languages'],
   // The legal text itself is server-rendered from messages/legal/ and never
   // handed to the client; only the language switcher needs messages there.
   imprint: ['site', 'nav', 'languages'],
   privacy: ['site', 'nav', 'languages'],
 };
+
+/** `site` keys used only by metadata and JSON-LD, never by a client component. */
+const SERVER_ONLY_SITE_KEYS: readonly string[] = ['journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout'];
 
 /**
  * Page title per view, the name always ahead of the brand (the `seo` skill):
@@ -75,6 +80,9 @@ async function viewTitle(locale: Locale, view: View): Promise<string> {
   const t = await getTranslations({ locale, namespace: 'site' });
   // CONTENT-TODO CR-1043
   if (view === 'landing') return `${t('title')} | ${t('brand')}`;
+  if (view === 'about') {
+    return `${(await getTranslations({ locale, namespace: 'nav' }))('about')} – ${t('author')} | ${t('brand')}`;
+  }
   if (view === 'imprint' || view === 'privacy') {
     return `${(await loadLegalCopy(locale))[view].title} – ${t('author')} | ${t('brand')}`;
   }
@@ -121,7 +129,9 @@ export async function generateMetadata({
       ? t('journeyDescription')
       : view === 'desktop'
         ? t('desktopDescription')
-        : t('description');
+        : view === 'about'
+          ? t('aboutDescription')
+          : t('description');
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -177,8 +187,23 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const allMessages = await getMessages({ locale });
   const messages = Object.fromEntries(
-    Object.entries(allMessages).filter(([namespace]) => VIEW_NAMESPACES[view].includes(namespace)),
+    Object.entries(allMessages)
+      .filter(([namespace]) => VIEW_NAMESPACES[view].includes(namespace))
+      // The SEO-only `site` keys feed metadata and JSON-LD on the server; no
+      // client component reads them, so they stay out of the page payload
+      // (the desktop's description would otherwise put the quiz into the
+      // landing page's HTML).
+      .map(([namespace, value]) =>
+        namespace === 'site' && typeof value === 'object'
+          ? [namespace, Object.fromEntries(Object.entries(value).filter(([key]) => !SERVER_ONLY_SITE_KEYS.includes(key)))]
+          : [namespace, value],
+      ),
   );
+  // The static About page renders the About app's component on the server,
+  // so its copy - normally loaded with the app - comes in here.
+  if (view === 'about') {
+    messages.about = (await import(`@/messages/apps/about/${locale}.json`)).default;
+  }
 
   // Structured data on every indexed page; the noindex legal pages carry none.
   const tSite = await getTranslations({ locale, namespace: 'site' });

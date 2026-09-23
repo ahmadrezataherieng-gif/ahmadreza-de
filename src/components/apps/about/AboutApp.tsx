@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, type ReactNode } from 'react';
+import { useId, useRef, type HTMLAttributes, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
@@ -21,12 +21,19 @@ import { cn } from '@/lib/cn';
 export function AboutApp(props: AppProps) {
   return (
     <AppMessages copy={['about']}>
-      <About {...props} />
+      <AboutContent {...props} />
     </AppMessages>
   );
 }
 
-function About({ appId }: AppProps) {
+/**
+ * The About text itself. In a window (`page` false) the name is an h2 under the
+ * window title; on the static About page (`/about/`, ROADMAP SEO-09) the same
+ * component renders on the server as the page body, with the name as the h1
+ * and without the visitor numbers - one component, so the app and the page
+ * can never drift apart.
+ */
+export function AboutContent({ appId, page = false }: AppProps & { page?: boolean }) {
   const t = useTranslations('about');
   const headingId = useId();
   const lastRef = useRef<HTMLUListElement>(null);
@@ -36,9 +43,9 @@ function About({ appId }: AppProps) {
       <div className="mx-auto flex max-w-3xl flex-col gap-7 p-4 @min-[480px]:p-6 @min-[720px]:p-8">
         <header className="flex flex-col gap-3">
           <p className="font-mono text-[11px] tracking-[0.25em] text-accent uppercase">{t('eyebrow')}</p>
-          <h2 id={headingId} className="font-display text-2xl leading-tight font-bold text-ink @min-[480px]:text-3xl">
+          <Heading level={page ? 1 : 2} id={headingId} className="font-display text-2xl leading-tight font-bold text-ink @min-[480px]:text-3xl">
             {t('name')}
-          </h2>
+          </Heading>
           <p className="font-body text-base text-muted">{t('role')}</p>
           <div className="flex flex-col gap-3 font-body leading-relaxed text-ink">
             {asStringList(t.raw('intro')).map((paragraph) => (
@@ -48,15 +55,15 @@ function About({ appId }: AppProps) {
           <Actions />
         </header>
 
-        <Section title={t('path.title')}>
+        <Section page={page} title={t('path.title')}>
           <ol className="flex flex-col gap-4 border-s border-edge ps-4">
             {careerStations.map((station) => (
-              <Station key={station.id} station={station} />
+              <Station key={station.id} station={station} page={page} />
             ))}
           </ol>
         </Section>
 
-        <Section title={t('now.title')}>
+        <Section page={page} title={t('now.title')}>
           <div className="flex flex-col gap-3 font-body leading-relaxed text-ink">
             {asStringList(t.raw('now.text')).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -64,11 +71,13 @@ function About({ appId }: AppProps) {
           </div>
         </Section>
 
-        <Section title={t('skills.title')}>
+        <Section page={page} title={t('skills.title')}>
           <div className="grid gap-4 @min-[640px]:grid-cols-3">
             {skillAreas.map((area) => (
               <section key={area.id} className="ao-themed rounded-control border border-edge bg-elevated/50 p-3">
-                <h4 className="mb-2 font-mono text-xs tracking-wide text-accent uppercase">{t(`skills.areas.${area.id}.title`)}</h4>
+                <Heading level={page ? 3 : 4} className="mb-2 font-mono text-xs tracking-wide text-accent uppercase">
+                  {t(`skills.areas.${area.id}.title`)}
+                </Heading>
                 <ul className="flex flex-col gap-1.5 font-body text-sm text-ink">
                   {area.skills.map((skill) => (
                     <li key={skill} className="flex gap-2">
@@ -82,7 +91,7 @@ function About({ appId }: AppProps) {
           </div>
         </Section>
 
-        <Section title={t('languages.title')}>
+        <Section page={page} title={t('languages.title')}>
           <ul ref={lastRef} className="flex flex-wrap gap-2">
             {languages.map((language) => (
               <li
@@ -96,20 +105,27 @@ function About({ appId }: AppProps) {
           </ul>
         </Section>
 
-        {/* Last and quiet: nothing about Ahmadreza moves for it. */}
-        <VisitorStats observe={lastRef} />
+        {/* Last and quiet: nothing about Ahmadreza moves for it. Not on the
+            static page, whose HTML is for reading, not for live numbers. */}
+        {page ? null : <VisitorStats observe={lastRef} />}
       </div>
     </article>
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+/** A heading at a given level, so the page and the window share one outline. */
+function Heading({ level, ...props }: { level: 1 | 2 | 3 | 4 } & HTMLAttributes<HTMLHeadingElement>) {
+  const Tag = `h${level}` as const;
+  return <Tag {...props} />;
+}
+
+function Section({ title, page, children }: { title: string; page: boolean; children: ReactNode }) {
   const id = useId();
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h3 id={id} className="font-display text-lg font-bold text-ink">
+      <Heading level={page ? 2 : 3} id={id} className="font-display text-lg font-bold text-ink">
         {title}
-      </h3>
+      </Heading>
       {children}
     </section>
   );
@@ -127,7 +143,7 @@ function Placeholder({ children }: { children: ReactNode }) {
   );
 }
 
-function Station({ station }: { station: CareerStation }) {
+function Station({ station, page }: { station: CareerStation; page: boolean }) {
   const t = useTranslations('about');
   const locale = useLocale() as Locale;
   const format = (month: string) =>
@@ -150,7 +166,9 @@ function Station({ station }: { station: CareerStation }) {
         )}
       />
       <p className="flex flex-wrap items-center gap-1 font-mono text-xs text-muted">{period}</p>
-      <h4 className="font-body font-bold text-ink">{t(`path.stations.${station.id}.title`)}</h4>
+      <Heading level={page ? 3 : 4} className="font-body font-bold text-ink">
+        {t(`path.stations.${station.id}.title`)}
+      </Heading>
       {place ? <p className="font-body text-sm text-accent">{place}</p> : null}
       <p className={cn('font-body text-sm leading-relaxed', station.placeholder ? 'text-muted italic' : 'text-ink')}>
         {t(`path.stations.${station.id}.text`)}

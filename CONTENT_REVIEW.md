@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1055 entries.**
+Generated from the codebase on 2026-09-23. **1057 entries.**
 
 ## How to use this file
 
@@ -25,10 +25,10 @@ Generated from the codebase on 2026-09-23. **1055 entries.**
 | button | 64 |
 | puzzle / game | 353 |
 | alt text | 1 |
-| SEO / meta | 14 |
+| SEO / meta | 16 |
 | other | 63 |
 | legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1055** |
+| **Total** | **1057** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1482,3 +1482,14 @@ The Impressum and the Datenschutzerklärung are **not placeholders**: they were 
 | CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Still says «AhmadOS» and «8 von 13 Phasen» (ROADMAP BR-02); was outside the repo until 2026-09-23 |
 | CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
 | CR-1055 | Coming-soon legal pages (`soon/dist/` `impressum/` and `datenschutz/` in de, en, fa, built by `scripts/build-soon.mjs` from the same JSON with scope `soon`) | legal | de / en / fa | LEGAL – owner must verify | Same text as CR-1029 and CR-1030 minus the counters, the Assistant and the site's storage table; plus the `ao-lang` storage entry and system fonts |
+
+## 27. Static About page and the footer link
+
+The About app’s own text (section 15) renders server-side as a page at `/about/`, `/en/about/`, `/fa/about/` (ROADMAP SEO-09); only these are new.
+
+**Files:** `src/messages/{de,en,fa}.json`, `src/components/about/AboutPage.tsx`, `src/components/ui/SiteFooter.tsx`
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1056 | `site.aboutDescription` - the About page’s meta description | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
+| CR-1057 | The About page’s URL `/about/` (one slug in all three languages) and its title «Über mich – Ahmadreza Taheri \| Amonel» (from `nav.about`, CR-003) | SEO / meta | de / en / fa | PLACEHOLDER | Confirm the slug (e.g. `/ueber-mich/` would suit German search but not en/fa) and the title |

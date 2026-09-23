@@ -34,11 +34,23 @@ export function LegalLinks({ className, linkClassName }: { className?: string; l
   );
 }
 
-/** A page footer that holds the legal links. */
+/**
+ * A page footer: the static About page - a plain link, so crawlers find the
+ * indexable text from every page that has a footer - then the legal links.
+ */
 export function SiteFooter({ className }: { className?: string }) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations('nav');
   return (
-    <footer className={className}>
-      <LegalLinks className="text-xs" />
+    <footer className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs', className)}>
+      <a
+        href={viewHref(locale, 'about')}
+        className="ao-themed rounded-control px-1 py-0.5 text-muted underline-offset-4 hover:text-ink hover:underline"
+        data-action="about-page"
+      >
+        {t('about')}
+      </a>
+      <LegalLinks />
     </footer>
   );
 }

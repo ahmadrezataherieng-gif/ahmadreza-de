@@ -9,6 +9,7 @@ import { defaultLocale, isLocale, locales, type Locale } from './i18n-config.ts'
  *   /             /en/            /fa/             the landing page
  *   /amonel/      /en/amonel/     /fa/amonel/      Act 1 and the Convergence (the journey)
  *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the Amonel OS desktop
+ *   /about/       /en/about/      /fa/about/       the static About page (indexable text)
  *   /impressum/   /en/impressum/  /fa/impressum/   the Impressum (§ 5 DDG)
  *   /datenschutz/ /en/datenschutz/ /fa/datenschutz/ the Datenschutzerklärung
  *
@@ -21,7 +22,7 @@ import { defaultLocale, isLocale, locales, type Locale } from './i18n-config.ts'
  * locale early enough to emit a correct static `lang` and `dir`.
  */
 
-export const views = ['landing', 'journey', 'desktop', 'imprint', 'privacy'] as const;
+export const views = ['landing', 'journey', 'desktop', 'about', 'imprint', 'privacy'] as const;
 export type View = (typeof views)[number];
 
 /**
@@ -33,6 +34,7 @@ const VIEW_PATHS: Record<View, string> = {
   landing: '/',
   journey: '/amonel',
   desktop: '/desktop',
+  about: '/about',
   imprint: '/impressum',
   privacy: '/datenschutz',
 };
@@ -41,6 +43,7 @@ const VIEW_PATHS: Record<View, string> = {
 const VIEW_SEGMENTS: Record<Exclude<View, 'landing'>, string> = {
   journey: 'amonel',
   desktop: 'desktop',
+  about: 'about',
   imprint: 'impressum',
   privacy: 'datenschutz',
 };

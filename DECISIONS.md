@@ -1974,3 +1974,38 @@ same origin; the Assistant local. **To weigh before launch:** `observability`
 is on in `wrangler.jsonc`, so Cloudflare keeps Worker logs of `/api/*` calls
 for a few days; the Datenschutzerklärung says so. Turning invocation logs
 off would make that sentence unnecessary.
+
+## 59. The SEO layer, the 404 page, the CSP and the static About page (2026-09-23)
+
+Built autonomously from ROADMAP.md (SEO-01 to SEO-11, LEG-06); every text is
+a placeholder with a CONTENT_REVIEW.md entry.
+
+- **One 404 page in three languages.** A stray URL carries no locale, so
+  `app/not-found.tsx` speaks German first, then English and Persian, each with
+  links home, into the journey and to the desktop; `noindex`, real 404 status.
+  Next never styled it while the fonts and `globals.css` were imported by the
+  locale layout, which does not wrap the root 404 - so those imports moved to
+  the root layout. Every matrix (journey, desktop, navigation, apps, bonus)
+  passed afterwards.
+- **The static About page renders the About app's own component** on the
+  server (`AboutContent` with `page`: h1 for the name, h2/h3 below, no visitor
+  numbers), its copy merged into the page's messages. One component, so the
+  app and the page cannot drift. **One slug, `/about/`, in every locale** -
+  a German `/ueber-mich/` would break the language switcher's "same path"
+  rule; the owner may still choose another (CR-1057).
+- **SEO-only `site` keys stay on the server.** The client provider receives
+  `site` minus the descriptions, job title, `knowsAbout` and the Persian
+  name: no client component reads them, and the desktop description had put
+  the word "Computer-Quiz" into the landing page's HTML, which the apps check
+  forbids.
+- **JSON-LD never carries the legal name**, by Ahmadreza's instruction of the
+  same day - replacing the earlier plan of an `alternateName`. The Persian
+  spelling is the only alternate name.
+- **CSP: everything `'self'`**, scripts and styles also `'unsafe-inline'`
+  (no nonces in a static export; Next streams page data inline). What it buys
+  is the origin lock: a third-party request is blocked by the browser, which
+  backs the Datenschutzerklärung's promise. `serve.mjs --headers` serves the
+  export with `_headers` so the checks run under the policy.
+- robots.txt allows every crawler and names the AI bots; the sitemap lists
+  every indexed page with hreflang and leaves out the `noindex` legal pages;
+  `llms.txt` states only facts the site already states.

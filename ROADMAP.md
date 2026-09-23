@@ -28,9 +28,9 @@ Recount after each change (one line in Git Bash):
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
-| P1 | 20 | 6 | 6 | 32 |
+| P1 | 18 | 6 | 8 | 32 |
 | P2 | 16 | 2 | 0 | 18 |
-| **total** | **46** | **8** | **13** | **67** |
+| **total** | **44** | **8** | **15** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -62,8 +62,8 @@ Recount after each change (one line in Git Bash):
 | SEO-05 | **Open Graph share image**: one 1200 x 630 PNG per language (or one shared), `og:image`, `og:image:alt`, `twitter:card`. | missing | P1 | Claude Code | BR-01 for the final version |
 | SEO-06 | **Per-page meta descriptions**: the journey and the desktop reuse `site.description`; each view (and each new page) needs its own. Done 2026-09-23: `site.journeyDescription`, `site.desktopDescription`; legal pages have their own; drafts run 140-190 characters (CR-1051). | done | P1 | Claude Code | - |
 | SEO-07 | **hreflang + canonical** per view incl. `x-default` - done for the nine pages; every new page (legal, About, 404 excluded) must emit them too. | done | P1 | Claude Code | - |
-| SEO-08 | **Persian name "احمدرضا طاهری" coverage**: in `site.title`/`author` (fa) and About (fa) today; missing in JSON-LD, llms.txt, the static fa About page, the fa OG image alt. | partial | P1 | Claude Code | SEO-03, SEO-04, SEO-09 |
-| SEO-09 | **Static, indexable About pages** at `/ueber-mich/`, `/en/about/`, `/fa/about/` (URL to be confirmed): real HTML text from `content/about.ts`, one h1, linked from landing and footer. | missing | P1 | Claude Code | - |
+| SEO-08 | **Persian name "احمدرضا طاهری" coverage**: in `site.title`/`author` (fa) and About (fa) today; missing in JSON-LD, llms.txt, the static fa About page, the fa OG image alt. Since 2026-09-23 also in JSON-LD (`alternateName`), llms.txt and the fa About page; only the OG image alt is left (SEO-05). | partial | P1 | Claude Code | SEO-03, SEO-04, SEO-09 |
+| SEO-09 | **Static, indexable About pages** at `/ueber-mich/`, `/en/about/`, `/fa/about/` (URL to be confirmed): real HTML text from `content/about.ts`, one h1, linked from landing and footer. Built 2026-09-23 at `/about/` in all three locales (one slug, like the legal pages): the About app's own component rendered on the server, name as h1, in the sitemap, linked from every page footer (DECISIONS.md 59). | done | P1 | Claude Code | - |
 | SEO-10 | **Journey text fallback**: today a screen-reader-only list of the eras; expand to the full SEO layer (one truth, insider detail, puzzle summary per era) as real static text. | partial | P1 | Claude Code | - |
 | SEO-11 | **Custom 404 page**: localised, on-brand, `noindex`, links home / desktop / journey; replaces Next's default `404.html` that `not_found_handling: "404-page"` serves. Built 2026-09-23: `src/app/not-found.tsx`, one page in all three languages (a stray URL has no locale), real 404 status, noindex; fonts and CSS moved to the root layout so it is styled. | done | P1 | Claude Code | - |
 | SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 |
@@ -79,7 +79,7 @@ Recount after each change (one line in Git Bash):
 | LEG-03 | **Legal links in the footer of every view** (landing, journey, desktop, About, 404) - one click from every page, labelled exactly "Impressum" / "Datenschutz". Done for every existing view: landing and legal footers, desktop top bar, home screen, journey chrome corner; new pages (About, 404) must add `SiteFooter`. | done | P0 | Claude Code | LEG-01, LEG-02 |
 | LEG-04 | **Legal pages and links on the live "coming soon" page** (Worker `silent-lake-8ae2`), deployed to production. Built in `soon/` (`npm run build:soon`), deployed 2026-09-23; ahmadreza.de/impressum/ and /datenschutz/ (and en, fa) verified live. | done | P0 | Claude Code | LEG-01, LEG-02 |
 | LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. | missing | P0 | Claude Code + Ahmadreza | all feature work |
-| LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. | missing | P1 | Claude Code | - |
+| LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. Done 2026-09-23: every fetch type locked to 'self' (scripts/styles also 'unsafe-inline', no nonces in a static export); pinned by `legal.test.mjs`; `serve.mjs --headers` runs the checks under it (apps, bonus, desktop pass). | done | P1 | Claude Code | - |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 |
 | LEG-08 | **May the employer, Stadtverwaltung Trier, be named** on a personal site, and in which wording? **Waiting for owner.** | missing | P0 | Ahmadreza | - |
 | LEG-09 | **Written usage rights for the portrait** from the photographer before it goes online. | missing | P0 | Ahmadreza | OWN-01 |

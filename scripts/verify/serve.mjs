@@ -1,12 +1,12 @@
 // Serve the static export the way Cloudflare will, so the checks can run
 // against the real build rather than the dev server.
 //
-//   node scripts/verify/serve.mjs [--port 3001] [--dir out]
+//   node scripts/verify/serve.mjs [--port 3001] [--dir out] [--headers]
 //
 // No dependencies: node:http and node:fs. Directory URLs get their index.html
 // (`trailingSlash: true`), and anything missing gets the exported 404 page.
 import { createServer } from 'node:http';
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const args = Object.fromEntries(
@@ -19,6 +19,31 @@ const args = Object.fromEntries(
 );
 const PORT = Number(args.port ?? 3001);
 const ROOT = path.resolve(args.dir ?? 'out');
+
+// `--headers` applies the export's `_headers` the way Cloudflare does (a path
+// pattern, then indented `Name: value` lines; `*` matches any rest), so the
+// checks can run under the real Content-Security-Policy. Off by default.
+const HEADER_RULES = [];
+if (args.headers) {
+  let current = null;
+  for (const line of readFileSync(path.join(ROOT, '_headers'), 'utf8').split(/\r?\n/)) {
+    if (!line.trim() || line.trim().startsWith('#')) continue;
+    if (!/^\s/.test(line)) {
+      current = { pattern: line.trim(), headers: {} };
+      HEADER_RULES.push(current);
+    } else if (current) {
+      const at = line.indexOf(':');
+      current.headers[line.slice(0, at).trim().toLowerCase()] = line.slice(at + 1).trim();
+    }
+  }
+}
+const headersFor = (urlPath) =>
+  Object.assign(
+    {},
+    ...HEADER_RULES.filter(({ pattern }) =>
+      pattern.endsWith('*') ? urlPath.startsWith(pattern.slice(0, -1)) : urlPath === pattern,
+    ).map(({ headers }) => headers),
+  );
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -51,12 +76,13 @@ createServer((request, response) => {
   const file = resolve(request.url ?? '/');
   if (!file) {
     const notFound = path.join(ROOT, '404.html');
-    response.writeHead(404, { 'content-type': TYPES['.html'] });
+    response.writeHead(404, { ...headersFor(request.url ?? '/'), 'content-type': TYPES['.html'] });
     if (existsSync(notFound)) createReadStream(notFound).pipe(response);
     else response.end('404');
     return;
   }
   response.writeHead(200, {
+    ...headersFor((request.url ?? '/').split('?')[0]),
     'content-type': TYPES[path.extname(file)] ?? 'application/octet-stream',
     'cache-control': 'no-store',
   });

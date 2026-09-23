@@ -22,7 +22,8 @@ test('legal: /impressum/ and /datenschutz/ exist in every locale, with the Germa
   }
   assert.deepEqual(matchSegments(['en', 'impressum']), { locale: 'en', view: 'imprint' });
   assert.deepEqual(matchSegments(['datenschutz']), { locale: 'de', view: 'privacy' });
-  assert.equal(allRouteSegments().length, 15);
+  // Six views (landing, journey, desktop, about and the two legal pages) in three locales.
+  assert.equal(allRouteSegments().length, 18);
 });
 
 test('legal: the postal address and legal name are imported only by the legal page', () => {
@@ -68,4 +69,20 @@ test('legal: the coming-soon version drops the counters, the Assistant and the s
 
 test('legal: bare https URLs become links, the rest stays text', () => {
   assert.deepEqual(linkify('Mainz, https://www.datenschutz.rlp.de'), [{ text: 'Mainz, ' }, { text: 'https://www.datenschutz.rlp.de', href: 'https://www.datenschutz.rlp.de' }]);
+});
+
+test('legal: the Content-Security-Policy allows this origin only - no third-party host can ever load', () => {
+  const line = read('public/_headers').split(/\r?\n/).find((entry) => entry.trim().startsWith('Content-Security-Policy:'));
+  assert.ok(line, 'a CSP header exists');
+  const policy = Object.fromEntries(
+    line.split(':').slice(1).join(':').split(';').map((part) => part.trim().split(/\s+/)).map(([name, ...values]) => [name, values]),
+  );
+  assert.deepEqual(policy['default-src'], ["'self'"]);
+  assert.deepEqual(policy['connect-src'], ["'self'"]);
+  assert.deepEqual(policy['font-src'], ["'self'"]);
+  assert.deepEqual(policy['form-action'], ["'none'"]);
+  assert.deepEqual(policy['frame-ancestors'], ["'none'"]);
+  for (const [name, values] of Object.entries(policy)) {
+    for (const value of values) assert.doesNotMatch(value, /^(https?:|\*|[a-z0-9-]+\.[a-z])/i, `${name} ${value}`);
+  }
 });

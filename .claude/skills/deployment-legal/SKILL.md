@@ -39,9 +39,14 @@ reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
   `wrangler.jsonc` is a placeholder until the database is created (TODO.md,
   Phase 13).
 - `public/_headers` — security headers. Next copies `public/` verbatim into the
-  export, so these land at `out/_headers`, where Cloudflare reads them. No
-  Content-Security-Policy yet; that arrives in Phase 11 once every external
-  origin is known.
+  export, so these land at `out/_headers`, where Cloudflare reads them. Since
+  2026-09-23 a **Content-Security-Policy** locks every fetch type to
+  `'self'` (scripts and styles also `'unsafe-inline'`: a static export has no
+  nonces, and Next streams page data as inline scripts). Adding any external
+  origin means changing the CSP, the Datenschutzerklärung and this skill
+  together - which is the point. `scripts/test/legal.test.mjs` pins it;
+  `node scripts/verify/serve.mjs --headers` (launch config `export-csp`)
+  serves the export with the real headers so the checks run under it.
 - `public/_redirects` — `301 /de/ → /` (what used to be an nginx rule), and since
   Phase 9A the old `/journey/` URLs → `/amonel/` in every locale.
 - Custom domain is **ahmadreza.de**. Workers custom domains require the zone's

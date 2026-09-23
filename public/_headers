@@ -4,15 +4,25 @@
 # at out/_headers, which is where Workers static assets expects it. Cloudflare
 # consumes it; it is never served to visitors.
 #
-# No Content-Security-Policy yet. It arrives in Phase 11, once the Gemini proxy
-# endpoint is the only external origin and we can write a policy that is
-# actually complete instead of one that silently breaks the site.
+# Content-Security-Policy (Phase 11, ROADMAP LEG-06): the site loads nothing
+# from any other origin, and this policy makes the browser enforce that - a
+# font, script or request to a third party is blocked, not just avoided. That
+# is the legal promise of the Datenschutzerklärung ("no external services").
+#
+# 'unsafe-inline' for scripts: a static export cannot carry per-request nonces,
+# and Next streams its page data as inline scripts that differ per page. The
+# site has no user-generated content to inject, so the risk this leaves is
+# small; the origin lock is what matters here. 'unsafe-inline' for styles:
+# React style attributes (window positions, CSS custom properties).
+# img-src/media-src blob: and data: - Pixel Paint's PNG download and the CSS
+# grain texture. form-action 'none': the site has no forms, and never will.
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; media-src 'self' blob:; manifest-src 'self'; worker-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # Hashed build output is immutable by construction, so it can be cached forever.
 /_next/static/*
