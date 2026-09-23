@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-09-19
+Last updated: 2026-09-23
 
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
@@ -93,7 +93,7 @@ Last updated: 2026-09-19
   fullscreen on a phone; `npm test` runs the pure modules and checks the app
   data and copy in plain node; `navigation.mjs` the hand-over, Zum Desktop from every era and the
   returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
-  so all of them can run against the real export. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 195 lines; its specialised rules live in `.claude/skills/`.
+  so all of them can run against the real export. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 197 lines, three core rules plus pointers; its specialised rules live in `.claude/skills/` (`seo` added in Phase 8B).
 
 ## Budgets (measured on the export)
 

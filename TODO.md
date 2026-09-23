@@ -77,6 +77,25 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   own truth, sourced insider detail, visual, puzzle and theme, and slots in
   between 1971 and 1981 (`src/content/eras.ts`, `eras/registry.ts`, themes,
   messages, the Convergence).
+- **Connect the GitHub repository to Cloudflare** so every push auto-deploys,
+  and the owner can edit copy directly through the GitHub web editor. An
+  optional admin panel (Decap CMS or Sveltia CMS at `/admin`) is a later step,
+  once that direct-edit workflow is in place.
+
+## Phase 9 — planned additions
+
+- **The brand rename**, and the journey route rename that follows it
+  (`/journey/` renamed to something built on the new brand) - once Ahmadreza
+  gives the name. Do not rename anything before then; see the `seo` skill.
+- **A computer-knowledge quiz app.** Never call it, or present it as, an IQ
+  test.
+- **Anonymous counters on `/api/*`** - e.g. how many visitors solved each
+  puzzle. The only visitor data this site ever collects; see the
+  `deployment-legal` skill and DECISIONS.md 53.
+- Unlockable apps, easter eggs, the Time Machine theme switcher - already this
+  phase's scope in PROJECT_STATE.md.
+- **The free GSAP plugins** (MorphSVG, DrawSVG) are candidates for this phase
+  or Phase 12. **Never ScrollSmoother** - decided by Ahmadreza.
 
 ## Phase 6 — Desktop copy to confirm
 
@@ -138,6 +157,9 @@ What is left:
 
 ## Phase 13 — Deployment
 
+- **A temporary "coming soon" page is already live on ahmadreza.de**, as a
+  separate Cloudflare project named `ahmadreza-soon`. This phase moves the
+  domain to the real project; `ahmadreza-soon` is removed once it does.
 - **BLOCKING: `kontakt@ahmadreza.de` must really receive mail before the site
   goes live** - for example through Cloudflare Email Routing to a mailbox
   Ahmadreza reads, tested with a real message from outside. The address is on
