@@ -70,16 +70,19 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
   desktop: ['site', 'nav', 'languages', 'os'],
 };
 
-/** Page title per view; the landing page uses the site title as it is. */
+/**
+ * Page title per view, the name always ahead of the brand (the `seo` skill):
+ * the landing page is "name – job | Amonel", every other page
+ * "page – name | Amonel".
+ */
 async function viewTitle(locale: Locale, view: View): Promise<string> {
   const t = await getTranslations({ locale, namespace: 'site' });
-  if (view === 'landing') return t('title');
-  if (view === 'journey') {
-    const tLanding = await getTranslations({ locale, namespace: 'landing' });
-    return `${tLanding('journeyTitle')} — ${t('author')}`;
-  }
-  const tOs = await getTranslations({ locale, namespace: 'os' });
-  return `${tOs('title')} — ${t('author')}`;
+  if (view === 'landing') return `${t('title')} | ${t('brand')}`;
+  const page =
+    view === 'journey'
+      ? (await getTranslations({ locale, namespace: 'landing' }))('journeyTitle')
+      : (await getTranslations({ locale, namespace: 'os' }))('pageName');
+  return `${page} – ${t('author')} | ${t('brand')}`;
 }
 
 /**
@@ -131,7 +134,7 @@ export async function generateMetadata({
       locale: htmlLang[locale],
       title,
       description: t('description'),
-      siteName: t('author'),
+      siteName: t('brand'),
       url: viewHref(locale, view),
     },
   };

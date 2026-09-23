@@ -66,8 +66,8 @@ never sees it.
   (`site.title` per locale).
 - Every other page: `<Page name> – Ahmadreza Taheri | Amonel`.
 - Aim for 60 characters or fewer. The landing titles run over (de 66, en 64,
-  fa 66 characters); that was accepted rather than cutting the name or the
-  job - report any new title that runs over, never shorten the name to fit.
+  fa 66 characters) and were reported to the owner rather than cutting the
+  name or the job. Report any new title that runs over; never shorten the name.
 
 ### Images
 

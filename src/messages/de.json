@@ -1,6 +1,7 @@
 {
   "site": {
-    "title": "Ahmadreza Taheri — IT-Systemintegration",
+    "title": "Ahmadreza Taheri – Fachinformatiker für Systemintegration",
+    "brand": "Amonel",
     "tagline": "80 Jahre Computergeschichte in 90 Sekunden",
     "description": "Portfolio von Ahmadreza Taheri, Auszubildender Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Ein interaktives Betriebssystem im Browser.",
     "author": "Ahmadreza Taheri"
@@ -627,7 +628,7 @@
   },
   "os": {
     "brand": "Amonel OS",
-    "title": "Amonel-OS-Desktop",
+    "pageName": "Desktop",
     "heading": "Amonel OS – der Desktop von Ahmadreza Taheri",
     "noscript": "Der Desktop braucht JavaScript. Alles Wichtige finden Sie auch auf der Startseite.",
     "home": "Zur Startseite",

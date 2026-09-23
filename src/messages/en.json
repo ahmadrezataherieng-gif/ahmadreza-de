@@ -1,6 +1,7 @@
 {
   "site": {
-    "title": "Ahmadreza Taheri — IT Systems Integration",
+    "title": "Ahmadreza Taheri – IT Specialist for System Integration",
+    "brand": "Amonel",
     "tagline": "80 years of computing in 90 seconds",
     "description": "Portfolio of Ahmadreza Taheri, IT systems integration apprentice at Stadtverwaltung Trier. An interactive operating system in the browser.",
     "author": "Ahmadreza Taheri"
@@ -626,7 +627,7 @@
   },
   "os": {
     "brand": "Amonel OS",
-    "title": "Amonel OS desktop",
+    "pageName": "Desktop",
     "heading": "Amonel OS – the desktop of Ahmadreza Taheri",
     "noscript": "The desktop needs JavaScript. Everything important is also on the home page.",
     "home": "Home",
