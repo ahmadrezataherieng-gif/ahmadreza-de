@@ -237,8 +237,8 @@ What is left:
 ## Phase 13 — Deployment
 
 - **A temporary "coming soon" page is already live on ahmadreza.de**, as a
-  separate Cloudflare project named `ahmadreza-soon`. This phase moves the
-  domain to the real project; `ahmadreza-soon` is removed once it does.
+  separate Cloudflare Worker, `silent-lake-8ae2` (source in `soon/`). This phase moves the
+  domains to the real project; `silent-lake-8ae2` is removed once it does.
 - **BLOCKING: `kontakt@ahmadreza.de` must really receive mail before the site
   goes live** - for example through Cloudflare Email Routing to a mailbox
   Ahmadreza reads, tested with a real message from outside. The address is on

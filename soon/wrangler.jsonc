@@ -3,9 +3,14 @@
   // separate from the real site (../wrangler.jsonc). Removed once the real site
   // takes the domain (ROADMAP.md, DEP-06).
   //
-  // Deploy from this folder, after `node scripts/build-soon.mjs` in the root:
-  //   npx wrangler deploy
-  "name": "ahmadreza-soon",
+  // The Worker was created in the dashboard on 2026-09-20, which named it
+  // `silent-lake-8ae2`; the name `ahmadreza-soon` in older notes was never
+  // used. It holds the custom domains ahmadreza.de and www.ahmadreza.de (the
+  // www host is 301-redirected by a Redirect Rule before it reaches the Worker).
+  //
+  // Deploy, after `npm run build:soon` in the root:
+  //   npx wrangler deploy        (from this folder)
+  "name": "silent-lake-8ae2",
   "compatibility_date": "2026-09-20",
   "assets": {
     // Built by scripts/build-soon.mjs: index.html plus the legal pages.
@@ -13,6 +18,9 @@
     // /impressum and /impressum/ both resolve to impressum/index.html.
     "html_handling": "auto-trailing-slash"
   },
-  // Keep the apex bound to this Worker (idempotent if it already is).
-  "routes": [{ "pattern": "ahmadreza.de", "custom_domain": true }]
+  // No `routes` on purpose: the two custom domains were attached in the
+  // dashboard, and listing only some of them here would detach the rest.
+  // workers.dev stays as it was (on), preview URLs off.
+  "workers_dev": true,
+  "preview_urls": false
 }

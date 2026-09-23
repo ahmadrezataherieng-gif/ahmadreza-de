@@ -4,7 +4,7 @@ Last updated: 2026-09-23
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
-**Master plan until launch: ROADMAP.md** (full audit of 2026-09-23, 65 items by
+**Master plan until launch: ROADMAP.md** (full audit of 2026-09-23, 67 items by
 phase, status, priority and owner). The phase list below is the history; what
 is left lives in ROADMAP.md.
 
@@ -290,6 +290,6 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - **Legal pages** (Phase 11, DECISIONS.md 58): built in all three languages
   from `messages/legal/`, `noindex`, the address only in `content/legal.ts`;
   status "LEGAL – owner must verify". The coming-soon page now lives in
-  `soon/` with the same legal pages (`npm run build:soon`); its deploy waits
-  for a Cloudflare login (ROADMAP.md LEG-04, OWN-08).
-- Deployment.
+  `soon/` with the same legal pages (`npm run build:soon`), live on
+  ahmadreza.de since 2026-09-23 (Worker `silent-lake-8ae2`).
+- Deployment of the real site (only the coming-soon page is live).

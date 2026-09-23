@@ -1,5 +1,5 @@
 // Builds the deployable folder of the temporary "coming soon" page
-// (Worker `ahmadreza-soon`, see soon/wrangler.jsonc): soon/index.html plus the
+// (Worker `silent-lake-8ae2`, see soon/wrangler.jsonc): soon/index.html plus the
 // Impressum and the Datenschutzerklärung in de, en and fa, rendered from the
 // same messages/legal/*.json as the real site, with the `soon` scope - the
 // coming-soon page has no counters, no Assistant and only one storage entry.

@@ -127,7 +127,7 @@ transfer basis.
   click from every page: landing and legal footers, the desktop top bar, the
   home screen, the journey's own chrome corner.
 - **The coming-soon page** lives in `soon/` (`index.html`, `wrangler.jsonc`,
-  Worker `ahmadreza-soon`). `npm run build:soon` writes `soon/dist/` with the
+  Worker `silent-lake-8ae2`, named by the dashboard). `npm run build:soon` writes `soon/dist/` with the
   legal pages rendered from the same JSON (`scope: "soon"` sections), then
   `npx wrangler deploy` from `soon/`. It is the only thing deployed until
   launch.

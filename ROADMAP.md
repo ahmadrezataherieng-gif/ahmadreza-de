@@ -27,10 +27,10 @@ Recount after each change (one line in Git Bash):
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 11 | 1 | 5 | 17 |
+| P0 | 10 | 0 | 7 | 17 |
 | P1 | 25 | 6 | 1 | 32 |
 | P2 | 16 | 2 | 0 | 18 |
-| **total** | **52** | **9** | **6** | **67** |
+| **total** | **51** | **8** | **8** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -77,7 +77,7 @@ Recount after each change (one line in Git Bash):
 | LEG-01 | **Impressum** at `/impressum/` (+ `/en/`, `/fa/`), § 5 DDG and § 18 Abs. 2 MStV, legal name "Ahmadreza Taheri Momrabadi" (the only place it may appear). Built 2026-09-23 (DECISIONS.md 58), `noindex`. | done | P0 | Claude Code + Ahmadreza | OWN-07 |
 | LEG-02 | **Datenschutzerklärung** at `/datenschutz/` (+ en, fa), written from an audit of the real data flows: Cloudflare hosting and logs, no external requests, the browser storage table, the anonymous counters, the local assistant, email contact, rights, LfDI RLP. German binding. Built 2026-09-23; the audit found no external request, so nothing had to be self-hosted. | done | P0 | Claude Code + Ahmadreza | OWN-07 |
 | LEG-03 | **Legal links in the footer of every view** (landing, journey, desktop, About, 404) - one click from every page, labelled exactly "Impressum" / "Datenschutz". Done for every existing view: landing and legal footers, desktop top bar, home screen, journey chrome corner; new pages (About, 404) must add `SiteFooter`. | done | P0 | Claude Code | LEG-01, LEG-02 |
-| LEG-04 | **Legal pages and links on the live "coming soon" page** (`ahmadreza-soon`), deployed to production. Built in `soon/` (`npm run build:soon`). | partial | P0 | Claude Code | LEG-01, LEG-02 |
+| LEG-04 | **Legal pages and links on the live "coming soon" page** (Worker `silent-lake-8ae2`), deployed to production. Built in `soon/` (`npm run build:soon`), deployed 2026-09-23; ahmadreza.de/impressum/ and /datenschutz/ (and en, fa) verified live. | done | P0 | Claude Code | LEG-01, LEG-02 |
 | LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. | missing | P0 | Claude Code + Ahmadreza | all feature work |
 | LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. | missing | P1 | Claude Code | - |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 |
@@ -106,7 +106,7 @@ Recount after each change (one line in Git Bash):
 | DEP-03 | **Create the D1 database** `amonel-counters` (weur), put its `database_id` in `wrangler.jsonc`, apply the migration. A deploy with the placeholder id fails. | missing | P0 | Ahmadreza (or Claude Code with his login) | - |
 | DEP-04 | **Rate-limiting rule** `api-count` (20 per 10 s, IP, Block) - exact values in TODO.md, Phase 13. | missing | P0 | Ahmadreza | - |
 | DEP-05 | **Anonymous puzzle counters** (aggregate counts only, no personal data): built in Phase 9C (Worker + D1, `/api/*`), **not live** until DEP-03, DEP-04 and DEP-06. | partial | P1 | Claude Code | DEP-03, DEP-04, DEP-06 |
-| DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move the domain from `ahmadreza-soon` to it, then remove `ahmadreza-soon`. Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-01, DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01 |
+| DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move both custom domains (apex and www) from the coming-soon Worker `silent-lake-8ae2` to it, then delete `silent-lake-8ae2`. Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-01, DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01 |
 | DEP-07 | **Post-deploy checks**: the counter `curl` checks (TODO.md), legal pages, redirects, 404 status, headers. | missing | P1 | Claude Code | DEP-06 |
 
 ## Branding
@@ -127,7 +127,7 @@ Recount after each change (one line in Git Bash):
 | OWN-05 | **About/CV facts**: apprenticeship start and end date, earlier stations, language levels, skill list, projects (TODO.md, Phase 7). | missing | P1 | Ahmadreza | - |
 | OWN-06 | **Decide the GitHub repo link** is public on the site (Projects). | missing | P2 | Ahmadreza | - |
 | OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. Given 2026-09-23; used only in `src/content/legal.ts`. | done | P0 | Ahmadreza | - |
-| OWN-08 | **Cloudflare login for deploys** (`npx wrangler login` on this machine, or deploy `soon/` yourself): nothing can be deployed without it. | missing | P0 | Ahmadreza | - |
+| OWN-08 | **Cloudflare login for deploys** (`npx wrangler login` on this machine, or deploy `soon/` yourself): nothing can be deployed without it. Done 2026-09-23 (OAuth, approved by the owner). | done | P0 | Ahmadreza | - |
 | OWN-09 | **Make `kontakt@ahmadreza.de` or the Gmail address the one contact**: the site shows `kontakt@ahmadreza.de`, the legal pages the Gmail address the owner chose. Both are fine legally once DEP-01 works; decide whether to keep two. | missing | P2 | Ahmadreza | DEP-01 |
 
 ## After launch
