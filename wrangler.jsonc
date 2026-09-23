@@ -2,13 +2,13 @@
   // Cloudflare Workers with static assets, plus one Worker script for /api/*.
   //
   // The site is still a static export: `npm run build` produces nothing but
-  // `out`, and the application code never imports `worker/`. `/api/*` is a
-  // plain 404 for now, reserved for Phase 9's anonymous per-puzzle counters
-  // (DECISIONS.md, entry 53). `run_worker_first` lists that one path pattern,
-  // so every other request is served from `out` by Cloudflare's asset layer
+  // `out`, and the application code never imports `worker/`. The Worker
+  // answers `/api/*` only: the anonymous public counters (Phase 9C,
+  // DECISIONS.md 56). `run_worker_first` lists that one path pattern, so
+  // every other request is served from `out` by Cloudflare's asset layer
   // without waking the Worker - headers, redirects and the 404 page behave
   // exactly as in a pure static deploy, and the site stays portable to any
-  // plain web server.
+  // plain web server (the counters then simply stay hidden).
   //
   // Phase 8A built a Gemini proxy here; Phase 8B removed it (DECISIONS.md,
   // entry 53). The assistant answers entirely in the visitor's browser and
@@ -45,6 +45,18 @@
     // for.
     "not_found_handling": "404-page"
   },
+
+  // The counters: one table, a name and an integer per row (migrations/).
+  // `database_id` is a placeholder until the database is created at deploy
+  // time (TODO.md, Phase 13); `wrangler dev --local` does not need a real one.
+  "d1_databases": [
+    {
+      "binding": "COUNTERS_DB",
+      "database_name": "amonel-counters",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
 
   "observability": {
     "enabled": true
