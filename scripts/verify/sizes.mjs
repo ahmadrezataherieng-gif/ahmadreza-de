@@ -63,11 +63,18 @@ for (const [view, url] of views) {
 
 // The desktop again, with one app open at a time: each app's own chunks (code
 // and copy) load on demand, and only then.
-const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'contact', 'quiz'];
+const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'contact', 'quiz', 'binary', 'snake', 'paint'];
+// Bonus apps (Phase 9D-1) open once the journey is finished: seed that, then reload.
+const BONUS = new Set(['binary', 'snake', 'paint']);
+const FINISHED = JSON.stringify({ state: { journeyFinished: true, hasCompletedJourney: true }, version: 3 });
 const appRows = {};
 if (results.desktop) {
   for (const app of APPS) {
     appRows[app] = await measure(`desktop-${app}`, `${BASE}/desktop/`, async (b) => {
+      if (BONUS.has(app)) {
+        await b.evaluate(`localStorage.setItem('amonel.unlocks.v1', ${JSON.stringify(FINISHED)}); true`);
+        await b.goto(`${BASE}/desktop/`, 5000);
+      }
       const point = await b.evaluate(`(() => { const r = document.querySelector('[data-app="${app}"]').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
       await b.click(point.x, point.y);
       await sleep(2500);

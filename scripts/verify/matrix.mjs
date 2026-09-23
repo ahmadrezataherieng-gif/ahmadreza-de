@@ -1,6 +1,6 @@
 // The whole verification matrix, quietly: one line per configuration.
 //
-//   node scripts/verify/matrix.mjs [--only apps|desktop|navigation|journey]
+//   node scripts/verify/matrix.mjs [--only apps|bonus|desktop|navigation|journey]
 //        [--base http://localhost:3001] [--verbose]
 //
 // Needs the export served (npm run build, then node scripts/verify/serve.mjs).
@@ -48,6 +48,12 @@ const MATRIX = [
   ['desktop', TABLET],
   ['desktop', [...PHONE, ...en]],
   ['desktop', [...reduce, ...PHONE]],
+  // Phase 9D-1: the bonus apps and their unlocks.
+  ['bonus', []],
+  ['bonus', fa],
+  ['bonus', TABLET],
+  ['bonus', [...PHONE, ...en]],
+  ['bonus', [...reduce, ...PHONE, ...fa]],
   ['navigation', []],
   ['navigation', fa],
   ['navigation', [...en, '--width', '380', '--touch']],
@@ -66,6 +72,8 @@ const MATRIX = [
   ['journey', ['--mode', 'play', '--api']],
   ['journey', ['--mode', 'play', '--api', ...fa]],
   ['journey', ['--mode', 'watch', '--api']],
+  ['bonus', ['--api']],
+  ['bonus', ['--api', ...PHONE, ...fa]],
 ];
 
 try {
