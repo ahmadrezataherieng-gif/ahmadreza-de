@@ -1,0 +1,50 @@
+{
+  "canvasRole": "Zeichenfläche",
+  "canvasLabel": "Zeichenfläche {size} × {size} Pixel, Cursor bei Spalte {x}, Zeile {y}, Werkzeug: {tool}",
+  "canvasHelp": "Mit Maus, Finger oder Stift malen. Mit der Tastatur: Pfeiltasten bewegen den Cursor (mit Umschalt in Viererschritten), Leertaste oder Eingabe benutzt das Werkzeug. Strg+Z macht rückgängig, Strg+Y wiederholt.",
+  "toolsLabel": "Werkzeuge",
+  "tools": {
+    "pencil": "Stift",
+    "eraser": "Radierer",
+    "fill": "Füllen",
+    "picker": "Farbe aufnehmen"
+  },
+  "undo": "Rückgängig",
+  "redo": "Wiederholen",
+  "clear": "Leeren",
+  "grid": "Raster",
+  "sizeLabel": "Größe",
+  "sizeConfirm": "Eine neue Größe beginnt ein leeres Bild mit {size} × {size} Pixeln. Das jetzige Bild lässt sich danach mit „Rückgängig“ zurückholen.",
+  "sizeConfirmYes": "Neues Bild beginnen",
+  "sizeConfirmNo": "Abbrechen",
+  "paletteLabel": "Palette",
+  "palettes": {
+    "bit1": {
+      "name": "1 Bit · 2 Farben",
+      "note": "1 Bit pro Pixel: Jeder Bildpunkt ist an oder aus, schwarz oder weiß – so zeichnete der erste Macintosh von 1984."
+    },
+    "ega16": {
+      "name": "4 Bit · 16 Farben",
+      "note": "4 Bit pro Pixel ergeben 16 Farben: die Palette von CGA und EGA auf dem IBM-PC. Aus Rot, Grün, Blau und einem Helligkeitsbit gebildet – nur Farbe 6 wurde vom Monitor zu Braun gemacht."
+    },
+    "vga256": {
+      "name": "8 Bit · 256 Farben",
+      "note": "8 Bit pro Pixel ergeben 256 Farben gleichzeitig, wie im VGA-Modus von 1987. Welche 256 es waren, legte das Programm fest; hier sind es die 16 von oben, ein Farbwürfel und Graustufen."
+    }
+  },
+  "memory": "Dieses Bild braucht so {bytes} Bytes Speicher ({size} × {size} Pixel × {depth} Bit).",
+  "colorLabel": "Farbe",
+  "swatch": "Farbe {index} von {count}: {hex}",
+  "download": "Als PNG herunterladen",
+  "saveNote": "Das Bild wird nur in diesem Browser gespeichert und nirgendwohin hochgeladen. Der Download entsteht hier auf Ihrem Gerät.",
+  "saveFailed": "Automatisches Speichern ist in diesem Browser gerade nicht möglich. Sie können weitermalen und das Bild herunterladen.",
+  "announce": {
+    "picked": "Farbe {color} aufgenommen, zurück zum Stift.",
+    "undone": "Rückgängig gemacht.",
+    "redone": "Wiederholt.",
+    "cleared": "Bild geleert.",
+    "palette": "Palette gewechselt: {name}. Jede Farbe wurde durch die nächstliegende ersetzt.",
+    "size": "Neues Bild, {size} × {size} Pixel.",
+    "downloaded": "Das PNG wurde erstellt."
+  }
+}

@@ -51,7 +51,7 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   filesystem: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   snake: load(() => import('@/components/apps/snake/SnakeApp'), 'SnakeApp'),
-  paint: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  paint: load(() => import('@/components/apps/paint/PaintApp'), 'PaintApp'),
   'network-tools': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   'time-machine': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
 };

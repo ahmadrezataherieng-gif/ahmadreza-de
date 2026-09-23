@@ -1,0 +1,50 @@
+{
+  "canvasRole": "drawing canvas",
+  "canvasLabel": "Canvas {size} × {size} pixels, cursor at column {x}, row {y}, tool: {tool}",
+  "canvasHelp": "Paint with a mouse, finger or pen. With the keyboard: the arrow keys move the cursor (with Shift in steps of four), Space or Enter uses the tool. Ctrl+Z undoes, Ctrl+Y redoes.",
+  "toolsLabel": "Tools",
+  "tools": {
+    "pencil": "Pencil",
+    "eraser": "Eraser",
+    "fill": "Fill",
+    "picker": "Pick colour"
+  },
+  "undo": "Undo",
+  "redo": "Redo",
+  "clear": "Clear",
+  "grid": "Grid",
+  "sizeLabel": "Size",
+  "sizeConfirm": "A new size starts an empty {size} × {size} picture. You can bring the current one back afterwards with “Undo”.",
+  "sizeConfirmYes": "Start a new picture",
+  "sizeConfirmNo": "Cancel",
+  "paletteLabel": "Palette",
+  "palettes": {
+    "bit1": {
+      "name": "1 bit · 2 colours",
+      "note": "1 bit per pixel: every dot is on or off, black or white – the way the first Macintosh drew in 1984."
+    },
+    "ega16": {
+      "name": "4 bits · 16 colours",
+      "note": "4 bits per pixel make 16 colours: the CGA and EGA palette of the IBM PC. Built from red, green, blue and one brightness bit – only colour 6 was turned into brown by the monitor."
+    },
+    "vga256": {
+      "name": "8 bits · 256 colours",
+      "note": "8 bits per pixel make 256 colours at once, as in the VGA mode of 1987. The program chose which 256; here they are the 16 above, a colour cube and greys."
+    }
+  },
+  "memory": "This picture needs {bytes} bytes of memory like this ({size} × {size} pixels × {depth} bits).",
+  "colorLabel": "Colour",
+  "swatch": "Colour {index} of {count}: {hex}",
+  "download": "Download as PNG",
+  "saveNote": "The picture is saved in this browser only and never uploaded. The download is made right here on your device.",
+  "saveFailed": "Autosave is not possible in this browser right now. You can keep painting and download the picture.",
+  "announce": {
+    "picked": "Picked colour {color}, back to the pencil.",
+    "undone": "Undone.",
+    "redone": "Redone.",
+    "cleared": "Picture cleared.",
+    "palette": "Palette changed: {name}. Every colour was replaced by the closest one.",
+    "size": "New picture, {size} × {size} pixels.",
+    "downloaded": "The PNG was created."
+  }
+}
