@@ -1,8 +1,11 @@
 import type { StateCreator } from 'zustand';
-import type { PersistOptions, PersistStorage, StorageValue } from 'zustand/middleware';
+import type { PersistOptions } from 'zustand/middleware';
 
 import { artifactIds, baseAppIds, eraIds, eras, type AppId, type ArtifactId, type Era, type EraId } from '../content/eras.ts';
 import { STORAGE_KEYS } from './constants.ts';
+import { safeJSONStorage, type StorageLike } from './safe-storage.ts';
+
+export { safeJSONStorage, type StorageLike } from './safe-storage.ts';
 
 /**
  * The unlock store's logic, kept free of React and of the `@/` alias so plain
@@ -152,55 +155,6 @@ export function sanitizeUnlockData(value: unknown): UnlockData {
     hasCompletedJourney: raw.hasCompletedJourney === true,
     journeyFinished: raw.journeyFinished === true,
     mode: journeyModes.includes(raw.mode as JourneyMode) ? (raw.mode as JourneyMode) : null,
-  };
-}
-
-/** The minimal `Storage` surface, so tests can hand in a stand-in. */
-export interface StorageLike {
-  getItem: (key: string) => string | null;
-  setItem: (key: string, value: string) => void;
-  removeItem: (key: string) => void;
-}
-
-/**
- * JSON storage that fails safe. Unreadable JSON reads as "nothing stored";
- * a storage that throws (blocked, private mode, quota) is treated as absent.
- * The page keeps working either way - progress is then simply not remembered.
- */
-export function safeJSONStorage<S>(getStorage: () => StorageLike | undefined): PersistStorage<S> {
-  const storage = (): StorageLike | undefined => {
-    try {
-      return getStorage();
-    } catch {
-      return undefined;
-    }
-  };
-  return {
-    getItem: (name) => {
-      try {
-        const raw = storage()?.getItem(name);
-        if (raw === null || raw === undefined) return null;
-        const parsed: unknown = JSON.parse(raw);
-        if (!parsed || typeof parsed !== 'object') return null;
-        return parsed as StorageValue<S>;
-      } catch {
-        return null;
-      }
-    },
-    setItem: (name, value) => {
-      try {
-        storage()?.setItem(name, JSON.stringify(value));
-      } catch {
-        // Quota or blocked storage: keep the state in memory only.
-      }
-    },
-    removeItem: (name) => {
-      try {
-        storage()?.removeItem(name);
-      } catch {
-        // Nothing to remove.
-      }
-    },
   };
 }
 

@@ -3103,3 +3103,46 @@ html:not([data-tier='full']) .ao-depth-extra {
     var(--ao-brand-night);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ao-brand-white) 40%, transparent);
 }
+
+/* ==========================================================================
+   Bonus apps (Phase 9D-1, DECISIONS.md 57)
+   ========================================================================== */
+
+/* Snake draws on a canvas, which cannot read a class: it reads these tokens
+   with getComputedStyle on every frame it paints. By default they follow the
+   active theme, so the game wears whatever the desktop wears. A theme or the
+   9D-2 Time Machine restyles it by overriding the --ao-snake-* set - the
+   phosphor set below is the first, applied whenever the 1971 theme is active
+   and on demand with data-snake-skin. */
+.ao-snake {
+  --ao-snake-board: var(--ao-color-background);
+  --ao-snake-grid: color-mix(in srgb, var(--ao-color-border) 45%, transparent);
+  --ao-snake-body: var(--ao-color-accent);
+  --ao-snake-head: var(--ao-color-text);
+  --ao-snake-food: var(--ao-color-warning);
+  --ao-snake-text: var(--ao-color-text);
+}
+
+[data-theme='era1971'] .ao-snake,
+.ao-snake[data-snake-skin='phosphor'] {
+  --ao-snake-board: #000000;
+  --ao-snake-grid: #0b2410;
+  --ao-snake-body: #33ff66;
+  --ao-snake-head: #b3ffc6;
+  --ao-snake-food: #66ff99;
+  --ao-snake-text: #33ff66;
+}
+
+/* The board takes touch gestures for itself: a swipe steers, never scrolls. */
+.ao-snake-board {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Pixel Paint: crisp pixels at any zoom, and the canvas owns its gestures. */
+.ao-paint-canvas {
+  image-rendering: pixelated;
+  touch-action: none;
+}
+

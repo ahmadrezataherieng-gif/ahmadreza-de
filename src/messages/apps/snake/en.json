@@ -1,0 +1,35 @@
+{
+  "score": "Score",
+  "best": "Best",
+  "boardRole": "game board",
+  "boardLabel": "Snake board",
+  "overlay": {
+    "ready": "Press “Start” or an arrow key to begin.",
+    "paused": "Paused. Space or “Resume” to go on.",
+    "over": "Game over – {score, plural, one {# point} other {# points}}.",
+    "won": "The whole board is full. There is no more room."
+  },
+  "start": "Start",
+  "pause": "Pause",
+  "resume": "Resume",
+  "again": "Play again",
+  "restart": "Restart",
+  "padLabel": "Direction pad",
+  "directions": {
+    "up": "Up",
+    "down": "Down",
+    "left": "Left",
+    "right": "Right"
+  },
+  "helpKeys": "Steer with the arrow keys or W, A, S, D. Space or P pauses. The game pauses by itself when you switch windows.",
+  "helpTouch": "Swipe on the board or use the direction pad. Tap the board to resume after a pause.",
+  "truth": "The board has exactly 400 squares, and every bite makes the snake longer. Like memory: it is finite, and sooner or later it is full.",
+  "played": "{count, plural, one {# game played} other {# games played}} – counted anonymously.",
+  "announce": {
+    "started": "The game is running.",
+    "paused": "Paused.",
+    "resumed": "The game is running again.",
+    "over": "Game over with {score, plural, one {# point} other {# points}}.",
+    "won": "The board is full: {score} points."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "score": "Punkte",
+  "best": "Bestwert",
+  "boardRole": "Spielfeld",
+  "boardLabel": "Snake-Spielfeld",
+  "overlay": {
+    "ready": "Starten Sie mit „Start“ oder einer Pfeiltaste.",
+    "paused": "Pause. Weiter mit der Leertaste oder „Weiter“.",
+    "over": "Vorbei – {score, plural, one {# Punkt} other {# Punkte}}.",
+    "won": "Das ganze Feld ist gefüllt. Mehr Platz gibt es nicht."
+  },
+  "start": "Start",
+  "pause": "Pause",
+  "resume": "Weiter",
+  "again": "Noch einmal",
+  "restart": "Neu beginnen",
+  "padLabel": "Steuerkreuz",
+  "directions": {
+    "up": "Nach oben",
+    "down": "Nach unten",
+    "left": "Nach links",
+    "right": "Nach rechts"
+  },
+  "helpKeys": "Steuern mit den Pfeiltasten oder W, A, S, D. Leertaste oder P pausiert. Das Spiel pausiert von selbst, wenn Sie das Fenster wechseln.",
+  "helpTouch": "Wischen Sie auf dem Spielfeld oder nutzen Sie das Steuerkreuz. Tippen auf das Feld setzt eine Pause fort.",
+  "truth": "Das Feld hat genau 400 Kästchen, und jeder Happen macht die Schlange länger. Wie Speicher: Er ist endlich, und irgendwann ist er voll.",
+  "played": "{count, plural, one {# Spiel gespielt} other {# Spiele gespielt}} – anonym gezählt.",
+  "announce": {
+    "started": "Das Spiel läuft.",
+    "paused": "Pause.",
+    "resumed": "Das Spiel läuft weiter.",
+    "over": "Spiel vorbei mit {score, plural, one {# Punkt} other {# Punkten}}.",
+    "won": "Das Feld ist voll: {score} Punkte."
+  }
+}
