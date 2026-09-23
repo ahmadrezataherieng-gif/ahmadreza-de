@@ -1,4 +1,4 @@
-# AhmadOS — Portfolio of Ahmadreza Taheri
+# Amonel — Portfolio of Ahmadreza Taheri
 
 A static Next.js site for [ahmadreza.de](https://ahmadreza.de): a landing page,
 and a scroll-driven journey through eighty years of computing - seven eras, each

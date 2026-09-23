@@ -8,7 +8,7 @@ import { defaultLocale, isLocale, locales, type Locale } from '@/lib/i18n-config
  *
  *   /             /en/            /fa/             the landing page
  *   /journey/     /en/journey/    /fa/journey/     Act 1 and the Convergence
- *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the AhmadOS desktop
+ *   /desktop/     /en/desktop/    /fa/desktop/     Act 3, the Amonel OS desktop
  *
  * All of it is one optional catch-all segment (`app/[[...locale]]`) rather than
  * middleware, because `output: 'export'` produces plain files and never runs

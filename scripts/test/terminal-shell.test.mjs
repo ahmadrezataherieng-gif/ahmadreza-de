@@ -70,7 +70,7 @@ test('cd moves, and fails like bash', () => {
 });
 
 test('cat prints files, and fails like cat', () => {
-  assert.deepEqual(texts(run('cat /etc/hostname')), ['ahmados']);
+  assert.deepEqual(texts(run('cat /etc/hostname')), ['amonel']);
   assert.deepEqual(printed(run('cat README.md')).map((line) => [line.kind, line.section]), [['section', 'about']]);
   assert.deepEqual(texts(run('cat nope.txt')), ['cat: nope.txt: No such file or directory']);
   assert.deepEqual(texts(run('cat projects')), ['cat: projects: Is a directory']);
@@ -87,7 +87,7 @@ test('an unknown command fails the way bash does', () => {
 test('the small commands', () => {
   assert.deepEqual(texts(run('whoami')), ['guest']);
   assert.deepEqual(texts(run('echo hello   world')), ['hello world']);
-  assert.deepEqual(texts(run('uname')), ['AhmadOS']);
+  assert.deepEqual(texts(run('uname')), ['Amonel']);
   assert.match(texts(run('sudo ls'))[0], /is not in the sudoers file/);
   assert.equal(run('exit').exited, true);
   assert.equal(run('help', 'clear').lines.length, 0);
@@ -123,7 +123,7 @@ test('Tab completes paths', () => {
   assert.deepEqual(complete(state, 'cd '), { input: 'cd projects/', candidates: [] }, 'cd only offers directories');
   assert.deepEqual(complete(state, 'cat R'), { input: 'cat README.md ', candidates: [] });
   assert.deepEqual(complete(state, 'cat .b'), { input: 'cat .bash_history ', candidates: [] });
-  assert.deepEqual(complete(state, 'cat ~/projects/a'), { input: 'cat ~/projects/ahmados.md ', candidates: [] });
+  assert.deepEqual(complete(state, 'cat ~/projects/a'), { input: 'cat ~/projects/amonel.md ', candidates: [] });
   assert.deepEqual(complete(state, 'cat /etc/'), { input: 'cat /etc/', candidates: ['hostname', 'motd', 'os-release'] });
   assert.deepEqual(complete(state, 'cat c'), { input: 'cat c', candidates: ['contact.txt', 'cv.txt'] });
   assert.deepEqual(complete(state, 'cat nowhere/x'), { input: 'cat nowhere/x', candidates: [] });

@@ -361,11 +361,11 @@ export const themes: Record<ThemeId, Theme> = {
     sound: 'modern',
   },
 
-  /* AhmadOS - the shipping desktop theme. */
+  /* Amonel OS - the shipping desktop theme. */
   modern: {
     id: 'modern',
     year: null,
-    name: 'AhmadOS',
+    name: 'Amonel OS',
     colors: {
       background: '#0D1117',
       surface: '#161B22',

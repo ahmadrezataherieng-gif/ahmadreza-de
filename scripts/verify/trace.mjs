@@ -33,7 +33,7 @@ const b = await launch({ width: WIDTH, height: HEIGHT, touch: WIDTH < 768, tag: 
 await b.goto(`${BASE}/journey/?tier=${TIER}`, 2000);
 const passed = MODE === 'open' ? "['eniac','batch','unix','dos','macintosh','win95','cloud']" : '[]';
 await b.evaluate(
-  `localStorage.setItem('ahmados.unlocks.v1', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: ${passed}, legendEras: [], hasCompletedJourney: false, mode: '${MODE === 'open' ? 'interactive' : 'guided'}' }, version: 2 })); true`,
+  `localStorage.setItem('amonel.unlocks.v1', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: ${passed}, legendEras: [], hasCompletedJourney: false, mode: '${MODE === 'open' ? 'interactive' : 'guided'}' }, version: 2 })); true`,
 );
 await b.goto(`${BASE}/journey/?tier=${TIER}`, 8000);
 

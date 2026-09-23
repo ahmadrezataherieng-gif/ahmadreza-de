@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import type { AppId } from '@/content/eras';
 
 /**
- * The AhmadOS window manager's state (DECISIONS.md 49).
+ * The Amonel OS window manager's state (DECISIONS.md 49).
  *
  * Deliberately not persisted: a reload starts on a clean desktop. One window
  * per app - opening an open app brings it back and focuses it.

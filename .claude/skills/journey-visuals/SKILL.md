@@ -3,7 +3,7 @@ name: journey-visuals
 description: "Read before touching Act 1 or Act 2: era visuals (src/components/journey/), scroll machinery (Lenis, the ScrollTrigger resolver), era-to-era crossings and CSS 3D depth, motion tiers, printed text, the Phase 4 patterns, the era visual characters table, or the Convergence."
 ---
 
-## The concept: "AhmadOS — 80 Years in 90 Seconds"
+## The concept: "Amonel — 80 Years in 90 Seconds"
 
 Three acts.
 
@@ -33,7 +33,7 @@ modern desktop, with a boot log listing each era as a loaded component.
 | `era1984` | light grey, black 1-bit pixel art |
 | `era1995` | teal desktop, grey 3D bevelled chrome |
 | `era2024` | the modern dark palette |
-| `modern` | AhmadOS — same palette as `era2024` |
+| `modern` | Amonel OS — same palette as `era2024` |
 
 ## Act 1 scroll machinery
 

@@ -1152,7 +1152,7 @@ emulation, not on hardware.
 
 ---
 
-## 49. The AhmadOS desktop shell, Phase 6
+## 49. The Amonel OS desktop shell, Phase 6
 
 **Route.** Act 3 is its own view, `/desktop/` (`/en/desktop/`, `/fa/desktop/`),
 added through `matchSegments` and `viewHref` like the other two, with canonical

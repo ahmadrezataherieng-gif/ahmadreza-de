@@ -110,7 +110,7 @@
         "beepLabel": "BEEP",
         "prompt": "C:\\>",
         "dirCommand": "DIR",
-        "dirVolume": "Volume in drive C is AHMADOS",
+        "dirVolume": "Volume in drive C is AMONEL",
         "dirRows": [
           {
             "name": "CV",
@@ -162,7 +162,7 @@
             "time": "00:01"
           },
           {
-            "name": "AHMADOS",
+            "name": "AMONEL",
             "ext": "SYS",
             "size": "640.000",
             "date": "15.09.26",
@@ -212,7 +212,7 @@
         "screenLabel": "Windows 95 desktop connecting to the internet over a modem",
         "infoTitle": "Info.txt - Notepad",
         "start": "Start",
-        "banner": "AhmadOS 95",
+        "banner": "Amonel OS 95",
         "startItems": [
           "Programs",
           "Documents",
@@ -319,7 +319,7 @@
     "fa": "فارسی"
   },
   "convergence": {
-    "title": "The Convergence: eighty years become AhmadOS",
+    "title": "The Convergence: eighty years become Amonel OS",
     "intro": "Compiling 80 years of computing...",
     "components": [
       {
@@ -351,8 +351,8 @@
         "status": "OK"
       }
     ],
-    "welcome": "Welcome to AhmadOS v1.0",
-    "desktopLabel": "Empty AhmadOS desktop"
+    "welcome": "Welcome to Amonel OS",
+    "desktopLabel": "Empty Amonel OS desktop"
   },
   "landing": {
     "eyebrow": "Portfolio",
@@ -625,13 +625,13 @@
     }
   },
   "os": {
-    "brand": "AhmadOS",
-    "title": "AhmadOS desktop",
-    "heading": "AhmadOS – the desktop of Ahmadreza Taheri",
+    "brand": "Amonel OS",
+    "title": "Amonel OS desktop",
+    "heading": "Amonel OS – the desktop of Ahmadreza Taheri",
     "noscript": "The desktop needs JavaScript. Everything important is also on the home page.",
     "home": "Home",
     "replay": "Watch the journey again",
-    "desktopLabel": "AhmadOS desktop",
+    "desktopLabel": "Amonel OS desktop",
     "icons": "Apps on the desktop",
     "launcher": {
       "open": "Apps",

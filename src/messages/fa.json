@@ -111,7 +111,7 @@
         "beepLabel": "BEEP",
         "prompt": "C:\\>",
         "dirCommand": "DIR",
-        "dirVolume": "Volume in drive C is AHMADOS",
+        "dirVolume": "Volume in drive C is AMONEL",
         "dirRows": [
           {
             "name": "CV",
@@ -163,7 +163,7 @@
             "time": "00:01"
           },
           {
-            "name": "AHMADOS",
+            "name": "AMONEL",
             "ext": "SYS",
             "size": "640.000",
             "date": "15.09.26",
@@ -213,7 +213,7 @@
         "screenLabel": "میزکار ویندوز ۹۵ در حال اتصال به اینترنت با مودم",
         "infoTitle": "Info.txt - Notepad",
         "start": "شروع",
-        "banner": "AhmadOS 95",
+        "banner": "Amonel OS 95",
         "startItems": [
           "برنامه‌ها",
           "اسناد",
@@ -320,7 +320,7 @@
     "fa": "فارسی"
   },
   "convergence": {
-    "title": "هم‌گرایی: هشتاد سال به AhmadOS بدل می‌شود",
+    "title": "هم‌گرایی: هشتاد سال به Amonel OS بدل می‌شود",
     "intro": "در حال کامپایل ۸۰ سال تاریخ رایانه...",
     "components": [
       {
@@ -352,8 +352,8 @@
         "status": "OK"
       }
     ],
-    "welcome": "به AhmadOS v1.0 خوش آمدید",
-    "desktopLabel": "میزکار خالی AhmadOS"
+    "welcome": "به Amonel OS خوش آمدید",
+    "desktopLabel": "میزکار خالی Amonel OS"
   },
   "landing": {
     "eyebrow": "نمونه‌کار",
@@ -626,13 +626,13 @@
     }
   },
   "os": {
-    "brand": "AhmadOS",
-    "title": "میزکار AhmadOS",
-    "heading": "AhmadOS، میزکار احمدرضا طاهری",
+    "brand": "Amonel OS",
+    "title": "میزکار Amonel OS",
+    "heading": "Amonel OS، میزکار احمدرضا طاهری",
     "noscript": "میزکار به جاوااسکریپت نیاز دارد. همهٔ اطلاعات مهم را در صفحهٔ اصلی هم پیدا می‌کنید.",
     "home": "صفحهٔ اصلی",
     "replay": "دیدن دوبارهٔ سفر",
-    "desktopLabel": "میزکار AhmadOS",
+    "desktopLabel": "میزکار Amonel OS",
     "icons": "برنامه‌های روی میزکار",
     "launcher": {
       "open": "برنامه‌ها",

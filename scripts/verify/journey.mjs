@@ -29,7 +29,7 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TIER = args.tier === 'light' || args.tier === 'full' ? args.tier : null;
 const JOURNEY = `${BASE}${PREFIX}/journey/${TIER ? `?tier=${TIER}` : ''}`;
 const ERAS = ['eniac', 'batch', 'unix', 'dos', 'macintosh', 'win95', 'cloud'];
-const STORE = 'ahmados.unlocks.v1';
+const STORE = 'amonel.unlocks.v1';
 
 // --quiet: failures in full, passes only in the final count.
 const QUIET = Boolean(args.quiet);
@@ -181,7 +181,7 @@ if (MODE === 'watch') {
     await sleep(2500);
     check(`watch: ${TOUCH ? 'swipes' : 'the wheel'} alone reach the end and the desktop`, await js(`location.pathname.endsWith('/desktop/')`), { swipes, at: await js('location.pathname') });
     // Back into the journey as "Reise erneut ansehen" does it.
-    await js(`sessionStorage.setItem('ahmados.replay', '1'); true`);
+    await js(`sessionStorage.setItem('amonel.replay', '1'); true`);
     await b.goto(JOURNEY, 9000);
   }
   for (const [i, era] of ERAS.entries()) {

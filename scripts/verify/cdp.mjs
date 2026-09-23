@@ -12,7 +12,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 const CHROME = process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-export const OUT = process.env.VERIFY_OUT ?? path.join(tmpdir(), 'ahmados-verify');
+export const OUT = process.env.VERIFY_OUT ?? path.join(tmpdir(), 'amonel-verify');
 mkdirSync(OUT, { recursive: true });
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

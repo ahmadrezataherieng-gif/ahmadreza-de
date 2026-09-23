@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 /**
- * The empty AhmadOS desktop: the wallpaper, the strip along the top that becomes
+ * The empty Amonel OS desktop: the wallpaper, the strip along the top that becomes
  * the desktop's top bar, and the seam of light where the eras dissolved, which
  * becomes the taskbar.
  *

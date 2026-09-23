@@ -14,7 +14,7 @@ How it works:
 1. `src/lib/themes.ts` defines a `Theme` interface — colour tokens, font
    families, border radii, shadow styles, rendering effects (scanlines, phosphor
    glow, pixelation, dithering, noise, curvature), cursor style, sound profile —
-   and eight concrete themes: one per era plus `modern` for AhmadOS.
+   and eight concrete themes: one per era plus `modern` for Amonel OS.
 2. `src/lib/apply-theme.ts` flattens a theme into `--ao-*` CSS custom properties
    and writes them onto `<html>`, plus `data-theme`, `data-cursor`, `data-sound`.
 3. `src/store/theme-store.ts` holds the active theme id. `setTheme(id)` is the

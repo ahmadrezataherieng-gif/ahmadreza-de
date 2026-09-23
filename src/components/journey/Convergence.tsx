@@ -50,7 +50,7 @@ function asComponents(value: unknown): LogComponent[] {
  * in a ring, then one by one fly to the foot of a forming desktop and shrink
  * into it. As each one docks, its line in the boot log types out and reports
  * OK. The chips dissolve into a seam of light, the desktop grows to fill the
- * screen, the log fades, and the story ends on an empty AhmadOS desktop - the
+ * screen, the log fades, and the story ends on an empty Amonel OS desktop - the
  * same picture /desktop/ opens on, so the hand-over to it is seamless.
  *
  * All of it is one scroll-progress value. No GSAP timeline; each element's

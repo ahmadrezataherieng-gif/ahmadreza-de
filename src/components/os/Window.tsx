@@ -73,7 +73,7 @@ interface Gesture {
 }
 
 /**
- * One AhmadOS window: a non-modal dialog (DECISIONS.md 49).
+ * One Amonel OS window: a non-modal dialog (DECISIONS.md 49).
  *
  * - Drag it by the title bar, resize it from any edge or corner - pointer
  *   events, so mouse, touch and pen are one code path. It stays inside the

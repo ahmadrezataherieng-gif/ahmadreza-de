@@ -56,7 +56,7 @@ Last updated: 2026-09-23
 - **Motion tiers** (DECISIONS.md 46): `full`, `light` (phones, coarse pointers,
   weak hardware) and reduced motion, chosen before first paint; `?tier=` forces
   one.
-- **Act 2, the Convergence:** the seven eras compile into an empty AhmadOS
+- **Act 2, the Convergence:** the seven eras compile into an empty Amonel OS
   desktop; reaching it hands over to `/desktop/`, whose first frame is the same
   picture (pixel-identical). Zum Desktop goes there from any point, gated or not.
   A returning visitor's direct visit to `/journey/` lands on the desktop.

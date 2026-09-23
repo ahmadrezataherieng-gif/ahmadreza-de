@@ -3,7 +3,7 @@
   "inputLabel": "Befehl eingeben",
   "inputHint": "Eingabetaste führt den Befehl aus, Tab ergänzt, Pfeil hoch und runter blättern durch frühere Befehle.",
   "tryLabel": "Zum Ausprobieren:",
-  "motd": "Willkommen auf AhmadOS. Tippen Sie help für alle Befehle – oder fangen Sie mit about, skills oder projects an.",
+  "motd": "Willkommen auf Amonel OS. Tippen Sie help für alle Befehle – oder fangen Sie mit about, skills oder projects an.",
   "help": {
     "portfolio": "Über Ahmadreza",
     "shell": "Shell",
@@ -32,8 +32,8 @@
     "source": "Quellcode",
     "stack": "Technik",
     "items": {
-      "ahmados": {
-        "name": "AhmadOS – diese Website",
+      "amonel": {
+        "name": "Amonel – diese Website",
         "text": "80 Jahre Computergeschichte in sieben Epochen, jede mit einem Rätsel, das eine echte Grundlage der Informatik lehrt – und am Ende dieser Desktop. Eine statische Website ohne eigenen Server, in Deutsch, Englisch und Persisch."
       }
     }

@@ -29,7 +29,7 @@ const text = (...lines: string[]): Node => ({ kind: 'file', content: { kind: 'te
 const section = (name: PortfolioSection): Node => ({ kind: 'file', content: { kind: 'section', section: name } });
 
 export const USER = 'guest';
-export const HOST = 'ahmados';
+export const HOST = 'amonel';
 /** The guest's home is Ahmadreza's directory: that is where the visitor came to look. */
 export const HOME = '/home/ahmadreza';
 
@@ -37,7 +37,7 @@ const ROOT: Node = dir({
   etc: dir({
     hostname: text(HOST),
     motd: { kind: 'file', content: { kind: 'message', key: 'motd' } },
-    'os-release': text('NAME="AhmadOS"', 'PRETTY_NAME="AhmadOS"', 'ID=ahmados', 'HOME_URL="https://ahmadreza.de/"'),
+    'os-release': text('NAME="Amonel OS"', 'PRETTY_NAME="Amonel OS"', 'ID=amonel', 'HOME_URL="https://ahmadreza.de/"'),
   }),
   home: dir({
     ahmadreza: dir({
@@ -45,7 +45,7 @@ const ROOT: Node = dir({
       'skills.txt': section('skills'),
       'contact.txt': section('contact'),
       'cv.txt': section('cv'),
-      projects: dir({ 'ahmados.md': section('projects') }),
+      projects: dir({ 'amonel.md': section('projects') }),
       '.bash_history': text('cd ~/projects', 'npm run build', 'traceroute ahmadreza.de', 'cat ~/skills.txt'),
     }),
   }),
@@ -160,7 +160,7 @@ export function runCommand(state: ShellState, input: string): ShellState {
       return out({ kind: 'text', text: USER });
 
     case 'uname':
-      return out({ kind: 'text', text: args.includes('-a') ? `AhmadOS ${HOST} 7.0 web browser` : 'AhmadOS' });
+      return out({ kind: 'text', text: args.includes('-a') ? `Amonel ${HOST} 7.0 web browser` : 'Amonel' });
 
     case 'echo':
       return out({ kind: 'text', text: args.join(' ') });

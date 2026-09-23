@@ -1,9 +1,9 @@
 ---
 name: desktop-apps
-description: "Read before touching the AhmadOS desktop (Act 3): src/components/os/, src/components/apps/, the window manager, taskbar, launcher, mobile home screen, the app registry, or any app (About, Terminal, Tickets, Traceroute, Assistant, Contact, Timeline, CV, bonus apps) and its per-app copy."
+description: "Read before touching the Amonel OS desktop (Act 3): src/components/os/, src/components/apps/, the window manager, taskbar, launcher, mobile home screen, the app registry, or any app (About, Terminal, Tickets, Traceroute, Assistant, Contact, Timeline, CV, bonus apps) and its per-app copy."
 ---
 
-### Act 3 — AhmadOS
+### Act 3 — Amonel OS
 
 A fully interactive desktop operating system. Draggable windows on desktop,
 fullscreen apps on mobile. Portfolio sections are applications. Puzzles solved

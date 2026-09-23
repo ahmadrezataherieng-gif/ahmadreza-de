@@ -25,7 +25,7 @@ const TOUCH = Boolean(args.touch);
 const BASE = args.base ?? 'http://localhost:3001';
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `apps-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}`;
-const STORE = 'ahmados.unlocks.v1';
+const STORE = 'amonel.unlocks.v1';
 const RTL = LOCALE === 'fa';
 
 // --quiet: failures in full, passes only in the final count.
@@ -208,7 +208,7 @@ const terminal = async () => {
   await typeLine('cd projects');
   await typeLine('pwd');
   check('terminal: cd and pwd', /\/home\/ahmadreza\/projects\s*$/.test(await outputText()));
-  await typeLine('cat ahmados.md');
+  await typeLine('cat amonel.md');
   check('terminal: cat prints a project from content', /github\.com\/ahmadrezataherieng-gif/.test(await outputText()));
   await typeLine('frobnicate');
   check('terminal: an unknown command fails like bash', /bash: frobnicate: command not found/.test(await outputText()));

@@ -3,7 +3,7 @@
   "inputLabel": "Enter a command",
   "inputHint": "Enter runs the command, Tab completes, arrow up and down step through earlier commands.",
   "tryLabel": "Try:",
-  "motd": "Welcome to AhmadOS. Type help to see every command - or start with about, skills or projects.",
+  "motd": "Welcome to Amonel OS. Type help to see every command - or start with about, skills or projects.",
   "help": {
     "portfolio": "About Ahmadreza",
     "shell": "Shell",
@@ -32,8 +32,8 @@
     "source": "Source code",
     "stack": "Built with",
     "items": {
-      "ahmados": {
-        "name": "AhmadOS - this website",
+      "amonel": {
+        "name": "Amonel - this website",
         "text": "80 years of computing history in seven eras, each with a puzzle that teaches a real foundation of computing - and this desktop at the end. A static website without a server of its own, in German, English and Persian."
       }
     }

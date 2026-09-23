@@ -1,4 +1,4 @@
-// End-to-end checks for the AhmadOS desktop (Phase 6).
+// End-to-end checks for the Amonel OS desktop (Phase 6).
 //
 //   node scripts/verify/desktop.mjs [--width 1280] [--height 800] [--locale de|en|fa]
 //        [--reduce] [--touch] [--base URL]
@@ -28,7 +28,7 @@ const TOUCH = Boolean(args.touch);
 const BASE = args.base ?? 'http://localhost:3001';
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `desktop-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}`;
-const STORE = 'ahmados.unlocks.v1';
+const STORE = 'amonel.unlocks.v1';
 const RTL = LOCALE === 'fa';
 
 // --quiet: failures in full, passes only in the final count.
@@ -47,7 +47,7 @@ const js = (code) => b.evaluate(code);
 // The 1971 puzzle solved (its artifact unlocks the file tree); everything else locked.
 await b.goto(`${BASE}${PREFIX}/`, 2500);
 await js(
-  `localStorage.setItem('${STORE}', JSON.stringify({ state: { artifacts: ['shell-token'], visitedEras: [], skippedEras: [], passedEras: ['unix'], legendEras: [], hasCompletedJourney: false, mode: 'guided' }, version: 2 })); sessionStorage.setItem('ahmados.replay', '1'); true`,
+  `localStorage.setItem('${STORE}', JSON.stringify({ state: { artifacts: ['shell-token'], visitedEras: [], skippedEras: [], passedEras: ['unix'], legendEras: [], hasCompletedJourney: false, mode: 'guided' }, version: 2 })); sessionStorage.setItem('amonel.replay', '1'); true`,
 );
 await b.goto(`${BASE}${PREFIX}/desktop/`, 5000);
 
@@ -55,7 +55,7 @@ const layout = await js(`document.querySelector('[data-shell]')?.dataset.shellLa
 const expected = !TOUCH && WIDTH >= 768 ? 'desktop' : 'mobile';
 check(`layout is the ${expected} shell`, layout === expected, layout);
 check('arriving completes the journey', await js(`JSON.parse(localStorage.getItem('${STORE}')).state.hasCompletedJourney === true`));
-check('arriving ends a replay', await js(`sessionStorage.getItem('ahmados.replay') === null`));
+check('arriving ends a replay', await js(`sessionStorage.getItem('amonel.replay') === null`));
 check('modern theme', await js(`document.documentElement.dataset.theme === 'modern' || !document.documentElement.dataset.theme`), await js('document.documentElement.dataset.theme ?? null'));
 const scripts = await js(`[...performance.getEntriesByType('resource')].map((e) => e.name).filter((n) => n.endsWith('.js'))`);
 const noJourneyCode = await js(`(async () => {

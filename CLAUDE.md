@@ -1,4 +1,4 @@
-# AhmadOS — Portfolio of Ahmadreza Taheri
+# Amonel — Portfolio of Ahmadreza Taheri
 
 The core rules are in this file; the specialised ones are in the project skills listed below. Read this file before touching code, and the matching skill before touching its area.
 

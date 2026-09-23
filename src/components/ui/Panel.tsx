@@ -11,7 +11,7 @@ interface PanelProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * A bordered surface with the current era's OS look. Every window, dialog and
- * card in AhmadOS is built on this, so bevels, radii and shadows only ever have
+ * card in Amonel is built on this, so bevels, radii and shadows only ever have
  * to be defined once per theme.
  */
 export function Panel({

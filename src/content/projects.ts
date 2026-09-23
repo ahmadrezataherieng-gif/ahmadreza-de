@@ -4,7 +4,7 @@
  * this site. Which others belong here is owed (TODO.md).
  */
 export interface Project {
-  id: 'ahmados';
+  id: 'amonel';
   /** Machine text: identical in every language. */
   url: string;
   source: string;
@@ -13,7 +13,7 @@ export interface Project {
 
 export const projects: readonly Project[] = [
   {
-    id: 'ahmados',
+    id: 'amonel',
     url: 'https://ahmadreza.de',
     source: 'https://github.com/ahmadrezataherieng-gif/ahmadreza-de',
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers'],

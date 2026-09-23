@@ -35,7 +35,7 @@ const TOUCH = Boolean(args.touch);
 const BASE = args.base ?? 'http://localhost:3001';
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `nav-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}`;
-const STORE = 'ahmados.unlocks.v1';
+const STORE = 'amonel.unlocks.v1';
 const LANDING = `${BASE}${PREFIX}/`;
 const JOURNEY = `${BASE}${PREFIX}/journey/`;
 const DESKTOP = `${BASE}${PREFIX}/desktop/`;

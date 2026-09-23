@@ -18,7 +18,7 @@
 }
 
 /* ==========================================================================
-   AhmadOS design tokens
+   Amonel design tokens
    --------------------------------------------------------------------------
    This is the ONLY file in the project allowed to contain raw colour values.
    Everything else reads tokens, either as Tailwind utilities (bg-surface,
@@ -1423,7 +1423,7 @@ html[data-returning] .ao-mode-section h2 {
 }
 
 /* ==========================================================================
-   AhmadOS desktop (Phase 6, DECISIONS.md 49)
+   Amonel OS desktop (Phase 6, DECISIONS.md 49)
 
    The page paints DesktopFrame - the Convergence's last frame - and the shell
    fades in over it. Everything is placed against the same two landmarks as the

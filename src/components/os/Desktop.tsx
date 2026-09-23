@@ -7,7 +7,7 @@ import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
 
 /**
- * Act 3 - the AhmadOS desktop, at /desktop/ in every locale.
+ * Act 3 - the Amonel OS desktop, at /desktop/ in every locale.
  *
  * The server paints only the empty desktop: the same frame the Convergence ends
  * on, so arriving from the journey changes nothing on screen. The shell - window

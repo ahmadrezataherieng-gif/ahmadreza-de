@@ -4,7 +4,7 @@ import { appIds, baseAppIds, type AppId } from '@/content/eras';
 import type { AppProps } from '@/components/apps/types';
 
 /**
- * Every app on the AhmadOS desktop.
+ * Every app on the Amonel OS desktop.
  *
  * The shell only ever reads this table: which apps exist, how each is named
  * (`os.apps.<id>.title`), how big its window opens, and the component it runs -

@@ -32,7 +32,7 @@ export const artifactIds = [
 
 export type ArtifactId = (typeof artifactIds)[number];
 
-/** Applications on the AhmadOS desktop. Bonus apps start locked. */
+/** Applications on the Amonel OS desktop. Bonus apps start locked. */
 export const appIds = [
   'about',
   'terminal',

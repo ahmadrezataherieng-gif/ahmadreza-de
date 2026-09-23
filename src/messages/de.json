@@ -111,7 +111,7 @@
         "beepLabel": "BEEP",
         "prompt": "C:\\>",
         "dirCommand": "DIR",
-        "dirVolume": "Datentraeger in Laufwerk C: ist AHMADOS",
+        "dirVolume": "Datentraeger in Laufwerk C: ist AMONEL",
         "dirRows": [
           {
             "name": "CV",
@@ -163,7 +163,7 @@
             "time": "00:01"
           },
           {
-            "name": "AHMADOS",
+            "name": "AMONEL",
             "ext": "SYS",
             "size": "640.000",
             "date": "15.09.26",
@@ -213,7 +213,7 @@
         "screenLabel": "Windows-95-Desktop, der sich per Modem mit dem Internet verbindet",
         "infoTitle": "Info.txt - Editor",
         "start": "Start",
-        "banner": "AhmadOS 95",
+        "banner": "Amonel OS 95",
         "startItems": [
           "Programme",
           "Dokumente",
@@ -320,7 +320,7 @@
     "fa": "فارسی"
   },
   "convergence": {
-    "title": "Die Konvergenz: achtzig Jahre werden zu AhmadOS",
+    "title": "Die Konvergenz: achtzig Jahre werden zu Amonel OS",
     "intro": "Kompiliere 80 Jahre Computergeschichte...",
     "components": [
       {
@@ -352,8 +352,8 @@
         "status": "OK"
       }
     ],
-    "welcome": "Willkommen bei AhmadOS v1.0",
-    "desktopLabel": "Leerer AhmadOS-Desktop"
+    "welcome": "Willkommen bei Amonel OS",
+    "desktopLabel": "Leerer Amonel-OS-Desktop"
   },
   "landing": {
     "eyebrow": "Portfolio",
@@ -626,13 +626,13 @@
     }
   },
   "os": {
-    "brand": "AhmadOS",
-    "title": "AhmadOS-Desktop",
-    "heading": "AhmadOS – der Desktop von Ahmadreza Taheri",
+    "brand": "Amonel OS",
+    "title": "Amonel-OS-Desktop",
+    "heading": "Amonel OS – der Desktop von Ahmadreza Taheri",
     "noscript": "Der Desktop braucht JavaScript. Alles Wichtige finden Sie auch auf der Startseite.",
     "home": "Zur Startseite",
     "replay": "Reise erneut ansehen",
-    "desktopLabel": "AhmadOS-Desktop",
+    "desktopLabel": "Amonel-OS-Desktop",
     "icons": "Programme auf dem Desktop",
     "launcher": {
       "open": "Programme",

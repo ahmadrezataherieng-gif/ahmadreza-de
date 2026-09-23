@@ -9,7 +9,7 @@ import { clearJourneyReplay } from '@/lib/returning';
 import { useUnlockStore } from '@/store/unlock-store';
 
 /**
- * The AhmadOS shell, mounted over the empty desktop the server painted.
+ * The Amonel OS shell, mounted over the empty desktop the server painted.
  *
  * Arriving here is finishing the journey, as Zum Desktop always was: the
  * visitor becomes a returning visitor, and a replay the tab asked for is over.
