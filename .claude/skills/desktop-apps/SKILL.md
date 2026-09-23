@@ -58,23 +58,27 @@ in Act 1 unlock extra apps.
 
 ## The apps (Act 3, Phase 7)
 
-About, Terminal, Tickets, Traceroute and (Phase 8A) the Assistant are real;
+About, Terminal, Tickets, Traceroute and (Phase 7/8) the Assistant are real;
 Contact, Timeline and CV are still placeholders. Read DECISIONS.md 50 first, and
-52 for the Assistant.
+53 for the Assistant.
 
-- **The Assistant** (`apps/assistant/`) talks to `/api/assistant` (the Worker in
-  `worker/`, see the `deployment-legal` skill). On open it sends a bare GET; a
-  Worker with a key means **live**, anything else means the **demo**: five
-  prepared answers, labelled "Demo" on the banner and on every message, and a
-  question matching none is refused, never guessed. The demo must never look like
-  a live answer - keep the badge, the label and the copy that says "not AI".
-  Its logic (`assistant.ts`: reply parsing, demo matching) is pure and tested; its
-  seven phases (idle, thinking, answered, refused, rateLimited, offline,
-  notConfigured) each have copy in `messages/apps/assistant/<locale>.json`, and
-  the root carries `data-assistant-mode` and `data-assistant-state` for the
-  checks. Under reduced motion an answer is simply there. The privacy line
-  (questions go to Google's Gemini API once live) must stay in the app and in the
-  Datenschutzerklärung together.
+- **The Assistant** (`apps/assistant/`) is a local search over `src/content/`,
+  built by `src/lib/search/` and run entirely in the visitor's browser. It talks
+  to no server and no external AI service - `worker/` answers `/api/*` with a
+  plain 404, reserved for Phase 9's anonymous counters (see the
+  `deployment-legal` skill). It normalises the question, matches it against an
+  index built from the About data, career stations, skills, projects, tickets
+  and the seven era truths in the visitor's own language, and returns the best
+  passages, each labelled with its source ("from About", "from the 1971 era",
+  a ticket's number). A question that matches nothing gets an honest "I can't
+  answer that" and the example questions again - never a guess. Its logic
+  (`assistant.ts`, `src/lib/search/`) is pure and tested; its phases (idle,
+  searching, answered, noMatch) each have copy in
+  `messages/apps/assistant/<locale>.json`, and the root carries
+  `data-assistant-state` for the checks. Under reduced motion an answer is
+  simply there. The app presents itself honestly as a search, never as an AI,
+  and the privacy line says nothing a visitor types ever leaves the device -
+  keep that true of both the app and the Datenschutzerklärung.
 - **`apps/use-app-input.ts`** holds what any app with a text field needs:
   `useKeyboardInset`, `useNativeKeydown` (the input handles its keys itself so
   the desktop's Alt+Shift+Arrow listener never sees them) and

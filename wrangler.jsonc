@@ -2,17 +2,17 @@
   // Cloudflare Workers with static assets, plus one Worker script for /api/*.
   //
   // The site is still a static export: `npm run build` produces nothing but
-  // `out`, and the application code never imports `worker/`. The script only
-  // answers /api/assistant (the Gemini proxy, Phase 8). `run_worker_first`
-  // lists that one path pattern, so every other request is served from `out`
-  // by Cloudflare's asset layer without waking the Worker - headers, redirects
-  // and the 404 page behave exactly as in a pure static deploy, and the site
-  // stays portable to any plain web server (the assistant then shows its
-  // "not available" state and the demo).
+  // `out`, and the application code never imports `worker/`. `/api/*` is a
+  // plain 404 for now, reserved for Phase 9's anonymous per-puzzle counters
+  // (DECISIONS.md, entry 53). `run_worker_first` lists that one path pattern,
+  // so every other request is served from `out` by Cloudflare's asset layer
+  // without waking the Worker - headers, redirects and the 404 page behave
+  // exactly as in a pure static deploy, and the site stays portable to any
+  // plain web server.
   //
-  // The Gemini key is a secret variable, never in this file:
-  //   npx wrangler secret put GEMINI_API_KEY      (or the dashboard)
-  // Locally it goes in `.dev.vars`, which is gitignored.
+  // Phase 8A built a Gemini proxy here; Phase 8B removed it (DECISIONS.md,
+  // entry 53). The assistant answers entirely in the visitor's browser and
+  // needs no key, no secret and no Worker call of its own.
   //
   // Pages is the older product. Cloudflare still supports it but directs all
   // new investment at Workers, and a Cloudflare account created in 2026 may not

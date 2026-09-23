@@ -122,6 +122,12 @@ against their will.
 
 ## 5. The AI assistant is Google Gemini behind a Cloudflare proxy
 
+> **Superseded by entry 53 (Phase 8B).** The assistant does not use Gemini, or
+> any external AI service: it is a local search that never leaves the
+> browser. Kept here as the record of why a proxy was built in Phase 8A and
+> what the absolute key rule protected, in case a future feature ever again
+> holds a server-side secret.
+
 **Decision:** the Phase 8 assistant uses the **Google Gemini API**. The browser
 never talks to Google directly. It calls a small server-side function on
 Cloudflare, which holds the key and forwards the request.
@@ -1426,6 +1432,11 @@ load only when their description matches the task.
 
 ## 52. The Assistant and its proxy, Phase 8A (no key yet)
 
+> **Superseded by entry 53 (Phase 8B).** The Gemini proxy this entry describes
+> was removed; the assistant now answers from a local search instead. Kept
+> here as the historical record of what Phase 8A built and why - the app
+> shell, its states and its checks are still the right design, per entry 53.
+
 Built so that connecting the real Gemini key (Phase 8B) is a setting, not code.
 
 - **A Worker script beside the static assets, not Pages Functions.** The site is
@@ -1495,3 +1506,64 @@ Built so that connecting the real Gemini key (Phase 8B) is a setting, not code.
 - **Not verified:** the real Gemini API, the request shape it expects and its
   response shape were never called (no key); the tests run against a fake. The
   Worker was bundled by wrangler but never run under `wrangler dev` or deployed.
+
+---
+
+## 53. The assistant becomes a local search; Gemini is removed, Phase 8B
+
+**Decision, made by Ahmadreza outside Claude Code:** the assistant does not use
+Gemini or any external AI service. It answers entirely from a search over the
+site's own content, running in the visitor's browser. Nothing a visitor types
+ever leaves the device.
+
+**Why:** the Gemini API's terms require Paid Services for apps that serve
+users in the EEA, Switzerland or the UK (entry 5, TODO.md Phase 8B); the free
+tier is not permitted. The paid tier needs a card on file and a
+Datenschutzerklärung disclosure of Google as a US processor. Neither cost -
+the money, or the legal surface of a second processor and a second transfer
+basis to document - is worth it for a portfolio site whose material fits in a
+few kilobytes and does not change at runtime. A search answers the same
+questions a recruiter would ask, with none of that.
+
+**What Phase 8A built and what stayed:** the Assistant app, its chat-like
+shell, its seven-phase state machine's shape, its labelled honesty about not
+being a live AI, the journey teaser, and the checks that verify all of it
+(DECISIONS.md 52) are the right design for *any* brain behind the app,
+network or local. Only the brain changed:
+
+- **Removed**, and still in the git history if ever needed again:
+  `worker/gemini.ts` (the Gemini client), `worker/prompt.ts` (the system
+  prompt), `worker/context.ts` + `worker/sources.ts` (the model's material,
+  built from `src/content/`), `worker/rate-limit.ts`, `worker/validate.ts` and
+  `worker/handler.ts` (the request path), and their tests. `worker/index.ts`
+  stays as a minimal stub: every `/api/*` path is a plain 404, reserved for
+  Phase 9's anonymous per-puzzle counters - the next thing that will actually
+  need a Worker. `wrangler.jsonc`'s `run_worker_first` still lists `/api/*`
+  unchanged, so that Phase 9 work is a Worker script, not a deploy config
+  change.
+- **Added:** `src/lib/search/` - a pure, locale-aware retrieval module,
+  described in full where it is built (see the module's own comments and
+  `desktop-apps` skill). It normalises a question (case, diacritics, and for
+  Persian the ي/ی, ك/ک and ZWNJ variants that mean the same letter) and scores
+  it against passages built from `src/content/` and the app's own message
+  files at build time - the same "content is data, never typed by hand"
+  discipline entry 52's `sources.ts` already followed, just running in the
+  browser instead of at the Worker's build time.
+- **Gone entirely:** the live/demo distinction, the "checking" state, the
+  Worker readiness probe on open, rate limiting, `notConfigured` and
+  `offline` states, and every mention of Gemini, an API key or "your question
+  is sent to Google" anywhere on the site. A local search cannot be
+  rate-limited by a stranger's traffic and cannot go offline in a way that
+  differs from the page itself failing to load.
+- **The privacy line changed meaning, not just wording:** it used to promise
+  that a live question left the device; now it correctly promises that no
+  question ever does, in every state, not just the demo. Phase 11's
+  Datenschutzerklärung needs no assistant-specific entry at all: there is no
+  processor and no transfer to disclose for a feature that runs entirely
+  client-side.
+- **What this trades away:** the assistant can only ever answer with material
+  already on the site, phrased close to how the site phrases it - it cannot
+  paraphrase, infer, or answer something the content does not say. That is
+  judged the right trade for a portfolio: every sentence a visitor reads is
+  one Ahmadreza actually wrote or reviewed, which a free-text LLM answer is
+  not.

@@ -13,7 +13,7 @@ Last updated: 2026-09-19
 - [x] **Phase 6** — Desktop shell: window manager, taskbar, mobile home screen
 - [x] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [x] **Phase 8A** — Assistant app, labelled demo and the proxy Worker, built without a key
-- [ ] **Phase 8B** — connect the real Gemini key (TODO.md, Phase 8B)
+- [x] **Phase 8B** — the assistant becomes a local search; no Gemini, no key (DECISIONS.md 53)
 - [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung

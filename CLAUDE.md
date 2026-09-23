@@ -87,12 +87,12 @@ Keep the two in sync.
 | State | zustand (+ `persist` for unlocks) |
 | Fonts | `@fontsource*` packages, **self-hosted** |
 | Hosting | **Cloudflare Workers with static assets**, GitHub-connected |
-| AI (Phase 8) | **Google Gemini**, behind a server-side Cloudflare proxy |
+| Assistant | local search over `src/content/`, runs in the browser, no external AI service |
 
 ## Folder structure — what belongs where
 
 ```
-worker/                     the Cloudflare Worker for /api/* only (the assistant proxy); never imported by src/
+worker/                     the Cloudflare Worker for /api/* only (a 404, reserved for Phase 9); never imported by src/
 scripts/                    project checks (check-pixel-font.mjs)
   test/                     plain-node tests of the pure modules and app data (`npm test`)
   verify/                   end-to-end browser checks over CDP (no dependencies)
