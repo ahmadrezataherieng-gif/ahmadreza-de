@@ -16,7 +16,8 @@ Last updated: 2026-09-23
 - [x] **Phase 8B** — the assistant becomes a local search; no Gemini, no key (DECISIONS.md 53)
 - [x] **Phase 9A** — Rebrand to Amonel: names, the `/amonel/` route with 301s, titles, logos and icons (DECISIONS.md 54)
 - [x] **Phase 9B** — the Computer-Quiz, a base app (DECISIONS.md 55)
-- [ ] **Phase 9C** and on — anonymous counters, unlockable apps, easter eggs, Time Machine theme switcher
+- [x] **Phase 9C** — anonymous public counters on `/api/*`, Worker + D1, not deployed (DECISIONS.md 56)
+- [ ] **Phase 9D** and on — unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
@@ -94,7 +95,7 @@ Last updated: 2026-09-23
   - **Assistant** (Phase 8B, DECISIONS.md 53): a local search over `src/content/`, built by `src/lib/search/` and run entirely in the visitor's browser - no Worker call, no key, no external AI service. It normalises a question (case, diacritics, Persian letter and digit variants) and matches it against an index built at build time, returning the best passages labelled with their source, or an honest "nothing found" with the example questions again. Four visible states (idle, searching, answered, noMatch), reduced motion shows the finished answer.
   - **Computer-Quiz** (Phase 9B, DECISIONS.md 55): ten questions a round from a bank of 30, every era asked at least once, each going back to its era's one truth; after each answer right or wrong in words and a mark, the right answer, the era and a short explanation; at the end the score, a friendly line, the eras worth a second look and "Neue Runde". Never presented as a test of the visitor. The best score is one number in this browser (`amonel.quiz.v1`). Keyboard-playable, verdicts and score announced live, right to left in Persian, fullscreen on phones. Not in the dock, and never in the Assistant's index.
   - Contact, Timeline and CV are still placeholders.
-- **The Worker** (`worker/`, Phase 8A, gutted in Phase 8B): answers only `/api/*` (`assets.run_worker_first`) with a plain 404, reserved for Phase 9's anonymous counters; the rest of the site is served from `out/` as before. The Gemini proxy that used to live here is gone (DECISIONS.md 53), still in the git history.
+- **The Worker** (`worker/`, Phase 9C, DECISIONS.md 56): answers only `/api/*` (`assets.run_worker_first`); the rest of the site is served from `out/` as before. It holds the **anonymous public counters** - a name and an integer per row in one D1 table (`COUNTERS_DB`, `migrations/0001_counters.sql`), nothing about the visitor. `POST /api/count/<name>` (allowlist from `src/lib/counters.ts`, built from the era and app registries; 404 unknown, 405 not POST, 403 foreign Origin) increments atomically; `GET /api/counts` returns the totals, cached for a minute; everything else is 404. Counted: an era puzzle solved by hand in Play (never a guided auto-solve or a shown solution), a finished quiz round (no score), reaching the Convergence, the mode card on the landing page, every app opened - each name once per page load, in memory, no storage key. Shown, lazily and only from 10 up (Persian digits in fa): under a puzzle's outcome in the Play dialog, under the quiz result, and a small "Diese Website in Zahlen" section at the end of About. Without the Worker (any plain server, `next dev`) nothing is sent after the first failure and no number appears. **Not deployed:** the D1 database and the rate-limiting rule are created by hand in Phase 13 (TODO.md). The Gemini proxy of Phase 8A is gone (DECISIONS.md 53), still in the git history.
 - **Checks:** `npm run check:pixel-font`; `scripts/verify/journey.mjs` drives a
   real Chrome through both modes, all puzzles, the gates and the landing page;
   `boundaries.mjs` screenshots every crossing and checks that no frame is blank
@@ -190,6 +191,19 @@ code and a few new utility classes in the one stylesheet.
 | Landing / Journey HTML | de 9.5 / 40.3 kB | unchanged |
 | Desktop HTML | de 4.9 · en 4.7 · fa 5.3 kB | de 4.9 · en 4.8 · fa 5.3 kB (the window title) |
 
+Phase 9C (`scripts/verify/sizes.mjs`, gzip -6): the counter code
+(`count()`, the allowlist, `loadCounts`) sits in the route chunk every view
+loads, because the landing page, the journey and the desktop all count.
+
+| | Before 9C | After 9C |
+|---|---|---|
+| Landing / Journey / Desktop: JS loaded | 135.3 / 224.8 / 145.9 kB | **135.9 / 225.7 / 146.6 kB** (+0.6 / +0.9 / +0.7) |
+| About on open | 4.0 kB | 4.8 kB (the stats view; its copy, ~0.4 kB, loads only when there is something to show) |
+| Computer-Quiz on open | 9.5 kB | 9.9 kB |
+| Stylesheet | 21.0 kB | 21.0 kB |
+| Landing / Journey / Desktop HTML | de 9.4 / 40.3 / 4.9 kB | de 9.5 / 40.3 / 4.9 kB |
+| Worker bundle (`wrangler deploy --dry-run`) | under 1 kB | 4.2 kB, **1.8 kB gzip** |
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
@@ -211,6 +225,9 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - Contact, Timeline and CV, and the seven bonus apps
   (Phase 9), are placeholders.
 - The quiz copy is a draft awaiting native-speaker proofreading (TODO.md).
+- The counter copy (Phase 9C) is a draft too, and the counters have only run
+  under `wrangler dev --local` and against a CDP stub: the real D1, the edge
+  cache and the rate-limiting rule exist only after Phase 13 (TODO.md).
 - The phone keyboard handling (Terminal, Assistant) was checked in emulation only.
 - Badges are recorded, readable through `selectLegendEras`, but not displayed.
 - The motion tiers have only been measured in headless Chrome; no real phone or

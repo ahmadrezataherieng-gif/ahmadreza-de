@@ -25,11 +25,19 @@ reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
   status. Do not drop `run_worker_first`: with `not_found_handling` set, an
   unmatched `/api/*` would otherwise get the 404 page and the Worker would
   never run.
-- `worker/` — a minimal Worker: `/api/*` is a plain 404, reserved for Phase 9's
-  anonymous per-puzzle counters (DECISIONS.md, entry 53). It is bundled by
-  wrangler, never by Next, and nothing under `src/` may import it (the
-  application never knows it is on Cloudflare). `npx wrangler deploy --dry-run`
-  checks the config and the bundle.
+- `worker/` — the anonymous counters (Phase 9C, DECISIONS.md 56):
+  `POST /api/count/<name>` and `GET /api/counts` over one D1 table
+  (`COUNTERS_DB`, `migrations/`), every other `/api/*` a 404. The logic is in
+  `worker/api.ts`; `worker/index.ts` exports the handler and nothing else
+  (workerd refuses an entry with other named exports). It imports the
+  allowlist from `src/lib/counters.ts`; the reverse is forbidden - nothing
+  under `src/` may import `worker/`, and the application still works on any
+  plain web server (the numbers simply stay hidden). It is bundled by
+  wrangler, never by Next. `npx wrangler deploy --dry-run` checks the config
+  and the bundle; `scripts/verify/worker-local.mjs` runs it under
+  `wrangler dev --local` against a local D1. The `database_id` in
+  `wrangler.jsonc` is a placeholder until the database is created (TODO.md,
+  Phase 13).
 - `public/_headers` — security headers. Next copies `public/` verbatim into the
   export, so these land at `out/_headers`, where Cloudflare reads them. No
   Content-Security-Policy yet; that arrives in Phase 11 once every external
@@ -53,16 +61,18 @@ neither is worth it for this site. Phase 8A built a Gemini proxy behind
 `handler.ts` - still in the git history). The assistant now answers entirely
 from a local search over `src/content/` that runs in the visitor's browser
 (`src/lib/search/`); nothing a visitor types ever leaves the device, and
-`/api/*` is a plain 404 (see `worker/` above). There is no key, no secret and
-no rate limit to configure. The site must never claim anywhere that questions
+the assistant never calls `/api/*` (which holds only the anonymous counters,
+see `worker/` above). There is no key and no secret to configure. The site must never claim anywhere that questions
 go to an AI service, because they do not.
 
 ### Visitor data — anonymous counts only
 
-The only visitor data this site will ever collect is **anonymous aggregate
-counts** - for example, how many visitors solved each puzzle (Phase 9,
-`/api/*`). Never add names, e-mail addresses, IP storage, identifiers, a
-comments section, or any form. Contact is a `mailto:` link only, nothing that
+The only visitor data this site ever collects is **anonymous aggregate
+counts** (Phase 9C, DECISIONS.md 56): a counter name from the allowlist in
+`src/lib/counters.ts` and an integer, in D1. Never add names, e-mail
+addresses, IP storage, identifiers, user agents, per-visitor timestamps, a
+score, a comments section, or any form. A new counter is a new name in the
+allowlist - never a new column. Contact is a `mailto:` link only, nothing that
 submits to this site.
 
 **No analytics scripts, and no third-party requests of any kind** - fonts,
@@ -82,15 +92,40 @@ here, in `STORAGE_KEYS` (`src/lib/constants.ts`), in the same change:
 | `amonel.replay` | sessionStorage | this tab asked to see the journey again | Phase 6 |
 | `amonel.quiz.v1` | localStorage | the Computer-Quiz's best score, one number | Phase 9B |
 
-**Cloudflare features that set cookies stay off:** Bot Fight Mode, Rate
-Limiting Rules, Waiting Room, Always Online. Turning any of these on without
-checking their cookie behaviour first would undo the "no consent banner"
-decision.
+The anonymous counters add **no** key: "once per page load" is kept in memory.
+A test pins `STORAGE_KEYS` (`scripts/test/counters.test.mjs`).
+
+**Cloudflare features that set cookies stay off:** Bot Fight Mode, Waiting
+Room, Always Online, every challenge action (`cf_clearance`). Turning any of
+these on without checking their cookie behaviour first would undo the "no
+consent banner" decision. **One exception, checked in Phase 9C:** the single
+free-plan Rate Limiting Rule on `/api/count/*` (TODO.md, Phase 13), counting
+by **IP** with the action **Block**. Cloudflare's cookie list ties Rate
+Limiting Rules' `_cfuvid` only to the "IP with NAT support" characteristic
+(Enterprise); IP counting with Block sets no cookie. Never switch that rule
+to a challenge or to "IP with NAT support".
 
 Cloudflare's Data Processing Addendum is part of its self-serve terms. The
 Datenschutzerklärung (Phase 11) must name Cloudflare as a US processor, with
 the EU-US Data Privacy Framework and Standard Contractual Clauses as the
 transfer basis.
+
+### Datenschutzerklärung (Phase 11, not built yet) - it must say
+
+- Cloudflare as a US processor, with the DPF and SCCs as transfer basis (above).
+- The browser storage list above, all of it the visitor's own feature.
+- **The anonymous counters** (Phase 9C, DECISIONS.md 56): what is counted (a
+  puzzle solved in Play mode, a finished quiz round, reaching the end of the
+  journey, the mode chosen, an app opened), that only a name and a total are
+  stored, and that totals under ten are never shown.
+- That **Cloudflare processes the visitor's IP address in transit** only to
+  deliver the site and protect it (including the rate limit on the counters),
+  on the basis of **Art. 6(1)(f) DSGVO** - the legitimate interest in a
+  working, secure site.
+- That **nothing is stored on or read from the device for counting** - no
+  cookie, no storage key - so **no consent under § 25 TDDDG** is needed.
+- That **the site operator stores no IP addresses**, no identifiers and no
+  per-visitor records.
 
 ### Impressum (Phase 11, not built yet)
 

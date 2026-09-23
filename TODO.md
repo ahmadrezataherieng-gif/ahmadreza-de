@@ -86,6 +86,19 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   the journey has a deep-link entry that respects Play-mode gates and the
   returning-visitor redirect (DECISIONS.md 55).
 
+### Phase 9C — the anonymous counters (draft, needs native-speaker proofreading)
+
+- **All counter copy is a draft**: `puzzles.common.solvedBy` in
+  `messages/{de,en,fa}.json` ("Bisher 1.234-mal selbst gelöst"),
+  `result.rounds` in `messages/apps/quiz/`, and the whole of
+  `messages/apps/stats/` (the "Diese Website in Zahlen" section in About).
+  German is the source; have a native speaker read German and Persian.
+- **Wording:** the lines count events, not people ("1.234-mal gelöst", not
+  "1.234 Personen"), because a visitor who solves again after a reload counts
+  again. Keep that honesty if you reword them (DECISIONS.md 56).
+- **Placement:** the stats sit at the very end of About. If you would rather
+  not have them there, a `stats` command in the Terminal is the alternative.
+
 ## After launch
 
 - **The first era added after launch will be 1977: the Apple II.** It needs its
@@ -105,9 +118,9 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   (the brand kit's own rule; Phase 11).
 - ~~A computer-knowledge quiz app~~ - done in Phase 9B: the Computer-Quiz
   (DECISIONS.md 55). Its copy is still a draft, see below.
-- **Anonymous counters on `/api/*`** - e.g. how many visitors solved each
-  puzzle. The only visitor data this site ever collects; see the
-  `deployment-legal` skill and DECISIONS.md 53.
+- ~~Anonymous counters on `/api/*`~~ - done in Phase 9C (DECISIONS.md 56). The
+  D1 database and the rate-limiting rule are created by hand at deploy time
+  (Phase 13, below).
 - Unlockable apps, easter eggs, the Time Machine theme switcher - already this
   phase's scope in PROJECT_STATE.md.
 - **The free GSAP plugins** (MorphSVG, DrawSVG) are candidates for this phase
@@ -146,6 +159,12 @@ What is left:
 - **Browser storage to disclose:** the list in the `deployment-legal` skill
   ("Browser storage"). Since Phase 9B it includes the quiz's best score,
   `amonel.quiz.v1`.
+
+- **The anonymous counters must be in the Datenschutzerklärung** (Phase 9C):
+  what is counted, that no IP, identifier or device storage is involved (so
+  no § 25 TDDDG consent), and that Cloudflare processes the IP in transit
+  under Art. 6(1)(f) DSGVO. The full list of points is in the
+  `deployment-legal` skill, "Datenschutzerklärung".
 
 - **The assistant needs no Datenschutzerklärung entry of its own.** It is a
   local search that never leaves the visitor's browser - no processor, no
@@ -193,6 +212,45 @@ What is left:
 - Confirm the Workers Builds GitHub connection (repo is public) and that the
   build command is `npm run build` with no output-directory setting, since
   `wrangler.jsonc` already points at `out`.
+
+### The anonymous counters (Phase 9C, DECISIONS.md 56) - by hand, before the first deploy
+
+1. **Create the D1 database** (once, logged in with `npx wrangler login`):
+   `npx wrangler d1 create amonel-counters` - choose the location hint
+   **Western Europe (weur)** if asked. Copy the `database_id` it prints into
+   `wrangler.jsonc` (`d1_databases[0].database_id`, now the placeholder
+   `00000000-0000-0000-0000-000000000000`) and commit that. A deploy with the
+   placeholder fails.
+2. **Apply the migration to the real database:**
+   `npx wrangler d1 migrations apply amonel-counters --remote`. Check with
+   `npx wrangler d1 execute amonel-counters --remote --command "SELECT * FROM counters"`
+   (empty at first).
+3. **Create the rate-limiting rule** in the Cloudflare dashboard: the
+   ahmadreza.de zone → Security → WAF → **Rate limiting rules** → Create rule.
+   The free plan allows exactly one rule, with these values:
+   - Rule name: `api-count`
+   - If incoming requests match: Field **URI Path**, Operator **starts with**,
+     Value `/api/count/` (if the free plan's editor offers no "starts with",
+     use Operator **contains** with the same value)
+   - With the same characteristics: **IP** (the only choice on free; **never**
+     "IP with NAT support", which sets the `_cfuvid` cookie)
+   - When rate exceeds: Requests **20**, Period **10 seconds**
+   - Then take action: **Block** (never a challenge - that sets `cf_clearance`)
+   - Duration: **10 seconds** (the only free choice)
+   - Place at: first
+
+   Why 20 per 10 s: one page load sends at most about a dozen counts (seven
+   eras, the quiz, the journey, a mode, a burst of app openings), each name
+   only once, so a real visitor never comes near it, while a script is held to
+   two a second per IP. A blocked count fails silently and the page sends no
+   more that load. The rule counts inside Cloudflare; the site never sees or
+   keeps an IP.
+4. After the first deploy: `curl -i -X POST https://ahmadreza.de/api/count/quiz.completed`
+   → 204, `curl -i https://ahmadreza.de/api/counts` → JSON with
+   `cache-control: public, max-age=60`, and
+   `curl -i -X POST -H "Origin: https://evil.example" https://ahmadreza.de/api/count/quiz.completed`
+   → 403. Then reset that test count:
+   `npx wrangler d1 execute amonel-counters --remote --command "DELETE FROM counters"`.
 
 ## Answered
 

@@ -98,7 +98,8 @@ The canonical machine-readable version of this table is `src/content/eras.ts`; k
 ## Folder structure — what belongs where
 
 ```
-worker/                     the Cloudflare Worker for /api/* only (a 404, reserved for Phase 9); never imported by src/
+worker/                     the Cloudflare Worker for /api/* only: the anonymous counters (Phase 9C); never imported by src/
+migrations/                 the D1 schema for those counters
 scripts/                    project checks (check-pixel-font.mjs)
   test/                     plain-node tests of the pure modules and app data (`npm test`)
   verify/                   end-to-end browser checks over CDP (no dependencies)

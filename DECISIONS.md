@@ -1666,3 +1666,133 @@ round, never about the visitor.
   focus at their heading. Option labels sit in `<bdi>`, and the one ordering
   question uses Persian digits and commas in fa, because "2, 5, 10" would
   display reversed in a right-to-left line and change the answer.
+
+---
+
+## 56. Anonymous public counters on /api/*, Phase 9C
+
+**Decision, made by Ahmadreza:** the site counts a handful of things visitors
+do and shows the totals back to them - and stores nothing about the visitors
+themselves. It is the only visitor data the site ever collects (entry 53).
+
+**What is counted** - a name and an integer, nothing else. The allowlist is
+`src/lib/counters.ts`, built from the era and app registries in
+`src/content/eras.ts`, and imported by the Worker, the client and the tests
+alike, so no id is typed twice:
+
+- `era.<eraId>.solved` - a puzzle solved **by the visitor's own hand in Play
+  mode**. Guided playback never counts: the guided demonstration gets `noop`
+  for `onSolved`, and the engine reports a solve only in the `play`
+  presentation, so neither the auto-solve nor "Lösung zeigen" can reach the
+  one `count()` call in `PuzzleShell`'s `onSolved`. An auto-solve is
+  something the page did, not the visitor; counting it would make every
+  number meaningless. "Selbst probieren" switches to Play, so a guided
+  visitor who takes over a puzzle does count.
+- `quiz.completed` - a round of ten finished. Never the score or the answers:
+  `count()` takes a name and nothing else, and the request has no body.
+- `journey.completed` - the Convergence reached, where the journey hands over
+  to the desktop. Zum Desktop is not counted: it skips the Convergence.
+- `journey.mode.guided`, `journey.mode.interactive` - the mode card clicked
+  on the landing page (not the in-journey switch).
+- `app.<appId>.opened` - an app window opened, base and bonus apps, on the
+  window manager and the phone home screen alike (counted where the window
+  or the fullscreen app mounts, so a locked app that only shows its notice is
+  not counted).
+
+**What is never stored or sent:** IP addresses, user agents, identifiers,
+per-visitor timestamps, cookies, scores, the page, the referrer (requests go
+with `credentials: 'omit'` and `referrerPolicy: 'no-referrer'`). No new
+`localStorage` or `sessionStorage` key: "at most once per page load" is an
+in-memory `Set`, so reloading the page and solving again counts again. The
+numbers are therefore **counts of events, not of people**, and the copy says
+so: "Bisher 1.234-mal selbst gelöst", not "1.234 Personen". The Worker reads
+no request body and never calls `console` (observability is on, so a log
+line would be kept).
+
+**The Worker** (`worker/api.ts`; `worker/index.ts` is the entry and exports
+only the handler, because workerd treats every named export of the entry as
+a handler and refuses to start otherwise):
+
+- `POST /api/count/<name>` → 204. Unknown name 404, any other method 405
+  (`Allow: POST`), an `Origin` header that is set and is not
+  `https://ahmadreza.de`, `https://www.ahmadreza.de` or a `localhost` /
+  `127.0.0.1` dev origin → 403. No `Origin` (curl, a server) is allowed, as
+  specified - a browser always sends one with a POST; the allowlist and the
+  rate limit still apply. A missing or failing database is a quiet 503.
+- `GET /api/counts` → `{ name: n }` for allowlisted names only, with
+  `Cache-Control: public, max-age=60`, and put into `caches.default` so D1 is
+  read about once a minute per edge location. One cache key for everyone.
+- Everything else under `/api/` → 404. Every response carries `nosniff`,
+  `no-referrer`, `default-src 'none'; frame-ancestors 'none'` and CORP
+  same-origin.
+
+**Why D1:** the increment must be atomic, and D1 does it in one statement -
+`INSERT INTO counters (name, n) VALUES (?1, 1) ON CONFLICT(name) DO UPDATE
+SET n = n + 1` - where Workers KV is eventually consistent and loses
+concurrent increments (read-modify-write), and a Durable Object is more
+machinery than two dozen integers need. D1 is on the free plan, and the table
+(`migrations/0001_counters.sql`: `name TEXT PRIMARY KEY, n INTEGER NOT NULL
+DEFAULT 0`) cannot hold anything but a name and a number. Checked under
+`wrangler dev --local`: 50 parallel POSTs raised a counter by exactly 50.
+
+**The client** (`src/lib/count.ts`): `count(name)` is a fire-and-forget
+`fetch` POST with `keepalive` (so a count sent as the page navigates away
+still arrives), each name at most once per page load, every error caught.
+After the API answers anything but success once - no Worker (a plain web
+server, `next dev`), a 404, the rate limit - the page sends nothing more. In
+node and during the static build there is no `window`, so nothing happens.
+`loadCounts()` fetches `/api/counts` at most once per page load, and only
+when a place that shows a number scrolls into view (`usePublicCounts`, an
+IntersectionObserver); anything that is not the expected JSON is null.
+
+**The threshold:** `MIN_PUBLIC_COUNT = 10`. Below it a number is not shown;
+without the API, on an error or on a malformed answer, nothing is shown.
+Never a 0, never an error. Ten is the smallest count that reads as a crowd
+and does not invite a guess at who. Applied on the client only, as
+specified; the server returns the raw counts (they say nothing about anyone
+either way).
+
+**Where the numbers are shown**, each placed so that nothing moves when it
+arrives:
+
+- under the buttons of a puzzle's outcome in the Play dialog ("Bisher
+  1.234-mal selbst gelöst"), after a solve or a shown solution; not in the
+  journey's own flow, where a line appearing would shift the pinned scenes;
+- under "Neue Runde" on the quiz's result ("Bisher wurden hier 1.234 Runden
+  zu Ende gespielt");
+- a small "Diese Website in Zahlen" section at the very end of **About**:
+  journeys followed to the desktop, both modes, and the five most-opened
+  apps, with a line saying the counts are anonymous and numbers under ten
+  are hidden. About was the least intrusive fitting place: it is the one app
+  every visitor opens, the section sits below everything about Ahmadreza,
+  and it is fetched only once its end is scrolled into view. Its copy is its
+  own file (`messages/apps/stats/`), loaded only when there is something to
+  show, and it is outside the Assistant's index. A "stats" command in the
+  Terminal was the alternative, and would still be a nice extra.
+
+Numbers go through ICU `{count, number}`, so Persian gets Persian digits
+(۱٬۲۳۴). All new copy is a draft for native proofreading (TODO.md).
+
+**Abuse:** the allowlist, the method and Origin checks, and a Cloudflare
+rate-limiting rule on `/api/count/*` that Ahmadreza creates in the dashboard
+at deploy time (TODO.md, Phase 13, with the exact values). The rule counts
+per IP inside Cloudflare; this code never sees or keeps one. On the free
+plan it is one rule, IP only, 10 s period and 10 s block, action **Block** -
+which sets no cookie. Challenge actions would set `cf_clearance`, and the
+"IP with NAT support" characteristic sets `_cfuvid` (Enterprise only
+anyway), so both stay off; the `deployment-legal` skill says so. The counts
+are approximate and not tamper-proof by design: someone determined can
+still inflate them slowly, and a portfolio's counters do not justify more.
+
+**Legal:** nothing is stored on or read from the visitor's device for
+counting, so § 25 TDDDG needs no consent; no personal data is stored, and
+the IP that Cloudflare necessarily processes in transit (delivery,
+security, the rate limit) rests on Art. 6(1)(f) DSGVO. The Phase 11
+Datenschutzerklärung must say all of this (the `deployment-legal` skill).
+`STORAGE_KEYS` is unchanged, and a test pins it.
+
+**Not verified:** anything that only exists on real Cloudflare - the real D1
+binding, `caches.default` on a custom domain (it is a no-op on workers.dev),
+the rate-limiting rule, and `run_worker_first` in production. Locally:
+`wrangler dev --local` with a local D1, and the browser checks against a CDP
+stub of `/api`.

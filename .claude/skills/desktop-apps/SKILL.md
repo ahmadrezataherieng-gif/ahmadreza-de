@@ -69,9 +69,9 @@ Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
 
 - **The Assistant** (`apps/assistant/`) is a local search over `src/content/`,
   built by `src/lib/search/` and run entirely in the visitor's browser. It talks
-  to no server and no external AI service - `worker/` answers `/api/*` with a
-  plain 404, reserved for Phase 9's anonymous counters (see the
-  `deployment-legal` skill). It normalises the question, matches it against an
+  to no server and no external AI service - `worker/` holds only the anonymous
+  counters (Phase 9C, see the `deployment-legal` skill), which the Assistant
+  never calls. It normalises the question, matches it against an
   index built from the About data, career stations, skills, projects, tickets
   and the seven era truths in the visitor's own language, and returns the best
   passages, each labelled with its source ("from About", "from the 1971 era",
