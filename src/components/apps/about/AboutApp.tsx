@@ -1,9 +1,10 @@
 'use client';
 
-import { useId, type ReactNode } from 'react';
+import { useId, useRef, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
+import { VisitorStats } from '@/components/apps/about/VisitorStats';
 import type { AppProps } from '@/components/apps/types';
 import { careerStations, languages, skillAreas, type CareerStation } from '@/content/about';
 import { EMAIL, RESUME } from '@/content/profile';
@@ -28,6 +29,7 @@ export function AboutApp(props: AppProps) {
 function About({ appId }: AppProps) {
   const t = useTranslations('about');
   const headingId = useId();
+  const lastRef = useRef<HTMLUListElement>(null);
 
   return (
     <article aria-labelledby={headingId} data-app-content={appId} className="@container min-h-full">
@@ -81,7 +83,7 @@ function About({ appId }: AppProps) {
         </Section>
 
         <Section title={t('languages.title')}>
-          <ul className="flex flex-wrap gap-2">
+          <ul ref={lastRef} className="flex flex-wrap gap-2">
             {languages.map((language) => (
               <li
                 key={language.id}
@@ -93,6 +95,9 @@ function About({ appId }: AppProps) {
             ))}
           </ul>
         </Section>
+
+        {/* Last and quiet: nothing about Ahmadreza moves for it. */}
+        <VisitorStats observe={lastRef} />
       </div>
     </article>
   );

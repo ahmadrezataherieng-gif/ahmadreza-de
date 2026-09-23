@@ -26,7 +26,8 @@
     },
     "newBest": "New best score.",
     "revisit": "These eras are worth a second look:",
-    "again": "New round"
+    "again": "New round",
+    "rounds": "{count, number} rounds completed here so far."
   },
   "eras": {
     "eniac": "1946 · ENIAC and punch cards",

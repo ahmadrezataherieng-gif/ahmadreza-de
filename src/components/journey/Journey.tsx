@@ -30,6 +30,8 @@ import { PuzzleGate } from '@/components/puzzles/PuzzleGate';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
+import { count } from '@/lib/count';
+import { JOURNEY_COMPLETED } from '@/lib/counters';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -530,6 +532,7 @@ export function Journey() {
         if (!journeyCompleted && entry.eraId === null && (progress >= 0.98 || atPageEnd)) {
           journeyCompleted = true;
           completeJourney();
+          count(JOURNEY_COMPLETED);
           container.dataset.handover = '';
           window.setTimeout(() => leaveForDesktop(desktopHref, { replace: true }), HAND_OVER_MS);
         }

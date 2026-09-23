@@ -9,6 +9,9 @@ import { pickRound, resultBand, ROUND_SIZE, scoreRound, type RoundQuestion, type
 import { quizQuestions, type QuizOptionId } from '@/content/quiz';
 import { selectQuizBest, useQuizStore } from '@/store/quiz-store';
 import { cn } from '@/lib/cn';
+import { count } from '@/lib/count';
+import { publicCount, QUIZ_COMPLETED } from '@/lib/counters';
+import { usePublicCounts } from '@/lib/use-public-counts';
 
 type Phase =
   | { kind: 'intro' }
@@ -84,6 +87,8 @@ function Quiz({ appId }: AppProps) {
     const score = scoreRound(phase.round, phase.answers);
     const newBest = best !== null && score.score > best;
     recordRound(score.score);
+    // That a round was finished - never the score, never the answers.
+    count(QUIZ_COMPLETED);
     setPhase({ kind: 'result', round: phase.round, score, newBest });
     setAnnouncement(`${t('result.score', { score: score.score, total: score.total })}. ${t(`result.bands.${resultBand(score.score, score.total)}`)}`);
   };
@@ -247,9 +252,11 @@ function Result({
 }) {
   const t = useTranslations('quiz');
   const { score, total, missedEras } = phase.score;
+  const sectionRef = useRef<HTMLElement>(null);
+  const rounds = publicCount(usePublicCounts(sectionRef), QUIZ_COMPLETED);
 
   return (
-    <section data-quiz-result={score} className="flex flex-col gap-4">
+    <section ref={sectionRef} data-quiz-result={score} className="flex flex-col gap-4">
       <h2 ref={headingRef} tabIndex={-1} className="font-display text-2xl leading-tight font-bold text-ink outline-none">
         {t('result.heading')}
       </h2>
@@ -278,6 +285,12 @@ function Result({
           {t('result.again')}
         </button>
       </div>
+      {/* Under the button, so nothing moves when the number arrives. */}
+      {rounds !== null ? (
+        <p data-public-count={QUIZ_COMPLETED} className="font-mono text-xs text-muted">
+          {t('result.rounds', { count: rounds })}
+        </p>
+      ) : null}
     </section>
   );
 }

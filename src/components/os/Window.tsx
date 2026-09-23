@@ -19,6 +19,8 @@ import { closeWindow, minimiseWindow } from '@/components/os/window-actions';
 import { dirForLocale, type Locale } from '@/lib/i18n-config';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { cn } from '@/lib/cn';
+import { count } from '@/lib/count';
+import { appOpened } from '@/lib/counters';
 import { MIN_WINDOW, stackRank, useWindowStore, type Rect } from '@/store/window-store';
 
 /** Keyboard steps for moving and resizing from the title bar. */
@@ -109,6 +111,9 @@ export function Window({ id }: { id: AppId }) {
     const timer = window.setTimeout(() => remove(id), reduced ? 0 : 320);
     return () => window.clearTimeout(timer);
   }, [closing, reduced, remove, id]);
+
+  // A window mounts when its app opens; `count` sends each name once per page load.
+  useEffect(() => count(appOpened(id)), [id]);
 
   if (!state) return null;
   const { rect, mode } = state;

@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 
 import { useUnlockStore, type JourneyMode } from '@/store/unlock-store';
 import { cn } from '@/lib/cn';
+import { count } from '@/lib/count';
+import { modeChosen } from '@/lib/counters';
 import { allowJourneyReplay } from '@/lib/returning';
 
 /**
@@ -43,6 +45,7 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
             href={journeyHref}
             onClick={() => {
               setMode(option.mode);
+              count(modeChosen(option.mode));
               // Choosing a mode is choosing the journey: a returning visitor
               // is not redirected to the desktop for it.
               allowJourneyReplay();

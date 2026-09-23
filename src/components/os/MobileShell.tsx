@@ -14,6 +14,8 @@ import { replayJourney } from '@/components/os/replay';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
+import { count } from '@/lib/count';
+import { appOpened } from '@/lib/counters';
 import type { Locale } from '@/lib/i18n-config';
 import { useShellStore } from '@/store/shell-store';
 
@@ -122,6 +124,8 @@ function MobileApp({ id }: { id: AppId }) {
   const titleId = useId();
   const bodyRef = useRef<HTMLDivElement>(null);
   const app = getApp(id);
+
+  useEffect(() => count(appOpened(id)), [id]);
 
   useEffect(() => {
     bodyRef.current?.focus({ preventScroll: true });

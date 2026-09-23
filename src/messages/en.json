@@ -428,7 +428,8 @@
       "revealed": "Solution shown",
       "revealing": "Playing the solution …",
       "insiderLabel": "Insider",
-      "gateNote": "The journey continues once you solve the puzzle or choose to see the solution."
+      "gateNote": "The journey continues once you solve the puzzle or choose to see the solution.",
+      "solvedBy": "Solved {count, number} times so far."
     },
     "eniac": {
       "title": "The bug",

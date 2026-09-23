@@ -429,7 +429,8 @@
       "revealed": "Lösung gezeigt",
       "revealing": "Die Lösung wird vorgeführt …",
       "insiderLabel": "Insider",
-      "gateNote": "Weiter geht es, sobald Sie das Rätsel lösen oder sich die Lösung zeigen lassen."
+      "gateNote": "Weiter geht es, sobald Sie das Rätsel lösen oder sich die Lösung zeigen lassen.",
+      "solvedBy": "Bisher {count, number}-mal selbst gelöst."
     },
     "eniac": {
       "title": "Der Bug",

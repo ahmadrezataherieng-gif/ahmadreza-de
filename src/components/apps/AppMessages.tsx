@@ -6,7 +6,7 @@ import { NextIntlClientProvider, useLocale, useMessages, type AbstractIntlMessag
 import type { Locale } from '@/lib/i18n-config';
 
 /** Apps whose copy lives in `messages/apps/<id>/<locale>.json`. */
-export type AppCopyId = 'about' | 'terminal' | 'tickets' | 'traceroute' | 'assistant' | 'assistant-journey' | 'quiz';
+export type AppCopyId = 'about' | 'terminal' | 'tickets' | 'traceroute' | 'assistant' | 'assistant-journey' | 'quiz' | 'stats';
 
 /**
  * An app's copy arrives with the app, never with the desktop.

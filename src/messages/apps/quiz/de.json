@@ -26,7 +26,8 @@
     },
     "newBest": "Neuer Bestwert.",
     "revisit": "Diese Epochen lohnen einen zweiten Blick:",
-    "again": "Neue Runde"
+    "again": "Neue Runde",
+    "rounds": "Bisher wurden hier {count, number} Runden zu Ende gespielt."
   },
   "eras": {
     "eniac": "1946 · ENIAC und Lochkarten",

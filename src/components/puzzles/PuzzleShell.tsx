@@ -1,11 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { getEra, type EraId } from '@/content/eras';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
+import { count } from '@/lib/count';
+import { eraSolved, publicCount } from '@/lib/counters';
+import { usePublicCounts } from '@/lib/use-public-counts';
 import { keepScrollAnchor, scrollToEra } from '@/lib/lenis-controller';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { DEFAULT_MODE, useUnlockStore } from '@/store/unlock-store';
@@ -69,6 +72,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
   const [attempt, setAttempt] = useState(0);
   const pendingScroll = useRef<string | null>(null);
   const continueRef = useRef<HTMLButtonElement>(null);
+  const outcomeRef = useRef<HTMLDivElement>(null);
 
   const open = useCallback((reveal: boolean) => {
     setHint(false);
@@ -95,9 +99,13 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
     scrollToEra(nextSectionId);
   };
 
+  // Only a solve by the visitor's own hand reaches this: guided playback
+  // passes `noop`, and the engine reports a solve in the play presentation
+  // only, so a shown solution is never counted either (DECISIONS.md 56).
   const onSolved = useCallback(() => {
     setOutcome('solved');
     solvePuzzle(eraId);
+    count(eraSolved(eraId));
   }, [eraId, solvePuzzle]);
 
   const onTrick = useCallback(() => earnLegend(eraId), [eraId, earnLegend]);
@@ -306,7 +314,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
           </div>
 
           {outcome ? (
-            <div role="status" className="flex flex-col gap-3 rounded-control border border-success p-3">
+            <div ref={outcomeRef} role="status" className="flex flex-col gap-3 rounded-control border border-success p-3">
               <p className="font-body text-sm leading-relaxed text-ink">
                 <span className="me-1.5 font-mono text-[11px] tracking-wide text-success uppercase">
                   {outcome === 'solved' ? tc('solved') : tc('revealed')}
@@ -334,6 +342,7 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
                   {tc('close')}
                 </Button>
               </div>
+              <SolvedCount eraId={eraId} observe={outcomeRef} />
             </div>
           ) : legend && hasTrick ? (
             insiderNote
@@ -345,3 +354,19 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
 }
 
 function noop() {}
+
+/**
+ * "X people solved this", under the outcome's buttons so nothing moves when
+ * it arrives. The counts are fetched once the outcome is on screen; below
+ * the threshold, or without the API, the line is simply not there.
+ */
+function SolvedCount({ eraId, observe }: { eraId: EraId; observe: RefObject<HTMLElement | null> }) {
+  const tc = useTranslations('puzzles.common');
+  const solvedBy = publicCount(usePublicCounts(observe), eraSolved(eraId));
+  if (solvedBy === null) return null;
+  return (
+    <p data-public-count={eraSolved(eraId)} className="font-mono text-[11px] text-muted">
+      {tc('solvedBy', { count: solvedBy })}
+    </p>
+  );
+}
