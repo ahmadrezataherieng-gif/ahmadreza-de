@@ -32,6 +32,7 @@ import { cn } from '@/lib/cn';
 /** Machine text: the prompt is the same in every language. */
 const PROMPT_USER = `${USER}@${HOST}`;
 /** Offered under the welcome line, so a phone visitor need not type to start. */
+// CONTENT-TODO CR-509
 const STARTERS = ['help', 'about', 'skills', 'projects'] as const;
 
 /**

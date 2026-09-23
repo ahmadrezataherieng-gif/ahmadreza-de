@@ -7,6 +7,7 @@ import { target, usePuzzleEngine, type PuzzleDefinition, type PuzzleProps } from
 import { PuzzleSurface } from '@/components/puzzles/PuzzleSurface';
 
 type RuleAction = 'allow' | 'deny';
+// CONTENT-TODO CR-346
 const PORT_CHOICES = ['22', '80', '443', '8080'] as const;
 type Port = (typeof PORT_CHOICES)[number] | 'any';
 

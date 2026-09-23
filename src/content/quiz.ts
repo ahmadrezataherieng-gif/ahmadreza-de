@@ -30,6 +30,7 @@ export interface QuizQuestion {
 
 const FOUR = ['a', 'b', 'c', 'd'] as const;
 
+// CONTENT-TODO CR-907
 export const quizQuestions: readonly QuizQuestion[] = [
   // 1946 - text is numbers
   { id: 'byte-bits', era: 'eniac', options: FOUR, correct: 'b' },

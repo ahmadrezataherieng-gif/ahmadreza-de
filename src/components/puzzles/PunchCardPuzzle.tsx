@@ -16,6 +16,7 @@ import {
 import { PuzzleSurface, revealInScroller } from '@/components/puzzles/PuzzleSurface';
 
 /** A name is a name in every language; the card spells it in Latin capitals. */
+// CONTENT-TODO CR-112
 const WORD = 'AHMADREZA';
 /** Column index of the misprint: the D, punched as 12-5 (E) instead of 12-4. */
 const FAULT_COLUMN = 4;

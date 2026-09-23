@@ -11,6 +11,7 @@ export interface Project {
   stack: readonly string[];
 }
 
+// CONTENT-TODO CR-510
 export const projects: readonly Project[] = [
   {
     id: 'amonel',

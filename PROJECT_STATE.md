@@ -2,6 +2,8 @@
 
 Last updated: 2026-09-23
 
+Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
+
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
 - [x] **Phase 2** — Journey scaffold and unlock store

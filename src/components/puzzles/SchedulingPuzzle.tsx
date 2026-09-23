@@ -7,6 +7,7 @@ import { cn } from '@/lib/cn';
 import { target, usePuzzleEngine, type PuzzleDefinition, type PuzzleProps } from '@/components/puzzles/engine';
 import { PuzzleSurface } from '@/components/puzzles/PuzzleSurface';
 
+// CONTENT-TODO CR-139
 const JOBS = { payroll: 30, inventory: 5, invoices: 15, report: 2 } as const;
 type JobId = keyof typeof JOBS;
 
@@ -80,6 +81,7 @@ const definition: PuzzleDefinition<QueueState, QueueAction> = {
 const LONGEST = Math.max(...Object.values(JOBS));
 
 /** FORTRAN as the 704 ran it: machine text, the same in every language. */
+// CONTENT-TODO CR-140
 const LISTING = ['      IF (SENSE SWITCH 3) 10, 20', '   10 PRINT 100, WAIT'].join(String.fromCharCode(10));
 
 /**

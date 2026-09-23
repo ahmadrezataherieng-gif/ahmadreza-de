@@ -75,6 +75,7 @@ const definition: PuzzleDefinition<SubnetState, SubnetAction> = {
   usedTrick: (state) => state.usedWinipcfg,
   script: [
     { kind: 'act', target: 'start-run', action: { type: 'openRun' } },
+    // CONTENT-TODO CR-298
     { kind: 'type', target: 'run-input', text: 'winipcfg', action: { type: 'submitRun', text: 'winipcfg' } },
     { kind: 'point', target: 'field-gateway' },
     { kind: 'type', target: 'field-ip', text: '192.168.1.50', action: { type: 'set', field: 'ip', value: '192.168.1.50' } },

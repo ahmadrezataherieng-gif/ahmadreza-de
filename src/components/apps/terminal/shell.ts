@@ -28,11 +28,13 @@ const dir = (children: Record<string, Node>): Node => ({ kind: 'dir', children }
 const text = (...lines: string[]): Node => ({ kind: 'file', content: { kind: 'text', lines } });
 const section = (name: PortfolioSection): Node => ({ kind: 'file', content: { kind: 'section', section: name } });
 
+// CONTENT-TODO CR-506
 export const USER = 'guest';
 export const HOST = 'amonel';
 /** The guest's home is Ahmadreza's directory: that is where the visitor came to look. */
 export const HOME = '/home/ahmadreza';
 
+// CONTENT-TODO CR-507
 const ROOT: Node = dir({
   etc: dir({
     hostname: text(HOST),
@@ -71,6 +73,7 @@ export type ShellLine =
  * lines to print; machine text only, or message keys (`{ kind: 'message' }`).
  */
 export type HiddenCommand = (args: readonly string[], state: ShellState) => ShellLine[];
+// CONTENT-TODO CR-508
 export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map();
 
 export interface ShellState {

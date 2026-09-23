@@ -15,6 +15,7 @@ const MEMORY_STEPS = Array.from({ length: 11 }, (_, index) => index * 64);
 /** The visual beep, matching `.ao-beep`. */
 const BEEP_END = 2.3;
 
+// CONTENT-TODO CR-213
 /**
  * The era year as 1981 would have drawn it: ASCII block digits. Decorative, and
  * a year - which the conventions exempt from localization - so it lives here

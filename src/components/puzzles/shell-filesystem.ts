@@ -13,6 +13,7 @@ type Node = { kind: 'dir'; children: Record<string, Node> } | { kind: 'file'; co
 const dir = (children: Record<string, Node>): Node => ({ kind: 'dir', children });
 const file = (content: FileKey): Node => ({ kind: 'file', content });
 
+// CONTENT-TODO CR-169
 const ROOT: Node = dir({
   bin: dir({}),
   etc: dir({ motd: file('motd') }),

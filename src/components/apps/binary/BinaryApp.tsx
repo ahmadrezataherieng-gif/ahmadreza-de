@@ -29,6 +29,7 @@ const BYTE_FORMATS: readonly ByteFormat[] = ['binary', 'hex', 'decimal'];
 /** Rows of the UTF-8 table: enough to compare scripts, few enough to read. */
 const TABLE_ROWS = 24;
 /** What the fields hold on first open: a Latin word, a Persian word, an emoji. */
+// CONTENT-TODO CR-965
 const SAMPLE_TEXT = 'Hi سلام 👋';
 const SAMPLE_MORSE_TEXT = 'SOS';
 

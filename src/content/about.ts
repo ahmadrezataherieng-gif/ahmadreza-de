@@ -24,6 +24,7 @@ export interface CareerStation {
   placeholder: boolean;
 }
 
+// CONTENT-TODO CR-470
 export const careerStations: readonly CareerStation[] = [
   // The one station already on the site: the apprenticeship. Its start date is owed.
   { id: 'apprenticeship', start: null, end: null, current: true, placeholder: false },
@@ -31,6 +32,7 @@ export const careerStations: readonly CareerStation[] = [
   { id: 'earlier', start: null, end: null, current: false, placeholder: true },
 ];
 
+// CONTENT-TODO CR-471
 /**
  * Skills grouped by area. No levels and no percentages: a bar at "80 %" is a
  * number nobody can check. The areas follow the site's two stated focuses,
@@ -44,6 +46,7 @@ export const skillAreas = [
 
 export type SkillAreaId = (typeof skillAreas)[number]['id'];
 
+// CONTENT-TODO CR-472
 /**
  * The three languages on the landing page. Their levels are owed (TODO.md);
  * until then none is shown rather than one guessed.

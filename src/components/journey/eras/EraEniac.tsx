@@ -8,6 +8,7 @@ import { asStatList } from '@/lib/message-shapes';
 import { CARD_COLUMNS, CARD_ROWS, encodeCard, rowIndex } from '@/lib/punch-card';
 
 /** What the holes in the card actually spell. Encoded, not drawn. */
+// CONTENT-TODO CR-113
 const CARD_TEXT = 'AHMADREZA TAHERI';
 
 /** Vertical distance between card rows, in columns. */

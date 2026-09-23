@@ -40,6 +40,7 @@ export interface Ticket {
 
 export const tickets: readonly Ticket[] = [
   {
+    // CONTENT-TODO CR-597
     id: 'no-network',
     number: 'HD-2041',
     category: 'network',
@@ -73,6 +74,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-598
     id: 'intranet-dns',
     number: 'HD-2044',
     category: 'network',
@@ -99,6 +101,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-599
     id: 'printer-postscript',
     number: 'HD-2047',
     category: 'printer',
@@ -114,6 +117,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-600
     id: 'print-queue',
     number: 'HD-2049',
     category: 'printer',
@@ -150,6 +154,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-601
     id: 'account-lockout',
     number: 'HD-2052',
     category: 'account',
@@ -182,6 +187,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-602
     id: 'slow-pc',
     number: 'HD-2055',
     category: 'client',
@@ -210,6 +216,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-603
     id: 'dock-display',
     number: 'HD-2058',
     category: 'hardware',
@@ -218,6 +225,7 @@ export const tickets: readonly Ticket[] = [
     steps: [null, null, null],
   },
   {
+    // CONTENT-TODO CR-604
     id: 'meeting-wifi',
     number: 'HD-2061',
     category: 'network',
@@ -249,6 +257,7 @@ export const tickets: readonly Ticket[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-605
     id: 'share-access',
     number: 'HD-2063',
     category: 'account',

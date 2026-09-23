@@ -12,8 +12,10 @@ const TOTAL = 640;
 const NEEDED = 384;
 
 /** The word processor's command. Machine text, the same in every language. */
+// CONTENT-TODO CR-209
 const PROGRAM = 'WP';
 
+// CONTENT-TODO CR-210
 const DRIVERS = [
   { id: 'dos', kb: 64, fixed: true },
   { id: 'mouse', kb: 24, fixed: false },
@@ -34,6 +36,7 @@ type ScreenLine =
   | { kind: 'listing' };
 
 /** What DIR shows on this disk. Machine text. */
+// CONTENT-TODO CR-211
 const LISTING = ['AUTOEXEC BAT', 'CONFIG   SYS', 'COMMAND  COM', 'WP       EXE'];
 
 interface MemoryState {

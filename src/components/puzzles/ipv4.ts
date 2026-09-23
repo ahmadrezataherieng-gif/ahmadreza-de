@@ -8,6 +8,7 @@
  */
 
 /** The network the PC has to join. Fixed facts of the puzzle's world. */
+// CONTENT-TODO CR-297
 export const ROUTER = '192.168.1.1';
 export const PRINTER = '192.168.1.20';
 const ROUTER_NETWORK = '192.168.1.0';

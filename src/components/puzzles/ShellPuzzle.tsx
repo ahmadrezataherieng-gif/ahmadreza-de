@@ -19,6 +19,7 @@ const definition: PuzzleDefinition<ShellState, ShellAction> = {
   isSolved: (state) => state.found,
   usedTrick: (state) => state.usedChdir,
   script: [
+    // CONTENT-TODO CR-170
     { kind: 'type', target: 'prompt', text: 'ls', action: run('ls') },
     { kind: 'type', target: 'prompt', text: 'cd home/ahmadreza', action: run('cd home/ahmadreza') },
     { kind: 'type', target: 'prompt', text: 'ls', action: run('ls') },

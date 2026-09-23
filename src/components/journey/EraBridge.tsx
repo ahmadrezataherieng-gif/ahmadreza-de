@@ -16,6 +16,7 @@ interface EraBridgeProps {
 }
 
 /** Machine text on the 1981 screen. Identical in every language. */
+// CONTENT-TODO CR-212
 const DOS_PROMPT = 'C:\\>';
 
 /**

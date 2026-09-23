@@ -93,6 +93,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'eniac.description',
     artifact: 'punch-card',
     unlocksApp: 'binary',
+    // CONTENT-TODO CR-111
     teaches: 'binary and character encoding',
   },
   {
@@ -104,6 +105,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'batch.description',
     artifact: 'job-deck',
     unlocksApp: 'scheduler',
+    // CONTENT-TODO CR-138
     teaches: 'scheduling and why operating systems exist',
   },
   {
@@ -115,6 +117,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'unix.description',
     artifact: 'shell-token',
     unlocksApp: 'filesystem',
+    // CONTENT-TODO CR-168
     teaches: 'the filesystem tree and paths',
   },
   {
@@ -126,6 +129,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'dos.description',
     artifact: 'memory-chip',
     unlocksApp: 'snake',
+    // CONTENT-TODO CR-208
     teaches: 'memory constraints',
   },
   {
@@ -137,6 +141,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'macintosh.description',
     artifact: 'mouse-ball',
     unlocksApp: 'paint',
+    // CONTENT-TODO CR-245
     teaches: 'the WIMP paradigm and keyboard shortcuts',
   },
   {
@@ -148,6 +153,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'win95.description',
     artifact: 'dial-tone',
     unlocksApp: 'network-tools',
+    // CONTENT-TODO CR-296
     teaches: 'subnetting fundamentals',
   },
   {
@@ -160,6 +166,7 @@ export const eras: readonly Era[] = [
     descriptionKey: 'cloud.description',
     artifact: 'firewall-key',
     unlocksApp: 'time-machine',
+    // CONTENT-TODO CR-345
     teaches: 'ports and firewall basics',
   },
 ];

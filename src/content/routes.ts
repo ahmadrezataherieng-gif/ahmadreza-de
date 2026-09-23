@@ -58,11 +58,13 @@ const carrierNyc: Hop = { role: 'subsea', host: 'ae1.nyc.carrier.example', ip: '
 
 export const routes: readonly Route[] = [
   {
+    // CONTENT-TODO CR-642
     id: 'router',
     target: '192.168.1.1',
     hops: [{ ...home, role: 'destination' }],
   },
   {
+    // CONTENT-TODO CR-643
     id: 'ahmadreza',
     target: 'ahmadreza.de',
     hops: [
@@ -75,6 +77,7 @@ export const routes: readonly Route[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-644
     id: 'newyork',
     target: 'www.newyork.example',
     hops: [
@@ -89,6 +92,7 @@ export const routes: readonly Route[] = [
     ],
   },
   {
+    // CONTENT-TODO CR-645
     id: 'tokyo',
     target: 'www.tokyo.example',
     hops: [

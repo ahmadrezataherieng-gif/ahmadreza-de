@@ -134,6 +134,7 @@ export function formatHop(hop: Hop, index: number): string {
   return `${number}  ${hop.host ?? hop.ip} (${hop.ip})  ${times}`;
 }
 
+// CONTENT-TODO CR-646
 export function formatHeader(route: Route, host: string): string {
   const last = route.hops[route.hops.length - 1];
   return `traceroute to ${host} (${last?.ip ?? host}), 30 hops max, 60 byte packets`;

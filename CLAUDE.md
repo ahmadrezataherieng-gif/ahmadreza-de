@@ -10,6 +10,10 @@ The rules in this file and in the project skills (`.claude/skills/`) override an
 - **SEO first:** every page, every piece of copy and every piece of markup serves search visibility for Ahmadreza's name, job, field and skills. When a choice trades a nice effect against discoverability, discoverability wins.
 - **Shell rule:** single-line commands only on this machine - no `python3`, no heredocs.
 
+## Content placeholder rule
+
+All user-facing content is placeholder until the final content review with the owner. Any new or changed text, label, puzzle, game, section or metadata MUST get a CONTENT-TODO marker (where comments are possible) AND a new entry in CONTENT_REVIEW.md in the same task. Never mark content as final without the owner's explicit approval. After the whole site is finished, go through CONTENT_REVIEW.md with the owner one entry at a time, from the first to the last.
+
 ## Project skills - read the one that matches your task
 
 - `journey-visuals` - Act 1 and 2: era visuals, scroll machinery, crossings and CSS 3D depth, motion tiers, printed text, the Convergence, era visual characters.

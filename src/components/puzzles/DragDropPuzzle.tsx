@@ -8,6 +8,7 @@ import { bitmapPath, bitmapWidth, ICON_DOCUMENT, ICON_FOLDER, ICON_TRASH, type B
 import { target, usePuzzleEngine, type PuzzleDefinition, type PuzzleProps } from '@/components/puzzles/engine';
 import { PuzzleSurface } from '@/components/puzzles/PuzzleSurface';
 
+// CONTENT-TODO CR-246
 const ITEMS = ['vita', 'old'] as const;
 const TARGETS = ['folder', 'trash'] as const;
 type Item = (typeof ITEMS)[number];

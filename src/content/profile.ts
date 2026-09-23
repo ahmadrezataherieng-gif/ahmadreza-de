@@ -7,6 +7,7 @@
  * in `public/`. TODO.md lists what is still owed.
  */
 
+// CONTENT-TODO CR-045
 /**
  * The landing-page portrait. The one raster asset the project allows.
  * 4:5 portrait orientation; supply at 1200 x 1500 px (2x of the largest size it
@@ -20,11 +21,13 @@ export const PORTRAIT = {
 } as const;
 
 /** The résumé download. Until the PDF exists the control renders disabled. */
+// CONTENT-TODO CR-044
 export const RESUME = {
   href: '/files/ahmadreza-taheri-lebenslauf.pdf',
   available: false,
 } as const;
 
+// CONTENT-TODO CR-046
 /**
  * The contact address, confirmed by Ahmadreza in Phase 7. `available` still
  * gates every mailto link. Before launch the address must really receive mail

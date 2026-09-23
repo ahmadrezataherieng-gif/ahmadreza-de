@@ -77,6 +77,7 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
  */
 async function viewTitle(locale: Locale, view: View): Promise<string> {
   const t = await getTranslations({ locale, namespace: 'site' });
+  // CONTENT-TODO CR-1043
   if (view === 'landing') return `${t('title')} | ${t('brand')}`;
   const page =
     view === 'journey'
@@ -115,6 +116,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_URL),
+    // CONTENT-TODO CR-1044
     title,
     description: t('description'),
     alternates: {
