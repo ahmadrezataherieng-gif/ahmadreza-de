@@ -4,6 +4,10 @@ Last updated: 2026-09-23
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+**Master plan until launch: ROADMAP.md** (full audit of 2026-09-23, 65 items by
+phase, status, priority and owner). The phase list below is the history; what
+is left lives in ROADMAP.md.
+
 - [x] **Phase 0** — Environment and scaffold
 - [x] **Phase 1** — Design system, i18n, theme engine
 - [x] **Phase 2** — Journey scaffold and unlock store

@@ -9,6 +9,7 @@ The rules in this file and in the project skills (`.claude/skills/`) override an
 - **Legal first:** check every addition against German law (DSGVO, TDDDG, DDG, copyright, image rights) before building it. The site must never need a consent banner; if something would create legal risk, stop and say so instead of building it.
 - **SEO first:** every page, every piece of copy and every piece of markup serves search visibility for Ahmadreza's name, job, field and skills. When a choice trades a nice effect against discoverability, discoverability wins.
 - **Shell rule:** single-line commands only on this machine - no `python3`, no heredocs.
+- ROADMAP.md is the master plan. Every new idea, missing piece or postponed task must be added there so nothing is forgotten before the final phase.
 
 ## Content placeholder rule
 
