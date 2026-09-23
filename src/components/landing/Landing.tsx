@@ -6,6 +6,7 @@ import { JourneyHint } from '@/components/landing/JourneyHint';
 import { ModeChoice } from '@/components/landing/ModeChoice';
 import { Portrait } from '@/components/landing/Portrait';
 import { ResumeLink } from '@/components/landing/ResumeLink';
+import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { PORTRAIT } from '@/content/profile';
@@ -28,6 +29,7 @@ import type { Locale } from '@/lib/i18n-config';
 export async function Landing() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations('landing');
+  const tSite = await getTranslations('site');
   const facts = asStatList(t.raw('facts'));
   const journeyHref = viewHref(locale, 'journey');
   const desktopHref = viewHref(locale, 'desktop');
@@ -39,13 +41,10 @@ export async function Landing() {
       <div className="ao-landing-grain pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
 
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
-        <p className="flex items-center gap-2.5 font-mono text-xs tracking-[0.3em] text-muted uppercase">
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-control border border-edge font-display text-sm tracking-normal text-ink"
-            aria-hidden="true"
-          >
-            A
-          </span>
+        {/* The brand leads the header; the name leads the page (the h1 below). */}
+        <p className="flex items-center gap-3 font-mono text-xs tracking-[0.3em] text-muted uppercase">
+          <AmonelLogo uid="ao-landing-logo" label={tSite('brand')} className="h-7 w-auto sm:h-8" />
+          <span className="hidden h-4 w-px bg-edge sm:inline" aria-hidden="true" />
           <span className="hidden sm:inline">{t('eyebrow')}</span>
         </p>
         <div className="flex items-center gap-2 sm:gap-3">

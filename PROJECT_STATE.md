@@ -14,7 +14,8 @@ Last updated: 2026-09-23
 - [x] **Phase 7** — Core apps: About, Terminal, Ticket System, Traceroute
 - [x] **Phase 8A** — Assistant app, labelled demo and the proxy Worker, built without a key
 - [x] **Phase 8B** — the assistant becomes a local search; no Gemini, no key (DECISIONS.md 53)
-- [ ] **Phase 9** — Unlockable apps, easter eggs, Time Machine theme switcher
+- [x] **Phase 9A** — Rebrand to Amonel: names, the `/amonel/` route with 301s, titles, logos and icons (DECISIONS.md 54)
+- [ ] **Phase 9B** and on — Unlockable apps, easter eggs, Time Machine theme switcher
 - [ ] **Phase 10** — SEO layer: text fallback, JSON-LD, sitemap, hreflang, llms.txt
 - [ ] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
@@ -24,9 +25,9 @@ Last updated: 2026-09-23
 
 - **Build:** Next.js 15 static export, Tailwind v4, TypeScript strict. `npm run
   build` emits nine pages - the landing page, the journey and the desktop in de
-  (`/`, `/journey/`, `/desktop/`), en (`/en/…`) and fa (`/fa/…`) - into a
+  (`/`, `/amonel/`, `/desktop/`), en (`/en/…`) and fa (`/fa/…`) - into a
   static `out/`, plus the
-  SVG favicon. Deployment config for Cloudflare Workers with static assets is in
+  Amonel icon set (SVG and ICO favicons, Apple touch icon, web manifest). Deployment config for Cloudflare Workers with static assets is in
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
 - **Landing page** (`/`): name, role, bold key facts, two mode cards, the résumé
   control in the header and under the role, an email link that appears once the
@@ -34,9 +35,17 @@ Last updated: 2026-09-23
   kontakt@ahmadreza.de, is confirmed and linked. No journey
   code is loaded there. A returning visitor gets "Zum Desktop" as the primary
   action in the same slot, without a layout shift; the mode cards step back.
+- **Brand** (Phase 9A, DECISIONS.md 54): the site is **Amonel**, the OS is
+  **Amonel OS**, the person is always Ahmadreza Taheri. Logos are inline SVG or
+  HTML from `components/ui/Brand.tsx` with fixed `--ao-brand-*` colours: the
+  main logo in the landing header, the `~$ amonel os` lockup (blinking cursor,
+  still under reduced motion) in the desktop and home-screen top bars, the
+  Terminal and the boot log, the mark on the launcher button, the glass icon on
+  the About tile. Titles are "name – job | Amonel" (landing) and
+  "page – name | Amonel". The `modern` theme keeps its cyan accent for now.
 - **Theme engine:** eight themes applied as CSS custom properties, also to
   subtrees (`[data-theme-scope]`).
-- **Act 1, the journey** (`/journey/`): seven era visuals, pinned and scrubbed on
+- **Act 1, the journey** (`/amonel/`; the old `/journey/` URLs 301 there): seven era visuals, pinned and scrubbed on
   wide screens, in document flow on phones and under reduced motion. Each era
   ends in a puzzle segment with its one truth.
 - **Two modes over one set of scenes.** Watch: puzzles play themselves as the
@@ -59,7 +68,7 @@ Last updated: 2026-09-23
 - **Act 2, the Convergence:** the seven eras compile into an empty Amonel OS
   desktop; reaching it hands over to `/desktop/`, whose first frame is the same
   picture (pixel-identical). Zum Desktop goes there from any point, gated or not.
-  A returning visitor's direct visit to `/journey/` lands on the desktop.
+  A returning visitor's direct visit to `/amonel/` lands on the desktop.
 - **Act 3, the desktop** (`/desktop/`, DECISIONS.md 49): no GSAP, Lenis or era
   code. Wide screens with a fine pointer get a window manager - drag, resize,
   minimise, maximise, cascade, z-order, keyboard control, Alt+Shift+Arrow

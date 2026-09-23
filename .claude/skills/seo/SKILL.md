@@ -73,10 +73,14 @@ never sees it.
 
 - The portrait file name carries the name, e.g.
   `ahmadreza-taheri-trier.webp`, with a full descriptive `alt` text.
-- The Open Graph image is **one** PNG or JPG at exactly **1200 × 630**. This
-  and the portrait (see `landing-page` skill) are the only two raster
-  exceptions in the project - link previews in LinkedIn, WhatsApp and
+- The Open Graph image is **one** PNG or JPG at exactly **1200 × 630**. This,
+  the portrait (see `landing-page` skill) and the brand icons are the only
+  raster exceptions in the project - link previews in LinkedIn, WhatsApp and
   Telegram need a real raster image, nothing else does.
+- The brand icons (Phase 9A): `favicon.ico`, `apple-touch-icon.png` and the
+  manifest's `brand/icon-*.png`, generated from the kit's SVGs by
+  `node scripts/brand-icons.mjs`. Every logo on a page is inline SVG or CSS,
+  never an image file.
 
 ### Structured data (Phase 10, not built yet)
 

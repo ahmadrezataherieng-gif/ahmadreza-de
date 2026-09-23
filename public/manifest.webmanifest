@@ -1,0 +1,17 @@
+{
+  "name": "Amonel – Ahmadreza Taheri",
+  "short_name": "Amonel",
+  "description": "Portfolio von Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung.",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#0b0f15",
+  "theme_color": "#0b0f15",
+  "icons": [
+    { "src": "/brand/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

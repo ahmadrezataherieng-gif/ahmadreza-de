@@ -353,6 +353,7 @@
         "status": "OK"
       }
     ],
+    "osName": "Amonel OS",
     "welcome": "Willkommen bei Amonel OS",
     "desktopLabel": "Leerer Amonel-OS-Desktop"
   },

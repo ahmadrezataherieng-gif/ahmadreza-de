@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import { apps } from '@/components/apps/registry';
 import { AppIcon } from '@/components/os/AppIcon';
+import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LockedNotice } from '@/components/os/LockedNotice';
 import { Taskbar } from '@/components/os/Taskbar';
 import { WindowLayer } from '@/components/os/WindowLayer';
@@ -52,10 +53,7 @@ export function DesktopShell() {
   return (
     <div className="absolute inset-0 overflow-hidden rounded-window" data-layout="desktop">
       <div className="ao-topbar ao-reveal absolute inset-x-0 top-0 flex h-[3.5cqh] items-center justify-between gap-3 px-3 text-[max(10px,1.35cqh)]">
-        <span className="flex items-center gap-2 font-mono tracking-[0.25em] text-muted uppercase">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_var(--ao-color-glow)]" aria-hidden="true" />
-          {t('brand')}
-        </span>
+        <AmonelOsLockup label={t('brand')} />
         <span className="flex items-center gap-4 font-mono text-muted">
           <Link href={viewHref(locale, 'landing')} className="hover:text-ink focus-visible:text-ink">
             {tNav('home')}

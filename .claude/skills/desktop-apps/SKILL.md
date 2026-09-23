@@ -55,6 +55,11 @@ in Act 1 unlock extra apps.
   array of new objects never compares equal and re-renders forever (React error
   185) - select the store's own objects, or primitives.
 - Legende badges are read through `selectLegendEras` and displayed in Phase 9.
+- **Brand (Phase 9A, DECISIONS.md 54):** the OS is "Amonel OS". Its lockup
+  (`AmonelOsLockup` from `ui/Brand.tsx`) sits in the desktop and home-screen
+  top bars and above the Terminal's greeting; the launcher button shows the
+  mark alone; the About tile wears the glass icon (`BRAND_TILE_APP` in
+  `AppIcon.tsx`). Taskbar window buttons keep the line glyphs.
 
 ## The apps (Act 3, Phase 7)
 

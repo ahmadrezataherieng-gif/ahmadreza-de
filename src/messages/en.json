@@ -352,6 +352,7 @@
         "status": "OK"
       }
     ],
+    "osName": "Amonel OS",
     "welcome": "Welcome to Amonel OS",
     "desktopLabel": "Empty Amonel OS desktop"
   },

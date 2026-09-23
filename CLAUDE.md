@@ -143,8 +143,9 @@ Rules of thumb:
   `matchSegments()` in `src/lib/routing.ts` turns segments into `{ locale, view }`
   or null; `viewHref(locale, view)` builds links.
 - `dynamicParams = false`: only generated routes exist, so stray URLs are a clean
-  404. `/favicon.ico` is a static route handler (`app/favicon.ico/route.ts`) that
-  serves `public/favicon.svg`, and `_redirects` 301s it to the SVG in production.
+  404. The icons are plain files in `public/` (`favicon.svg`, `favicon.ico`,
+  `apple-touch-icon.png`, `brand/`, `manifest.webmanifest`); the rasters come from
+  `node scripts/brand-icons.mjs`.
 - `/de` is deliberately **not generated** — it would duplicate `/`. The
   `301 /de/ → /` lives in `public/_redirects`.
 - `canonical` and `hreflang` (including `x-default`) are emitted per view.

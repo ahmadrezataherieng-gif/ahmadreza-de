@@ -8,6 +8,13 @@ import { AppGlyph, LockGlyph } from '@/components/apps/icons';
 import { launchApp } from '@/components/os/window-actions';
 import { cn } from '@/lib/cn';
 import { selectIsAppUnlocked, useUnlockStore } from '@/store/unlock-store';
+import { AmonelGlassIcon } from '@/components/ui/Brand';
+
+/**
+ * The app that wears the Amonel glass icon (Phase 9A): About, the app about the
+ * person behind the brand. A base app, so it is never locked or greyed.
+ */
+const BRAND_TILE_APP: AppId = 'about';
 
 /**
  * An app's icon: on the desktop, in the launcher, on the home screen and in the
@@ -57,6 +64,9 @@ export function AppIcon({
         variant === 'dock' && 'w-auto flex-1 py-1',
       )}
     >
+      {appId === BRAND_TILE_APP ? (
+        <AmonelGlassIcon className={cn('shrink-0 transition-transform group-hover:scale-105', row ? 'h-8 w-8' : 'h-12 w-12')} />
+      ) : (
       <span
         className={cn(
           'relative flex shrink-0 items-center justify-center rounded-control border',
@@ -73,6 +83,7 @@ export function AppIcon({
           </span>
         )}
       </span>
+      )}
       <span
         className={cn(
           'font-body leading-tight',

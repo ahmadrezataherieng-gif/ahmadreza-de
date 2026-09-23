@@ -73,6 +73,17 @@
 
   /* --- tokens that do NOT change per era --- */
 
+  /* The Amonel brand (Bearbeitung/amonel-brand/README.md, Phase 9A). Fixed in
+     every theme: the logo is never recoloured, and the cursor is always amber. */
+  --ao-brand-green-light: #b6fbdc;
+  --ao-brand-green: #5de2a4;
+  --ao-brand-green-deep: #2aa874;
+  --ao-brand-amber: #f0a44a;
+  --ao-brand-ink: #e9edf5;
+  --ao-brand-night: #0b0f15;
+  --ao-brand-muted: #8e9bb0;
+  --ao-brand-white: #ffffff;
+
   /* Standard motion curve and durations. */
   --ao-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ao-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
@@ -115,6 +126,15 @@
   --color-glow: var(--ao-color-glow);
   --color-chrome: var(--ao-color-chrome);
   --color-chrome-ink: var(--ao-color-chrome-text);
+
+  --color-brand-green-light: var(--ao-brand-green-light);
+  --color-brand-green: var(--ao-brand-green);
+  --color-brand-green-deep: var(--ao-brand-green-deep);
+  --color-brand-amber: var(--ao-brand-amber);
+  --color-brand-ink: var(--ao-brand-ink);
+  --color-brand-night: var(--ao-brand-night);
+  --color-brand-muted: var(--ao-brand-muted);
+  --color-brand-white: var(--ao-brand-white);
 
   --font-display: var(--ao-font-display);
   --font-body: var(--ao-font-body);
@@ -1647,30 +1667,30 @@ html[data-returning] .ao-mode-section h2 {
    Landing page (Phase 5)
    ========================================================================== */
 
-/* Two faint pools of accent light behind the content - depth without a
-   picture, in the modern palette. */
+/* The Amonel hero, in CSS (the brand kit's hero reference is a picture of
+   this, never shipped): a pool of green light up top and a pool of amber
+   below, behind the real text. The pools do not mirror in RTL, like the logo. */
 .ao-landing-glow {
   background:
     radial-gradient(
-      ellipse 60% 50% at 80% 10%,
-      color-mix(in srgb, var(--ao-color-accent) 10%, transparent),
+      ellipse 50% 45% at 22% 18%,
+      color-mix(in srgb, var(--ao-brand-green) 20%, transparent),
       transparent 70%
     ),
     radial-gradient(
-      ellipse 50% 45% at 5% 95%,
-      color-mix(in srgb, var(--ao-color-accent-muted) 18%, transparent),
+      ellipse 50% 45% at 78% 88%,
+      color-mix(in srgb, var(--ao-brand-amber) 15%, transparent),
       transparent 70%
     );
 }
 
-/* The portrait placeholder: a fine grid, so an empty frame still looks
-   deliberate rather than broken. */
+/* The name fades from ink into the brand green. */
 .ao-landing-name {
   background: linear-gradient(
     100deg,
     var(--ao-color-text) 0%,
     var(--ao-color-text) 55%,
-    color-mix(in srgb, var(--ao-color-accent) 85%, var(--ao-color-text)) 100%
+    color-mix(in srgb, var(--ao-brand-green) 85%, var(--ao-color-text)) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -1684,6 +1704,8 @@ html[data-returning] .ao-mode-section h2 {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* The portrait placeholder: a fine grid, so an empty frame still looks
+   deliberate rather than broken. */
 .ao-portrait-placeholder {
   background-image:
     linear-gradient(color-mix(in srgb, var(--ao-color-border) 55%, transparent) 1px, transparent 1px),
@@ -3061,4 +3083,23 @@ html:not([data-tier='full']) .ao-depth-extra {
     inset 0 0 30px color-mix(in srgb, var(--ao-color-glow) 40%, transparent);
   opacity: clamp(0, calc((var(--boundary-in) - 0.34) / 0.2), 1);
   transform: scale(calc(0.2 + clamp(0, (var(--boundary-in) - 0.34) / 0.44, 1) * 0.8));
+}
+
+/* ==========================================================================
+   Amonel brand (Phase 9A)
+   ========================================================================== */
+
+/* The glass app icon from the brand kit, rebuilt in CSS so it needs no filter
+   ids and no image request: night, a green glow top-left, an amber glow
+   bottom-right, a white wash, a highlight on the upper half and a bright edge.
+   The white mark sits on top (AmonelGlassIcon). */
+.ao-brand-glass {
+  border-radius: 23%;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ao-brand-white) 50%, transparent) 0%, transparent 48%),
+    linear-gradient(color-mix(in srgb, var(--ao-brand-white) 8%, transparent), color-mix(in srgb, var(--ao-brand-white) 8%, transparent)),
+    radial-gradient(circle at 33% 35%, var(--ao-brand-green) 0%, color-mix(in srgb, var(--ao-brand-green) 55%, transparent) 28%, transparent 58%),
+    radial-gradient(circle at 68% 70%, var(--ao-brand-amber) 0%, color-mix(in srgb, var(--ao-brand-amber) 55%, transparent) 26%, transparent 56%),
+    var(--ao-brand-night);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ao-brand-white) 40%, transparent);
 }

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { apps } from '@/components/apps/registry';
 import { AppIcon } from '@/components/os/AppIcon';
 import { replayJourney } from '@/components/os/replay';
+import { AmonelMark } from '@/components/ui/Brand';
 import { LAUNCHER_BUTTON_ID } from '@/components/os/window-actions';
 import { asStringList } from '@/lib/message-shapes';
 import type { Locale } from '@/lib/i18n-config';
@@ -66,12 +67,8 @@ export function Launcher() {
           open ? 'border-accent bg-elevated text-accent' : 'border-edge text-ink hover:border-accent',
         )}
       >
-        <span
-          className="flex h-5 w-5 items-center justify-center rounded-[4px] bg-accent font-display text-[11px] font-bold text-background"
-          aria-hidden="true"
-        >
-          A
-        </span>
+        {/* A small place: the mark alone, never the wordmark (brand kit). */}
+        <AmonelMark uid="ao-launcher-mark" className="h-5 w-5" />
         {t('launcher.open')}
       </button>
 

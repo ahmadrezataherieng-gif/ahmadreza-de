@@ -22,6 +22,7 @@ import {
   type ShellState,
 } from '@/components/apps/terminal/shell';
 import { closeWindow } from '@/components/os/window-actions';
+import { AmonelOsLockup } from '@/components/ui/Brand';
 import { skillAreas } from '@/content/about';
 import { EMAIL, RESUME } from '@/content/profile';
 import { projects } from '@/content/projects';
@@ -211,6 +212,7 @@ function Prose({ children, className }: { children: string; className?: string }
 
 function Line({ line, onRun }: { line: ShellLine; onRun: (command: string) => void }) {
   const t = useTranslations('terminal');
+  const tOs = useTranslations('os');
 
   switch (line.kind) {
     case 'input':
@@ -244,6 +246,7 @@ function Line({ line, onRun }: { line: ShellLine; onRun: (command: string) => vo
     case 'message':
       return (
         <div className="my-1 flex flex-col gap-2">
+          {line.key === 'motd' ? <AmonelOsLockup label={tOs('brand')} className="self-start text-base" /> : null}
           <Prose className="text-muted">{t(line.key)}</Prose>
           {line.key === 'motd' ? (
             <p className="flex flex-wrap items-center gap-2">

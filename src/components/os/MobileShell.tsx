@@ -11,6 +11,7 @@ import { AppIcon } from '@/components/os/AppIcon';
 import { Clock } from '@/components/os/Clock';
 import { LockedNotice } from '@/components/os/LockedNotice';
 import { replayJourney } from '@/components/os/replay';
+import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
@@ -68,7 +69,7 @@ export function MobileShell() {
     <div className="absolute inset-0 overflow-hidden rounded-window" data-layout="mobile">
       <div className="ao-reveal absolute inset-x-0 top-0 flex h-[3.5cqh] items-center justify-between px-4 text-[max(11px,1.5cqh)]">
         <Clock className="text-ink" />
-        <span className="font-mono tracking-[0.25em] text-muted uppercase">{t('brand')}</span>
+        <AmonelOsLockup label={t('brand')} />
       </div>
 
       <div className="ao-home ao-reveal absolute inset-x-0 top-[3.5cqh] overflow-y-auto" inert={openId !== null}>

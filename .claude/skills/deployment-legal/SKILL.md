@@ -34,7 +34,8 @@ reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
   export, so these land at `out/_headers`, where Cloudflare reads them. No
   Content-Security-Policy yet; that arrives in Phase 11 once every external
   origin is known.
-- `public/_redirects` — `301 /de/ → /`. This is what used to be an nginx rule.
+- `public/_redirects` — `301 /de/ → /` (what used to be an nginx rule), and since
+  Phase 9A the old `/journey/` URLs → `/amonel/` in every locale.
 - Custom domain is **ahmadreza.de**. Workers custom domains require the zone's
   nameservers to be managed by Cloudflare — a CNAME from an external DNS
   provider is not enough, unlike Pages.

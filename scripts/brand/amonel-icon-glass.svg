@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="t"><title id="t">Amonel</title><defs>
+    <filter id="s" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="12"/></filter>
+    <linearGradient id="hi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".45"/></linearGradient>
+    <clipPath id="r"><rect x="0" y="0" width="120" height="120" rx="28"/></clipPath></defs>
+    <g clip-path="url(#r)"><rect width="120" height="120" fill="#0b0f15"/>
+    <circle cx="40" cy="42" r="30" fill="#5de2a4" filter="url(#s)" opacity=".9"/>
+    <circle cx="82" cy="84" r="28" fill="#f0a44a" filter="url(#s)" opacity=".9"/>
+    <rect width="120" height="120" fill="#fff" fill-opacity=".08"/><rect width="120" height="120" fill="url(#hi)"/></g>
+    <rect x=".6" y=".6" width="118.8" height="118.8" rx="27.4" fill="none" stroke="url(#edge)" stroke-width="1.2"/>
+    <g transform="translate(12 12) scale(.8)"><path d="M20 100 C25 100 28 96 31 88 L52 34 C55 25 65 25 68 34 L86 88 C89 97 95 101 100 96 C105 90 100 80 90 76 C80 72 70 70 60 70" fill="none" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="47" y="64" width="6" height="12" rx="1.5" fill="#ffffff"/></g></svg>

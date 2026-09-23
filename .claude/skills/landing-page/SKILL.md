@@ -13,6 +13,10 @@ a recruiter judges in three seconds and Google reads first.
   JavaScript). **Never import journey code here** — the journey is behind
   `JourneyLoader`'s dynamic import precisely so the landing page ships no GSAP,
   Lenis or era.
+- **Brand (Phase 9A):** the Amonel logo (`AmonelLogo`, inline SVG) leads the
+  header; the name still leads the page as the `<h1>`. The hero light is CSS
+  (`.ao-landing-glow`, green and amber); the kit's hero picture is only a
+  reference and is never embedded.
 - Contents: name (the strongest element), role line, bold key facts, the two
   mode cards as the primary call to action (the Play card must describe the
   gates), the résumé control twice (header corner and under the role), an email

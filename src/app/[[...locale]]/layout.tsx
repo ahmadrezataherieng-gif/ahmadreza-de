@@ -126,9 +126,17 @@ export async function generateMetadata({
         'x-default': viewHref('de', view),
       },
     },
+    // The Amonel icon set (Phase 9A), all files in public/, none fetched from
+    // elsewhere. Browsers that read SVG favicons take it; the .ico is for the
+    // rest; iOS takes the touch icon, Android and installs the manifest's.
     icons: {
-      icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+      icon: [
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: '/favicon.ico', sizes: '16x16 32x32 48x48' },
+      ],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
+    manifest: '/manifest.webmanifest',
     openGraph: {
       type: view === 'landing' ? 'profile' : 'website',
       locale: htmlLang[locale],

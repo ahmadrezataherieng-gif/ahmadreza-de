@@ -12,6 +12,7 @@ import { asStringList } from '@/lib/message-shapes';
 import { BOUNDARY_LENGTH } from '@/components/journey/EraSection';
 import { EraBridge } from '@/components/journey/EraBridge';
 import { DesktopFrame } from '@/components/os/DesktopFrame';
+import { AmonelOsLockup } from '@/components/ui/Brand';
 
 export const CONVERGENCE_ID = 'convergence';
 
@@ -196,6 +197,10 @@ export function Convergence() {
             <bdi> so a Persian run keeps its own trailing punctuation instead of
             the "..." jumping to the wrong end of the line. */}
         <div className="ao-conv-log ao-rm-show font-mono" dir="ltr">
+          {/* The boot starts on the Amonel OS command; it ends on the welcome. */}
+          <LogLine on={INTRO_AT} className="mb-[0.8cqh]">
+            <AmonelOsLockup label={t('osName')} />
+          </LogLine>
           <LogLine on={INTRO_AT} className="mb-[1.2cqh] text-muted">
             <bdi>{t('intro')}</bdi>
           </LogLine>
