@@ -1,66 +1,162 @@
 {
-  "intro": "Ask the assistant about Ahmadreza’s background, his skills and this website. It answers only with what this website says.",
-  "log": "Conversation with the assistant",
+  "intro": "Ask this search about Ahmadreza's background, his skills and this website. It only answers with sentences that are actually on this website.",
+  "log": "Search over this website's content",
   "you": "You",
-  "mode": {
-    "checking": "Checking the connection …",
-    "demoBadge": "Demo",
-    "liveBadge": "Live",
-    "demo": "Demo mode: the assistant is not live yet. You see prepared answers on a few topics – not AI answers.",
-    "demoOffline": "Demo mode: the assistant cannot be reached right now. You see prepared answers on a few topics – not AI answers.",
-    "live": "Live: answers come from the Gemini AI model and rest only on the content of this website."
-  },
+  "badge": "Search",
+  "banner": "This is a search over this website's content, not AI. It runs entirely in your browser – nothing you type ever leaves your device.",
   "source": {
-    "demo": "Demo · prepared answer, not AI",
-    "live": "Assistant · AI answer",
-    "refused": "Not answered"
+    "about": "From About",
+    "now": "What he does today",
+    "station": "Career",
+    "skillArea": "Skills",
+    "language": "Languages",
+    "project": "Project",
+    "era": "The {year} era",
+    "ticket": "Ticket {number}",
+    "contact": "Contact"
   },
   "status": {
-    "idle": "Ready. Ask a question or pick a suggestion.",
-    "thinking": "Preparing the answer …",
-    "answered": "Answer received.",
-    "refused": "That question is outside what the assistant answers.",
-    "rateLimited": "Too many questions were asked. Please try again in {seconds} seconds.",
-    "offline": "The assistant is not answering right now. Please try again later.",
-    "notConfigured": "The assistant is not set up yet. Until then you see the demo mode."
+    "idle": "Ready. Ask a question or pick an example.",
+    "searching": "Searching the website …",
+    "answered": "Matching passages found.",
+    "noMatch": "This website says nothing about that."
   },
-  "demoRefused": "I have no prepared answer for that in demo mode. Pick one of the topics below.",
-  "suggestions": "Topics to try",
+  "noMatchIntro": "I can't find that on this website. Here is what I can answer:",
+  "suggestions": "Examples to try",
+  "examples": [
+    "Who is Ahmadreza?",
+    "What skills does he have?",
+    "What is his career path?",
+    "What does this website show?",
+    "How can I reach him?"
+  ],
   "form": {
-    "label": "Your question for the assistant",
+    "label": "Your question for the search",
     "placeholder": "Your question …",
-    "send": "Ask",
+    "send": "Search",
     "count": "{count} of {max} characters",
-    "hint": "Press Enter to send. Arrow up brings back the last question."
+    "hint": "Enter to send. Arrow up recalls the last question."
   },
-  "privacy": "Privacy: in demo mode nothing leaves your device. When the assistant is live, your questions are sent to Google’s Gemini API. Please do not enter personal data.",
-  "demo": {
-    "topics": {
-      "who": {
-        "question": "Who is Ahmadreza?",
-        "keywords": ["who is", "who are", "introduce", "about him", "person"],
-        "answer": "Ahmadreza Taheri works in IT, in Germany. He is currently doing an apprenticeship as an IT specialist for system integration (Fachinformatiker für Systemintegration) at the Stadtverwaltung Trier. His focus is networks and Linux."
-      },
-      "skills": {
-        "question": "What skills does he have?",
-        "keywords": ["skill", "can he", "knowledge", "topics", "network", "linux", "abilit"],
-        "answer": "This website lists three areas. Networks: TCP/IP, subnetting, DNS and DHCP, firewall rules, Wi-Fi. Systems: Linux, the shell, Windows clients, users and permissions. Support: structured troubleshooting, tickets, documentation, hardware. He does not state a level."
-      },
-      "path": {
-        "question": "What is his background?",
-        "keywords": ["background", "apprentice", "vocational", "career", "resume", "cv", "experience", "stations"],
-        "answer": "He is doing a dual apprenticeship as an IT specialist for system integration, at the Stadtverwaltung Trier and in vocational school. Earlier stations are not on the website yet, so I cannot say anything about them."
-      },
-      "site": {
-        "question": "What does this website show?",
-        "keywords": ["website", "site", "era", "journey", "puzzle", "desktop"],
-        "answer": "80 years of computing history in seven eras, from ENIAC to the cloud. Each era has a puzzle and explains a foundation that still holds today. At the end is this desktop, with programs such as the Terminal, the ticket system and Traceroute. The website is Ahmadreza’s own project."
-      },
-      "contact": {
-        "question": "How can I reach him?",
-        "keywords": ["contact", "reach", "e-mail", "email", "mail", "write", "hire", "apply"],
-        "answer": "The quickest way is email, at {email}."
-      }
+  "privacy": "Privacy: this search runs entirely in your browser. Nothing you type here is sent to a server or stored.",
+  "contactSentence": "The fastest way is email, at {email}.",
+  "keywords": {
+    "about": {
+      "keywords": [
+        "who is",
+        "who are",
+        "introduce",
+        "about him",
+        "person"
+      ]
+    },
+    "now": {
+      "keywords": [
+        "today",
+        "currently",
+        "right now",
+        "these days"
+      ]
+    },
+    "station": {
+      "keywords": [
+        "career",
+        "apprenticeship",
+        "vocational school",
+        "resume",
+        "experience",
+        "background"
+      ]
+    },
+    "skills": {
+      "keywords": [
+        "skill",
+        "skills",
+        "abilities",
+        "knowledge",
+        "topics",
+        "network",
+        "linux"
+      ]
+    },
+    "language": {
+      "keywords": [
+        "languages",
+        "language",
+        "german",
+        "english",
+        "persian"
+      ]
+    },
+    "project": {
+      "keywords": [
+        "project",
+        "projects",
+        "working on",
+        "what does he build"
+      ]
+    },
+    "era": {
+      "keywords": [
+        "era",
+        "eras",
+        "journey",
+        "puzzle",
+        "website",
+        "site",
+        "desktop"
+      ]
+    },
+    "ticket": {
+      "keywords": [
+        "ticket",
+        "tickets",
+        "helpdesk",
+        "issue",
+        "problem",
+        "diagnosis"
+      ]
+    },
+    "contact": {
+      "keywords": [
+        "contact",
+        "reach",
+        "reach him",
+        "email",
+        "e-mail",
+        "mail",
+        "write",
+        "application"
+      ]
+    }
+  },
+  "eras": {
+    "eniac": {
+      "name": "ENIAC and punch cards",
+      "description": "Text is numbers. Every character is a pattern of on and off."
+    },
+    "batch": {
+      "name": "Mainframes and batch processing",
+      "description": "A computer hates waiting. That is exactly why operating systems exist: they decide who gets to compute next."
+    },
+    "unix": {
+      "name": "UNIX",
+      "description": "A filesystem is a tree. Every file has a path leading to it from the root, /."
+    },
+    "dos": {
+      "name": "IBM PC and MS-DOS",
+      "description": "Memory is finite. That limit shapes what software can do."
+    },
+    "macintosh": {
+      "name": "Macintosh",
+      "description": "Pointing is easier than remembering. Every interface since rests on that idea."
+    },
+    "win95": {
+      "name": "Windows 95 and dial-up",
+      "description": "A network needs addresses. Without them, a machine cannot find another machine."
+    },
+    "cloud": {
+      "name": "Cloud, containers and AI",
+      "description": "Programs run isolated from each other, in many places at once."
     }
   }
 }

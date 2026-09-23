@@ -1,66 +1,162 @@
 {
-  "intro": "Fragen Sie den Assistenten nach Ahmadrezas Werdegang, seinen Fähigkeiten und dieser Website. Er antwortet nur mit dem, was auf dieser Website steht.",
-  "log": "Gespräch mit dem Assistenten",
+  "intro": "Fragen Sie diese Suche nach Ahmadrezas Werdegang, seinen Fähigkeiten und dieser Website. Sie antwortet nur mit Sätzen, die tatsächlich auf dieser Website stehen.",
+  "log": "Suche über die Inhalte dieser Website",
   "you": "Sie",
-  "mode": {
-    "checking": "Verbindung wird geprüft …",
-    "demoBadge": "Demo",
-    "liveBadge": "Live",
-    "demo": "Demo-Modus: Der Assistent ist noch nicht live. Sie sehen vorbereitete Antworten zu wenigen Themen – keine KI-Antworten.",
-    "demoOffline": "Demo-Modus: Der Assistent ist gerade nicht erreichbar. Sie sehen vorbereitete Antworten zu wenigen Themen – keine KI-Antworten.",
-    "live": "Live: Die Antworten kommen vom KI-Modell Gemini und beruhen nur auf den Inhalten dieser Website."
-  },
+  "badge": "Suche",
+  "banner": "Das ist eine Suche über die Inhalte dieser Website, keine KI. Sie läuft vollständig in Ihrem Browser – nichts, was Sie eingeben, verlässt Ihr Gerät.",
   "source": {
-    "demo": "Demo · vorbereitete Antwort, keine KI",
-    "live": "Assistent · KI-Antwort",
-    "refused": "Nicht beantwortet"
+    "about": "Über Ahmadreza",
+    "now": "Was er heute macht",
+    "station": "Werdegang",
+    "skillArea": "Fähigkeiten",
+    "language": "Sprachen",
+    "project": "Projekt",
+    "era": "Epoche {year}",
+    "ticket": "Ticket {number}",
+    "contact": "Kontakt"
   },
   "status": {
-    "idle": "Bereit. Stellen Sie eine Frage oder wählen Sie einen Vorschlag.",
-    "thinking": "Die Antwort wird vorbereitet …",
-    "answered": "Antwort erhalten.",
-    "refused": "Diese Frage liegt außerhalb dessen, wozu der Assistent Auskunft gibt.",
-    "rateLimited": "Es wurden zu viele Fragen gestellt. Bitte versuchen Sie es in {seconds} Sekunden noch einmal.",
-    "offline": "Der Assistent antwortet gerade nicht. Bitte versuchen Sie es später noch einmal.",
-    "notConfigured": "Der Assistent ist noch nicht eingerichtet. Bis dahin sehen Sie den Demo-Modus."
+    "idle": "Bereit. Stellen Sie eine Frage oder wählen Sie ein Beispiel.",
+    "searching": "Die Website wird durchsucht …",
+    "answered": "Passende Stellen gefunden.",
+    "noMatch": "Dazu steht nichts auf dieser Website."
   },
-  "demoRefused": "Dazu habe ich im Demo-Modus keine vorbereitete Antwort. Wählen Sie eines der Themen unten.",
-  "suggestions": "Themen zum Ausprobieren",
+  "noMatchIntro": "Dazu finde ich nichts auf dieser Website. Das kann ich beantworten:",
+  "suggestions": "Beispiele zum Ausprobieren",
+  "examples": [
+    "Wer ist Ahmadreza?",
+    "Welche Fähigkeiten hat er?",
+    "Wie ist sein Werdegang?",
+    "Was zeigt diese Website?",
+    "Wie erreiche ich ihn?"
+  ],
   "form": {
-    "label": "Ihre Frage an den Assistenten",
+    "label": "Ihre Frage an die Suche",
     "placeholder": "Ihre Frage …",
-    "send": "Fragen",
+    "send": "Suchen",
     "count": "{count} von {max} Zeichen",
     "hint": "Mit Enter senden. Pfeil nach oben holt die letzte Frage zurück."
   },
-  "privacy": "Datenschutz: Im Demo-Modus verlässt nichts Ihr Gerät. Ist der Assistent live, werden Ihre Fragen an die Gemini-API von Google gesendet. Bitte geben Sie keine persönlichen Daten ein.",
-  "demo": {
-    "topics": {
-      "who": {
-        "question": "Wer ist Ahmadreza?",
-        "keywords": ["wer ist", "wer bist", "vorstell", "uber ihn", "person"],
-        "answer": "Ahmadreza Taheri arbeitet in der IT, in Deutschland. Er macht zurzeit eine Ausbildung zum Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Seine Schwerpunkte sind Netzwerke und Linux."
-      },
-      "skills": {
-        "question": "Welche Fähigkeiten hat er?",
-        "keywords": ["fahigkeit", "kann er", "kenntnisse", "skills", "themen", "netzwerk", "linux"],
-        "answer": "Auf dieser Website nennt er drei Bereiche. Netzwerke: TCP/IP, Subnetze, DNS und DHCP, Firewall-Regeln, WLAN. Systeme: Linux, die Shell, Windows-Clients, Benutzer und Berechtigungen. Support: strukturierte Fehlersuche, Tickets, Dokumentation, Hardware. Ein Niveau gibt er nicht an."
-      },
-      "path": {
-        "question": "Wie ist sein Werdegang?",
-        "keywords": ["werdegang", "ausbildung", "berufsschule", "lebenslauf", "erfahrung", "stationen"],
-        "answer": "Er macht eine duale Ausbildung zum Fachinformatiker für Systemintegration, im Betrieb bei der Stadtverwaltung Trier und in der Berufsschule. Frühere Stationen stehen noch nicht auf der Website; dazu kann ich nichts sagen."
-      },
-      "site": {
-        "question": "Was zeigt diese Website?",
-        "keywords": ["website", "webseite", "seite", "epoche", "reise", "ratsel", "desktop"],
-        "answer": "80 Jahre Computergeschichte in sieben Epochen, von ENIAC bis zur Cloud. Jede Epoche hat ein Rätsel und erklärt eine Grundlage, die bis heute gilt. Am Ende steht dieser Desktop mit Programmen wie Terminal, Ticketsystem und Traceroute. Die Website ist Ahmadrezas eigenes Projekt."
-      },
-      "contact": {
-        "question": "Wie erreiche ich ihn?",
-        "keywords": ["kontakt", "erreich", "e-mail", "email", "mail", "schreiben", "bewerb"],
-        "answer": "Am schnellsten per E-Mail an {email}."
-      }
+  "privacy": "Datenschutz: Diese Suche läuft vollständig in Ihrem Browser. Nichts, was Sie hier eingeben, wird an einen Server gesendet oder gespeichert.",
+  "contactSentence": "Am schnellsten per E-Mail an {email}.",
+  "keywords": {
+    "about": {
+      "keywords": [
+        "wer ist",
+        "wer bist",
+        "vorstellung",
+        "uber ihn",
+        "person"
+      ]
+    },
+    "now": {
+      "keywords": [
+        "heute",
+        "aktuell",
+        "zurzeit",
+        "gerade"
+      ]
+    },
+    "station": {
+      "keywords": [
+        "werdegang",
+        "ausbildung",
+        "berufsschule",
+        "lebenslauf",
+        "erfahrung",
+        "stationen"
+      ]
+    },
+    "skills": {
+      "keywords": [
+        "fahigkeit",
+        "fahigkeiten",
+        "kenntnisse",
+        "kann er",
+        "themen",
+        "netzwerk",
+        "linux"
+      ]
+    },
+    "language": {
+      "keywords": [
+        "sprachen",
+        "sprache",
+        "deutsch",
+        "englisch",
+        "persisch"
+      ]
+    },
+    "project": {
+      "keywords": [
+        "projekt",
+        "projekte",
+        "arbeitet er an",
+        "woran arbeitet"
+      ]
+    },
+    "era": {
+      "keywords": [
+        "epoche",
+        "epochen",
+        "reise",
+        "ratsel",
+        "website",
+        "webseite",
+        "desktop"
+      ]
+    },
+    "ticket": {
+      "keywords": [
+        "ticket",
+        "tickets",
+        "helpdesk",
+        "fehler",
+        "problem",
+        "diagnose"
+      ]
+    },
+    "contact": {
+      "keywords": [
+        "kontakt",
+        "erreichen",
+        "erreiche",
+        "e-mail",
+        "email",
+        "mail",
+        "schreiben",
+        "bewerbung"
+      ]
+    }
+  },
+  "eras": {
+    "eniac": {
+      "name": "ENIAC und Lochkarten",
+      "description": "Text ist Zahlen. Jedes Zeichen ist ein Muster aus an und aus."
+    },
+    "batch": {
+      "name": "Großrechner und Stapel­verarbeitung",
+      "description": "Ein Computer hasst Warten. Genau dafür gibt es Betriebssysteme: Sie entscheiden, wer als Nächstes rechnen darf."
+    },
+    "unix": {
+      "name": "UNIX",
+      "description": "Ein Dateisystem ist ein Baum. Jede Datei hat einen Pfad, der von der Wurzel / zu ihr führt."
+    },
+    "dos": {
+      "name": "IBM PC und MS-DOS",
+      "description": "Speicher ist endlich. Diese Grenze bestimmt, was Software kann."
+    },
+    "macintosh": {
+      "name": "Macintosh",
+      "description": "Zeigen ist leichter als Erinnern. Auf dieser Idee beruht jede Oberfläche seither."
+    },
+    "win95": {
+      "name": "Windows 95 und Einwahl",
+      "description": "Ein Netzwerk braucht Adressen. Ohne sie findet eine Maschine keine andere."
+    },
+    "cloud": {
+      "name": "Cloud, Container und KI",
+      "description": "Programme laufen voneinander isoliert, an vielen Orten zugleich."
     }
   }
 }
