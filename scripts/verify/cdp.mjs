@@ -137,6 +137,28 @@ export async function launch({ width, height, reduce = false, touch = false, tag
       writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(r.result.data, 'base64'));
     },
     /** `modifiers`: an array of 'Alt', 'Control', 'Meta', 'Shift'. */
+    /**
+     * Answer the site's own /api/* inside Chrome (Phase 9C): the export is
+     * served without the Worker, so this stands in for it. Every request is
+     * recorded - method, path and whether it carried a body - and answered:
+     * POST /api/count/* with 204, GET /api/counts with `counts`, the rest 404.
+     */
+    async stubApi(counts) {
+      const calls = [];
+      listeners.push((msg) => {
+        if (msg.method !== 'Fetch.requestPaused') return;
+        const { requestId, request } = msg.params;
+        const { pathname } = new URL(request.url);
+        calls.push({ method: request.method, path: pathname, body: Boolean(request.hasPostData || request.postData) });
+        const reply =
+          pathname === '/api/counts'
+            ? { responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'application/json' }], body: Buffer.from(JSON.stringify(counts)).toString('base64') }
+            : { responseCode: pathname.startsWith('/api/count/') && request.method === 'POST' ? 204 : 404 };
+        void send('Fetch.fulfillRequest', { requestId, ...reply });
+      });
+      await send('Fetch.enable', { patterns: [{ urlPattern: '*/api/*', requestStage: 'Request' }] });
+      return calls;
+    },
     async key(key, text, modifiers = []) {
       const code = key === ' ' ? 'Space' : key;
       const mask = modifiers.reduce((sum, name) => sum | ({ Alt: 1, Control: 2, Meta: 4, Shift: 8 }[name] ?? 0), 0);

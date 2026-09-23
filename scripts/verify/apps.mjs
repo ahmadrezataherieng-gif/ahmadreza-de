@@ -8,6 +8,7 @@
 // closed. On the home screen each opens fullscreen, is used, and closes with
 // Back. Every state is checked for horizontal overflow and screenshotted.
 import { launch, sleep } from './cdp.mjs';
+import { BELOW_THRESHOLD, posted, shownPattern, STUB_COUNTS, wellFormed } from './api-stub.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((pairs, arg, index, all) => {
@@ -40,6 +41,10 @@ const check = (name, ok, detail) => {
 
 const b = await launch({ width: WIDTH, height: HEIGHT, reduce: REDUCE, touch: TOUCH, tag: TAG });
 const js = (code) => b.evaluate(code);
+// --api: answer /api/* with stub counts and record what the page sends
+// (Phase 9C). Without it /api is missing, as on any plain web server.
+const API = Boolean(args.api);
+const apiCalls = API ? await b.stubApi(STUB_COUNTS) : [];
 
 await b.goto(`${BASE}${PREFIX}/`, 2500);
 await js(
@@ -171,7 +176,7 @@ const about = async () => {
     const root = document.querySelector('${content('about')}');
     return {
       heading: root.querySelector('h2')?.textContent ?? '',
-      sections: root.querySelectorAll('h3').length,
+      sections: [...root.querySelectorAll('h3')].filter((h) => !h.closest('[data-visitor-stats]')).length,
       placeholders: root.querySelectorAll('[data-placeholder]').length,
       resumeLink: root.querySelectorAll('a[download]').length,
       resumePending: !!root.querySelector('[data-action="resume-pending"]'),
@@ -184,6 +189,34 @@ const about = async () => {
   check('about: no résumé link while the PDF is missing', facts.resumeLink === 0 && facts.resumePending, facts);
   check('about: the confirmed email is a link', facts.mail === 'mailto:kontakt@ahmadreza.de', facts);
   check(`about: reads ${RTL ? 'right to left' : 'left to right'}`, facts.dir === (RTL ? 'rtl' : 'ltr'), facts);
+
+  // The anonymous stats (Phase 9C): fetched only once the end of About is in view.
+  const countsBefore = apiCalls.filter((call) => call.path === '/api/counts').length;
+  if (API) check('about stats: nothing fetched before the end is in view', countsBefore === 0, apiCalls);
+  // Where the last section sits inside the scrolled content, whatever the scroll position.
+  const lastSectionAt = () =>
+    js(`(() => { const body = document.querySelector('${frame('about')} [data-window-body]'); const sections = document.querySelectorAll('${content('about')} section[aria-labelledby]'); const last = [...sections].filter((s) => !s.matches('[data-visitor-stats]')).pop(); return Math.round(last.getBoundingClientRect().top - body.getBoundingClientRect().top + body.scrollTop); })()`);
+  const bottomBefore = await lastSectionAt();
+  await js(`(() => { const body = document.querySelector('${frame('about')} [data-window-body]'); body.scrollTop = body.scrollHeight; return true; })()`);
+  await sleep(1500);
+  const stats = await js(`(() => {
+    const root = document.querySelector('${content('about')} [data-visitor-stats]');
+    return root ? { text: root.innerText, names: [...root.querySelectorAll('[data-public-count]')].map((e) => e.dataset.publicCount) } : null;
+  })()`);
+  if (API) {
+    check('about stats: fetched once the end came into view', apiCalls.filter((call) => call.path === '/api/counts').length === 1, apiCalls);
+    check(`about stats: shown, in ${LOCALE} digits`, !!stats && shownPattern(LOCALE).test(stats.text), stats);
+    check('about stats: numbers below ten are left out', !!stats && !stats.names.some((name) => BELOW_THRESHOLD.has(name)), stats?.names);
+    check('about stats: the journey, the Watch mode and five apps', !!stats && stats.names.includes('journey.completed') && stats.names.includes('journey.mode.guided') && stats.names.filter((name) => name.startsWith('app.')).length === 5, stats?.names);
+    check('about stats: its copy loaded', !!stats && !/\bstats\.[a-zA-Z]/.test(stats.text), stats?.text);
+    check('about stats: no horizontal overflow', await noOverflow('about'));
+  } else {
+    check('about stats: without the API there is no section and no number', stats === null, stats);
+  }
+  // Appended below the last section: nothing above it moved.
+  const bottomAfter = await lastSectionAt();
+  check('about stats: nothing above it moved', typeof bottomBefore === 'number' && bottomBefore === bottomAfter, { bottomBefore, bottomAfter });
+  await js(`(() => { document.querySelector('${frame('about')} [data-window-body]').scrollTop = 0; return true; })()`);
 };
 
 const outputText = () => js(`document.querySelector('${frame('terminal')} [data-terminal-output]').innerText`);
@@ -440,6 +473,17 @@ const quiz = async () => {
   }))()`);
   check('quiz: the score is announced, focus on the result', result.live.length > 5 && result.focus === 'H2', result);
   check('quiz: the best score is stored in this browser, one number', JSON.parse(result.stored ?? '{}').state?.best === result.score, result.stored);
+  // Phase 9C: the round is counted - that it ended, nothing more - and the total shown under the button.
+  await sleep(800);
+  const rounds = await js(`document.querySelector('${Q('[data-public-count="quiz.completed"]')}')?.textContent ?? null`);
+  if (API) {
+    const quizCalls = apiCalls.filter((call) => call.path === '/api/count/quiz.completed');
+    check('api: a finished round is counted once, as a bare POST with no body', quizCalls.length === 1 && quizCalls[0].method === 'POST' && !quizCalls[0].body, quizCalls);
+    check('api: no score in any request', !apiCalls.some((call) => /score|\d/.test(call.path)), apiCalls.map((call) => call.path));
+    check(`quiz: the rounds played are shown, in ${LOCALE} digits`, shownPattern(LOCALE).test(rounds ?? ''), rounds);
+  } else {
+    check('quiz: without the API no number is shown', rounds === null, rounds);
+  }
   await clickOn(Q('[data-action="quiz-again"]'));
   check('quiz: a new round starts at the first question', await until(`!!document.querySelector('${Q('[data-quiz-question]')}') && !document.querySelector('${Q('[data-quiz-answered]')}')`, 2000));
 };
@@ -503,6 +547,14 @@ await clickOn(`${frame('terminal')} [data-terminal-input]`);
 await typeLine('exit');
 check('terminal: exit closes it', await until(`!document.querySelector('${frame('terminal')}')`, 3000));
 if (layout !== 'desktop') check('terminal: exit on a phone returns home', (await js('location.pathname')).endsWith('/desktop/') && !(await js(`!!document.querySelector('[data-mobile-app]')`)));
+
+if (API) {
+  // Every app above was opened two or three times: each counted once in this page load.
+  const opened = posted(apiCalls).filter((name) => name.startsWith('app.'));
+  const expected = ['about', 'traceroute', 'tickets', 'assistant', 'quiz', 'terminal'].map((id) => `app.${id}.opened`);
+  check('api: every app opened is counted, once per page load', opened.join() === expected.join(), opened);
+  check('api: only allowlisted counters and /api/counts, never a body', wellFormed(apiCalls), apiCalls.slice(0, 8));
+}
 
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;

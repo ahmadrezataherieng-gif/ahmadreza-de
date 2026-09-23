@@ -59,6 +59,13 @@ const MATRIX = [
   ['journey', ['--mode', 'play', ...TABLET]],
   ['journey', ['--mode', 'play', ...reduce]],
   ['journey', ['--mode', 'watch', ...reduce]],
+  // Phase 9C: /api answered by a stub, so the counters are sent and shown.
+  // Every run above has no /api at all and checks that no number appears.
+  ['apps', ['--api']],
+  ['apps', ['--api', ...PHONE, ...fa]],
+  ['journey', ['--mode', 'play', '--api']],
+  ['journey', ['--mode', 'play', '--api', ...fa]],
+  ['journey', ['--mode', 'watch', '--api']],
 ];
 
 try {
@@ -75,7 +82,8 @@ let failed = 0;
 for (const [script, extra] of MATRIX) {
   if (ONLY && ONLY !== script) continue;
   ran += 1;
-  const argv = [path.join(HERE, `${script}.mjs`), '--base', BASE, ...extra, ...(VERBOSE ? [] : ['--quiet'])];
+  // The scripts import the counter allowlist straight from src/ (a .ts file).
+  const argv = ['--disable-warning=MODULE_TYPELESS_PACKAGE_JSON', path.join(HERE, `${script}.mjs`), '--base', BASE, ...extra, ...(VERBOSE ? [] : ['--quiet'])];
   const run = spawnSync(process.execPath, argv, { encoding: 'utf8', timeout: 20 * 60 * 1000, maxBuffer: 64 * 1024 * 1024 });
   const lines = `${run.stdout ?? ''}\n${run.stderr ?? ''}`.split(/\r?\n/).filter(Boolean);
   const summary = [...lines].reverse().find((line) => / passed/.test(line));

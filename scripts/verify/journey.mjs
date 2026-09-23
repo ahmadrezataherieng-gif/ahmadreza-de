@@ -6,6 +6,7 @@
 // Needs a running dev or static server. Prints PASS/FAIL per check and a
 // summary; exits 1 if anything failed. Screenshots go to VERIFY_OUT.
 import { launch, sleep, OUT } from './cdp.mjs';
+import { posted, shownPattern, STUB_COUNTS, wellFormed } from './api-stub.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((pairs, arg, index, all) => {
@@ -43,6 +44,11 @@ const check = (name, ok, detail) => {
 
 const b = await launch({ width: WIDTH, height: HEIGHT, reduce: REDUCE, touch: TOUCH, tag: TAG });
 const js = (code) => b.evaluate(code);
+// --api: answer /api/* with stub counts and record what the page sends
+// (Phase 9C). Without it /api is missing, as on any plain web server.
+const API = Boolean(args.api);
+const apiCalls = API ? await b.stubApi(STUB_COUNTS) : [];
+const countLine = (name) => js(`document.querySelector('[role="dialog"] [data-public-count="${name}"]')?.textContent ?? null`);
 const store = () => js(`JSON.parse(localStorage.getItem('${STORE}') ?? '{"state":{}}').state`);
 const dialogOpen = () => js(`!!document.querySelector('[role="dialog"]')`);
 const dialogText = () => js(`document.querySelector('[role="dialog"]')?.innerText ?? ''`);
@@ -156,6 +162,7 @@ await b.click(card.x, card.y);
 await sleep(9000);
 check('landing card opens the journey', (await js('location.pathname')).includes('amonel'));
 check('mode stored', (await store()).mode === (MODE === 'watch' ? 'guided' : 'interactive'));
+if (API) check('api: the chosen mode is counted once', posted(apiCalls).join() === `journey.mode.${MODE === 'watch' ? 'guided' : 'interactive'}`, posted(apiCalls));
 if (TIER) {
   // The mode is persisted, so reloading with the tier forced keeps the run.
   await b.goto(JOURNEY, 9000);
@@ -209,6 +216,10 @@ if (MODE === 'watch') {
   }
   const s = await store();
   check('watch: no artifacts, no badges, nothing passed', !s.artifacts?.length && !s.legendEras?.length && !s.passedEras?.length, s);
+  if (API) {
+    check('api: a guided auto-solve is never counted', !posted(apiCalls).some((name) => name.startsWith('era.')), posted(apiCalls));
+    check('api: reaching the Convergence counts the journey once', posted(apiCalls).filter((name) => name === 'journey.completed').length === (REDUCE ? 0 : 1), posted(apiCalls));
+  }
 
   // Take over one puzzle: the mode flips, the dialog opens, the gate stays off
   // for eras already behind the visitor.
@@ -317,6 +328,22 @@ if (MODE === 'play') {
   check('eniac: bug history is Harvard 1947, not ENIAC', /1947|۱۹۴۷/.test(eniac.text) && /Harvard|هاروارد/.test(eniac.text));
   check('eniac: artifact awarded', (await store()).artifacts?.includes('punch-card'));
   await sleep(REDUCE ? 200 : 2200);
+  if (API) {
+    check('api: solving era 1 by hand counts it', posted(apiCalls).includes('era.eniac.solved'), posted(apiCalls));
+    // The counts are fetched once the outcome is on screen: bring it there, as a visitor scrolling to Continue does.
+    await js(`(() => {
+      const target = document.querySelector('[role="dialog"] [role="status"]');
+      for (let node = target?.parentElement; node; node = node.parentElement) {
+        if (/auto|scroll/.test(getComputedStyle(node).overflowY) && node.scrollHeight > node.clientHeight) node.scrollTop += target.getBoundingClientRect().bottom - node.getBoundingClientRect().bottom + 8;
+      }
+      return true;
+    })()`);
+    await sleep(1200);
+    const line = await countLine('era.eniac.solved');
+    check(`api: the outcome shows how often it was solved, in ${LOCALE} digits`, shownPattern(LOCALE).test(line ?? ''), line);
+  } else {
+    check('no api: the outcome shows no number', (await js(`document.querySelectorAll('[data-public-count]').length`)) === 0);
+  }
   await b.shot(`${TAG}-eniac-solved`);
   check('eniac: continue focused', await js(`document.activeElement?.dataset.action === 'continue'`));
   await press('Enter');
@@ -347,6 +374,10 @@ if (MODE === 'play') {
   await press('Enter');
   await sleep(400);
   check('batch: solved by keyboard', !!(await outcome()));
+  if (API) {
+    await sleep(600);
+    check('api: a count below ten is not shown', (await countLine('era.batch.solved')) === null);
+  }
   await press('Enter');
   await sleep(3000);
 
@@ -504,6 +535,15 @@ if (MODE === 'play') {
     return mark && Math.abs(mark.getBoundingClientRect().top) < 30 ? 'convergence' : null;
   })()`);
   check('play: convergence reached', reached === 'convergence' || (REDUCE && reached === 'desktop'), reached);
+  if (API) {
+    await sleep(2500);
+    const solvedByHand = ERAS.filter((_, i) => (afterReveal.artifacts ?? []).includes(['punch-card', 'job-deck', 'shell-token', 'memory-chip', 'mouse-ball', 'dial-tone', 'firewall-key'][i]));
+    const eraPosts = posted(apiCalls).filter((name) => name.startsWith('era.'));
+    check('api: each era solved by hand counted once; a shown solution never', eraPosts.join() === solvedByHand.map((era) => `era.${era}.solved`).join(), { eraPosts, solvedByHand });
+    // This run stops at the Convergence's top; only the hand-over at its end counts.
+    check('api: the journey is counted only where it hands over to the desktop', posted(apiCalls).filter((name) => name === 'journey.completed').length === (reached === 'desktop' ? 1 : 0), { reached, posted: posted(apiCalls) });
+  }
+  const completedBefore = posted(apiCalls).filter((name) => name === 'journey.completed').length;
 
   // Zum Desktop while gated: un-pass era 3 from the landing page (the journey
   // would write its own state back), then open the journey at the top.
@@ -518,6 +558,11 @@ if (MODE === 'play') {
   const at = await js('location.pathname');
   check('Zum Desktop passes a closed gate', at.endsWith('/desktop/'), at);
   check('Zum Desktop completes the journey', (await store()).hasCompletedJourney === true);
+  if (API) check('api: Zum Desktop is not counted as reaching the Convergence', posted(apiCalls).filter((name) => name === 'journey.completed').length === completedBefore, posted(apiCalls));
+}
+
+if (API) {
+  check('api: only allowlisted counters and /api/counts, never a body', wellFormed(apiCalls), apiCalls.slice(0, 8));
 }
 
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 4));
