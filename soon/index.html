@@ -38,6 +38,10 @@
     --stack-body:var(--font-body),var(--font-fa),var(--font-fallback);
     --head-weight:700; --head-tracking:-.03em;
     --radius:14px;
+    /* Depth: one very soft light behind the top of the page and the progress card. */
+    --glow:rgba(93,226,164,.10);
+    /* A pixel face for tiny terminal details only; the mono face until one is chosen. */
+    --font-pixel:var(--font-mono);
   }
   @media (prefers-color-scheme:light){
     :root{
@@ -45,12 +49,15 @@
       --ink:#0b0f15; --muted:#434e5c;
       --brand:#1d7550; --brand-deep:#155c3e; --on-brand:#ffffff; --amber:#c46f10;
       --track:#e6eaf0;
+      --glow:rgba(29,117,80,.07);
     }
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{margin:0;background:radial-gradient(70rem 36rem at 85% -12rem,var(--glow),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
+  h1,h2,h3,.role,.overall-label{text-wrap:balance}
+  p,li{text-wrap:pretty}
   .wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
   @media (min-width:720px){.wrap{padding:28px 32px 64px}}
 
@@ -81,7 +88,8 @@
      English page the Persian line starts at the left edge like the lines above
      it (and vice versa in Persian). Persian script runs small next to Latin,
      so it is set about 12 % larger with more room between lines. */
-  html[dir="ltr"] .alt p[dir="rtl"]{text-align:justify;text-align-last:left}
+  html[dir="ltr"] .alt p[dir="rtl"],html[dir="rtl"] .alt p[dir="ltr"]{text-wrap:balance}
+  html[dir="ltr"] .alt p[dir="rtl"]{text-align:left}
   html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
   .alt [lang="fa"]{font-size:1.12em;line-height:1.75;color:var(--ink)}
   html[lang="fa"] body{font-size:17.5px;line-height:1.8}
@@ -107,9 +115,9 @@
   .card .num{display:block;font:600 12px/1 var(--font-mono);color:var(--brand);margin-bottom:10px}
 
   /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
-  .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden}
+  .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 80px -40px var(--glow)}
   .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
-  .os{direction:ltr;font-weight:700;color:var(--brand)}
+  .os{direction:ltr;font-family:var(--font-pixel);font-weight:700;color:var(--brand)}
   .os .p{color:var(--muted);font-weight:400}
   .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}

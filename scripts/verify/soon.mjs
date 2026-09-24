@@ -52,6 +52,30 @@ for (const viewport of VIEWPORTS) {
           percent: document.querySelector('.big').textContent,
           areas: document.querySelectorAll('.area').length,
           height: root.scrollHeight,
+          // Paragraphs and headings whose last line holds a single word.
+          orphans: [...document.querySelectorAll('main p, main h1, main h2, main h3, .alt p')]
+            // A two-word text (the name) may break into one word per line; that is no orphan.
+            .filter((el) => el.textContent.trim().split(/\\s+/).length >= 3)
+            .filter((el) => el.getClientRects().length && el.getBoundingClientRect().height > parseFloat(getComputedStyle(el).lineHeight) * 1.5)
+            .filter((el) => {
+              const nodes = [];
+              const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+              for (let node = walker.nextNode(); node; node = walker.nextNode()) if (node.data.trim()) nodes.push(node);
+              const node = nodes.at(-1);
+              if (!node) return false;
+              const text = node.data.replace(/\\s+$/, '');
+              const cut = text.lastIndexOf(' ');
+              if (cut <= 0) return false;
+              const top = (from, to) => {
+                const range = document.createRange();
+                range.setStart(node, from);
+                range.setEnd(node, to);
+                return range.getClientRects()[0]?.top ?? 0;
+              };
+              // The last word starts a line of its own when it sits below the character before the space.
+              return top(cut + 1, text.length) - top(cut - 1, cut) > 2;
+            })
+            .map((el) => el.textContent.trim().slice(-40)),
           // The narrowest word space in any heading, in em of its font size.
           space: (() => {
             let min = { ratio: 9, text: '' };
@@ -84,6 +108,7 @@ for (const viewport of VIEWPORTS) {
       check(`${label}: the name is the h1`, state.h1 === 'Ahmadreza Taheri');
       check(`${label}: the Persian name is visible, marked fa and rtl`, state.persianName);
       check(`${label}: every heading keeps a real word space (>= 0.2 em)`, state.space.ratio >= 0.2, `${state.space.ratio} em in "${state.space.text}"`);
+      check(`${label}: no line ends in a single orphaned word`, state.orphans.length === 0, state.orphans.join(' | '));
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
       check(
         `${label}: the overall figure is in the page's digits`,
