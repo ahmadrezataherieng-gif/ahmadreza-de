@@ -74,7 +74,7 @@ test('passages: every passage is non-empty and comes from the site\'s own conten
     }
 
     const contact = passages.find((p) => p.id === 'contact');
-    assert.ok(contact.text.includes('kontakt@ahmadreza.de'), `${locale} contact passage carries the confirmed address`);
+    assert.ok(contact.text.includes('ahmadrezataheride@gmail.com'), `${locale} contact passage carries the confirmed address`);
   }
 });
 

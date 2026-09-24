@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 
 import { structuredData, serialiseJsonLd } from '../../src/lib/structured-data.ts';
 import { leaksAddress } from './private-address.mjs';
+import { EMAIL } from '../../src/content/profile.ts';
 
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 
@@ -45,4 +46,15 @@ test('JSON-LD: one Person and one WebSite by @id, a ProfilePage only on the land
   assert.doesNotMatch(json, /Momrabadi|streetAddress/);
   assert.ok(!leaksAddress(json));
   assert.ok(!serialiseJsonLd({ x: '</script>' }).includes('</script>'));
+});
+
+test('e-mail: one address on the whole site, from EMAIL in content/profile.ts (llms.txt, legal pages, JSON-LD)', () => {
+  assert.ok(read('public/llms.txt').includes(`Contact: ${EMAIL.address}`));
+  assert.match(read('src/content/legal.ts'), /email: EMAIL\.address/);
+  const copy = { name: 'Ahmadreza Taheri', persianName: 'احمدرضا طاهری', jobTitle: 'Job', knowsAbout: [], inLanguage: 'de-DE', siteName: 'Amonel', description: 'd', pageUrl: 'https://ahmadreza.de/', isProfilePage: true };
+  assert.equal(structuredData(copy)['@graph'][0].email, `mailto:${EMAIL.address}`);
+  // The retired domain address appears nowhere a visitor or crawler can read it.
+  for (const file of ['public/llms.txt', 'soon/index.html', 'src/content/profile.ts', ...['de', 'en', 'fa'].map((locale) => `src/messages/${locale}.json`)]) {
+    assert.doesNotMatch(read(file), /kontakt@ahmadreza/, file);
+  }
 });

@@ -195,9 +195,9 @@ function Actions() {
         </span>
       )}
       {EMAIL.available ? (
-        <a href={`mailto:${EMAIL.address}`} data-action="email" className={cn(button, 'border-accent text-accent hover:bg-elevated')}>
+        <a href={`mailto:${EMAIL.address}`} data-action="email" className={cn(button, 'max-w-full flex-wrap border-accent text-accent hover:bg-elevated')}>
           {t('email')}
-          <span dir="ltr" className="text-ink">
+          <span dir="ltr" className="min-w-0 wrap-anywhere text-ink">
             {EMAIL.address}
           </span>
         </a>

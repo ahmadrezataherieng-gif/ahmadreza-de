@@ -36,6 +36,24 @@ export function roadmapProgress(items = roadmapItems()) {
   return { done, partial, total, percent: total ? Math.round(((done + partial / 2) / total) * 100) : 0 };
 }
 
+/**
+ * The phase being built now: the first `## Phase ...` section that still has
+ * an item that is not done. Its label is the part before " - " without
+ * "Phase", e.g. "9D-2 / 9D-3".
+ */
+export function currentPhase(markdown = readFileSync(file, 'utf8')) {
+  const sections = markdown.split(/\r?\n(?=## )/);
+  for (const section of sections) {
+    const heading = section.match(/^## Phase (.+?)(?: - .*)?\r?$/m);
+    if (!heading) continue;
+    const items = roadmapItems(section);
+    if (items.length && items.some((item) => item.status !== 'done')) {
+      return { label: heading[1].trim(), ...roadmapProgress(items) };
+    }
+  }
+  return null;
+}
+
 export function summaryTable(items = roadmapItems()) {
   const count = (priority, status) => items.filter((item) => (!priority || item.priority === priority) && (!status || item.status === status)).length;
   const rows = PRIORITIES.map((priority) => `| ${priority} | ${STATUSES.map((status) => count(priority, status)).join(' | ')} | ${count(priority)} |`);
@@ -47,8 +65,10 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const markdown = readFileSync(file, 'utf8');
   const table = summaryTable(roadmapItems(markdown));
   if (process.argv.includes('--write')) {
-    const updated = markdown.replace(/\| \| missing \| partial \| done \| total \|\n\|---\|---\|---\|---\|---\|\n(?:\|.*\|\n){4}/, `${table}\n`);
-    if (updated === markdown && !markdown.includes(table)) throw new Error('ROADMAP.md: Summary table not found');
+    // autocrlf may hand this file over with CRLF; keep whichever ending it has.
+    const eol = markdown.includes('\r\n') ? '\r\n' : '\n';
+    const updated = markdown.replace(/\| \| missing \| partial \| done \| total \|\r?\n\|---\|---\|---\|---\|---\|\r?\n(?:\|.*\|\r?\n){4}/, `${table.replace(/\n/g, eol)}${eol}`);
+    if (updated === markdown && !markdown.includes(table.replace(/\n/g, eol))) throw new Error('ROADMAP.md: Summary table not found');
     writeFileSync(file, updated);
   }
   console.log(table);

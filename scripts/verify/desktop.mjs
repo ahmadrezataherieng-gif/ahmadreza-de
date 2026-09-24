@@ -322,7 +322,7 @@ if (layout === 'desktop') {
   await clickOn('[data-launcher] [data-app="contact"]');
   await sleep(600);
   // The address was confirmed in Phase 7 (EMAIL.available).
-  check('Contact: the confirmed address is a mailto link', (await js(`document.querySelector('${win('contact')} a[href="mailto:kontakt@ahmadreza.de"]') !== null`)));
+  check('Contact: the confirmed address is a mailto link', (await js(`document.querySelector('${win('contact')} a[href="mailto:ahmadrezataheride@gmail.com"]') !== null`)));
   await b.shot(`${TAG}-windows`);
 } else {
   /* --- the home screen ------------------------------------------------------------ */

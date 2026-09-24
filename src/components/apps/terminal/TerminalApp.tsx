@@ -394,7 +394,7 @@ function Section({ section }: { section: PortfolioSection }) {
         <div className="my-1 flex flex-col gap-1">
           <Prose>{t('contact.text')}</Prose>
           {EMAIL.available ? (
-            <p>
+            <p className="wrap-anywhere">
               <a href={`mailto:${EMAIL.address}`} data-action="email" className={link}>
                 {EMAIL.address}
               </a>

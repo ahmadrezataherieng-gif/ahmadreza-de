@@ -187,7 +187,7 @@ const about = async () => {
   check('about: name, four sections', facts.heading.length > 5 && facts.sections === 4, facts);
   check('about: owed facts are marked, not guessed', facts.placeholders >= 2, facts);
   check('about: no résumé link while the PDF is missing', facts.resumeLink === 0 && facts.resumePending, facts);
-  check('about: the confirmed email is a link', facts.mail === 'mailto:kontakt@ahmadreza.de', facts);
+  check('about: the confirmed email is a link', facts.mail === 'mailto:ahmadrezataheride@gmail.com', facts);
   check(`about: reads ${RTL ? 'right to left' : 'left to right'}`, facts.dir === (RTL ? 'rtl' : 'ltr'), facts);
 
   // The anonymous stats (Phase 9C): fetched only once the end of About is in view.
@@ -255,7 +255,7 @@ const terminal = async () => {
   await press('ArrowDown');
   check('terminal: arrow down returns to an empty line', (await inputValue()) === '');
   await typeLine('contact');
-  check('terminal: contact prints the confirmed address', /kontakt@ahmadreza\.de/.test(await outputText()));
+  check('terminal: contact prints the confirmed address', /ahmadrezataheride@gmail.com/.test(await outputText()));
 
   // Keys the terminal answers never reach the document, where the desktop's
   // window cycling listens; other keys still do.
@@ -392,7 +392,7 @@ const assistant = async () => {
   if (!REDUCE) check('assistant: searching is a visible state', seen === 'searching', seen);
   check('assistant: the answer arrives', await aStateIs('answered'));
   const first = (await aMessages()).at(-1);
-  check('assistant: the answer is a real passage carrying the confirmed address', first.role === 'assistant' && /kontakt@ahmadreza\.de/.test(first.text), first);
+  check('assistant: the answer is a real passage carrying the confirmed address', first.role === 'assistant' && /ahmadrezataheride@gmail.com/.test(first.text), first);
   if (REDUCE) check('assistant: reduced motion - the finished answer at once, no typing', first.typed === 'done', first);
   else check('assistant: the answer types out and finishes', await until(`document.querySelector('${A('[data-typed]')}')?.dataset.typed === 'done'`, 4000));
   check('assistant: nothing overflows sideways', await noOverflow('assistant'));

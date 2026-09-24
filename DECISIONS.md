@@ -2037,3 +2037,38 @@ or in any past commit.
   force-pushed. A bundle of the old history was kept outside the repository
   first. The rewrite changed every commit SHA from the first one that held the
   address.
+
+## 61. One contact address: the Gmail address (2026-09-24)
+
+**Decided by Ahmadreza:** the Gmail address already in the Impressum is the
+only contact address on the whole site; `kontakt@ahmadreza.de` is shown
+nowhere.
+
+- `EMAIL.address` in `src/content/profile.ts` is the one place it is written.
+  `LEGAL_CONTACT.email` reads it, as do the landing page, About, Terminal,
+  Contact, the Assistant's index and JSON-LD. `public/llms.txt` is static, so a
+  test pins it to the constant; another keeps the retired address out of every
+  file a visitor or crawler reads.
+- The Datenschutzerklärung already named Google as the mailbox provider, so it
+  needed no change. Cloudflare Email Routing (DEP-01) is no longer a launch
+  blocker; it only matters if a domain address is activated later (OWN-09),
+  and then the privacy text must name every mail service involved.
+
+## 62. No phone number; Worker logs off (2026-09-24)
+
+**Decided by Ahmadreza:**
+
+- **No phone number in the Impressum.** The § 5 DDG grey area (a second fast
+  way of contact besides e-mail) is his decision and it is made; ROADMAP
+  LEG-13 records it as resolved.
+- **Worker logs off.** `observability` is disabled, logs and invocation logs
+  included, in `wrangler.jsonc` (the counter Worker `ahmadreza-de`) and in
+  `soon/wrangler.jsonc` (the live coming-soon Worker `silent-lake-8ae2`). With
+  no log there is nothing to describe, so the sentence "Cloudflare may log
+  requests to this interface for a few days" left the Datenschutzerklärung in
+  all three languages; everything else about the counters is unchanged. A test
+  pins both configs and the absence of the sentence, so logs cannot come back
+  without the privacy text coming back first.
+- `ahmadreza-de` has never been deployed (the D1 database is still owed,
+  DEP-03), so its setting takes effect with the first deploy at launch. The
+  coming-soon Worker was redeployed with logs off on the same day.

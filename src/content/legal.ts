@@ -12,11 +12,12 @@
  * Machine text, identical in every language; the country name and the e-mail
  * label come from `messages/legal/`.
  */
+import { EMAIL } from './profile.ts';
 import { LEGAL_ADDRESS } from './legal.local.ts';
 
 export const LEGAL_CONTACT = {
   name: 'Ahmadreza Taheri Momrabadi',
   street: LEGAL_ADDRESS.street,
   postcodeCity: LEGAL_ADDRESS.postcodeCity,
-  email: 'ahmadrezataheride@gmail.com',
+  email: EMAIL.address,
 } as const;

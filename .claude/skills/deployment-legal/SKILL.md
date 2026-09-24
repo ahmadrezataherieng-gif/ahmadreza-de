@@ -186,11 +186,15 @@ that confirmation from Ahmadreza.
 
 ### Launch blocker: email must really work
 
-`kontakt@ahmadreza.de` must receive real mail (via Cloudflare Email Routing)
-**before the site goes live**. This is tested with a real message from
-outside, not assumed. The Impressum, the landing page, About, Contact and the
-Terminal all point at this address - do not deploy with an address that does
-not receive mail. TODO.md, Phase 13.
+The site has **one contact address**, `EMAIL` in `src/content/profile.ts`
+(the Gmail address since 2026-09-24, DECISIONS.md 61). The Impressum, the
+Datenschutzerklärung, JSON-LD, the landing page, About, Contact, the Terminal
+and the Assistant read it from there; `public/llms.txt` is pinned to it by a
+test. Never hardcode an address anywhere else. If a domain address replaces
+it (ROADMAP OWN-09): route it, test it with a real message from outside,
+never use an auto-reply, and name every mail service in the
+Datenschutzerklärung - do not deploy with an address that does not receive
+mail.
 
 ### Fonts — legal requirement, not a preference
 

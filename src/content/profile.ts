@@ -29,11 +29,14 @@ export const RESUME = {
 
 // CONTENT-TODO CR-046
 /**
- * The contact address, confirmed by Ahmadreza in Phase 7. `available` still
- * gates every mailto link. Before launch the address must really receive mail
- * (TODO.md, Phase 13): the Impressum depends on a working contact.
+ * The one contact address of the whole site - landing page, About, Terminal,
+ * Assistant, Contact, JSON-LD, the Impressum and the Datenschutzerklärung all
+ * read it from here (`public/llms.txt` is pinned to it by a test). Ahmadreza
+ * chose the Gmail address on 2026-09-24 (DECISIONS.md 61); whether it stays or
+ * a domain address replaces it is ROADMAP OWN-09. `available` still gates
+ * every mailto link.
  */
 export const EMAIL = {
-  address: 'kontakt@ahmadreza.de',
+  address: 'ahmadrezataheride@gmail.com',
   available: true,
 } as const;

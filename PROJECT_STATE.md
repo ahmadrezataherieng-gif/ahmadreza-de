@@ -42,8 +42,9 @@ is left lives in ROADMAP.md.
   place (`wrangler.jsonc`, `public/_headers`, `public/_redirects`); not deployed.
 - **Landing page** (`/`): name, role, bold key facts, two mode cards, the résumé
   control in the header and under the role, an email link that appears once the
-  address is confirmed. Portrait and résumé are owed (TODO.md); the email,
-  kontakt@ahmadreza.de, is confirmed and linked. No journey
+  address is confirmed. Portrait and résumé are owed (TODO.md); the email - the
+  Gmail address, the site's only contact since 2026-09-24 (`EMAIL`, one
+  constant) - is linked. No journey
   code is loaded there. A returning visitor gets "Zum Desktop" as the primary
   action in the same slot, without a layout shift; the mode cards step back.
 - **Brand** (Phase 9A, DECISIONS.md 54): the site is **Amonel**, the OS is

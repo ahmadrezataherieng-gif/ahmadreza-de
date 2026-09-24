@@ -27,10 +27,10 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 11 | 0 | 8 | 19 |
+| P0 | 10 | 0 | 9 | 19 |
 | P1 | 16 | 4 | 12 | 32 |
-| P2 | 17 | 2 | 0 | 19 |
-| **total** | **44** | **6** | **20** | **70** |
+| P2 | 18 | 2 | 0 | 20 |
+| **total** | **44** | **6** | **21** | **71** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -86,6 +86,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | LEG-10 | **Check "Amonel"** in the DPMA and EUIPO registers before any commercial use. | missing | P1 | Ahmadreza | - |
 | LEG-11 | **Cloudflare features that set cookies stay off** (Bot Fight Mode, challenges, Waiting Room, Always Online); rate limit only by IP with Block. Check at deploy. | missing | P0 | Ahmadreza | DEP-06 |
 | LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - |
+| LEG-13 | **Phone number in the Impressum** (the § 5 DDG grey area: a "second fast way" of contact besides e-mail). **Resolved 2026-09-24 by the owner: no phone number.** The Impressum keeps name, postal address and e-mail; nothing to build. | done | P0 | Ahmadreza | - |
 
 ## Phase 12 - Performance, accessibility, mobile
 
@@ -103,12 +104,12 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
-| DEP-01 | **Cloudflare Email Routing** for `kontakt@ahmadreza.de` to a mailbox Ahmadreza reads, tested with a real message from outside. **Launch blocker.** | missing | P0 | Ahmadreza | - |
+| DEP-01 | **Cloudflare Email Routing** for a domain address (e.g. `kontakt@ahmadreza.de`), tested with a real message from outside. **No longer a launch blocker** since 2026-09-24: the site shows only the Gmail address (OWN-09); needed only if a domain address is activated. | missing | P2 | Ahmadreza | OWN-09 |
 | DEP-02 | **www → apex 301** redirect rule. Verified live on 2026-09-23 (`www.ahmadreza.de` → `https://ahmadreza.de/`, 301). | done | P0 | Ahmadreza | - |
 | DEP-03 | **Create the D1 database** `amonel-counters` (weur), put its `database_id` in `wrangler.jsonc`, apply the migration. A deploy with the placeholder id fails. | missing | P0 | Ahmadreza (or Claude Code with his login) | - |
 | DEP-04 | **Rate-limiting rule** `api-count` (20 per 10 s, IP, Block) - exact values in TODO.md, Phase 13. | missing | P0 | Ahmadreza | - |
 | DEP-05 | **Anonymous puzzle counters** (aggregate counts only, no personal data): built in Phase 9C (Worker + D1, `/api/*`), **not live** until DEP-03, DEP-04 and DEP-06. | partial | P1 | Claude Code | DEP-03, DEP-04, DEP-06 |
-| DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move both custom domains (apex and www) from the coming-soon Worker `silent-lake-8ae2` to it, then delete `silent-lake-8ae2`. Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-01, DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01 |
+| DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move both custom domains (apex and www) from the coming-soon Worker `silent-lake-8ae2` to it, then delete `silent-lake-8ae2`. Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01 |
 | DEP-07 | **Post-deploy checks**: the counter `curl` checks (TODO.md), legal pages, redirects, 404 status, headers. | missing | P1 | Claude Code | DEP-06 |
 
 ## Branding
@@ -130,7 +131,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | OWN-06 | **Decide the GitHub repo link** is public on the site (Projects). | missing | P2 | Ahmadreza | - |
 | OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. Given 2026-09-23; the address lives only in the git-ignored `src/content/legal.local.ts` since 2026-09-24 (LEG-12). | done | P0 | Ahmadreza | - |
 | OWN-08 | **Cloudflare login for deploys** (`npx wrangler login` on this machine, or deploy `soon/` yourself): nothing can be deployed without it. Done 2026-09-23 (OAuth, approved by the owner). | done | P0 | Ahmadreza | - |
-| OWN-09 | **Make `kontakt@ahmadreza.de` or the Gmail address the one contact**: the site shows `kontakt@ahmadreza.de`, the legal pages the Gmail address the owner chose. Both are fine legally once DEP-01 works; decide whether to keep two. | missing | P2 | Ahmadreza | DEP-01 |
+| OWN-09 | **Decide final e-mail (keep Gmail or activate a domain address).** If forwarding is used: test delivery, never use an auto-reply, and name the mail services (e.g. Cloudflare Email Routing, Google) in the Datenschutzerklärung. Since 2026-09-24 the Gmail address is the only contact on the whole site, from one constant (`EMAIL` in `src/content/profile.ts`): changing it there changes the landing page, About, Terminal, Assistant, Contact, JSON-LD and the legal pages; `public/llms.txt` is pinned to it by a test. | missing | P2 | Ahmadreza | - |
 
 ## After launch
 

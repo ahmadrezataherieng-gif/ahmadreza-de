@@ -55,9 +55,9 @@ function Contact({ appId }: AppProps) {
           <Row label={t('email.label')}>
             {EMAIL.available ? (
               <div className="flex flex-wrap items-center gap-2">
-                <a href={`mailto:${EMAIL.address}`} data-action="email" className={cn(BUTTON, 'border-accent text-accent hover:bg-elevated')}>
+                <a href={`mailto:${EMAIL.address}`} data-action="email" className={cn(BUTTON, 'max-w-full flex-wrap border-accent text-accent hover:bg-elevated')}>
                   {t('email.write')}
-                  <span dir="ltr" className="text-ink">
+                  <span dir="ltr" className="min-w-0 wrap-anywhere text-ink">
                     {EMAIL.address}
                   </span>
                 </a>

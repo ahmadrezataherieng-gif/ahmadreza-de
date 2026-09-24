@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1065 entries.**
+Generated from the codebase on 2026-09-23. **1066 entries.**
 
 ## How to use this file
 
@@ -20,7 +20,7 @@ Generated from the codebase on 2026-09-23. **1065 entries.**
 | Type | Entries |
 |---|---|
 | long text | 91 |
-| short text | 211 |
+| short text | 212 |
 | single word / label | 259 |
 | button | 66 |
 | puzzle / game | 353 |
@@ -28,7 +28,7 @@ Generated from the codebase on 2026-09-23. **1065 entries.**
 | SEO / meta | 16 |
 | other | 64 |
 | legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1065** |
+| **Total** | **1066** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -97,7 +97,7 @@ The first thing every visitor and recruiter sees. Highest priority for the final
 |---|---|---|---|---|---|
 | CR-044 | `RESUME (résumé PDF path and availability)` | other | all | PLACEHOLDER | The real résumé PDF (content of the file itself is owed) and its filename |
 | CR-045 | `PORTRAIT (portrait image)` | other | all | PLACEHOLDER | The real portrait photo; also needs its final alt text (`landing.portraitAlt`) |
-| CR-046 | `EMAIL (contact address)` | other | all | PLACEHOLDER | Confirm kontakt@ahmadreza.de really receives mail; used in Landing, About, Terminal, Assistant, Contact |
+| CR-046 | `EMAIL (contact address)` in `src/content/profile.ts` | other | all | PLACEHOLDER | Since 2026-09-24 the Gmail address from the Impressum, the only contact on the whole site (Landing, About, Terminal, Assistant, Contact, JSON-LD, llms.txt, legal pages). Final choice: ROADMAP OWN-09 |
 
 ## 3. Journey chrome (progress, mode switch, skip links)
 
@@ -1476,10 +1476,10 @@ The Impressum and the Datenschutzerklärung are **not placeholders**: they were 
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number, by the owner's choice (2026-09-23) - check that against § 5 DDG |
+| CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number - decided by the owner (2026-09-23, confirmed 2026-09-24, ROADMAP LEG-13) |
 | CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the five storage keys (§ 25(2) Nr. 2 TDDDG), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
 | CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
-| CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Still says «AhmadOS» and «8 von 13 Phasen» (ROADMAP BR-02); was outside the repo until 2026-09-23 |
+| CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
 | CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
 | CR-1055 | Coming-soon legal pages (`soon/dist/` `impressum/` and `datenschutz/` in de, en, fa, built by `scripts/build-soon.mjs` from the same JSON with scope `soon`) | legal | de / en / fa | LEGAL – owner must verify | Same text as CR-1029 and CR-1030 minus the counters, the Assistant and the site's storage table; plus the `ao-lang` storage entry and system fonts |
 
@@ -1519,3 +1519,4 @@ The Timeline app (ROADMAP APP-01): the seven eras with their year, name and trut
 |---|---|---|---|---|---|
 | CR-1064 | `title`, `intro`, `erasLabel` | short text | de / en / fa | PLACEHOLDER | Now (de): «Achtzig Jahre Computergeschichte in sieben Stationen – und am Ende, wo Ahmadreza heute steht.» |
 | CR-1065 | `open`, `now`, `since` | single word / label | de / en / fa | PLACEHOLDER | «In der Reise ansehen», «Ahmadreza heute», «seit {date}»; the start date itself is owed (OWN-05) |
+| CR-1066 | `soon/index.html` - the rebrand to «Amonel» and the progress block in the terminal (`t1`, `t2`, `t3`, the date stamp; figures filled from ROADMAP.md by `build-soon.mjs`) | short text | de / en / fa | PLACEHOLDER | Now (de): «roadmap: 21 von 71 punkten erledigt», «aktuelle phase 9D-2 / 9D-3: 1 von 14 erledigt», «nächster schritt: die letzten apps, dann feinschliff und start», «stand: 2026-09-24». en and fa use the English terminal lines. Decide whether a percentage of roadmap items is what visitors should see, and the Persian wording |

@@ -15,9 +15,10 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   controls (header corner and under the role) show "Lebenslauf folgt in Kürze"
   and are not links. Decide whether you want one German PDF for all languages or
   one per language.
-- **Email address:** confirmed as `kontakt@ahmadreza.de` in Phase 7 and live on
-  the site (`EMAIL.available = true`). It must receive mail before launch - see
-  Phase 13.
+- **Email address:** since 2026-09-24 the Gmail address from the Impressum is
+  the only contact on the whole site (`EMAIL` in `src/content/profile.ts`,
+  one constant). Whether it stays or a domain address replaces it is ROADMAP
+  OWN-09.
 
 ## Copy to confirm
 
@@ -239,12 +240,12 @@ What is left:
 - **A temporary "coming soon" page is already live on ahmadreza.de**, as a
   separate Cloudflare Worker, `silent-lake-8ae2` (source in `soon/`). This phase moves the
   domains to the real project; `silent-lake-8ae2` is removed once it does.
-- **BLOCKING: `kontakt@ahmadreza.de` must really receive mail before the site
-  goes live** - for example through Cloudflare Email Routing to a mailbox
-  Ahmadreza reads, tested with a real message from outside. The address is on
-  the landing page, in About, Contact and the Terminal, and the Impressum
-  (Phase 11) requires a real, working contact. **Do not deploy with an address
-  that does not receive mail.**
+- **The contact address must really receive mail.** Since 2026-09-24 that is
+  the Gmail address (no forwarding involved). If a domain address is ever
+  activated instead (OWN-09): route it (e.g. Cloudflare Email Routing), test it
+  with a real message from outside, never set an auto-reply, and name every mail
+  service in the Datenschutzerklärung. **Never deploy with an address that does
+  not receive mail** - the Impressum requires a working contact.
 
 - `ahmadreza.de` nameservers must be moved to Cloudflare. Workers custom domains
   **only** work for zones whose nameservers Cloudflare manages — unlike Pages,
