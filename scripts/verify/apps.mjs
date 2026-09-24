@@ -256,6 +256,9 @@ const terminal = async () => {
   check('terminal: arrow down returns to an empty line', (await inputValue()) === '');
   await typeLine('contact');
   check('terminal: contact prints the confirmed address', /ahmadrezataheride@gmail.com/.test(await outputText()));
+  // APP-08: a hidden command answers with its drawing and its own words.
+  await typeLine('moth');
+  check('terminal: the hidden moth answers', /\(\*\)/.test(await outputText()) && /1947|۱۹۴۷/.test(await outputText()), (await outputText()).slice(-200));
 
   // Keys the terminal answers never reach the document, where the desktop's
   // window cycling listens; other keys still do.

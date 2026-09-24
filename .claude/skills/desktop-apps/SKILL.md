@@ -100,8 +100,8 @@ DECISIONS.md 57.
   `deployment-legal` table and TODO.md together.
 - **Numbers in copy** use `{n, number}` or plural `#`: a bare `{n}` is
   stringified and shows Latin digits in Persian.
-- **The Terminal's `HIDDEN_COMMANDS`** (`terminal/shell.ts`) is the entry for
-  Phase 9D-3's easter eggs: answered like any command, never in `help` or Tab.
+- **The Terminal's `HIDDEN_COMMANDS`** (`terminal/shell.ts`, filled in APP-08, DECISIONS.md 68) holds
+  the easter eggs: answered like any command, never in `help` or Tab; own ASCII art only.
 
 - **The Assistant** (`apps/assistant/`) is a local search over `src/content/`,
   built by `src/lib/search/` and run entirely in the visitor's browser. It talks

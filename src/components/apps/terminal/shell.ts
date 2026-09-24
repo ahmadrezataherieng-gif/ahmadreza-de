@@ -73,8 +73,32 @@ export type ShellLine =
  * lines to print; machine text only, or message keys (`{ kind: 'message' }`).
  */
 export type HiddenCommand = (args: readonly string[], state: ShellState) => ShellLine[];
-// CONTENT-TODO CR-508
-export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map();
+
+/** Own drawings, machine text: the 1947 moth and a small Amonel train. */
+const MOTH = ['     .--.   .--.', "    (    \\ /    )", "     '.   V   .'", "       '-(*)-'", "      .-'/ \\'-.", "     (  /   \\  )", "      '-'   '-'"];
+const TRAIN = ['   ____________    ________', '  |   AMONEL   |__|   []   |__', "  |____________|  |________|  |)", '    (O)    (O)      (O)  (O)'];
+/** The first era's year: `uptime` counts from ENIAC. */
+const ENIAC_YEAR = 1946;
+const FORTUNES = 7;
+
+const say = (text: string, tone?: 'error' | 'muted'): ShellLine => ({ kind: 'text', text, ...(tone ? { tone } : {}) });
+const message = (key: string): ShellLine => ({ kind: 'message', key });
+
+// CONTENT-TODO CR-508, CR-1078 (the words are in messages/apps/terminal/ under `eggs`)
+export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map<string, HiddenCommand>([
+  ['moth', () => [...MOTH.map((line) => say(line)), message('eggs.moth')]],
+  ['sl', () => [...TRAIN.map((line) => say(line)), message('eggs.sl')]],
+  ['coffee', () => [say("HTTP/1.1 418 I'm a teapot", 'error'), message('eggs.coffee')]],
+  ['rm', (args) => (args.some((arg) => /^-[a-z]*r[a-z]*f|^-[a-z]*f[a-z]*r/.test(arg)) ? [message('eggs.rm')] : [say('rm: cannot remove: Read-only file system', 'error')])],
+  ['vim', () => [message('eggs.editor')]],
+  ['vi', () => [message('eggs.editor')]],
+  ['nano', () => [message('eggs.editor')]],
+  ['emacs', () => [message('eggs.editor')]],
+  ['hire', () => [message('eggs.hire')]],
+  ['fortune', (_args, state) => [message(`eggs.fortune.${state.history.length % FORTUNES}`)]],
+  ['uptime', () => [say(` up ${new Date().getFullYear() - ENIAC_YEAR} years, 7 eras, 1 user, load average: 0.19, 0.46, 0.71`), message('eggs.uptime')]],
+  ['ping', () => [message('eggs.ping')]],
+]);
 
 export interface ShellState {
   cwd: string;

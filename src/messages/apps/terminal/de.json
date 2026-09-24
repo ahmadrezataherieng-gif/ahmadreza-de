@@ -45,5 +45,24 @@
   },
   "contact": {
     "text": "Am schnellsten erreichen Sie Ahmadreza per E-Mail:"
+  },
+  "eggs": {
+    "moth": "Der erste „Bug“ war echt: Am 9. September 1947 klebten Techniker eine Motte aus Relais 70 des Harvard Mark II ins Logbuch. Seitdem suchen wir sie.",
+    "sl": "Tippfehler bei ls? Dieser Zug fährt trotzdem pünktlich ab.",
+    "coffee": "Laut RFC 2324 darf eine Teekanne keinen Kaffee kochen. Für echten Kaffee: der Befehl contact.",
+    "rm": "Netter Versuch. Dieses Dateisystem ist schreibgeschützt – genau wie die Geschichte.",
+    "editor": "Keine Sorge, hier bleibt niemand in einem Editor gefangen. Mit cat lesen Sie jede Datei.",
+    "hire": "Ausgezeichnete Idee. Der Befehl contact zeigt, wie Sie Ahmadreza erreichen, und cv, was er mitbringt.",
+    "uptime": "Gezählt ab dem ENIAC, 1946 – die erste Epoche dieser Reise.",
+    "ping": "Echte Pakete darf ein Browser nicht senden. Die Netzwerk-Werkzeuge zeigen, wie ping antwortet – als ehrliche Simulation.",
+    "fortune": {
+      "0": "Dass ein Byte acht Bits hat, wurde 1964 mit IBMs System/360 zum Standard.",
+      "1": "Das erste Wort über ein Netz war „lo“: 1969 stürzte das ARPANET beim „g“ von „login“ ab.",
+      "2": "640 KB sollten genug sein – ob das je jemand wirklich gesagt hat, ist nicht belegt.",
+      "3": "Die Maus hieß anfangs „X-Y-Positionsanzeiger für ein Anzeigesystem“.",
+      "4": "Ein Ping über den Atlantik dauert mindestens so lange, wie das Licht im Glas braucht.",
+      "5": "UNIX-Zeit zählt Sekunden ab dem 1. Januar 1970.",
+      "6": "Die Cloud ist nur der Computer von jemand anderem – mit sehr guter Klimaanlage."
+    }
   }
 }

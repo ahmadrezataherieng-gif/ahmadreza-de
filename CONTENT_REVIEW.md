@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1077 entries.**
+Generated from the codebase on 2026-09-23. **1078 entries.**
 
 ## How to use this file
 
@@ -20,7 +20,7 @@ Generated from the codebase on 2026-09-23. **1077 entries.**
 | Type | Entries |
 |---|---|
 | long text | 95 |
-| short text | 216 |
+| short text | 217 |
 | single word / label | 259 |
 | button | 66 |
 | puzzle / game | 353 |
@@ -28,7 +28,7 @@ Generated from the codebase on 2026-09-23. **1077 entries.**
 | SEO / meta | 16 |
 | other | 66 |
 | legal (not placeholder; LEGAL – owner must verify) | 5 |
-| **Total** | **1077** |
+| **Total** | **1078** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1545,3 +1545,11 @@ Copy in `src/messages/apps/time-machine/{de,en,fa}.json`; logic in `src/componen
 | CR-1075 | `themes.<id>.name`, `themes.<id>.look`, `effects.*` - the eight capsules | short text | de / en / fa | PLACEHOLDER | One name and one line per era look («Grüner Phosphor, Scanlines, ein blinkender Cursor.») |
 | CR-1076 | `destination.*` - enter a year, and the answers for too early, the future and invalid input; `ERA_STARTS` (the cloud era from 2006) | short text | de / en / fa | PLACEHOLDER | Now (de): «… ist noch nicht gebaut. Die Maschine fährt nur in die Vergangenheit.» Confirm 2006 as the start of the cloud look |
 | CR-1077 | Datenschutzerklärung: the storage-table row for `amonel.theme.v1` (`messages/legal/*.json`) | legal | de / en / fa | LEGAL – owner must verify | «Die Epoche, in die Sie den Desktop mit der Zeitmaschine versetzt haben …; wird erst geschrieben, wenn Sie reisen, und gelöscht, wenn Sie in die Gegenwart zurückkehren.» |
+
+## 32. Terminal easter eggs (hidden commands)
+
+Copy under `eggs` in `src/messages/apps/terminal/{de,en,fa}.json`; commands and drawings in `src/components/apps/terminal/shell.ts` (`HIDDEN_COMMANDS`).
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1078 | `eggs.moth`, `eggs.sl`, `eggs.coffee`, `eggs.rm`, `eggs.editor`, `eggs.hire`, `eggs.uptime`, `eggs.ping`, `eggs.fortune.0`..`6`; the ASCII moth and train (machine text) | short text | de / en / fa | PLACEHOLDER | Now (de): «Der erste „Bug" war echt: Am 9. September 1947 …», «Ausgezeichnete Idee. Der Befehl contact zeigt …». Seven sourced computing facts as fortunes; check each is how the owner wants to sound |

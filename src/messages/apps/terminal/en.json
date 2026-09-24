@@ -45,5 +45,24 @@
   },
   "contact": {
     "text": "The quickest way to reach Ahmadreza is email:"
+  },
+  "eggs": {
+    "moth": "The first \"bug\" was real: on 9 September 1947 technicians taped a moth from relay 70 of the Harvard Mark II into the logbook. We have been hunting them ever since.",
+    "sl": "Mistyped ls? This train leaves on time anyway.",
+    "coffee": "According to RFC 2324 a teapot may not brew coffee. For real coffee: the contact command.",
+    "rm": "Nice try. This file system is read-only - just like history.",
+    "editor": "Don't worry, nobody gets trapped in an editor here. cat reads any file.",
+    "hire": "Excellent idea. The contact command shows how to reach Ahmadreza, and cv what he brings.",
+    "uptime": "Counted from ENIAC, 1946 - the first era of this journey.",
+    "ping": "A browser may not send real packets. The Network tools show how ping answers - as an honest simulation.",
+    "fortune": {
+      "0": "The eight-bit byte became the standard with IBM's System/360 in 1964.",
+      "1": "The first word sent over a network was \"lo\": in 1969 the ARPANET crashed at the \"g\" of \"login\".",
+      "2": "640 KB ought to be enough - whether anyone really said so has never been shown.",
+      "3": "The mouse was first called an \"X-Y position indicator for a display system\".",
+      "4": "A ping across the Atlantic takes at least as long as light needs in glass.",
+      "5": "UNIX time counts seconds from 1 January 1970.",
+      "6": "The cloud is just someone else's computer - with very good air conditioning."
+    }
   }
 }

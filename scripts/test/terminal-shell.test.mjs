@@ -145,9 +145,26 @@ test('scrollback is bounded', () => {
   assert.equal(new Set(ids).size, ids.length, 'line ids stay unique');
 });
 
-test('hidden commands: the registry is empty until 9D-3, and help and Tab never list it', () => {
-  assert.equal(HIDDEN_COMMANDS.size, 0);
+test('hidden commands (APP-08): answered, never listed by help or offered by Tab, every word in the copy', async () => {
+  const { readFileSync } = await import('node:fs');
+  const copy = Object.fromEntries(['de', 'en', 'fa'].map((locale) => [locale, JSON.parse(readFileSync(new URL(`../../src/messages/apps/terminal/${locale}.json`, import.meta.url), 'utf8'))]));
+  const get = (object, path) => path.split('.').reduce((node, key) => node?.[key], object);
+  assert.ok(HIDDEN_COMMANDS.size >= 9);
+  for (const name of HIDDEN_COMMANDS.keys()) {
+    const lines = printed(run(name));
+    assert.ok(lines.length > 0, name);
+    assert.ok(!lines.some((line) => /command not found/.test(JSON.stringify(line))), name);
+    for (const line of lines.filter((entry) => entry.kind === 'message')) {
+      for (const locale of ['de', 'en', 'fa']) assert.equal(typeof get(copy[locale], line.key), 'string', `${locale} ${line.key}`);
+    }
+    // Tab completes nothing hidden: the visitor has to find them.
+    assert.equal(complete(initialShell(), name).input, name, name);
+  }
+  // Every fortune exists in every language.
+  for (let index = 0; index < 7; index++) for (const locale of ['de', 'en', 'fa']) assert.ok(copy[locale].eggs.fortune[index], `${locale} fortune ${index}`);
+  assert.match(JSON.stringify(printed(run('rm -rf /'))), /eggs\.rm/);
+  assert.match(JSON.stringify(printed(run('rm notes.txt'))), /Read-only file system/);
+  assert.match(JSON.stringify(printed(run('uptime'))), new RegExp(`up ${new Date().getFullYear() - 1946} years`));
   const state = run('nosuchcommand');
   assert.match(JSON.stringify(state.lines.at(-2)), /command not found/);
-  assert.equal(complete(initialShell(), 'nosuch').input, 'nosuch');
 });
