@@ -1,0 +1,35 @@
+{
+  "title": "Résumé",
+  "intro": "The résumé at a glance. Places marked “To be added” are not confirmed yet and will be filled in.",
+  "contact": "Contact",
+  "location": "Trier",
+  "sections": {
+    "experience": "Work and training",
+    "education": "School and studies",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certificates": "Certificates and further training"
+  },
+  "entries": {
+    "repair": {
+      "title": "Computer and mobile phone repair",
+      "text": "A background in repairing computers and mobile phones. Period, place and tasks to follow."
+    },
+    "earlier": {
+      "title": "Earlier stations",
+      "text": "Further stations will be added here."
+    },
+    "school": {
+      "title": "School",
+      "text": "Qualification and period to follow."
+    },
+    "studies": {
+      "title": "Studies or further training",
+      "text": "If applicable, it will be added here."
+    },
+    "certificates": {
+      "title": "Certificates",
+      "text": "Certificates and further training will be added here."
+    }
+  }
+}

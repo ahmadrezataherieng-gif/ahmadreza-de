@@ -588,6 +588,16 @@ await js(`localStorage.setItem('${STORE}', JSON.stringify({ state: { artifacts: 
 await b.goto(`${BASE}${PREFIX}/desktop/`, 4000);
 check('timeline: the earned badges are shown, with their count', (await openFromIcon('timeline')) && (await until(`${timelineBadges} === 2`, 3000)) && (await js(`document.querySelector('${content('timeline')} [data-legend-count]')?.dataset.legendCount`)) === '2');
 await close('timeline');
+
+// APP-03: the CV is a real sheet with marked placeholders, and its PDF control stays "coming soon".
+check('cv: opens', await openFromIcon('cv'));
+check('cv: its copy loaded', await until(`!/\\bcv\\.[a-zA-Z]/.test(document.querySelector('${content('cv')}')?.textContent ?? 'cv.x')`, 3000));
+check('cv: work, school and certificates are laid out (6 entries)', (await js(`document.querySelectorAll('${content('cv')} [data-cv-entry]').length`)) === 6);
+check('cv: every owed fact is visibly marked, none guessed', (await js(`document.querySelectorAll('${content('cv')} [data-placeholder]').length`)) >= 8);
+check('cv: the PDF control says it is coming, and is no link', await js(`(() => { const p = document.querySelector('${content('cv')} [data-action="resume-pending"]'); return !!p && p.getAttribute('aria-disabled') === 'true' && !document.querySelector('${content('cv')} [data-action="resume-download"]'); })()`));
+check('cv: the e-mail address is a mailto link', await js(`document.querySelector('${content('cv')} [data-action="email"]')?.getAttribute('href')?.startsWith('mailto:') ?? false`));
+check('cv: no horizontal overflow', await noOverflow('cv'));
+await close('cv');
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;
 console.log(`${QUIET ? '' : '\n'}${TAG}: ${passed}/${log.length} passed`);

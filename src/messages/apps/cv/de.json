@@ -1,0 +1,35 @@
+{
+  "title": "Lebenslauf",
+  "intro": "Der Lebenslauf auf einen Blick. Stellen, die mit „Angabe folgt“ markiert sind, sind noch nicht bestätigt und werden ergänzt.",
+  "contact": "Kontakt",
+  "location": "Trier",
+  "sections": {
+    "experience": "Berufserfahrung und Ausbildung",
+    "education": "Schule und Studium",
+    "skills": "Kenntnisse",
+    "languages": "Sprachen",
+    "certificates": "Zertifikate und Weiterbildung"
+  },
+  "entries": {
+    "repair": {
+      "title": "Computer- und Handyreparatur",
+      "text": "Hintergrund in der Reparatur von Computern und Mobiltelefonen. Zeitraum, Ort und Aufgaben folgen."
+    },
+    "earlier": {
+      "title": "Frühere Stationen",
+      "text": "Weitere Stationen werden hier ergänzt."
+    },
+    "school": {
+      "title": "Schulbildung",
+      "text": "Abschluss und Zeitraum folgen."
+    },
+    "studies": {
+      "title": "Studium oder weitere Ausbildung",
+      "text": "Falls zutreffend, wird es hier ergänzt."
+    },
+    "certificates": {
+      "title": "Zertifikate",
+      "text": "Zertifikate und Weiterbildungen werden hier ergänzt."
+    }
+  }
+}

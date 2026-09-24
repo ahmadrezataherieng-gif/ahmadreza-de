@@ -68,7 +68,7 @@ in Act 1 unlock extra apps.
 ## The apps (Act 3, Phase 7)
 
 About, Terminal, Tickets, Traceroute, (Phase 7/8) the Assistant and (Phase 9B)
-the Computer-Quiz are real; Contact, Timeline and CV are still placeholders.
+the Computer-Quiz are real; Contact, Timeline and CV are real (the CV with marked placeholder entries).
 Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
 The bonus apps (Phase 9D-1): Binary & Morse, Snake and Pixel Paint are real;
 Network tools and the Time Machine too (9D-2, DECISIONS.md 63 and 64: `network/net.ts`, data in

@@ -40,19 +40,19 @@ build time).
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
 | `desktop` | 9 | 0 | 4 | 49 / 66 | 74 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
-| `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
+| `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 64 | 6 | 35 | 263.8 / 406 | **65 %** |
+| **all** | 64 | 7 | 34 | 267.3 / 406 | **66 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
-| P1 | 13 | 5 | 36 | 54 |
+| P1 | 12 | 6 | 36 | 54 |
 | P2 | 12 | 1 | 16 | 29 |
-| **total** | **35** | **6** | **64** | **105** |
+| **total** | **34** | **7** | **64** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -86,7 +86,7 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | APP-01 | **Timeline app** (base app): the seven eras and Ahmadreza's own path as one scrollable timeline, from `content/eras.ts` and `content/about.ts`. Today the placeholder. Built 2026-09-23: the eras from the journey's own copy (the page-messages chunk the puzzles already load) with links to `/amonel/#era-N`, then the current station from About's copy; its start date is owed (OWN-05). | done | P1 | Claude Code | - | M | desktop |
 | APP-02 | **Contact app** (base app): today a placeholder with the `mailto:` link. Needs the full app: email, profiles (LinkedIn, GitHub, XING once OWN-03 is done), résumé, the legal links. `mailto:` only, never a form. Built 2026-09-23: its own copy, e-mail with a copy button, résumé, location, legal links; the profile links are **waiting for owner** (OWN-03) - add the URLs in `src/content/profiles.ts`. | partial | P1 | Claude Code | OWN-03 for the profile links | S 80% | about |
-| APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). | missing | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 | M | about |
+| APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). Built 2026-09-24: `content/cv.ts` (structure), `apps/cv/CvApp.tsx` (a readable sheet: contact, work and training, school, skills, languages, certificates), copy in `messages/apps/cv/`; the apprenticeship, skills and languages reuse About's; every entry is a marked placeholder and the PDF control still says "folgt in Kürze" (OWN-02, OWN-05 fill it); CR-1096, `apps.mjs` and `apps.test.mjs` check it. | partial | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 | M 70% | about |
 | APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): four tabs. **Subnet** - a real IPv4 calculator (CIDR, dotted or slash mask), the 32 bits coloured network/host, network/broadcast/first/last/usable, the address kind (private, APIPA, CGNAT, documentation, loopback...), a gateway check (the 1995 puzzle's question) and splitting a block into smaller ones. **Ping** - Windows 95 style output over the Traceroute app's prepared routes (same times), loopback, silent documentation addresses. **DNS** - an iterative lookup (resolver, root, TLD, authoritative) over a prepared `.example` zone, A/AAAA/MX/TXT/CNAME, CNAMEs followed, and the cache: a second lookup answers in 0 ms until the TTL. **Ports** - well-known ports by number or name with the three IANA ranges. Ping and DNS are labelled simulations, never real network requests. Built 2026-09-24 (DECISIONS.md 63): `apps/network/`, `content/network.ts`, 13 unit tests, `bonus.mjs` drives all four tabs; copy CR-1067..1073. | done | P1 | Claude Code | - | L | desktop |
 | APP-05 | **Time Machine app** (today bonus, slot `time-machine`): theme switcher over the eight themes; writes `amonel.theme.v1` (then LEG-02 must list it as used); restyles Snake via `--ao-snake-*`. Built 2026-09-24 (DECISIONS.md 64): eight capsules drawn in their own era's tokens, a year dial that counts to the target, "enter any year" (1946 to now lands in the era current then), back to the present; only the desktop remembers the era (`DesktopTheme`); LEG-02 storage table updated in de/en/fa; `check:pixel-font` now scans every desktop string. | done | P1 | Claude Code | LEG-02 update in the same change | M | desktop |
 | APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. | missing | P2 | Claude Code | - | M | desktop |

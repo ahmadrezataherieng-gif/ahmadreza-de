@@ -370,7 +370,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- The CV app is still a placeholder (waiting for the owner, APP-03), and two bonus apps (scheduler, file tree) share the stand-in. Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
+- The CV app has its layout but only marked placeholder entries and no PDF (waiting for the owner, APP-03, OWN-02, OWN-05), and two bonus apps (scheduler, file tree) share the stand-in. Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
 - The bonus apps' copy (Phase 9D-1) is a draft awaiting native-speaker
   proofreading (TODO.md). The Morse tone has only run in headless Chrome,
   where nothing is heard; touch and pen were emulated.

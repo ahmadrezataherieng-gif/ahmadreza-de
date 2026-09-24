@@ -7,13 +7,14 @@ import { test } from 'node:test';
 import { EMPLOYER } from './employer-name.mjs';
 import { careerStations, languages, skillAreas } from '../../src/content/about.ts';
 import { projects } from '../../src/content/projects.ts';
+import { cvCertificates, cvEducation, cvExperience } from '../../src/content/cv.ts';
 import { routes } from '../../src/content/routes.ts';
 import { tickets, ticketStatuses } from '../../src/content/tickets.ts';
 import { cleanHost, formatHop, median, resolveTarget, summarise } from '../../src/components/apps/traceroute/trace.ts';
 import { PORTFOLIO_COMMANDS, SHELL_COMMANDS } from '../../src/components/apps/terminal/shell.ts';
 
 const LOCALES = ['de', 'en', 'fa'];
-const APPS = ['about', 'contact', 'timeline', 'terminal', 'tickets', 'traceroute', 'assistant', 'assistant-journey', 'quiz', 'stats', 'binary', 'snake', 'paint', 'network', 'time-machine'];
+const APPS = ['about', 'contact', 'timeline', 'terminal', 'tickets', 'traceroute', 'assistant', 'assistant-journey', 'quiz', 'stats', 'binary', 'snake', 'paint', 'network', 'time-machine', 'cv'];
 const copy = (app, locale) => JSON.parse(readFileSync(new URL(`../../src/messages/apps/${app}/${locale}.json`, import.meta.url), 'utf8'));
 const get = (object, path) => path.split('.').reduce((node, key) => node?.[key], object);
 
@@ -191,4 +192,26 @@ test('the Assistant is never called an AI, in any language (DECISIONS.md 53)', (
     const claims = [JSON.stringify(site.os.apps.assistant), site.eras.cloud.visual.promptLabel];
     for (const text of claims) assert.doesNotMatch(text, /\bKI\b|\bAI\b|هوش مصنوعی/, `${locale}: ${text}`);
   }
+});
+
+test('CV (APP-03): every entry has its copy, no fact is guessed, the employer is never named', () => {
+  const entries = [...cvExperience, ...cvEducation, ...cvCertificates];
+  assert.equal(new Set(entries.map((entry) => entry.id)).size, entries.length, 'one entry per id');
+  for (const locale of LOCALES) {
+    const cv = copy('cv', locale);
+    const about = copy('about', locale);
+    for (const entry of entries) {
+      if (entry.id === 'apprenticeship') assert.ok(get(about, 'path.stations.apprenticeship.title'), `${locale} about station`);
+      else for (const key of ['title', 'text']) assert.ok(get(cv, `entries.${entry.id}.${key}`), `${locale} ${entry.id}.${key}`);
+    }
+    for (const section of ['experience', 'education', 'skills', 'languages', 'certificates']) assert.ok(get(cv, `sections.${section}`), `${locale} section ${section}`);
+    assert.doesNotMatch(JSON.stringify(cv), EMPLOYER, `${locale} names no employer`);
+  }
+  // Dates Ahmadreza has not supplied stay null and render as placeholders; every placeholder entry is flagged.
+  for (const entry of entries) {
+    assert.equal(entry.start, null, `${entry.id}: no date is invented`);
+    assert.equal(entry.end, null, `${entry.id}: no date is invented`);
+  }
+  assert.ok(cvExperience.some((entry) => entry.id === 'apprenticeship' && entry.current), 'the apprenticeship is the current station');
+  assert.ok([...cvEducation, ...cvCertificates].every((entry) => entry.placeholder), 'education and certificates are placeholders until supplied');
 });
