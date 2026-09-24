@@ -44,15 +44,15 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   timeline: load(() => import('@/components/apps/timeline/TimelineApp'), 'TimelineApp'),
   cv: load(() => import('@/components/apps/cv/CvApp'), 'CvApp'),
   quiz: load(() => import('@/components/apps/quiz/QuizApp'), 'QuizApp'),
-  // Bonus apps (Phase 9D-1, DECISIONS.md 57). The rest share one stand-in:
-  // network tools and the Time Machine arrive in 9D-2, the scheduler and the
-  // file tree later.
+  // Bonus apps (Phase 9D-1, DECISIONS.md 57; network tools 9D-2, DECISIONS.md
+  // 63). The rest share one stand-in: the Time Machine arrives in 9D-2, the
+  // scheduler and the file tree later.
   binary: load(() => import('@/components/apps/binary/BinaryApp'), 'BinaryApp'),
   scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   filesystem: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   snake: load(() => import('@/components/apps/snake/SnakeApp'), 'SnakeApp'),
   paint: load(() => import('@/components/apps/paint/PaintApp'), 'PaintApp'),
-  'network-tools': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  'network-tools': load(() => import('@/components/apps/network/NetworkApp'), 'NetworkApp'),
   'time-machine': load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
 };
 
@@ -69,6 +69,7 @@ const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
   binary: { width: 640, height: 580 },
   snake: { width: 480, height: 600 },
   paint: { width: 760, height: 600 },
+  'network-tools': { width: 700, height: 600 },
 };
 
 const DEFAULT_SIZE: AppDefinition['size'] = { width: 560, height: 400 };

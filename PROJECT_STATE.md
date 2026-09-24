@@ -111,8 +111,15 @@ is left lives in ROADMAP.md.
     1-bit, 16-colour (CGA/EGA) and 256-colour palettes as colour depths with a
     note each; autosave in `amonel.paint.v1` after the first change; a 512 px
     PNG made in the browser; mouse, touch, pen and keyboard.
-  - Network tools (1995) and the Time Machine (today) are 9D-2 slots; the
-    scheduler (1956) and file tree (1971) are still the stand-in.
+  - **Network tools** (1995, 2026-09-24, DECISIONS.md 63): a real IPv4 subnet
+    calculator (bits drawn network/host, address kinds, the gateway check of
+    the 1995 puzzle, splitting), ping in Windows 95 style and an iterative DNS
+    lookup with a cache - both labelled simulations over the Traceroute routes
+    and a `.example` zone - and the well-known ports with their IANA ranges.
+    Easter eggs: 127.0.0.1, APIPA, port 31337, a TXT greeting. Stores nothing,
+    sends nothing.
+  - The Time Machine (today) is the last 9D-2 slot; the scheduler (1956) and
+    file tree (1971) are still the stand-in.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
   own copy file per language:
   - **About:** who Ahmadreza is, his path, what he does now, skills by area,
@@ -254,6 +261,14 @@ and a few new utility classes in the one stylesheet; no app code reaches them.
 | Pixel Paint on open | - | **7.6 kB** (6.4 + 1.2) |
 | Landing / Journey HTML | de 9.5 / 40.3 kB | unchanged |
 | Desktop HTML | de 4.9 · en 4.7 · fa 5.2 kB | de 5.2 · en 5.0 · fa 5.5 kB (the bonus apps' descriptions in `os`) |
+
+Phase 9D-2 (`scripts/verify/sizes.mjs`, gzip -6): each app is its own lazy chunk;
+the views grow only by the registry line.
+
+| | Before 9D-2 | After 9D-2 |
+|---|---|---|
+| Landing / Journey / Desktop: JS loaded | 136.6 / 226.7 / 147.5 kB | 138.0 / 228.3 / 148.9 kB (incl. the Part A changes of 2026-09-24) |
+| Network tools on open (code + copy, de) | - | **13.8 kB** (9.0 + 4.8) |
 
 ## Scroll performance (DECISIONS.md 48)
 

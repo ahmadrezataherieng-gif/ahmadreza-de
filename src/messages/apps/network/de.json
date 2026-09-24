@@ -1,0 +1,212 @@
+{
+  "intro": "Ein Netz braucht Adressen: Ohne sie findet keine Maschine die andere. Hier rechnen Sie Subnetze aus, schicken einen Ping, verfolgen eine DNS-Abfrage durch das Internet und schlagen nach, welcher Dienst auf welchem Port lauscht.",
+  "tabsLabel": "Werkzeug wählen",
+  "tabs": {
+    "subnet": "Subnetz",
+    "ping": "Ping",
+    "dns": "DNS",
+    "ports": "Ports"
+  },
+  "subnet": {
+    "explain": "Eine IPv4-Adresse hat 32 Bit. Die Maske teilt sie: Die vorderen Bits nennen das Netz, die hinteren den Rechner darin. Rechner mit demselben Netzteil erreichen sich direkt – alle anderen nur über ein Gateway.",
+    "inputLabel": "Adresse mit Präfix oder Maske",
+    "examples": "Beispiele",
+    "summary": "Präfix /{prefix, number}: {hosts, plural, one {# nutzbare Adresse} other {# nutzbare Adressen}} in diesem Netz.",
+    "errors": {
+      "empty": "Geben Sie eine Adresse ein, z. B. 192.168.1.10/24.",
+      "invalidAddress": "Das ist keine gültige IPv4-Adresse: vier Zahlen von 0 bis 255, durch Punkte getrennt.",
+      "invalidPrefix": "Das Präfix reicht von /0 bis /32 – oder schreiben Sie eine Maske wie 255.255.255.0.",
+      "invalidMask": "Diese Maske ist nicht zusammenhängend: Erst müssen alle Einsen kommen, dann alle Nullen."
+    },
+    "bitsLabel": "Die 32 Bit der Adresse: {network, number} Bit für das Netz, {host, number} Bit für den Rechner.",
+    "bitsAddress": "Adresse",
+    "bitsMask": "Maske",
+    "legendNetwork": "{count, plural, one {# Netzbit} other {# Netzbits}}",
+    "legendHost": "{count, plural, one {# Hostbit} other {# Hostbits}}",
+    "fields": {
+      "network": "Netzadresse",
+      "broadcast": "Broadcast",
+      "first": "Erster Rechner",
+      "last": "Letzter Rechner",
+      "mask": "Subnetzmaske",
+      "wildcard": "Wildcard",
+      "usable": "Adressen",
+      "kind": "Art der Adresse"
+    },
+    "hostCount": "{usable, number} nutzbar von {total, number}",
+    "kinds": {
+      "unspecified": {
+        "name": "Unbestimmt",
+        "note": "0.0.0.0/8 bedeutet „dieses Netz“ oder „noch keine Adresse“ – ein Rechner, der beim Start per DHCP fragt, benutzt 0.0.0.0 als Absender."
+      },
+      "loopback": {
+        "name": "Loopback",
+        "note": "127.0.0.0/8 verlässt die Maschine nie: Wer 127.0.0.1 anspricht, spricht mit sich selbst."
+      },
+      "private": {
+        "name": "Privat (RFC 1918)",
+        "note": "Private Adressen gelten nur im eigenen Netz. Ins Internet kommen sie über NAT: Der Router ersetzt sie durch seine eine öffentliche Adresse."
+      },
+      "sharedCgnat": {
+        "name": "Carrier-Grade NAT",
+        "note": "100.64.0.0/10 vergeben Provider, die selbst zu wenige öffentliche Adressen haben – ein NAT hinter dem NAT."
+      },
+      "linkLocal": {
+        "name": "Link-local (APIPA)",
+        "note": "Eine Adresse aus 169.254.0.0/16 gibt sich ein Rechner selbst, wenn kein DHCP-Server antwortet. Unter Windows 98 hieß das APIPA – und bedeutete meist: Kabel prüfen."
+      },
+      "documentation": {
+        "name": "Dokumentation",
+        "note": "Diese Bereiche (RFC 5737) sind für Beispiele reserviert und werden nie im Internet geroutet – deshalb benutzt diese Website sie für ihre Simulationen."
+      },
+      "multicast": {
+        "name": "Multicast",
+        "note": "224.0.0.0/4 adressiert keine einzelne Maschine, sondern eine Gruppe: Wer sich anmeldet, bekommt die Pakete."
+      },
+      "reserved": {
+        "name": "Reserviert",
+        "note": "240.0.0.0/4 ist seit den Achtzigern für später reserviert – und wird bis heute nicht benutzt."
+      },
+      "broadcast": {
+        "name": "Limited Broadcast",
+        "note": "255.255.255.255 erreicht jede Maschine im lokalen Netz, aber nie einen Router dahinter."
+      },
+      "public": {
+        "name": "Öffentlich",
+        "note": "Eine öffentliche Adresse ist weltweit eindeutig und im Internet erreichbar – solange keine Firewall davorsteht."
+      }
+    },
+    "roles": {
+      "network": "Das ist die Netzadresse selbst: Sie bezeichnet das ganze Netz und gehört keinem Rechner.",
+      "broadcast": "Das ist die Broadcast-Adresse: Ein Paket an sie geht an alle im Netz – kein Rechner darf sie tragen."
+    },
+    "pointToPoint": "/31 ist eine Punkt-zu-Punkt-Verbindung zwischen zwei Routern (RFC 3021): ohne Netz- und Broadcast-Adresse, beide Adressen sind nutzbar.",
+    "singleHost": "/32 bezeichnet genau eine Adresse – so stehen einzelne Rechner in Routing-Tabellen und Firewall-Regeln.",
+    "gateway": {
+      "title": "Passt das Gateway?",
+      "explain": "Genau diese Frage stellte das Rätsel von 1995: Ein Rechner schickt alles, was nicht in seinem Netz liegt, an sein Gateway – und das muss er direkt erreichen können.",
+      "label": "Standard-Gateway",
+      "invalid": "Geben Sie eine gültige IPv4-Adresse für das Gateway ein.",
+      "verdicts": {
+        "ok": "Das Gateway liegt im selben Netz und ist eine Rechneradresse. So kommt der Rechner hinaus.",
+        "otherSubnet": "Das Gateway liegt in einem anderen Netz. Der Rechner kann es nicht direkt erreichen – und damit nichts außerhalb seines Netzes.",
+        "isNetwork": "Das ist die Netzadresse. Ein Gateway braucht eine echte Rechneradresse.",
+        "isBroadcast": "Das ist die Broadcast-Adresse. Ein Gateway braucht eine echte Rechneradresse.",
+        "isSelf": "Das ist die Adresse des Rechners selbst. Er kann nicht sein eigenes Gateway sein."
+      }
+    },
+    "split": {
+      "title": "Netz aufteilen",
+      "explain": "Jedes Bit mehr im Präfix halbiert das Netz. So teilt eine Firma ein Netz in Etagen, Abteilungen oder VLANs.",
+      "label": "In wie viele Teile?",
+      "option": "{count, plural, one {# Netz} other {# Netze}}",
+      "more": "… und {count, plural, one {# weiteres} other {# weitere}}"
+    },
+    "truth": "Das ist die eine Wahrheit von 1995: Ein Netz braucht Adressen. Die Maske entscheidet, wer Nachbar ist – und wer nur über das Gateway erreichbar."
+  },
+  "ping": {
+    "simulation": "Simulation: Ein Browser darf kein echtes ping senden, und diese Seite schickt nichts ins Netz. Die Ziele und Zeiten stammen aus denselben vorbereiteten Routen wie im Traceroute-Programm – Zeiten, die Licht in der Glasfaser wirklich braucht.",
+    "explain": "ping schickt ein kleines ICMP-Paket („Echo Request“) und wartet auf das Echo. Die Zeit dazwischen ist die Umlaufzeit – hin und zurück. So sah es 1995 unter Windows 95 aus.",
+    "formLabel": "Ping senden",
+    "targetLabel": "Ziel",
+    "run": "Ping",
+    "examples": "Vorbereitete Ziele",
+    "notes": {
+      "route": "Alle vier Pakete kamen zurück. Die TTL sank auf dem Weg um eins pro Router – {hops, plural, one {# Station} other {# Stationen}} bis zum Ziel.",
+      "loopback": "Es gibt keinen Ort wie 127.0.0.1: Das Paket hat die Maschine nie verlassen, deshalb dauert es weniger als eine Millisekunde.",
+      "silent": "Keine Antwort. Diese Adresse ist nur für Beispiele reserviert – und viele echte Rechner beantworten ping ebenfalls nicht, weil eine Firewall ICMP verwirft. Stille heißt nicht, dass niemand da ist.",
+      "unknown": "Diesen Namen kennt die Simulation nicht. In echt hätte vor dem ersten Paket eine DNS-Abfrage stattgefunden – probieren Sie sie im Reiter DNS aus."
+    },
+    "ttl": "TTL heißt „Time to Live“: Jeder Router zieht eins ab, bei null wird das Paket verworfen. So kreist kein Paket ewig im Netz – und genau das nutzt traceroute aus."
+  },
+  "dns": {
+    "simulation": "Simulation: Die Abfrage läuft über eine vorbereitete Zone mit Namen unter .example, die für Beispiele reserviert sind. Nichts verlässt diesen Browser.",
+    "explain": "Menschen merken sich Namen, Rechner brauchen Adressen. DNS übersetzt – und zwar Schritt für Schritt: Der Resolver fragt die Root-Server, die verweisen auf die Top-Level-Domain, die auf den zuständigen Nameserver, und erst der kennt die Antwort.",
+    "formLabel": "DNS-Abfrage",
+    "nameLabel": "Name",
+    "run": "Auflösen",
+    "typeLabel": "Eintragstyp",
+    "examples": "Beispiele",
+    "types": {
+      "A": "A – die IPv4-Adresse zum Namen.",
+      "AAAA": "AAAA – die IPv6-Adresse zum Namen.",
+      "MX": "MX – welcher Server die E-Mail für diese Domain annimmt; die kleinere Zahl wird zuerst versucht.",
+      "TXT": "TXT – freier Text, heute meist für E-Mail-Regeln (SPF) und Nachweise.",
+      "CNAME": "CNAME – ein Alias: Dieser Name ist nur ein anderer Name für einen anderen."
+    },
+    "servers": {
+      "cache": "Cache des Resolvers",
+      "resolver": "Resolver Ihres Providers",
+      "root": "Root-Server",
+      "tld": "TLD-Server",
+      "authoritative": "Zuständiger Nameserver"
+    },
+    "answers": {
+      "asks": "fragt für Sie nach",
+      "referral": "verweist weiter",
+      "records": "antwortet",
+      "nxdomain": "kennt den Namen nicht",
+      "cached": "hat die Antwort noch gespeichert"
+    },
+    "notes": {
+      "cached": "Diesmal kam die Antwort aus dem Cache: 0 ms statt einer Reise um die Welt. Das ist der Sinn der TTL – so lange darf ein Resolver die Antwort behalten.",
+      "found": "Gefunden. Der Resolver merkt sich diese Antwort {ttl, plural, one {# Sekunde} other {# Sekunden}} lang – fragen Sie gleich noch einmal.",
+      "nxdomain": "NXDOMAIN: Diesen Namen gibt es nicht. Auch ein „Nein“ wird übrigens eine Weile gespeichert.",
+      "cname": "Der Name war ein Alias (CNAME); der Resolver ist ihm bis zur Adresse gefolgt.",
+      "hello": "Wer TXT-Einträge zum Vergnügen liest, ist hier richtig."
+    },
+    "flush": "Cache leeren"
+  },
+  "ports": {
+    "explain": "Eine Adresse findet die Maschine, ein Port das Programm darauf. 65.536 Ports gibt es je Protokoll; wer einen Dienst anbietet, lauscht auf einem festen – ein Webserver auf 443.",
+    "searchLabel": "Port oder Dienst",
+    "placeholder": "z. B. 443 oder ssh",
+    "ranges": {
+      "wellKnown": "Well-known Port (0–1023): für Standarddienste, früher nur mit Administratorrechten zu öffnen.",
+      "registered": "Registrierter Port (1024–49151): bei der IANA für bestimmte Programme eingetragen.",
+      "dynamic": "Dynamischer Port (49152–65535): Diese Ports nimmt sich Ihr Rechner selbst, als Absender einer Verbindung."
+    },
+    "noService": "In dieser Liste steht dort kein Dienst.",
+    "invalid": "Ports reichen von 0 bis 65535; Dienste werden mit Buchstaben gesucht.",
+    "noMatch": "Kein Dienst in dieser Liste passt dazu.",
+    "count": "{count, plural, one {# Eintrag} other {# Einträge}}",
+    "stories": {
+      "elite": "31337 – in Hacker-Schreibweise „eleet“, also „elite“. Ende der Neunziger lauschte hier der Fernwartungs-Trojaner Back Orifice; wer den Port offen fand, wusste Bescheid."
+    },
+    "caption": "Häufige Ports mit Protokoll, Dienstname und Verwendung",
+    "columns": {
+      "port": "Port",
+      "service": "Dienst",
+      "use": "Wofür"
+    },
+    "services": {
+      "ftpData": "FTP, die Datenverbindung",
+      "ftp": "FTP-Steuerung: Dateien übertragen, unverschlüsselt",
+      "ssh": "SSH: verschlüsselte Fernanmeldung – das Werkzeug jedes Administrators",
+      "telnet": "Telnet: Fernanmeldung im Klartext, heute nur noch im Labor",
+      "smtp": "SMTP: Server reichen E-Mail untereinander weiter",
+      "dns": "DNS: Namen in Adressen übersetzen",
+      "dhcpServer": "DHCP, Serverseite: vergibt Adressen",
+      "dhcpClient": "DHCP, Clientseite: fragt nach einer Adresse",
+      "http": "HTTP: Web ohne Verschlüsselung",
+      "pop3": "POP3: E-Mail abholen",
+      "ntp": "NTP: die Uhrzeit abgleichen",
+      "imap": "IMAP: E-Mail auf dem Server lesen",
+      "snmp": "SNMP: Geräte im Netz überwachen",
+      "ldap": "LDAP: Verzeichnisdienste wie Active Directory",
+      "https": "HTTPS: Web mit TLS – auch diese Seite",
+      "smb": "SMB: Windows-Dateifreigaben",
+      "syslog": "Syslog: Protokollmeldungen an einen zentralen Server",
+      "submission": "SMTP-Submission: Ihr Mailprogramm liefert E-Mail ein",
+      "ldaps": "LDAP über TLS",
+      "imaps": "IMAP über TLS",
+      "pop3s": "POP3 über TLS",
+      "mysql": "MySQL-Datenbank",
+      "rdp": "RDP: Windows-Remotedesktop",
+      "postgresql": "PostgreSQL-Datenbank",
+      "httpAlt": "HTTP, alternativ: oft Testserver und Proxys"
+    },
+    "firewall": "Welche Ports offen sein dürfen, entscheidet die Firewall – das Rätsel der letzten Epoche.",
+    "firewallLink": "Zur Firewall in der Reise"
+  }
+}

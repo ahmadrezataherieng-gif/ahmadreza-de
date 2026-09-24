@@ -28,9 +28,9 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 10 | 20 |
-| P1 | 16 | 4 | 12 | 32 |
-| P2 | 18 | 2 | 1 | 21 |
-| **total** | **44** | **6** | **23** | **73** |
+| P1 | 15 | 4 | 13 | 32 |
+| P2 | 18 | 3 | 2 | 23 |
+| **total** | **43** | **7** | **25** | **75** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -39,7 +39,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | APP-01 | **Timeline app** (base app): the seven eras and Ahmadreza's own path as one scrollable timeline, from `content/eras.ts` and `content/about.ts`. Today the placeholder. Built 2026-09-23: the eras from the journey's own copy (the page-messages chunk the puzzles already load) with links to `/amonel/#era-N`, then the current station from About's copy; its start date is owed (OWN-05). | done | P1 | Claude Code | - |
 | APP-02 | **Contact app** (base app): today a placeholder with the `mailto:` link. Needs the full app: email, profiles (LinkedIn, GitHub, XING once OWN-03 is done), résumé, the legal links. `mailto:` only, never a form. Built 2026-09-23: its own copy, e-mail with a copy button, résumé, location, legal links; the profile links are **waiting for owner** (OWN-03) - add the URLs in `src/content/profiles.ts`. | partial | P1 | Claude Code | OWN-03 for the profile links |
 | APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). | missing | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 |
-| APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): ping, subnet calculator, DNS/port lookups as labelled simulations - never real network requests. | missing | P1 | Claude Code | - |
+| APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): four tabs. **Subnet** - a real IPv4 calculator (CIDR, dotted or slash mask), the 32 bits coloured network/host, network/broadcast/first/last/usable, the address kind (private, APIPA, CGNAT, documentation, loopback...), a gateway check (the 1995 puzzle's question) and splitting a block into smaller ones. **Ping** - Windows 95 style output over the Traceroute app's prepared routes (same times), loopback, silent documentation addresses. **DNS** - an iterative lookup (resolver, root, TLD, authoritative) over a prepared `.example` zone, A/AAAA/MX/TXT/CNAME, CNAMEs followed, and the cache: a second lookup answers in 0 ms until the TTL. **Ports** - well-known ports by number or name with the three IANA ranges. Ping and DNS are labelled simulations, never real network requests. Built 2026-09-24 (DECISIONS.md 63): `apps/network/`, `content/network.ts`, 13 unit tests, `bonus.mjs` drives all four tabs; copy CR-1067..1073. | done | P1 | Claude Code | - |
 | APP-05 | **Time Machine app** (today bonus, slot `time-machine`): theme switcher over the eight themes; writes `amonel.theme.v1` (then LEG-02 must list it as used); restyles Snake via `--ao-snake-*`. | missing | P1 | Claude Code | LEG-02 update in the same change |
 | APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. | missing | P2 | Claude Code | - |
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. | missing | P2 | Claude Code | - |
@@ -50,6 +50,8 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - |
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. | missing | P2 | Claude Code | - |
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. | missing | P2 | Claude Code | - |
+| APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 |
+| APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Still open: Ping and DNS offering "trace this host" into the Traceroute app (needs a way to hand a target to another app's window, on both shells). | partial | P2 | Claude Code | APP-04 |
 
 ## Phase 10 - SEO layer
 

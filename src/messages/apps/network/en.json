@@ -1,0 +1,212 @@
+{
+  "intro": "A network needs addresses: without them, no machine can find another. Here you can work out subnets, send a ping, follow a DNS query across the internet and look up which service listens on which port.",
+  "tabsLabel": "Choose a tool",
+  "tabs": {
+    "subnet": "Subnet",
+    "ping": "Ping",
+    "dns": "DNS",
+    "ports": "Ports"
+  },
+  "subnet": {
+    "explain": "An IPv4 address has 32 bits. The mask splits them: the leading bits name the network, the rest the machine in it. Machines with the same network part reach each other directly - everyone else only through a gateway.",
+    "inputLabel": "Address with prefix or mask",
+    "examples": "Examples",
+    "summary": "Prefix /{prefix, number}: {hosts, plural, one {# usable address} other {# usable addresses}} in this network.",
+    "errors": {
+      "empty": "Enter an address, e.g. 192.168.1.10/24.",
+      "invalidAddress": "That is not a valid IPv4 address: four numbers from 0 to 255, separated by dots.",
+      "invalidPrefix": "The prefix runs from /0 to /32 - or write a mask such as 255.255.255.0.",
+      "invalidMask": "This mask is not contiguous: all the ones must come first, then all the zeros."
+    },
+    "bitsLabel": "The address's 32 bits: {network, number} bits for the network, {host, number} bits for the machine.",
+    "bitsAddress": "Address",
+    "bitsMask": "Mask",
+    "legendNetwork": "{count, plural, one {# network bit} other {# network bits}}",
+    "legendHost": "{count, plural, one {# host bit} other {# host bits}}",
+    "fields": {
+      "network": "Network address",
+      "broadcast": "Broadcast",
+      "first": "First host",
+      "last": "Last host",
+      "mask": "Subnet mask",
+      "wildcard": "Wildcard",
+      "usable": "Addresses",
+      "kind": "Kind of address"
+    },
+    "hostCount": "{usable, number} usable of {total, number}",
+    "kinds": {
+      "unspecified": {
+        "name": "Unspecified",
+        "note": "0.0.0.0/8 means \"this network\" or \"no address yet\" - a machine asking DHCP at start-up sends from 0.0.0.0."
+      },
+      "loopback": {
+        "name": "Loopback",
+        "note": "127.0.0.0/8 never leaves the machine: whoever talks to 127.0.0.1 talks to itself."
+      },
+      "private": {
+        "name": "Private (RFC 1918)",
+        "note": "Private addresses only count inside your own network. They reach the internet through NAT: the router swaps them for its one public address."
+      },
+      "sharedCgnat": {
+        "name": "Carrier-grade NAT",
+        "note": "100.64.0.0/10 is handed out by providers who have too few public addresses themselves - a NAT behind the NAT."
+      },
+      "linkLocal": {
+        "name": "Link-local (APIPA)",
+        "note": "A machine gives itself an address from 169.254.0.0/16 when no DHCP server answers. Windows 98 called it APIPA - and it usually meant: check the cable."
+      },
+      "documentation": {
+        "name": "Documentation",
+        "note": "These ranges (RFC 5737) are reserved for examples and never routed on the internet - which is why this site uses them for its simulations."
+      },
+      "multicast": {
+        "name": "Multicast",
+        "note": "224.0.0.0/4 addresses a group rather than one machine: whoever joins receives the packets."
+      },
+      "reserved": {
+        "name": "Reserved",
+        "note": "240.0.0.0/4 has been reserved for later since the eighties - and is still unused."
+      },
+      "broadcast": {
+        "name": "Limited broadcast",
+        "note": "255.255.255.255 reaches every machine on the local network, but never a router beyond it."
+      },
+      "public": {
+        "name": "Public",
+        "note": "A public address is unique worldwide and reachable on the internet - unless a firewall stands in front of it."
+      }
+    },
+    "roles": {
+      "network": "This is the network address itself: it names the whole network and belongs to no machine.",
+      "broadcast": "This is the broadcast address: a packet sent to it goes to everyone on the network - no machine may use it."
+    },
+    "pointToPoint": "/31 is a point-to-point link between two routers (RFC 3021): no network or broadcast address, both addresses are usable.",
+    "singleHost": "/32 names exactly one address - that is how single machines appear in routing tables and firewall rules.",
+    "gateway": {
+      "title": "Does the gateway fit?",
+      "explain": "Exactly the question the 1995 puzzle asked: a machine sends everything outside its network to its gateway - and it must be able to reach it directly.",
+      "label": "Default gateway",
+      "invalid": "Enter a valid IPv4 address for the gateway.",
+      "verdicts": {
+        "ok": "The gateway is in the same network and is a host address. That is the way out.",
+        "otherSubnet": "The gateway is in another network. The machine cannot reach it directly - and so nothing outside its network.",
+        "isNetwork": "That is the network address. A gateway needs a real host address.",
+        "isBroadcast": "That is the broadcast address. A gateway needs a real host address.",
+        "isSelf": "That is the machine's own address. It cannot be its own gateway."
+      }
+    },
+    "split": {
+      "title": "Split the network",
+      "explain": "Every extra bit in the prefix halves the network. That is how a company divides one network into floors, departments or VLANs.",
+      "label": "Into how many parts?",
+      "option": "{count, plural, one {# network} other {# networks}}",
+      "more": "… and {count, plural, one {# more} other {# more}}"
+    },
+    "truth": "This is the one truth of 1995: a network needs addresses. The mask decides who is a neighbour - and who can only be reached through the gateway."
+  },
+  "ping": {
+    "simulation": "Simulation: a browser may not send a real ping, and this page sends nothing onto the network. The targets and times come from the same prepared routes as the Traceroute app - times that light in glass fibre really needs.",
+    "explain": "ping sends a small ICMP packet (an \"echo request\") and waits for the echo. The time in between is the round trip - there and back. This is how it looked under Windows 95.",
+    "formLabel": "Send a ping",
+    "targetLabel": "Target",
+    "run": "Ping",
+    "examples": "Prepared targets",
+    "notes": {
+      "route": "All four packets came back. The TTL dropped by one per router on the way - {hops, plural, one {# stop} other {# stops}} to the target.",
+      "loopback": "There's no place like 127.0.0.1: the packet never left the machine, which is why it takes less than a millisecond.",
+      "silent": "No answer. This address is reserved for examples - and many real machines ignore ping too, because a firewall drops ICMP. Silence does not mean nobody is there.",
+      "unknown": "The simulation does not know this name. For real, a DNS query would have come before the first packet - try it in the DNS tab."
+    },
+    "ttl": "TTL means \"time to live\": each router takes one off, and at zero the packet is dropped. That way no packet circles forever - and that is exactly what traceroute exploits."
+  },
+  "dns": {
+    "simulation": "Simulation: the query runs over a prepared zone of names under .example, which are reserved for examples. Nothing leaves this browser.",
+    "explain": "People remember names, machines need addresses. DNS translates - one step at a time: the resolver asks the root servers, they point to the top-level domain, that points to the responsible name server, and only that one knows the answer.",
+    "formLabel": "DNS query",
+    "nameLabel": "Name",
+    "run": "Resolve",
+    "typeLabel": "Record type",
+    "examples": "Examples",
+    "types": {
+      "A": "A - the IPv4 address for the name.",
+      "AAAA": "AAAA - the IPv6 address for the name.",
+      "MX": "MX - which server accepts e-mail for this domain; the lower number is tried first.",
+      "TXT": "TXT - free text, today mostly for e-mail rules (SPF) and verification.",
+      "CNAME": "CNAME - an alias: this name is only another name for another name."
+    },
+    "servers": {
+      "cache": "Resolver cache",
+      "resolver": "Your provider's resolver",
+      "root": "Root server",
+      "tld": "TLD server",
+      "authoritative": "Authoritative name server"
+    },
+    "answers": {
+      "asks": "asks on your behalf",
+      "referral": "refers onward",
+      "records": "answers",
+      "nxdomain": "does not know the name",
+      "cached": "still has the answer"
+    },
+    "notes": {
+      "cached": "This time the answer came from the cache: 0 ms instead of a trip around the world. That is what the TTL is for - how long a resolver may keep the answer.",
+      "found": "Found. The resolver keeps this answer for {ttl, plural, one {# second} other {# seconds}} - ask again right away.",
+      "nxdomain": "NXDOMAIN: this name does not exist. Even a \"no\" is kept for a while, by the way.",
+      "cname": "The name was an alias (CNAME); the resolver followed it to the address.",
+      "hello": "If you read TXT records for fun, you are in the right place."
+    },
+    "flush": "Flush the cache"
+  },
+  "ports": {
+    "explain": "An address finds the machine, a port the program on it. There are 65,536 ports per protocol; a service listens on a fixed one - a web server on 443.",
+    "searchLabel": "Port or service",
+    "placeholder": "e.g. 443 or ssh",
+    "ranges": {
+      "wellKnown": "Well-known port (0-1023): for standard services, once openable only with administrator rights.",
+      "registered": "Registered port (1024-49151): recorded with IANA for particular programs.",
+      "dynamic": "Dynamic port (49152-65535): your machine picks these itself, as the sender of a connection."
+    },
+    "noService": "No service is listed there.",
+    "invalid": "Ports run from 0 to 65535; services are searched with letters.",
+    "noMatch": "No service in this list matches.",
+    "count": "{count, plural, one {# entry} other {# entries}}",
+    "stories": {
+      "elite": "31337 - \"eleet\" in hacker spelling, meaning \"elite\". In the late nineties the remote-control trojan Back Orifice listened here; whoever found the port open knew what was going on."
+    },
+    "caption": "Common ports with protocol, service name and use",
+    "columns": {
+      "port": "Port",
+      "service": "Service",
+      "use": "Used for"
+    },
+    "services": {
+      "ftpData": "FTP, the data connection",
+      "ftp": "FTP control: transferring files, unencrypted",
+      "ssh": "SSH: encrypted remote login - every administrator's tool",
+      "telnet": "Telnet: remote login in plain text, today only in the lab",
+      "smtp": "SMTP: servers passing e-mail between each other",
+      "dns": "DNS: turning names into addresses",
+      "dhcpServer": "DHCP, server side: hands out addresses",
+      "dhcpClient": "DHCP, client side: asks for an address",
+      "http": "HTTP: the web without encryption",
+      "pop3": "POP3: fetching e-mail",
+      "ntp": "NTP: synchronising the clock",
+      "imap": "IMAP: reading e-mail on the server",
+      "snmp": "SNMP: monitoring devices on the network",
+      "ldap": "LDAP: directory services such as Active Directory",
+      "https": "HTTPS: the web over TLS - this site too",
+      "smb": "SMB: Windows file shares",
+      "syslog": "Syslog: log messages to a central server",
+      "submission": "SMTP submission: your mail program handing in e-mail",
+      "ldaps": "LDAP over TLS",
+      "imaps": "IMAP over TLS",
+      "pop3s": "POP3 over TLS",
+      "mysql": "MySQL database",
+      "rdp": "RDP: Windows Remote Desktop",
+      "postgresql": "PostgreSQL database",
+      "httpAlt": "HTTP, alternative: often test servers and proxies"
+    },
+    "firewall": "Which ports may be open is the firewall's decision - the puzzle of the last era.",
+    "firewallLink": "To the firewall in the journey"
+  }
+}

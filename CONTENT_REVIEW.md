@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1066 entries.**
+Generated from the codebase on 2026-09-23. **1073 entries.**
 
 ## How to use this file
 
@@ -19,16 +19,16 @@ Generated from the codebase on 2026-09-23. **1066 entries.**
 
 | Type | Entries |
 |---|---|
-| long text | 91 |
-| short text | 212 |
+| long text | 94 |
+| short text | 214 |
 | single word / label | 259 |
 | button | 66 |
 | puzzle / game | 353 |
 | alt text | 1 |
 | SEO / meta | 16 |
-| other | 64 |
+| other | 66 |
 | legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1066** |
+| **Total** | **1073** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1520,3 +1520,17 @@ The Timeline app (ROADMAP APP-01): the seven eras with their year, name and trut
 | CR-1064 | `title`, `intro`, `erasLabel` | short text | de / en / fa | PLACEHOLDER | Now (de): «Achtzig Jahre Computergeschichte in sieben Stationen – und am Ende, wo Ahmadreza heute steht.» |
 | CR-1065 | `open`, `now`, `since` | single word / label | de / en / fa | PLACEHOLDER | «In der Reise ansehen», «Ahmadreza heute», «seit {date}»; the start date itself is owed (OWN-05) |
 | CR-1066 | `soon/index.html` - the rebrand to «Amonel» and the progress block in the terminal (`t1`, `t2`, `t3`, the date stamp; figures filled from ROADMAP.md by `build-soon.mjs`) | short text | de / en / fa | PLACEHOLDER | Now (de): «roadmap: 21 von 71 punkten erledigt», «aktuelle phase 9D-2 / 9D-3: 1 von 14 erledigt», «nächster schritt: die letzten apps, dann feinschliff und start», «stand: 2026-09-24». en and fa use the English terminal lines. Decide whether a percentage of roadmap items is what visitors should see, and the Persian wording |
+
+## 30. Desktop app: Network tools (1995 bonus)
+
+Copy in `src/messages/apps/network/{de,en,fa}.json`; data in `src/content/network.ts`.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1067 | `dnsZones` in `src/content/network.ts` - the prepared DNS world (names under `.example`, the hidden TXT greeting on `amonel.example`) | other | all (machine text) | PLACEHOLDER | Now: `hello=curious-visitor; you-read-dns-records-for-fun; ask-ahmadreza-about-networks`. Decide whether the greeting stays and its wording |
+| CR-1068 | `wellKnownPorts` and `portStories` in `src/content/network.ts`, with `ports.services.*` and `ports.stories.elite` | short text | de / en / fa | PLACEHOLDER | 25 common ports and one story (31337, Back Orifice). Which ports a recruiter should see |
+| CR-1069 | `SUBNET_EXAMPLES`, `pingExamples`, `dnsExamples` - the one-click examples | other | all (machine text) | PLACEHOLDER | Now: 192.168.1.10/24, 10.20.30.40/8, 172.16.5.4 255.255.240.0, 192.168.178.23/26, 169.254.12.7/16 |
+| CR-1070 | `intro`, `tabs.*`, `subnet.*` (explanations, errors, the ten address kinds, gateway verdicts, splitting, the 1995 truth) | long text | de / en / fa | PLACEHOLDER | Now (de): «Ein Netz braucht Adressen: Ohne sie findet keine Maschine die andere. …» Native-speaker check of the technical German and Persian |
+| CR-1071 | `ping.*` (the simulation note, the notes for route, loopback, silent and unknown, the TTL line) | long text | de / en / fa | PLACEHOLDER | Now (de): «Es gibt keinen Ort wie 127.0.0.1 …». The command output itself is Windows 95 machine text |
+| CR-1072 | `dns.*` (simulation note, record types, the five servers, answers, cache notes) | long text | de / en / fa | PLACEHOLDER | Now (de): «Diesmal kam die Antwort aus dem Cache: 0 ms statt einer Reise um die Welt.» |
+| CR-1073 | `ports.*` (explain, the three IANA ranges, search messages, table, the link to the firewall era) | short text | de / en / fa | PLACEHOLDER | Now (de): «Eine Adresse findet die Maschine, ein Port das Programm darauf.» |

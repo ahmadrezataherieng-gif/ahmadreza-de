@@ -2072,3 +2072,30 @@ nowhere.
 - `ahmadreza-de` has never been deployed (the D1 database is still owed,
   DEP-03), so its setting takes effect with the first deploy at launch. The
   coming-soon Worker was redeployed with logs off on the same day.
+
+## 63. The Network tools app, the 1995 bonus (2026-09-24, APP-04)
+
+- **Four tabs, two kinds of honesty.** Subnet and Ports compute or look up
+  for real (the maths is IPv4's own, the port numbers and service names are
+  IANA's). Ping and DNS are **labelled simulations** over prepared data, like
+  Traceroute: a browser cannot send ICMP or raw DNS, and this site sends
+  nothing to anyone. The simulation note sits at the top of both tabs.
+- **One story across the apps.** Ping reads the Traceroute routes, so both
+  show the same destination and the same times (never faster than the
+  route's fastest probe, tested); the TTL a reply carries is 64 minus the
+  routers on that route. The DNS zone uses the same documentation addresses.
+  Every name is under `.example` or `home.arpa`, every address from RFC 5737
+  or 2001:db8::/32 - a test rejects anything else.
+- **Period details are the lesson.** Ping prints what Windows 95 printed
+  (`Pinging … with 32 bytes of data`, `time<1ms`, the statistics block); the
+  gateway check asks the 1995 puzzle's question; 169.254.x.x explains APIPA.
+  The DNS tab shows the iterative walk (resolver, root, TLD, authoritative)
+  and the cache: a second lookup answers in 0 ms until the record's TTL runs
+  out - the cache lives in the window's memory and is gone when it closes.
+- **Easter eggs** (APP-15): `127.0.0.1` - "there's no place like 127.0.0.1";
+  port 31337's story; a TXT record on `amonel.example` that greets whoever
+  reads DNS records for fun.
+- **Nothing stored, nothing sent.** No storage key; `bonus.mjs` checks that
+  no request leaves the origin after the app's own chunk and copy.
+- Tabs follow the Binary app's tab pattern (arrows, Home, End, mirrored in
+  Persian); all machine text is `dir="ltr"`; the bit view never mirrors.

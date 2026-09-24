@@ -12,7 +12,7 @@ import { cleanHost, formatHop, median, resolveTarget, summarise } from '../../sr
 import { PORTFOLIO_COMMANDS, SHELL_COMMANDS } from '../../src/components/apps/terminal/shell.ts';
 
 const LOCALES = ['de', 'en', 'fa'];
-const APPS = ['about', 'contact', 'timeline', 'terminal', 'tickets', 'traceroute', 'assistant', 'assistant-journey', 'quiz', 'stats', 'binary', 'snake', 'paint'];
+const APPS = ['about', 'contact', 'timeline', 'terminal', 'tickets', 'traceroute', 'assistant', 'assistant-journey', 'quiz', 'stats', 'binary', 'snake', 'paint', 'network'];
 const copy = (app, locale) => JSON.parse(readFileSync(new URL(`../../src/messages/apps/${app}/${locale}.json`, import.meta.url), 'utf8'));
 const get = (object, path) => path.split('.').reduce((node, key) => node?.[key], object);
 

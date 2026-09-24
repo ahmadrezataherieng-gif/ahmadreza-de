@@ -71,8 +71,11 @@ About, Terminal, Tickets, Traceroute, (Phase 7/8) the Assistant and (Phase 9B)
 the Computer-Quiz are real; Contact, Timeline and CV are still placeholders.
 Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
 The bonus apps (Phase 9D-1): Binary & Morse, Snake and Pixel Paint are real;
-the scheduler, file tree, network tools and Time Machine share the stand-in
-(`bonus/BonusApp.tsx`). Read DECISIONS.md 57.
+Network tools too (9D-2, DECISIONS.md 63: `network/net.ts`, data in
+`content/network.ts`; ping and DNS are labelled simulations over the
+Traceroute routes and `.example` names, never a real request); the scheduler,
+file tree and Time Machine share the stand-in (`bonus/BonusApp.tsx`). Read
+DECISIONS.md 57.
 
 - **Bonus apps follow the same rules as base apps** (own chunk, own copy,
   pure tested logic in `binary/codec.ts`, `snake/game.ts`, `paint/paint.ts`),

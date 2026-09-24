@@ -31,7 +31,7 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `bonus-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}${API ? '-api' : ''}`;
 const STORE = 'amonel.unlocks.v1';
 const ALLOWED_KEYS = ['amonel.unlocks.v1', 'amonel.snake.v1', 'amonel.paint.v1'];
-const BONUS = { binary: 1, snake: 4, paint: 5 };
+const BONUS = { binary: 1, snake: 4, paint: 5, 'network-tools': 6 };
 
 const QUIET = Boolean(args.quiet);
 const log = [];
@@ -242,6 +242,69 @@ const png = await js(`(async () => { const blob = window.__png; if (!blob) retur
 check('paint: the download is a 512 px PNG made in the browser', png?.type === 'image/png' && png.w === 512 && png.h === 512, png);
 check('paint: no sideways scroll', await noOverflow('paint'));
 await close('paint');
+
+/* --- Network tools (APP-04) ----------------------------------------------------------- */
+
+const setInput = (selector, value) =>
+  js(`(() => { const el = document.querySelector(${JSON.stringify(selector)}); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, ${JSON.stringify(value)}); el.dispatchEvent(new Event('input', { bubbles: true })); return true; })()`);
+const resourcesBefore = await js(`performance.getEntriesByType('resource').length`);
+const keysBeforeNetwork = (await storageKeys()).join();
+// Bring an element into the window body's view by hand (never scrollIntoView), then click it.
+const clickIn = async (selector) => {
+  await js(`(() => { const body = document.querySelector('${frame('network-tools')} [data-window-body]'); const el = document.querySelector(${JSON.stringify(selector)}); if (!body || !el) return false; const top = el.getBoundingClientRect().top - body.getBoundingClientRect().top; if (top < 0 || top > body.clientHeight - 60) body.scrollTop += top - 80; return true; })()`);
+  await sleep(120);
+  return clickOn(selector);
+};
+await open('network-tools');
+check('network: the subnet tab computes the default /24', await until(`document.querySelector('[data-subnet-fact="broadcast"]')?.textContent === '192.168.1.255'`, 3000), await text('[data-subnet-fact="broadcast"]'));
+await setInput('[data-subnet-input]', '192.168.178.23/26');
+await sleep(150);
+check('network: /26 has 62 usable hosts', /62/.test((await text('[data-subnet-fact="usable"]')) ?? '') || /۶۲/.test((await text('[data-subnet-fact="usable"]')) ?? ''), await text('[data-subnet-fact="usable"]'));
+check('network: the bits stay left-to-right', (await js(`document.querySelector('[data-subnet-bits] [role="img"]').dir`)) === 'ltr');
+check('network: the gateway 192.168.1.1 is outside 192.168.178.0/26', (await js(`document.querySelector('[data-gateway-verdict]').dataset.gatewayVerdict`)) === 'otherSubnet');
+await setInput('[data-gateway-input]', '192.168.178.1');
+await sleep(150);
+check('network: 192.168.178.1 fits', (await js(`document.querySelector('[data-gateway-verdict]').dataset.gatewayVerdict`)) === 'ok');
+await clickIn('[data-network-example="169.254.12.7/16"]');
+check('network: APIPA is recognised', (await js(`document.querySelector('[data-subnet-kind="linkLocal"]') !== null`)), await js(`[document.querySelector('[data-subnet-input]')?.value, document.querySelector('[data-subnet-kind]')?.dataset.subnetKind, document.querySelector('[data-network-panel]')?.dataset.networkPanel]`));
+await clickIn('[data-split="18"]');
+check('network: splitting a /16 lists four /18', (await js(`document.querySelector('[data-split-result]')?.dataset.splitResult`)) === '4');
+check('network: subnet tab has no sideways scroll', await noOverflow('network-tools'));
+
+await clickIn('[data-network-tab="ping"]');
+check('network: ping says it is a simulation', (await js(`document.querySelector('[data-network-panel="ping"] [data-simulation]') !== null`)));
+await clickIn('[data-network-example="127.0.0.1"]');
+check('network: ping 127.0.0.1 finishes', await until(`document.querySelector('[data-ping-state]')?.dataset.pingState === 'done'`, 6000));
+check('network: loopback answers in under a millisecond', /time<1ms/.test((await text('[data-ping-output]')) ?? '') && (await js(`document.querySelector('[data-ping-note="loopback"]') !== null`)));
+await clickIn('[data-network-example="192.0.2.99"]');
+check('network: a documentation address stays silent', await until(`document.querySelector('[data-ping-note="silent"]') !== null`, 6000) && /100% loss/.test((await text('[data-ping-output]')) ?? ''));
+check('network: ping tab has no sideways scroll', await noOverflow('network-tools'));
+
+await clickIn('[data-network-tab="dns"]');
+await clickIn('[data-action="dns"]');
+check('network: DNS walks resolver, root, TLD, authoritative', await until(`document.querySelector('[data-dns-state]')?.dataset.dnsState === 'found'`, 8000) && (await js(`document.querySelector('[data-dns-steps]').dataset.dnsSteps`)) === '4');
+check('network: the CNAME is followed to the address', /CNAME[\s\S]*198\.51\.100\.140/.test((await text('[data-dns-output]')) ?? ''));
+await clickIn('[data-action="dns"]');
+check('network: the second lookup comes from the cache', await until(`document.querySelector('[data-dns-step]')?.dataset.dnsStep === 'cache' && document.querySelector('[data-dns-state]')?.dataset.dnsState === 'found'`, 4000));
+await clickIn('[data-network-example="amonel.example TXT"]');
+check('network: the hidden TXT record greets', await until(`/hello=curious-visitor/.test(document.querySelector('[data-dns-output]')?.textContent ?? '')`, 8000));
+check('network: DNS tab has no sideways scroll', await noOverflow('network-tools'));
+
+await clickIn('[data-network-tab="ports"]');
+check('network: the port list starts complete', Number(await js(`document.querySelector('[data-port-table]')?.dataset.portTable`)) >= 20);
+await setInput('[data-port-input]', '443');
+await sleep(150);
+check('network: 443 is https', (await js(`[...document.querySelectorAll('[data-port]')].map((row) => row.dataset.port).join()`)) === '443');
+await setInput('[data-port-input]', '31337');
+await sleep(150);
+check('network: 31337 tells its story', (await js(`document.querySelector('[data-port-story="elite"]') !== null`)));
+check('network: the firewall link goes to the last era', /\/amonel\/#era-7$/.test((await js(`document.querySelector('[data-port-era]')?.getAttribute('href')`)) ?? ''), await js(`document.querySelector('[data-port-era]')?.getAttribute('href')`));
+check('network: ports tab has no sideways scroll', await noOverflow('network-tools'));
+// The app's own chunk and copy load; after that, nothing: no request to anywhere.
+const late = await js(`performance.getEntriesByType('resource').slice(${resourcesBefore}).map((entry) => entry.name).filter((name) => !name.startsWith(location.origin))`);
+check('network: nothing is sent to any other host', late.length === 0, late);
+check('storage: the network tools store nothing', (await storageKeys()).join() === keysBeforeNetwork, await storageKeys());
+await close('network-tools');
 
 /* --- storage and errors ---------------------------------------------------------------- */
 
