@@ -2229,3 +2229,42 @@ nowhere.
 - **The chosen language is stored only after a click** on a language button,
   as the Datenschutzerklärung says; the first visit only reads the browser's
   language.
+
+## 70. The approved style, and where it applies (2026-09-24, BR-04, BR-05, BR-06)
+
+The owner approved the coming-soon page's style after five review rounds
+("K6"). What was decided, and why:
+
+- **Fonts** (all SIL OFL 1.1, self-hosted, no request leaves the domain): Martian
+  Grotesk for headings, Geist for body text, Geist Mono for code and technical
+  details, Vazirmatn for Persian, Departure Mono only for the `~$ amonel os`
+  terminal line, at 22 px - exactly 2x its 11 px grid, so the pixels stay sharp.
+  Vazirmatn won over Estedad at small sizes (owner). Rejected on the way: Mona
+  Sans (word spaces too narrow: "So weit bin ich" read as one word), IBM Plex Sans
+  Arabic (owner's taste), Readex Pro (its self-hostable build lacks پ چ ژ گ ی ک and
+  the Persian digits). Martian Grotesk and Departure Mono are not on npm; they come
+  from their authors' GitHub releases, downloaded with the owner's approval.
+- **Palette:** "Forest Luxe". Dark mode is near-black and neutral (page
+  `#07090a`, surfaces `#0d1110`, borders `#1e2322`, tracks `#1c2120`, a 3 % glow):
+  the first version's green-tinted surfaces read as murky green. Green
+  (`#4be3a3`) is only the accent: the big percentage, filled bars, buttons, the
+  logo's power symbol, the active language pill, the terminal prompt. Light mode is
+  cream paper with a deep forest green. Body text 7:1 or better, pinned by
+  `soon-style.test.mjs`.
+- **Typography rules:** the extra heading word space applies to Latin text only
+  (the first tests showed narrow spaces make a heading read as one word, and that
+  the same rule squeezes Persian); Persian headings never get letter-spacing, which
+  breaks the joins. A Latin term inside Persian text is wrapped in `<bdi>` so the
+  punctuation next to it lands on the correct side; `soon.mjs` checks every mixed
+  line. No paragraph ends in a single orphaned word (`text-wrap: pretty`).
+- **Where it applies - the design system decision (BR-05):** this style becomes the
+  design system for the **main site's own pages** - landing, About, Impressum,
+  Datenschutz, the 404 page and the UI chrome. It does **not** apply to the journey
+  eras, which keep their historical styles: each era's look is the point of that
+  era. Applying it to the main site is a separate ROADMAP item (**BR-06**), not
+  started; open question for the owner there: the desktop shell (Act 3) and its
+  `modern` theme.
+- **Why the coming-soon page is built this way:** the tokens live in
+  `soon/tokens.css` and are injected into `index.html` and the legal pages, so the
+  domain has one look; the fonts and their licences travel together in
+  `soon/dist/fonts/` (LEG-15).

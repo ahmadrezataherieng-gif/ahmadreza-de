@@ -41,18 +41,18 @@ build time).
 | `desktop` | 6 | 1 | 6 | 44.8 / 66 | 68 % |
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
-| `legal` | 10 | 1 | 5 | 26.4 / 42 | 63 % |
-| `seo` | 13 | 3 | 8 | 52.7 / 79 | 67 % |
-| `launch` | 5 | 3 | 13 | 20 / 76 | 26 % |
-| **all** | 47 | 10 | 41 | 238.1 / 389 | **61 %** |
+| `legal` | 11 | 0 | 6 | 27 / 44 | 61 % |
+| `seo` | 13 | 3 | 9 | 52.7 / 81 | 65 % |
+| `launch` | 7 | 2 | 13 | 23.5 / 84 | 28 % |
+| **all** | 50 | 8 | 43 | 242.2 / 401 | **60 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 9 | 1 | 11 | 21 |
-| P1 | 12 | 6 | 33 | 51 |
-| P2 | 20 | 3 | 3 | 26 |
-| **total** | **41** | **10** | **47** | **98** |
+| P0 | 9 | 0 | 12 | 21 |
+| P1 | 13 | 5 | 34 | 52 |
+| P2 | 21 | 3 | 4 | 28 |
+| **total** | **43** | **8** | **50** | **101** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -120,6 +120,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 | XS | seo |
 | SEO-13 | Web manifest is German only (`name`, `description`). | partial | P2 | Claude Code | - | XS 50% | seo |
 | SEO-14 | Landing titles run over 60 characters (de 66, en 64, fa 66): **waiting for owner** decision on the wording (never shorten the name). | missing | P2 | Ahmadreza | FIN-01 | XS | seo |
+| SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | missing | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal
 
@@ -139,7 +140,8 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - | S | legal |
 | LEG-13 | **Phone number in the Impressum** (the § 5 DDG grey area: a "second fast way" of contact besides e-mail). **Resolved 2026-09-24 by the owner: no phone number.** The Impressum keeps name, postal address and e-mail; nothing to build. | done | P0 | Ahmadreza | - | XS | legal |
 | LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - | XS | legal |
-| LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md`; `scripts/test/fonts.test.mjs` fails if a font package has no licence file or row, or if any font is loaded from a third party. The coming-soon page's fonts are added the same way once chosen (BR-04). | partial | P0 | Claude Code | - | S 70% | legal |
+| LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md` (the five fonts of the site and the five of the coming-soon page, Martian Grotesk and Departure Mono from their authors' GitHub releases); `scripts/test/fonts.test.mjs` and `soon-style.test.mjs` fail if a font has no licence file or row, is not used, is loaded from a third party, or if a font file is committed outside `soon/fonts/`. | done | P0 | Claude Code | - | S | legal |
+| LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | missing | P2 | Claude Code | LEG-07 | S | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 
@@ -173,9 +175,10 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | BR-01 | **Final main logo** still to be designed; the current Amonel mark and wordmark are interim. Since 2026-09-24 the coming-soon page uses design 6 (the wordmark "Amonel" whose "o" is a power symbol) as its main logo and design 1 (`~$ amonel os` with a blinking cursor) only in its terminal panel; **the final main logo will be improved later** - design 6 is a stand-in, not the finished mark. | partial | P1 | Ahmadreza + Claude Code | - | L 25% | launch |
 | BR-02 | **Coming-soon page rebranded** (owner, 2026-09-24): «AhmadOS» → «Amonel» everywhere on the page and a progress block computed from ROADMAP.md at build time. Rewritten the same day so anyone understands it in ten seconds: who (name, role line), what the site will be, the weighted progress overall and in seven areas (`scripts/roadmap.mjs`, `scripts/soon-progress.mjs`), what's next, contact and the legal links, in de/en/fa with the other two languages always visible under the role; no item IDs or phase numbers. Checked by `scripts/verify/soon.mjs` (wide and phone, dark and light, three languages). Copy CR-1080..CR-1084. | done | P2 | Claude Code | - | S | launch |
-| BR-03 | **Redeploy the coming-soon page now and then** so its progress figure follows ROADMAP.md (`npm run build:soon`, then `npx wrangler deploy` in `soon/`); the figure is as fresh as the last deploy. Until launch (DEP-06). | missing | P2 | Claude Code | - | XS | launch |
-| BR-04 | **Fonts, style and colours of the coming-soon page** chosen with the owner (new 2026-09-24): self-hostable (SIL OFL) font candidates incl. Persian, complete style variants on the real page with WCAG AA contrast (body text 7:1), iterated until the owner says "approved". Rounds 1-5 so far: 39 OFL packages checked by their licence files; palette D "Forest Luxe" chosen by the owner; Vazirmatn preferred for Persian; Readex Pro rejected (no پ چ ژ گ ی ک or Persian digits); Martian Grotesk and Departure Mono fetched from their authors' GitHub releases with the owner's approval. `soon.mjs` checks orphans and heading word spacing. **Waiting for owner**: pick K5, K6 or K7. Then ask whether it becomes the main site's design system (BR-05). | partial | P1 | Ahmadreza + Claude Code | - | M 70% | launch |
-| BR-05 | **Should the approved coming-soon style become the main site's design system?** Ask the owner after BR-04; apply nothing to the main site without his answer. | missing | P2 | Ahmadreza | BR-04 | S | launch |
+| BR-03 | **Redeploy the coming-soon page whenever the ROADMAP progress changes noticeably** (a few percentage points, or an area finishing; owner, 2026-09-24): its figures are computed at build time, so they are exactly as fresh as the last deploy (`npm run build:soon`, then `npx wrangler deploy` in `soon/`, then the curl checks in PROJECT_STATE.md). Until launch (DEP-06). Last deploy: see PROJECT_STATE.md. | missing | P2 | Claude Code | - | XS | launch |
+| BR-04 | **Fonts, style and colours of the coming-soon page**: approved by the owner 2026-09-24 after five review rounds (DECISIONS.md 70). Style "K6": Martian Grotesk headings, Geist body, Geist Mono, Vazirmatn for Persian, Departure Mono only for the `~$ amonel os` line at 22 px; near-black dark mode (page #07090a, surfaces #0d1110, neutral borders and tracks, green only as the accent), Forest Luxe paper and forest green in light mode. Tokens in `soon/tokens.css`, fonts in `soon/fonts/` with licences (LEG-15); Latin-only heading word spacing, `<bdi>` for Latin terms in Persian, no orphans; `scripts/verify/soon.mjs` (196 checks) and `soon-style.test.mjs` pin it. | done | P1 | Ahmadreza + Claude Code | - | M | launch |
+| BR-05 | **Should the approved style become the main site's design system?** Decided by the owner 2026-09-24: **yes**, for the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) - **not** for the journey eras, which keep their historical styles (DECISIONS.md 70). Applying it is BR-06. | done | P2 | Ahmadreza | BR-04 | S | launch |
+| BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. | missing | P1 | Claude Code | BR-05 | L | launch |
 
 ## Owner tasks - assets and accounts
 
