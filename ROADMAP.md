@@ -37,22 +37,22 @@ build time).
 <!-- progress:start -->
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
-| `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
+| `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
 | `desktop` | 9 | 0 | 4 | 49 / 66 | 74 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 2 | 6 | 62.2 / 84 | 74 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 63 | 5 | 37 | 261.3 / 406 | **64 %** |
+| **all** | 64 | 5 | 36 | 263.3 / 406 | **65 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 14 | 0 | 15 | 29 |
-| **total** | **37** | **5** | **63** | **105** |
+| P2 | 13 | 0 | 16 | 29 |
+| **total** | **36** | **5** | **64** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -92,7 +92,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. | missing | P2 | Claude Code | - | M | desktop |
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. | missing | P2 | Claude Code | - | M | desktop |
 | APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - | S | puzzles |
-| APP-09 | **GSAP DrawSVG** (free plugin) for line-drawing effects; never ScrollSmoother. | missing | P2 | Claude Code | - | S | journey |
+| APP-09 | **Line-drawing effects** (was: GSAP DrawSVG, free plugin; never ScrollSmoother). Done 2026-09-24 in CSS instead of the plugin (DECISIONS.md 71): `.ao-draw` scrubs `stroke-dashoffset` over `--era-progress`, no plugin, no per-frame JS; used for the four links of the 2024 region map. | done | P2 | Claude Code | - | S | journey |
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. Done 2026-09-24: the Timeline app shows the earned badges (a "Legende" mark on the era, and a count once one exists; nothing before); `apps.mjs` checks both states; CR-1092. | done | P2 | Claude Code | - | S | puzzles |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |

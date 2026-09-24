@@ -73,6 +73,10 @@ Each era is `src/components/journey/eras/Era*.tsx`, wired up in
   `filter`. No per-frame JS, no React state, no GSAP timelines per era.
 - **One-shot motion** (printing, counters) is a CSS animation paused until
   `[data-started='true']`, which the resolver sets once and never clears.
+- **Line drawing** is `.ao-draw` (`pathLength="1"` on the line, `--draw-on` and
+  `--draw-span` in `--era-progress` units), not GSAP's DrawSVGPlugin: the
+  plugin needs a tween per line and JS on every frame (DECISIONS.md 71). Not on
+  `vector-effect: non-scaling-stroke` lines. ScrollSmoother is never used.
 - **Never use `steps(n, end)` with a forwards fill.** Float rounding can finish at
   progress 0.99999…, which freezes on the second-to-last step. Use `jump-none`.
 - **Never put a CSS animation on the same property you scrub** on one element:

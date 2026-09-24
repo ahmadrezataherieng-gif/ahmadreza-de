@@ -871,6 +871,18 @@ html[data-tier='light'] .ao-lamp {
   );
 }
 
+/* A line that draws itself over its own stretch of progress: `pathLength="1"`
+   makes one dash the whole line whatever its length, and the offset walks from
+   1 (nothing) to 0 (all of it). The line-drawing effect of ROADMAP APP-09 - in
+   CSS on the scrubbed `--era-progress`, like every other era effect, instead of
+   GSAP's DrawSVGPlugin, which would need a tween per line and JS on every
+   frame (the journey-visuals skill forbids both). --draw-on: where it starts;
+   --draw-span: how much progress it takes (default 0.03). */
+.ao-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - clamp(0, (var(--era-progress) - var(--draw-on, 0)) / var(--draw-span, 0.03), 1));
+}
+
 /* A pointer that travels three straight segments, each over its own progress
    window. Coordinates are unitless and multiplied by --ux/--uy, so the same
    rule drives an SVG pointer (user units) and an HTML one (container units). */

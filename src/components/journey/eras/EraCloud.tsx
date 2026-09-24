@@ -103,10 +103,14 @@ export function EraCloud({ headingId }: { headingId: string }) {
                 a wide dashboard it grew tall enough to push the prompt panel
                 out of the pinned stage. */}
             <svg viewBox="0 0 300 112" className="mx-auto block h-auto max-h-[18dvh] w-full" aria-hidden="true">
-              <g className="ao-cue" style={cue(0.21)}>
-                {EDGES.map(([a, b]) => (
+              {/* The links draw themselves one after another (APP-09), once the nodes are up. */}
+              <g>
+                {EDGES.map(([a, b], edge) => (
                   <line
                     key={`${a}-${b}`}
+                    className="ao-draw"
+                    pathLength={1}
+                    style={{ '--draw-on': 0.19 + edge * 0.008, '--draw-span': 0.025 } as CSSProperties}
                     x1={NODES[a].x}
                     y1={NODES[a].y}
                     x2={NODES[b].x}
