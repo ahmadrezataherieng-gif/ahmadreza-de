@@ -28,10 +28,14 @@
     --ink:#e9edf5; --muted:#a3aec0;
     --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
     --track:#1a2230;
-    --font-head:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-    --font-body:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    /* Latin face, then the Persian face (it only holds Arabic-script glyphs), then the generic fallback. */
+    --font-head:"Segoe UI",-apple-system,Roboto,"Helvetica Neue",Arial;
+    --font-body:"Segoe UI",-apple-system,Roboto,"Helvetica Neue",Arial;
     --font-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-    --font-fa:Tahoma,"Segoe UI",system-ui,sans-serif;
+    --font-fa:Tahoma;
+    --font-fallback:system-ui,sans-serif;
+    --stack-head:var(--font-head),var(--font-fa),var(--font-fallback);
+    --stack-body:var(--font-body),var(--font-fa),var(--font-fallback);
     --head-weight:700; --head-tracking:-.03em;
     --radius:14px;
   }
@@ -45,15 +49,14 @@
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--font-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  [lang="fa"]{font-family:var(--font-fa)}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
   .wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
   @media (min-width:720px){.wrap{padding:28px 32px 64px}}
 
   /* Header: the main logo (design 6, the "o" is a power symbol) and the languages. */
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--font-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
+  .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--stack-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
   .logo svg{width:.74em;height:.74em;margin:0 .03em;transform:translateY(.06em);color:var(--brand);overflow:visible}
   .langs{display:flex;gap:6px}
   .langs button{font:600 12px/1 var(--font-mono);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
@@ -67,24 +70,24 @@
   .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}
   .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 1.8s infinite}
   @keyframes pulse{50%{opacity:.35}}
-  h1{margin:18px 0 0;font:var(--head-weight) clamp(2.6rem,9vw,4.6rem)/1.02 var(--font-head);letter-spacing:var(--head-tracking)}
+  h1{margin:18px 0 0;font:var(--head-weight) clamp(2.6rem,9vw,4.6rem)/1.02 var(--stack-head);letter-spacing:var(--head-tracking)}
   .role{margin:14px 0 0;font-size:clamp(1.1rem,2.6vw,1.35rem);line-height:1.45;font-weight:600}
   .alt{margin:8px 0 0;font-size:.95rem;color:var(--muted)}
   .alt p{margin:2px 0}
   .intro{margin:22px 0 0;font-size:1.08rem;max-width:58ch}
   .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:24px}
   .button{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--on-brand);background:var(--brand);border-radius:10px;padding:12px 18px;text-decoration:none}
-  .button:hover{background:var(--brand-deep);color:#fff}
+  .button:hover{background:var(--brand-deep)}
   .mail{font-family:var(--font-mono);font-size:.9rem;color:var(--muted);overflow-wrap:anywhere}
 
   section{margin-top:64px}
-  h2{margin:0;font:var(--head-weight) clamp(1.5rem,4vw,2rem)/1.2 var(--font-head);letter-spacing:calc(var(--head-tracking) / 2)}
+  h2{margin:0;font:var(--head-weight) clamp(1.5rem,4vw,2rem)/1.2 var(--stack-head);letter-spacing:calc(var(--head-tracking) / 2)}
   .lead{margin:10px 0 0;color:var(--muted);max-width:62ch;font-size:1.05rem}
 
   .cards{display:grid;gap:12px;margin:24px 0 0;padding:0;list-style:none}
   @media (min-width:720px){.cards{grid-template-columns:1fr 1fr}}
   .card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);padding:18px 20px}
-  .card h3{margin:0;font:600 1.08rem/1.3 var(--font-head)}
+  .card h3{margin:0;font:600 1.08rem/1.3 var(--stack-head)}
   .card p{margin:6px 0 0;color:var(--muted)}
   .card .num{display:block;font:600 12px/1 var(--font-mono);color:var(--brand);margin-bottom:10px}
 
@@ -98,7 +101,7 @@
   .panel-body{padding:22px 18px 24px}
   @media (min-width:720px){.panel-body{padding:28px 28px 30px}}
   .overall{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
-  .big{font:var(--head-weight) clamp(3rem,10vw,4.4rem)/1 var(--font-head);letter-spacing:var(--head-tracking);color:var(--brand)}
+  .big{font:var(--head-weight) clamp(3rem,10vw,4.4rem)/1 var(--stack-head);letter-spacing:var(--head-tracking);color:var(--brand)}
   .overall-label{font-size:1.1rem;font-weight:600}
   .meter{position:relative;height:10px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:14px}
   .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--brand-deep),var(--brand));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
@@ -108,7 +111,7 @@
   .areas{display:grid;gap:22px 32px;margin:28px 0 0;padding:0;list-style:none}
   @media (min-width:720px){.areas{grid-template-columns:1fr 1fr}}
   .area-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-  .area h3{margin:0;font:600 1rem/1.35 var(--font-head)}
+  .area h3{margin:0;font:600 1rem/1.35 var(--stack-head)}
   .area .pct{font:700 .95rem/1 var(--font-mono);color:var(--ink);white-space:nowrap}
   .area .meter{height:6px;margin-top:8px}
   .area p{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
