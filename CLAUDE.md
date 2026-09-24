@@ -202,3 +202,11 @@ When this conversation is compacted, keep:
 - the current phase and what is left in it (PROJECT_STATE.md, TODO.md);
 - every decision made in this session, with its reason;
 - any failing check or test, with its command and output.
+
+## Cloud sessions
+
+A cloud session (Claude Code on the web, a remote agent) has no `src/content/legal.local.ts` - the real postal address never leaves the owner's machine (DECISIONS.md 60). Rules for it:
+
+- **Never deploy and never touch Cloudflare.** No `wrangler deploy`, no `wrangler` login, no DNS, no dashboard, no secrets, no `live-soon.mjs` run against the live domain. Deploys happen only on the owner's machine (`deployment-legal`, ROADMAP BR-03).
+- **Use the preview flag.** `AMONEL_PREVIEW_BUILD=1` lets the build, the lint and the tests run with the dummy address from `legal.example.ts`: run `AMONEL_PREVIEW_BUILD=1 npm run setup:preview` once (it creates the git-ignored `legal.local.ts` from the dummy), then `AMONEL_PREVIEW_BUILD=1 npm run build`, `npm run lint`, `npm test` as usual. A preview build is never a release: the Impressum shows "Musterstraße 1". Without the flag the dummy is still refused, as in production, and the flag itself is refused on Cloudflare's build machines (`WORKERS_CI`, `CF_PAGES`). Never commit `legal.local.ts`, never write a real address anywhere.
+- **Work on a branch and open a pull request.** Never push to `main`. The owner reviews and merges; the deploy follows from the owner's machine.

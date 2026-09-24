@@ -13,6 +13,8 @@ export function privateAddressParts() {
   const source = readFileSync(file, 'utf8');
   const street = source.match(/street:\s*'([^']+)'/)?.[1] ?? '';
   const postcodeCity = source.match(/postcodeCity:\s*'([^']+)'/)?.[1] ?? '';
+  // A preview build (AMONEL_PREVIEW_BUILD) holds the dummy template, which is public and no secret.
+  if (street.startsWith('Musterstra')) return [];
   const streetName = street.replace(/\s*\d.*$/, '');
   const postcode = postcodeCity.match(/\d{4,5}/)?.[0] ?? '';
   return [street, streetName, postcode].filter((part) => part.length >= 4);

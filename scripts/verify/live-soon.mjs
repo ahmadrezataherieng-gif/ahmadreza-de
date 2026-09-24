@@ -53,7 +53,7 @@ for (const [path, lang, dir, title, canonical] of [['/en/', 'en', 'ltr', 'Ahmadr
 }
 for (const path of ['/impressum/', '/datenschutz/', '/en/impressum/', '/en/datenschutz/', '/fa/impressum/', '/fa/datenschutz/']) {
   const legal = await get(path);
-  check(`${path} answers 200, is noindex, has no employer`, legal.status === 200 && (legal.body ?? '').includes('<meta name="robots" content="noindex,follow">') && !EMPLOYER.test(legal.body ?? ''), `${legal.status}`);
+  check(`${path} answers 200, is noindex, has no employer and no dummy address`, legal.status === 200 && (legal.body ?? '').includes('<meta name="robots" content="noindex,follow">') && !EMPLOYER.test(legal.body ?? '') && !/Musterstra|Musterstadt/.test(legal.body ?? ''), `${legal.status}`);
 }
 for (const [path, type] of [['/og/og-de.png', 'image/png'], ['/fonts/martian-grotesk-vf.woff2', 'font/woff2'], ['/fonts/geist-latin-wght.woff2', 'font/woff2'], ['/fonts/geist-mono-latin-wght.woff2', 'font/woff2'], ['/fonts/vazirmatn-arabic-wght.woff2', 'font/woff2'], ['/fonts/departure-mono-regular.woff2', 'font/woff2'], ['/fonts/LICENSES.md', ''], ['/fonts/licenses/martian-grotesk-OFL.txt', 'text/plain']]) {
   const asset = await get(path, { method: 'HEAD' });

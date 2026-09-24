@@ -43,16 +43,16 @@ build time).
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 5 | 29 / 44 | 66 % |
 | `seo` | 14 | 3 | 8 | 54.7 / 81 | 68 % |
-| `launch` | 7 | 2 | 13 | 23.5 / 84 | 28 % |
-| **all** | 52 | 8 | 41 | 246.2 / 401 | **61 %** |
+| `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
+| **all** | 53 | 8 | 41 | 247.2 / 402 | **61 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 0 | 12 | 21 |
 | P1 | 13 | 5 | 34 | 52 |
-| P2 | 19 | 3 | 6 | 28 |
-| **total** | **41** | **8** | **52** | **101** |
+| P2 | 19 | 3 | 7 | 29 |
+| **total** | **41** | **8** | **53** | **102** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -168,6 +168,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | DEP-05 | **Anonymous puzzle counters** (aggregate counts only, no personal data): built in Phase 9C (Worker + D1, `/api/*`), **not live** until DEP-03, DEP-04 and DEP-06. | partial | P1 | Claude Code | DEP-03, DEP-04, DEP-06 | M 70% | launch |
 | DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move both custom domains (apex and www) from the coming-soon Worker `silent-lake-8ae2` to it, then delete `silent-lake-8ae2`. Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01 | M | launch |
 | DEP-07 | **Post-deploy checks**: the counter `curl` checks (TODO.md), legal pages, redirects, 404 status, headers. | missing | P1 | Claude Code | DEP-06 | S | launch |
+| DEP-08 | **Cloud-session build mode** (owner, 2026-09-24): `AMONEL_PREVIEW_BUILD=1` builds, lints and tests with the dummy address (`npm run setup:preview`); production and deploys still refuse the dummy, and the flag is refused on Cloudflare's builders. Rules in CLAUDE.md, "Cloud sessions"; pinned by `preview-build.test.mjs`. | done | P2 | Claude Code | - | XS | launch |
 
 ## Branding
 
