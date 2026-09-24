@@ -28,9 +28,9 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 10 | 20 |
-| P1 | 14 | 4 | 15 | 33 |
-| P2 | 19 | 3 | 2 | 24 |
-| **total** | **43** | **7** | **27** | **77** |
+| P1 | 13 | 4 | 16 | 33 |
+| P2 | 20 | 3 | 2 | 25 |
+| **total** | **43** | **7** | **28** | **78** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -100,10 +100,11 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone: lighter era visuals, narrower `--era-progress` readers. | missing | P1 | Claude Code | PERF-01 to re-test |
 | PERF-03 | **Theme switch cost** (~40 ms restyle at each crossing midpoint). | missing | P2 | Claude Code | - |
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. Done 2026-09-24 (DECISIONS.md 65): `scripts/verify/a11y.mjs` runs axe-core (WCAG 2.2 A/AA) over every view, every app and the desktop in all eight themes, in `matrix.mjs` (de, fa, phone en): 30/30 each; `contrast.test.mjs` pins every theme's token contrast. Fixed: five palette values (1946, 1984, 1995), About's double-faded placeholder, two scroll panes not reachable by keyboard. Keyboard and RTL paths stay covered by `desktop.mjs`, `apps.mjs` and `journey.mjs`. A manual screen-reader walk is PERF-08. | done | P1 | Claude Code | - |
-| PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. | missing | P1 | Claude Code | - |
+| PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. Done 2026-09-24 (DECISIONS.md 66): `scripts/verify/vitals.mjs` (FCP, LCP, CLS, TBT in the page, slow-4G phone and desktop profiles); `serve.mjs` now gzips like Cloudflare. Desktop: every view LCP under 0.9 s, TBT 0. Phone: landing and About LCP 1.0 s; two budgets still over and tracked - journey TBT (PERF-02), desktop LCP 2.59 s (PERF-09). | done | P1 | Claude Code | - |
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 |
 | PERF-07 | **Flaky check**: `apps.mjs` "quiz 300x200: the question is in view" failed once on 2026-09-23 and passed on the rerun; find the timing it depends on. | missing | P2 | Claude Code | - |
 | PERF-08 | **Manual screen-reader walk** (new 2026-09-24): NVDA + Firefox on Windows and VoiceOver on an iPhone through landing, journey (both modes), desktop and three apps; automated checks cannot judge whether the announcements make sense. | missing | P1 | Ahmadreza + Claude Code | PERF-01 |
+| PERF-09 | **Desktop view's first paint on a slow phone** (new 2026-09-24): LCP 2.59 s against 2.5 s, because the client-only shell chunk is requested only after hydration. Options: preload that chunk from the desktop page's head, or give the server frame a contentful element that keeps the Convergence hand-over pixel-identical. | missing | P2 | Claude Code | - |
 
 ## Phase 13 - Deployment and launch
 

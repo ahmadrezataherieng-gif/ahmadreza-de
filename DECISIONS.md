@@ -2153,3 +2153,22 @@ nowhere.
 - **Rule kept in the test:** muted text is checked on panels, not on the page
   background - in 1984 and 1995 that background is a wallpaper that carries
   no muted text.
+
+## 66. Core Web Vitals measured on the export, with budgets (2026-09-24, PERF-05)
+
+- **Measured in the page, not by a tool we would have to install.**
+  `vitals.mjs` collects FCP, LCP, CLS and TBT with PerformanceObserver over
+  CDP, cold loads, median of three, in a slow-4G phone profile and a desktop
+  profile. Lighthouse itself stays out of the dependencies; the numbers are
+  the same metrics it reports.
+- **The test server compresses now.** `serve.mjs` gzips text as Cloudflare
+  does; before, every check downloaded CSS and JS uncompressed (a 108 kB
+  stylesheet instead of 22 kB), which made the first phone measurement read
+  2.9 s for a landing page that really paints in 1.0 s.
+- **Two budgets are not met yet, and are recorded rather than hidden:** the
+  journey's TBT on a 4x-slowed phone (503 ms, PERF-02) and the desktop view's
+  LCP on the slow phone (2.59 s against 2.5 s, PERF-09). The desktop's shell
+  is a client-only chunk requested after hydration; pulling it into the one
+  shared route chunk would cost every other view 11 kB, so it stays lazy
+  until a better way (a preload of that chunk, or a contentful server frame
+  that keeps the hand-over pixel-identical) is built.

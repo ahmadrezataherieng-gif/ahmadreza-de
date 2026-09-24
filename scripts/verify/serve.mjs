@@ -5,8 +5,12 @@
 //
 // No dependencies: node:http and node:fs. Directory URLs get their index.html
 // (`trailingSlash: true`), and anything missing gets the exported 404 page.
+// Text responses are gzipped when the browser accepts it, as Cloudflare does
+// (it sends brotli, a little smaller), so timings such as vitals.mjs measure
+// what a visitor would download (PERF-05).
 import { createServer } from 'node:http';
 import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
+import { createGzip } from 'node:zlib';
 import path from 'node:path';
 
 const args = Object.fromEntries(
@@ -72,19 +76,30 @@ const resolve = (urlPath) => {
   return existsSync(html) ? html : null;
 };
 
+const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.svg', '.txt', '.xml']);
+
+/** Streams a file, gzipped when it is text and the request accepts gzip. */
+function send(request, response, status, file, headers) {
+  const gzip = COMPRESSIBLE.has(path.extname(file)) && /\bgzip\b/.test(request.headers['accept-encoding'] ?? '');
+  response.writeHead(status, { ...headers, ...(gzip ? { 'content-encoding': 'gzip', vary: 'Accept-Encoding' } : {}) });
+  const stream = createReadStream(file);
+  (gzip ? stream.pipe(createGzip({ level: 6 })) : stream).pipe(response);
+}
+
 createServer((request, response) => {
   const file = resolve(request.url ?? '/');
   if (!file) {
     const notFound = path.join(ROOT, '404.html');
-    response.writeHead(404, { ...headersFor(request.url ?? '/'), 'content-type': TYPES['.html'] });
-    if (existsSync(notFound)) createReadStream(notFound).pipe(response);
-    else response.end('404');
+    if (existsSync(notFound)) send(request, response, 404, notFound, { ...headersFor(request.url ?? '/'), 'content-type': TYPES['.html'] });
+    else {
+      response.writeHead(404, { 'content-type': 'text/plain' });
+      response.end('404');
+    }
     return;
   }
-  response.writeHead(200, {
+  send(request, response, 200, file, {
     ...headersFor((request.url ?? '/').split('?')[0]),
     'content-type': TYPES[path.extname(file)] ?? 'application/octet-stream',
     'cache-control': 'no-store',
   });
-  createReadStream(file).pipe(response);
 }).listen(PORT, () => console.log(`serving ${ROOT} on http://localhost:${PORT}`));

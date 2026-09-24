@@ -276,6 +276,32 @@ the views grow only by the registry line.
 | Network tools on open (code + copy, de) | - | **13.8 kB** (9.0 + 4.8) |
 | Time Machine on open (code + copy, de) | - | **3.9 kB** (2.6 + 1.3); `DesktopTheme` adds 0.6 kB to the one route chunk every view loads (landing / journey / desktop 138.6 / 228.9 / 149.5 kB) |
 
+## Core Web Vitals (PERF-05, DECISIONS.md 66)
+
+`scripts/verify/vitals.mjs`, median of three cold loads (no cache) of the
+export served gzipped by `serve.mjs` (Cloudflare sends brotli, a little
+smaller). Phone: 380 x 800, touch, 4x CPU slowdown, 1.6 Mbit/s, 150 ms RTT
+(Lighthouse's slow-4G shape). Desktop: 1280 x 800, unthrottled. Budgets:
+phone LCP 2.5 s, CLS 0.1, TBT 200 ms; desktop LCP 1.5 s, CLS 0.1, TBT 100 ms.
+
+| 2026-09-24 | FCP | LCP | CLS | TBT |
+|---|---|---|---|---|
+| phone · landing | 1.02 s | 1.02 s | 0.027 | 85 ms |
+| phone · journey | 1.64 s | 1.64 s | 0.019 | **503 ms** (over; PERF-02) |
+| phone · desktop | 2.58 s | **2.59 s** (over by 0.09 s; PERF-09) | 0 | 0 ms |
+| phone · About | 1.03 s | 1.03 s | 0.055 | 95 ms |
+| desktop · landing | 84 ms | 84 ms | 0.010 | 0 ms |
+| desktop · journey | 264 ms | 264 ms | 0.006 | 0 ms |
+| desktop · desktop | 836 ms | 836 ms | 0 | 0 ms |
+| desktop · About | 108 ms | 108 ms | 0 | 0 ms |
+
+The desktop view paints nothing contentful until its client-only shell has
+loaded (the server paints the text-free frame the Convergence ends on), so its
+first paint waits for hydration plus the 11 kB shell chunk; a visitor who
+arrives from the landing page or the journey already has every shared chunk
+cached. The journey's blocking time on a slowed phone is the era scrubbing
+PERF-02 addresses.
+
 ## Scroll performance (DECISIONS.md 48)
 
 A full scroll of the journey with real input, on the production export
