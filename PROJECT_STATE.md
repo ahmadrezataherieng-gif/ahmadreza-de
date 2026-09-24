@@ -10,7 +10,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
 
 - [x] 1. Housekeeping: (a) `.gitattributes` + renormalise, (b) commit the entity/SEO work, `legal.local.ts` stays untracked, (c) stale docs, (d) ROADMAP rows (LEG-17, LEG-18, SEO-16, SEO-17, SEO-12 reworded)
 - [x] 2. SEO follow-ups: (a) `knowsAbout` the same 7 concepts in de/en/fa, (b) background in meta description and homepage subline, CR-1084 and pinned tests, (c) 301s from the old `/og/og-<locale>.png` on the main site and the coming-soon Worker, (d) `live-soon.mjs` reads the Person from `@graph` (already in the working tree)
-- [ ] 3. XS/S items, one commit each: SEO-13 [x], APP-14 [x], APP-11 [x], APP-10 [x], PERF-07 [x], PERF-09 [x], APP-13 [x], APP-16 [x], APP-09 [x], PERF-03 (only if the theme engine contract stays), SEO-14 (draft landing titles)
+- [x] 3. XS/S items, one commit each: SEO-13, APP-14, APP-11, APP-10, PERF-07, PERF-09, APP-13, APP-16, APP-09 (in CSS, DECISIONS 71) all done; PERF-03 measured and skipped (options in TODO.md); SEO-14 landing titles drafted (CR-1095, wording waits for the owner)
 - [ ] 4. M items, one commit each: APP-03, APP-06, APP-07, APP-12, APP-17
 - [ ] 5. BR-06 in steps: (1) tokens and fonts, (2) UI chrome, (3) landing, (4) About, (5) Impressum and Datenschutz, (6) 404; desktop shell out of scope (open question in TODO.md)
 - [ ] 6. Preliminary LEG-05 audit as a report in TODO.md (changes nothing legal)

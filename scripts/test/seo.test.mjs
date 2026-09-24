@@ -101,6 +101,7 @@ test('entity: every locale and the coming-soon pages keep Amonel out of the Pers
   for (const locale of ['de', 'en', 'fa']) {
     assert.ok(existsSync(`public/og/ahmadreza-taheri-${locale}.png`), locale);
     const site = JSON.parse(read(`src/messages/${locale}.json`)).site;
+    assert.ok(site.landingTitle.length <= 60 && site.landingTitle.startsWith(site.author), `${locale} landing title: ${site.landingTitle.length} characters, the name first`);
     assert.equal(site.knowsAbout.length, 7, `${locale} knowsAbout: the same seven concepts in every language`);
     const messages = JSON.parse(read(`src/messages/${locale}.json`));
     assert.ok(messages.landing.background.length > 10, `${locale} landing.background (the repair background under the role)`);

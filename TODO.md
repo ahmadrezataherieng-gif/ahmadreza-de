@@ -294,6 +294,14 @@ What is left:
    → 403. Then reset that test count:
    `npx wrangler d1 execute amonel-counters --remote --command "DELETE FROM counters"`.
 
+## Work queue of 2026-09-24 - choices taken and questions left
+
+Recorded while working through the queue in PROJECT_STATE.md, so nothing waits on an answer; each entry says the default that was taken.
+
+- **PERF-03, theme switch cost: not changed, options recorded.** A first measurement in a plain page (one custom property flipped on `<html>`, style recalculation forced) costs under 1 ms with 2,400 elements and 48 `.ao-themed` ones, so the ~40 ms seen at each crossing is not the restyle itself but what follows it (paint, the `.ao-themed` colour transitions, compositing on a throttled CPU). A fix worth doing needs a trace first (`node scripts/verify/trace.mjs --invalidations`, then which elements restyle and repaint). Options, none taken: (1) limit the `.ao-themed` transition to the properties that change and switch it off for the frame of the switch; (2) write only the tokens that differ between the two themes; (3) scope the tokens to the era section instead of `<html>` - this one changes the engine's contract (one root, `setTheme` the only entry point), so it needs your go. Default taken: leave the engine as it is.
+
+<!-- queue-notes:end -->
+
 ## Answered
 
 - Domain: **ahmadreza.de**, registered and owned.

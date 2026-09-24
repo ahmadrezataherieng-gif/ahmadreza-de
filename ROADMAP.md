@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
-| `seo` | 19 | 2 | 6 | 62.2 / 84 | 74 % |
+| `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 64 | 5 | 36 | 263.3 / 406 | **65 %** |
+| **all** | 64 | 6 | 35 | 263.8 / 406 | **65 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 13 | 0 | 16 | 29 |
-| **total** | **36** | **5** | **64** | **105** |
+| P2 | 12 | 1 | 16 | 29 |
+| **total** | **35** | **6** | **64** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -121,7 +121,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-16 | **Entity signals** (2026-09-24, Claude Code): one JSON-LD `@graph` (Person with name variants and `knowsAbout`, WebSite named after the person, Amonel as a separate CreativeWork, ImageObject), on the main site and on the coming-soon pages; share images renamed to `ahmadreza-taheri-<locale>.png`; `anthropic-ai` in robots.txt. The coming-soon pages carry it live (version `8eac93e8`); follow-ups: knowsAbout in seven matching concepts, the repair background in descriptions and the landing subline, 301s from the old share-image URLs (in the repo, deploy pending). | done | P1 | Claude Code | - | S | seo |
 | SEO-17 | **Cloudflare AI bot policies** (owner, 2026-09-24): Search, Agent and Training all set to Allow, so ClaudeBot and anthropic-ai no longer get a 403. | done | P1 | Ahmadreza | - | XS | seo |
 | SEO-13 | Web manifest per language. Done 2026-09-24: `manifest.webmanifest` (de), `manifest.en.webmanifest`, `manifest.fa.webmanifest` (own `lang`, `dir`, start URL and scope), chosen by the layout; CR-1090. | done | P2 | Claude Code | - | XS | seo |
-| SEO-14 | Landing titles run over 60 characters (de 66, en 64, fa 66): **waiting for owner** decision on the wording (never shorten the name). | missing | P2 | Ahmadreza | FIN-01 | XS | seo |
+| SEO-14 | Landing titles ran over 60 characters (de 68, en 66, fa 74). Drafted 2026-09-24 as `site.landingTitle` (de 55, en 58, fa 44, name first and whole, in the style of the coming-soon titles), pinned by `seo.test.mjs`; CR-1095. The wording is **waiting for owner** (FIN-01). | partial | P2 | Claude Code + Ahmadreza | FIN-01 | XS 50% | seo |
 | SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal
@@ -152,7 +152,7 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | PERF-01 | **Real devices**: iPhone, Android phone, iPad, a touchscreen laptop; Safari and Firefox. Everything so far ran in headless Chrome. | missing | P1 | Ahmadreza + Claude Code | - | M | seo |
 | PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone: lighter era visuals, narrower `--era-progress` readers. Partly done 2026-09-24 (DECISIONS.md 67): a forced layout on every scroll event removed (resolver writes deferred out of native scroll events) - phone profile 35.6 → 38.7 fps, long tasks 113 → 75, script time in slow frames 28 s → 0.8 s; `perf.mjs --profile` added. Left: style/layout and paint in the guided puzzle segments; needs the real-phone re-test (PERF-01) to judge. | partial | P1 | Claude Code | PERF-01 to re-test | L 40% | seo |
-| PERF-03 | **Theme switch cost** (~40 ms restyle at each crossing midpoint). | missing | P2 | Claude Code | - | S | seo |
+| PERF-03 | **Theme switch cost** (~40 ms restyle at each crossing midpoint). Measured 2026-09-24: the restyle itself is under 1 ms in a plain page, so the cost is what follows it; options recorded in TODO.md, nothing changed (one option would change the engine's contract - waiting for the owner's go). | missing | P2 | Claude Code | - | S | seo |
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. Done 2026-09-24 (DECISIONS.md 65): `scripts/verify/a11y.mjs` runs axe-core (WCAG 2.2 A/AA) over every view, every app and the desktop in all eight themes, in `matrix.mjs` (de, fa, phone en): 30/30 each; `contrast.test.mjs` pins every theme's token contrast. Fixed: five palette values (1946, 1984, 1995), About's double-faded placeholder, two scroll panes not reachable by keyboard. Keyboard and RTL paths stay covered by `desktop.mjs`, `apps.mjs` and `journey.mjs`. A manual screen-reader walk is PERF-08. | done | P1 | Claude Code | - | L | seo |
 | PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. Done 2026-09-24 (DECISIONS.md 66): `scripts/verify/vitals.mjs` (FCP, LCP, CLS, TBT in the page, slow-4G phone and desktop profiles); `serve.mjs` now gzips like Cloudflare. Desktop: every view LCP under 0.9 s, TBT 0. Phone: landing and About LCP 1.0 s; two budgets still over and tracked - journey TBT (PERF-02), desktop LCP 2.59 s (PERF-09). | done | P1 | Claude Code | - | M | seo |
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 | S | seo |

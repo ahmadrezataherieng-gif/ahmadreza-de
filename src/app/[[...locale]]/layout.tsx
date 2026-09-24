@@ -69,7 +69,7 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
 };
 
 /** `site` keys used only by metadata and JSON-LD, never by a client component. */
-const SERVER_ONLY_SITE_KEYS: readonly string[] = ['ogAlt', 'journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout'];
+const SERVER_ONLY_SITE_KEYS: readonly string[] = ['ogAlt', 'journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout', 'landingTitle'];
 
 /**
  * Page title per view, the name always ahead of the brand (the `seo` skill):
@@ -79,7 +79,8 @@ const SERVER_ONLY_SITE_KEYS: readonly string[] = ['ogAlt', 'journeyDescription',
 async function viewTitle(locale: Locale, view: View): Promise<string> {
   const t = await getTranslations({ locale, namespace: 'site' });
   // CONTENT-TODO CR-1043
-  if (view === 'landing') return `${t('title')} | ${t('brand')}`;
+  // A draft that fits the 60 characters a result page shows, the name first and whole (SEO-14, CR-1095).
+  if (view === 'landing') return t('landingTitle');
   if (view === 'about') {
     return `${(await getTranslations({ locale, namespace: 'nav' }))('about')} – ${t('author')} | ${t('brand')}`;
   }
