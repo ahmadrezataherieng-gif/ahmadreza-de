@@ -46,7 +46,8 @@ for (const viewport of VIEWPORTS) {
   for (const scheme of ['dark', 'light']) {
     await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
     for (const locale of ['de', 'en', 'fa']) {
-      await page.evaluate(`document.querySelector('[data-lang="${locale}"]').click()`);
+      // Each language is its own page (SEO-15): /, /en/, /fa/ - no button to press.
+      await page.goto(new URL(locale === 'de' ? '/' : `/${locale}/`, BASE).href, 800);
       await sleep(300);
       const state = await page.evaluate(`(async () => {
         await document.fonts.ready;

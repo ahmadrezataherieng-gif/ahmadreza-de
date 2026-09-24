@@ -1,8 +1,9 @@
-// The coming-soon page's search-engine data (ROADMAP BR-02, Part 4 of the
-// 2026-09-24 brief): the Person JSON-LD and the sitemap. Both are built from the
-// site's own single sources - messages/de.json `site`, EMAIL, PROFILES - so they
-// never drift from the main site (`src/lib/structured-data.ts`). Separate from
-// build-soon.mjs so the tests can validate them without the legal address.
+// The coming-soon pages' search-engine data (ROADMAP BR-02 and SEO-15): the
+// Person JSON-LD, the sitemap and the three language versions' addresses. All
+// built from the site's own single sources - messages/<locale>.json `site`,
+// EMAIL, PROFILES - so they never drift from the main site
+// (`src/lib/structured-data.ts`). Separate from build-soon.mjs so the tests can
+// validate them without the legal address.
 //
 // Never the legal name, the street or the postal code, and never the employer
 // (DECISIONS.md 58, ROADMAP LEG-08): a city and a country only.
@@ -15,10 +16,22 @@ import { PROFILES } from '../src/content/profiles.ts';
 import { SITE_URL } from '../src/lib/constants.ts';
 import { serialiseJsonLd } from '../src/lib/structured-data.ts';
 
-const site = JSON.parse(readFileSync(new URL('../src/messages/de.json', import.meta.url), 'utf8')).site;
+const messages = (locale) => JSON.parse(readFileSync(new URL(`../src/messages/${locale}.json`, import.meta.url), 'utf8')).site;
 
-/** schema.org Person for the coming-soon page. Empty profiles are skipped. */
-export function personJsonLd() {
+/** The three coming-soon pages: German at /, English at /en/, Persian at /fa/ (right to left). */
+export const LOCALES = [
+  { id: 'de', prefix: '', dir: 'ltr', label: 'DE', ogLocale: 'de_DE' },
+  { id: 'en', prefix: 'en/', dir: 'ltr', label: 'EN', ogLocale: 'en_US' },
+  { id: 'fa', prefix: 'fa/', dir: 'rtl', label: 'FA', ogLocale: 'fa_IR' },
+];
+
+/** The absolute URL of a locale's coming-soon page. */
+export const pageUrl = (locale) => `${SITE_URL}/${locale.prefix}`;
+
+/** schema.org Person for one coming-soon page. Empty profiles are skipped. */
+export function personJsonLd(localeId = 'de') {
+  const site = messages(localeId);
+  const locale = LOCALES.find((entry) => entry.id === localeId);
   const sameAs = PROFILES.flatMap((profile) => (profile.url ? [profile.url] : []));
   return {
     '@context': 'https://schema.org',
@@ -27,7 +40,7 @@ export function personJsonLd() {
     name: site.author,
     alternateName: site.persianName,
     jobTitle: site.jobTitle,
-    url: `${SITE_URL}/`,
+    url: pageUrl(locale),
     address: { '@type': 'PostalAddress', addressLocality: 'Trier', addressCountry: 'DE' },
     knowsLanguage: ['de', 'en', 'fa'],
     knowsAbout: [...site.knowsAbout],
@@ -36,14 +49,29 @@ export function personJsonLd() {
   };
 }
 
-/** The `<script>` element that goes into the page's head. */
-export function jsonLdScript() {
-  return `<script type="application/ld+json">${serialiseJsonLd(personJsonLd())}</script>`;
+/** The `<script>` element that goes into a page's head. */
+export function jsonLdScript(localeId = 'de') {
+  return `<script type="application/ld+json">${serialiseJsonLd(personJsonLd(localeId))}</script>`;
 }
 
-/** One indexable URL: the legal pages are noindex and stay out, as on the real site. */
+/** hreflang alternates for the head (every language, itself included, and x-default = German). */
+export function alternateLinks() {
+  const links = LOCALES.map((locale) => `<link rel="alternate" hreflang="${locale.id}" href="${pageUrl(locale)}">`);
+  links.push(`<link rel="alternate" hreflang="x-default" href="${pageUrl(LOCALES[0])}">`);
+  return links.join('\n');
+}
+
+/** Three indexable URLs, each listing all alternates: the legal pages are noindex and stay out, as on the real site. */
 export function sitemapXml(date) {
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${SITE_URL}/</loc>\n    <lastmod>${date}</lastmod>\n  </url>\n</urlset>\n`;
+  const alternates = [...LOCALES.map((locale) => [locale.id, pageUrl(locale)]), ['x-default', pageUrl(LOCALES[0])]]
+    .map(([hreflang, href]) => `    <xhtml:link rel="alternate" hreflang="${hreflang}" href="${href}"/>`)
+    .join('\n');
+  const urls = LOCALES.map((locale) => `  <url>\n    <loc>${pageUrl(locale)}</loc>\n    <lastmod>${date}</lastmod>\n${alternates}\n  </url>\n`).join('');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}</urlset>\n`;
 }
 
-export const OG_IMAGE = { file: 'public/og/og-de.png', url: `${SITE_URL}/og/og-de.png`, width: 1200, height: 630 };
+/** The share image per language (public/og/, made by scripts/og-image.mjs). */
+export const OG_IMAGES = Object.fromEntries(
+  LOCALES.map((locale) => [locale.id, { file: `public/og/og-${locale.id}.png`, path: `og/og-${locale.id}.png`, url: `${SITE_URL}/og/og-${locale.id}.png`, width: 1200, height: 630 }]),
+);
+export const OG_IMAGE = OG_IMAGES.de;

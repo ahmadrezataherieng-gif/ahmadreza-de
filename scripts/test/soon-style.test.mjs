@@ -66,8 +66,10 @@ test('soon style: extra word spacing for Latin only; the terminal line is Depart
   // Only the terminal line uses the pixel face.
   assert.equal([...page.matchAll(/var\(--font-pixel\)/g)].length, 1);
   // Latin terms in Persian strings are isolated with <bdi>.
-  assert.match(page, /function bidi\(text\)/);
-  assert.match(page, /if\(l==='fa'\) el\.innerHTML=bidi\(v\)/);
+  // (Rendered at build time by scripts/soon-pages.mjs since SEO-15; behaviour is checked in soon-pages.test.mjs.)
+  const renderer = read('scripts/soon-pages.mjs');
+  assert.match(renderer, /export function bidi\(text\)/);
+  assert.match(renderer, /localeId === 'fa' \? bidi\(text\)/);
 });
 
 test('soon fonts: every file is licensed, used, and served from the domain - no candidates committed', () => {

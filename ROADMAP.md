@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 11 | 0 | 6 | 27 / 44 | 61 % |
-| `seo` | 13 | 3 | 9 | 52.7 / 81 | 65 % |
+| `seo` | 14 | 3 | 8 | 54.7 / 81 | 68 % |
 | `launch` | 7 | 2 | 13 | 23.5 / 84 | 28 % |
-| **all** | 50 | 8 | 43 | 242.2 / 401 | **60 %** |
+| **all** | 51 | 8 | 42 | 244.2 / 401 | **61 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 0 | 12 | 21 |
 | P1 | 13 | 5 | 34 | 52 |
-| P2 | 21 | 3 | 4 | 28 |
-| **total** | **43** | **8** | **50** | **101** |
+| P2 | 20 | 3 | 5 | 28 |
+| **total** | **42** | **8** | **51** | **101** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -120,7 +120,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 | XS | seo |
 | SEO-13 | Web manifest is German only (`name`, `description`). | partial | P2 | Claude Code | - | XS 50% | seo |
 | SEO-14 | Landing titles run over 60 characters (de 66, en 64, fa 66): **waiting for owner** decision on the wording (never shorten the name). | missing | P2 | Ahmadreza | FIN-01 | XS | seo |
-| SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | missing | P2 | Claude Code | - | S | seo |
+| SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal
 

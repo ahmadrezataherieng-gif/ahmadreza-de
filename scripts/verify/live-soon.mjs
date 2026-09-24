@@ -42,8 +42,15 @@ check('the HTML links to no other origin for its own assets (scripts, styles, fo
 const robots = await get('/robots.txt');
 check('/robots.txt: text, allows all, names the sitemap and the AI bots', robots.status === 200 && robots.type.startsWith('text/plain') && /User-agent: \*\s+Allow: \//.test(robots.body) && robots.body.includes('Sitemap: https://ahmadreza.de/sitemap.xml') && ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'].every((bot) => robots.body.includes(bot)) && !/^Disallow:\s*\S/m.test(robots.body), `${robots.status} ${robots.type}`);
 const sitemap = await get('/sitemap.xml');
-check('/sitemap.xml: XML with the one indexable URL', sitemap.status === 200 && /xml/.test(sitemap.type) && sitemap.body.includes('<loc>https://ahmadreza.de/</loc>') && !/impressum|datenschutz/.test(sitemap.body), `${sitemap.status} ${sitemap.type}`);
+check('/sitemap.xml: XML with the three language pages and hreflang alternates', sitemap.status === 200 && /xml/.test(sitemap.type) && ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/'].every((url) => sitemap.body.includes(`<loc>${url}</loc>`)) && sitemap.body.includes('hreflang="x-default"') && !/impressum|datenschutz/.test(sitemap.body), `${sitemap.status} ${sitemap.type}`);
 
+// SEO-15: the English and Persian pages are real pages of their own.
+for (const [path, lang, dir, title, canonical] of [['/en/', 'en', 'ltr', 'Ahmadreza Taheri – IT System Integration Apprentice, Trier', 'https://ahmadreza.de/en/'], ['/fa/', 'fa', 'rtl', 'احمدرضا طاهری – کارآموز فناوری اطلاعات، تریر', 'https://ahmadreza.de/fa/']]) {
+  const page = await get(path);
+  const body = page.body ?? '';
+  check(`${path} answers 200 as HTML with lang=${lang} dir=${dir}, its own title, canonical and index,follow`, page.status === 200 && page.type.startsWith('text/html') && body.includes(`<html lang="${lang}" dir="${dir}">`) && body.includes(`<title>${title}</title>`) && body.includes(`<link rel="canonical" href="${canonical}">`) && body.includes('<meta name="robots" content="index,follow">'), `${page.status}`);
+  check(`${path} has hreflang de, en, fa, x-default and its own JSON-LD`, ['de', 'en', 'fa', 'x-default'].every((code) => body.includes(`hreflang="${code}"`)) && /"@type":"Person"/.test(body) && body.includes(`"url":"${canonical}"`) && !/{{|@jsonld|@tokens|@alternates/.test(body) && !EMPLOYER.test(body));
+}
 for (const path of ['/impressum/', '/datenschutz/', '/en/impressum/', '/en/datenschutz/', '/fa/impressum/', '/fa/datenschutz/']) {
   const legal = await get(path);
   check(`${path} answers 200, is noindex, has no employer`, legal.status === 200 && (legal.body ?? '').includes('<meta name="robots" content="noindex,follow">') && !EMPLOYER.test(legal.body ?? ''), `${legal.status}`);

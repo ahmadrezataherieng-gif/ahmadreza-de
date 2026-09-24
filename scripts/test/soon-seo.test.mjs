@@ -87,29 +87,32 @@ test('soon SEO: Open Graph and Twitter tags point at the existing share image', 
   assert.equal(png.readUInt32BE(20), 630);
 });
 
-test('soon SEO: robots.txt welcomes every crawler and names the sitemap; the sitemap has the one indexable URL', () => {
+test('soon SEO: robots.txt welcomes every crawler and names the sitemap; the sitemap has the three language pages', () => {
   const robots = read('public/robots.txt');
   assert.match(robots, /^User-agent: \*\nAllow: \//m);
   assert.doesNotMatch(robots, /^Disallow:\s*\S/m, 'nothing is disallowed - the noindex legal pages must stay crawlable');
   assert.ok(robots.includes('Sitemap: https://ahmadreza.de/sitemap.xml'));
   const xml = sitemapXml('2026-09-24');
-  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), ['https://ahmadreza.de/']);
+  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
   assert.match(xml, /<lastmod>2026-09-24<\/lastmod>/);
   assert.doesNotMatch(xml, /impressum|datenschutz/);
 });
 
-test('soon SEO: the built folder has robots.txt, sitemap.xml, the share image, the JSON-LD; the legal pages are noindex', (context) => {
+test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages with their share images and JSON-LD; the legal pages are noindex', (context) => {
   if (!exists('soon/dist/index.html')) return context.skip('run npm run build:soon first');
   const dist = (path) => read(`soon/dist/${path}`);
   assert.equal(dist('robots.txt'), read('public/robots.txt'));
-  assert.match(dist('sitemap.xml'), /<loc>https:\/\/ahmadreza\.de\/<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
-  assert.ok(exists('soon/dist/og/og-de.png'));
-  const html = dist('index.html');
-  const inner = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
-  assert.deepEqual(JSON.parse(inner), personJsonLd());
-  assert.doesNotMatch(html, /\{\{|@jsonld|@tokens/, 'nothing left unfilled');
-  assert.doesNotMatch(html, /Momrabadi/);
-  assert.ok(!leaksAddress(html));
+  assert.deepEqual([...dist('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
+  for (const [folder, id, image] of [['', 'de', 'og-de'], ['en/', 'en', 'og-en'], ['fa/', 'fa', 'og-fa']]) {
+    assert.ok(exists('soon/dist/og/' + image + '.png'), image);
+    const html = dist(folder + 'index.html');
+    const inner = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
+    assert.deepEqual(JSON.parse(inner), personJsonLd(id), id);
+    assert.ok(html.includes('<html lang="' + id + '"'), id);
+    assert.doesNotMatch(html, /\{\{|@jsonld|@tokens|@alternates/, 'nothing left unfilled');
+    assert.doesNotMatch(html, /Momrabadi/);
+    assert.ok(!leaksAddress(html));
+  }
   for (const path of ['impressum', 'datenschutz', 'en/impressum', 'en/datenschutz', 'fa/impressum', 'fa/datenschutz']) {
     assert.match(dist(`${path}/index.html`), /<meta name="robots" content="noindex,follow">/, path);
   }

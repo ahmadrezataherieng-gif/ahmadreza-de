@@ -1,6 +1,6 @@
 // Builds the deployable folder of the temporary "coming soon" page
 // (Worker `silent-lake-8ae2`, see soon/wrangler.jsonc): soon/index.html plus the
-// Impressum and the Datenschutzerklärung in de, en and fa, rendered from the
+// Impressum and the Datenschutzerklärung in de, en and fa; the page itself is rendered three times (/, /en/, /fa/), rendered from the
 // same messages/legal/*.json as the real site, with the `soon` scope - the
 // coming-soon page has no counters, no Assistant and only one storage entry.
 //
@@ -16,7 +16,8 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { ensureLegalAddress } from './legal-address.mjs';
 import { AREAS } from './roadmap.mjs';
 import { fillPlaceholders, progressValues } from './soon-progress.mjs';
-import { jsonLdScript, OG_IMAGE, sitemapXml } from './soon-seo.mjs';
+import { renderLanding } from './soon-pages.mjs';
+import { LOCALES, OG_IMAGES, sitemapXml } from './soon-seo.mjs';
 import { linkify, sectionsFor } from '../src/lib/legal-doc.ts';
 
 // Before the legal copy is imported: without the address there is no Impressum.
@@ -26,11 +27,7 @@ const { LEGAL_CONTACT } = await import('../src/content/legal.ts');
 const root = new URL('../', import.meta.url);
 const TOKENS = readFileSync(new URL('soon/tokens.css', root), 'utf8').trim();
 const dist = new URL('soon/dist/', root);
-const locales = [
-  { id: 'de', prefix: '', dir: 'ltr', label: 'DE' },
-  { id: 'en', prefix: 'en/', dir: 'ltr', label: 'EN' },
-  { id: 'fa', prefix: 'fa/', dir: 'rtl', label: 'FA' },
-];
+const locales = LOCALES;
 const kinds = [
   { id: 'imprint', slug: 'impressum' },
   { id: 'privacy', slug: 'datenschutz' },
@@ -97,8 +94,8 @@ function page(locale, kind, copy, labels) {
     )
     .join('');
   const note = copy.bindingNote ? `<p class="note">${escape(copy.bindingNote)} <a href="/${kind.slug}/" hreflang="de" lang="de">${escape(copy.bindingLink)}</a></p>` : '';
-  // The coming-soon page is one URL; it picks its language itself.
-  const home = '/';
+  // Back to the coming-soon page in this page's language.
+  const home = `/${locale.prefix}`;
   return `<!doctype html>
 <html lang="${locale.id}" dir="${locale.dir}">
 <head>
@@ -133,8 +130,13 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 // The progress figures come from ROADMAP.md at build time, never typed by hand.
 const values = progressValues();
-const landing = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values).replace('<!--@jsonld-->', () => jsonLdScript());
-writeFileSync(new URL('index.html', dist), landing);
+const filled = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values);
+// One real page per language (SEO-15): / in German, /en/ and /fa/, each rendered from the same template and copy table.
+for (const locale of locales) {
+  const folder = new URL(locale.prefix, dist);
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(new URL('index.html', folder), renderLanding(filled, locale.id));
+}
 console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area} ${values[`${area}.percent`]} %`).join(', ')})`);
 
 for (const locale of locales) {
@@ -153,10 +155,10 @@ cpSync(new URL('soon/fonts/', root), new URL('fonts/', dist), { recursive: true 
 cpSync(new URL('public/fonts/LICENSES.md', root), new URL('fonts/LICENSES.md', dist));
 cpSync(new URL('public/fonts/licenses/', root), new URL('fonts/licenses/', dist), { recursive: true });
 
-// Search engines: the share image, robots.txt (every crawler welcome, AI bots included) and a one-URL sitemap. The legal pages are noindex and stay out of it.
+// Search engines: the share image, robots.txt (every crawler welcome, AI bots included) and a sitemap of the three language pages. The legal pages are noindex and stay out of it.
 mkdirSync(new URL('og/', dist), { recursive: true });
-cpSync(new URL(OG_IMAGE.file, root), new URL('og/og-de.png', dist));
+for (const image of Object.values(OG_IMAGES)) cpSync(new URL(image.file, root), new URL(image.path, dist));
 cpSync(new URL('public/robots.txt', root), new URL('robots.txt', dist));
 writeFileSync(new URL('sitemap.xml', dist), sitemapXml(values.DATE));
 
-console.log('soon/dist: index.html, robots.txt, sitemap.xml, og/, fonts/ + impressum and datenschutz in de, en, fa');
+console.log('soon/dist: index.html + en/ and fa/ landing pages, robots.txt, sitemap.xml, og/, fonts/ + impressum and datenschutz in de, en, fa');

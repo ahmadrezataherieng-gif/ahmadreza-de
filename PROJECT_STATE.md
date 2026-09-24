@@ -4,6 +4,7 @@ Last updated: 2026-09-24
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+- **Coming-soon in three languages (2026-09-24, SEO-15):** `/`, `/en/` and `/fa/` are separate pages rendered by `scripts/soon-pages.mjs` from `soon/index.html` and the copy table `soon/copy.mjs`; own lang/dir, title (max 60 characters), description, canonical, hreflang incl. x-default, share tags, JSON-LD; language links are plain URLs, the one `ao-lang` storage entry is kept (privacy policy). Sitemap lists all three. Checked by `soon-pages.test.mjs`.
 - **Employer never named (2026-09-24, LEG-08):** removed from the coming-soon
   page, the main site, llms.txt and the docs; the role line is
   "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079).
