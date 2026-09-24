@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
-| `desktop` | 6 | 1 | 6 | 44.8 / 66 | 68 % |
+| `desktop` | 7 | 1 | 5 | 45.8 / 66 | 69 % |
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 17 | 2 | 8 | 58.2 / 84 | 69 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 56 | 7 | 42 | 250.7 / 406 | **62 %** |
+| **all** | 57 | 7 | 41 | 251.7 / 406 | **62 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 19 | 2 | 8 | 29 |
-| **total** | **42** | **7** | **56** | **105** |
+| P2 | 18 | 2 | 9 | 29 |
+| **total** | **41** | **7** | **57** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -97,7 +97,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). | missing | P2 | Claude Code | - | XS | puzzles |
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. | missing | P2 | Claude Code | - | S | desktop |
-| APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. | missing | P2 | Claude Code | - | XS | desktop |
+| APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |
 | APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 | S | puzzles |
 | APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Still open: Ping and DNS offering "trace this host" into the Traceroute app (needs a way to hand a target to another app's window, on both shells). | partial | P2 | Claude Code | APP-04 | S 40% | desktop |
 | APP-17 | **Time Machine extras** (new idea 2026-09-24): the era's sound profile as a short sample on arrival (with APP-12, only after a click), and each era's cursor style on the desktop (`data-cursor` is already set). | missing | P2 | Claude Code | APP-12 | S | desktop |

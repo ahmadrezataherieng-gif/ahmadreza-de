@@ -1499,16 +1499,22 @@ html[data-returning] .ao-mode-section h2 {
   bottom: calc(9cqh + 2.75rem);
 }
 
+/* On the desktop the icon columns fill the inline-start side, so the notice sits
+   at the inline-end, clear of them (APP-14); the phone has no such columns and
+   keeps it centred. */
 .ao-notice-slot {
-  left: 50%;
-  translate: -50% 0;
+  inset-inline-end: 1rem;
   bottom: calc(9cqh + 2.25rem);
   width: max-content;
-  max-width: calc(100% - 2rem);
+  max-width: calc(100% - 26rem);
 }
 
 .ao-notice-slot--mobile {
+  inset-inline-end: auto;
+  left: 50%;
+  translate: -50% 0;
   bottom: calc(9cqh + 3rem);
+  max-width: calc(100% - 2rem);
 }
 
 /* The shell's parts are invisible until it is ready, so the first frame is the

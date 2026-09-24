@@ -85,10 +85,10 @@ const notice = await js(`(() => { const n = document.querySelector('[data-locked
 check('locked: opening snake shows the notice, not a window', notice?.id === 'snake' && !(await js(`!!document.querySelector('${frame('snake')}')`)), notice);
 check('locked: the notice names 1981', /1981/.test(notice?.text ?? ''), notice?.text);
 const noticeBox = await rectOf('[data-locked-notice]');
-const iconBox = await rectOf(icon('paint'));
-// On the phone the notice once covered the grid; the window manager's notice sits
-// at the bottom by design and may overlap the icon column on a tall screen.
-if (layout !== 'desktop') check('locked: the notice leaves the icons free', !noticeBox || !iconBox || noticeBox.y >= iconBox.y + iconBox.h || noticeBox.y + noticeBox.h <= iconBox.y, { noticeBox, iconBox });
+// The notice once covered the lowest icon (desktop, 768 px tall) and the grid on the phone: no icon may sit under it (APP-14).
+const iconBoxes = await js(`[...document.querySelectorAll(${JSON.stringify(layout === 'desktop' ? '[data-layout="desktop"] nav [data-app]' : '.ao-home [data-app]')})].map((e) => { const r = e.getBoundingClientRect(); return { id: e.dataset.app, x: r.left, y: r.top, w: r.width, h: r.height }; }).filter((r) => r.w > 0)`);
+const covered = noticeBox ? iconBoxes.filter((r) => r.x < noticeBox.x + noticeBox.w && r.x + r.w > noticeBox.x && r.y < noticeBox.y + noticeBox.h && r.y + r.h > noticeBox.y).map((r) => r.id) : [];
+check('locked: the notice leaves every icon free', iconBoxes.length > 0 && covered.length === 0, { noticeBox, covered });
 await clickOn('[data-action="locked-play"]');
 check('locked: "to the puzzle" opens the journey at 1981', await until(`location.pathname.endsWith('/amonel/') && location.hash === '#era-4'`, 8000), await js('location.pathname + location.hash'));
 
