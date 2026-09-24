@@ -3,6 +3,7 @@
   "short_name": "Amonel",
   "description": "Portfolio of Ahmadreza Taheri, IT specialist for system integration in training.",
   "lang": "en",
+  "dir": "ltr",
   "start_url": "/en/",
   "scope": "/en/",
   "display": "browser",
