@@ -55,7 +55,7 @@ const ROOT: Node = dir({
 });
 
 export const PORTFOLIO_COMMANDS: readonly PortfolioSection[] = ['about', 'skills', 'projects', 'cv', 'contact'];
-export const SHELL_COMMANDS = ['cat', 'cd', 'clear', 'echo', 'exit', 'help', 'history', 'ls', 'pwd', 'sudo', 'uname', 'whoami'] as const;
+export const SHELL_COMMANDS = ['ask', 'cat', 'cd', 'clear', 'echo', 'exit', 'help', 'history', 'ls', 'pwd', 'sudo', 'uname', 'whoami'] as const;
 const COMMANDS: readonly string[] = [...PORTFOLIO_COMMANDS, ...SHELL_COMMANDS].sort();
 
 export type ShellLine =
@@ -107,13 +107,15 @@ export interface ShellState {
   nextId: number;
   /** Set by `exit`: the component closes the window. */
   exited: boolean;
+  /** Set by `ask`: the question the component hands to the Assistant, then clears (APP-13). */
+  asked: string | null;
 }
 
 /** Enough scrollback to read; old lines drop off like a real terminal's buffer. */
 const MAX_LINES = 400;
 
 export function initialShell(): ShellState {
-  return { cwd: HOME, lines: [{ id: 0, kind: 'message', key: 'motd' }], history: [], nextId: 1, exited: false };
+  return { cwd: HOME, lines: [{ id: 0, kind: 'message', key: 'motd' }], history: [], nextId: 1, exited: false, asked: null };
 }
 
 /** The prompt's path: home shows as `~`, like bash. */
@@ -206,6 +208,11 @@ export function runCommand(state: ShellState, input: string): ShellState {
 
     case 'sudo':
       return out(error(`${USER} is not in the sudoers file.  This incident will be reported.`));
+
+    case 'ask':
+      // The Terminal cannot search the site itself: it hands the words to the Assistant, whose local search answers (APP-13).
+      if (args.length === 0) return out(message('ask.usage'));
+      return { ...out(message('ask.handoff')), asked: args.join(' ') };
 
     case 'exit':
       return { ...out(), exited: true };

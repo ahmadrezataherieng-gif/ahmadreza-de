@@ -13,6 +13,7 @@
       "projects": "woran er arbeitet",
       "cv": "der Lebenslauf",
       "contact": "so erreichen Sie ihn",
+      "ask": "eine Frage an den Assistenten stellen, z. B. ask Wo arbeitet Ahmadreza?",
       "ls": "Dateien auflisten, ls -a zeigt auch versteckte",
       "cd": "Verzeichnis wechseln, cd .. geht eine Ebene hoch",
       "cat": "Datei anzeigen",
@@ -45,6 +46,10 @@
   },
   "contact": {
     "text": "Am schnellsten erreichen Sie Ahmadreza per E-Mail:"
+  },
+  "ask": {
+    "handoff": "Ihre Frage geht an den Assistenten.",
+    "usage": "Fragen Sie den Assistenten direkt aus dem Terminal: ask, gefolgt von Ihrer Frage, zum Beispiel ask Wo arbeitet Ahmadreza?"
   },
   "eggs": {
     "moth": "Der erste „Bug“ war echt: Am 9. September 1947 klebten Techniker eine Motte aus Relais 70 des Harvard Mark II ins Logbuch. Seitdem suchen wir sie.",

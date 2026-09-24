@@ -12,6 +12,7 @@ import { AppIcon } from '@/components/os/AppIcon';
 import { Clock } from '@/components/os/Clock';
 import { LockedNotice } from '@/components/os/LockedNotice';
 import { replayJourney } from '@/components/os/replay';
+import { onOpenAppRequest } from '@/lib/app-handoff';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
@@ -65,6 +66,9 @@ export function MobileShell() {
     },
     [dismissLocked],
   );
+
+  // An app asking for another (the Terminal's `ask` opens the Assistant, APP-13); Back returns to the app it came from.
+  useEffect(() => onOpenAppRequest((appId) => open(appId)), [open]);
 
   const home = apps.filter((app) => !dockAppIds.includes(app.id));
 

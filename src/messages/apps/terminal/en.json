@@ -13,6 +13,7 @@
       "projects": "what he works on",
       "cv": "the résumé",
       "contact": "how to reach him",
+      "ask": "put a question to the Assistant, e.g. ask Where does Ahmadreza work?",
       "ls": "list files, ls -a shows hidden ones too",
       "cd": "change directory, cd .. goes up one level",
       "cat": "show a file",
@@ -45,6 +46,10 @@
   },
   "contact": {
     "text": "The quickest way to reach Ahmadreza is email:"
+  },
+  "ask": {
+    "handoff": "Passing your question to the Assistant.",
+    "usage": "Ask the Assistant straight from the terminal: ask followed by your question, for example ask Where does Ahmadreza work?"
   },
   "eggs": {
     "moth": "The first \"bug\" was real: on 9 September 1947 technicians taped a moth from relay 70 of the Harvard Mark II into the logbook. We have been hunting them ever since.",

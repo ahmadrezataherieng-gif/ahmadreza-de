@@ -168,3 +168,28 @@ test('hidden commands (APP-08): answered, never listed by help or offered by Tab
   const state = run('nosuchcommand');
   assert.match(JSON.stringify(state.lines.at(-2)), /command not found/);
 });
+
+test('ask (APP-13): a question is handed over once, with words in the copy; no question shows the usage', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { askAssistant, takeWaitingQuestion } = await import('../../src/lib/app-handoff.ts');
+  const state = run('ask  Wo   arbeitet Ahmadreza?');
+  assert.equal(state.asked, 'Wo arbeitet Ahmadreza?');
+  assert.equal(printed(state).at(-1).key, 'ask.handoff');
+  assert.equal(runCommand({ ...state, asked: null }, 'pwd').asked, null, 'other commands hand nothing over');
+  const bare = run('ask');
+  assert.equal(bare.asked, null);
+  assert.equal(printed(bare).at(-1).key, 'ask.usage');
+  for (const locale of ['de', 'en', 'fa']) {
+    const copy = JSON.parse(readFileSync(new URL(`../../src/messages/apps/terminal/${locale}.json`, import.meta.url), 'utf8'));
+    for (const key of ['handoff', 'usage']) assert.equal(typeof copy.ask[key], 'string', `${locale} ask.${key}`);
+    assert.equal(typeof copy.help.commands.ask, 'string', `${locale} help`);
+  }
+  assert.deepEqual(complete(initialShell(), 'as'), { input: 'ask ', candidates: [] }, 'Tab completes ask');
+  // The waiting question is taken once; a blank one is dropped; the last one wins.
+  askAssistant('  first ');
+  askAssistant('second');
+  assert.equal(takeWaitingQuestion(), 'second');
+  assert.equal(takeWaitingQuestion(), null);
+  askAssistant('   ');
+  assert.equal(takeWaitingQuestion(), null);
+});

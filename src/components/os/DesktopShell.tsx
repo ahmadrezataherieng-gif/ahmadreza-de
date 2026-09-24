@@ -12,7 +12,8 @@ import { LockedNotice } from '@/components/os/LockedNotice';
 import { Taskbar } from '@/components/os/Taskbar';
 import { WindowLayer } from '@/components/os/WindowLayer';
 import { replayJourney } from '@/components/os/replay';
-import { cycleWindows } from '@/components/os/window-actions';
+import { cycleWindows, launchApp } from '@/components/os/window-actions';
+import { onOpenAppRequest } from '@/lib/app-handoff';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
 
@@ -38,6 +39,9 @@ export function DesktopShell() {
   const t = useTranslations('os');
   const tNav = useTranslations('nav');
   const locale = useLocale() as Locale;
+
+  // An app asking for another (the Terminal's `ask` opens the Assistant, APP-13).
+  useEffect(() => onOpenAppRequest((appId) => void launchApp(appId)), []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

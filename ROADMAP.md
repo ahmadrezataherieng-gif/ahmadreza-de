@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
-| `desktop` | 7 | 1 | 5 | 45.8 / 66 | 69 % |
+| `desktop` | 8 | 1 | 4 | 47.8 / 66 | 72 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
-| `seo` | 18 | 2 | 7 | 60.2 / 84 | 72 % |
+| `seo` | 19 | 2 | 6 | 62.2 / 84 | 74 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 60 | 6 | 39 | 256.1 / 406 | **63 %** |
+| **all** | 62 | 6 | 37 | 260.1 / 406 | **64 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 16 | 1 | 12 | 29 |
-| **total** | **39** | **6** | **60** | **105** |
+| P2 | 14 | 1 | 14 | 29 |
+| **total** | **37** | **6** | **62** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -96,7 +96,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. Done 2026-09-24: the Timeline app shows the earned badges (a "Legende" mark on the era, and a count once one exists; nothing before); `apps.mjs` checks both states; CR-1092. | done | P2 | Claude Code | - | S | puzzles |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |
-| APP-13 | Terminal `ask` command that hands a question to the Assistant. | missing | P2 | Claude Code | - | S | desktop |
+| APP-13 | Terminal `ask` command that hands a question to the Assistant. Done 2026-09-24: `ask <question>` opens the Assistant (window or phone app) and it answers at once, through `lib/app-handoff.ts` (two window events, one waiting value, no storage); listed in `help`, completed by Tab; `terminal-shell.test.mjs` and `apps.mjs` cover it; CR-1093. | done | P2 | Claude Code | - | S | desktop |
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |
 | APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 | S | puzzles |
 | APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Still open: Ping and DNS offering "trace this host" into the Traceroute app (needs a way to hand a target to another app's window, on both shells). | partial | P2 | Claude Code | APP-04 | S 40% | desktop |
@@ -158,7 +158,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 | S | seo |
 | PERF-07 | **Flaky check**: `apps.mjs` "quiz 300x200: the question is in view" failed once on 2026-09-23 and passed on the rerun; find the timing it depends on. Done 2026-09-24: the cause is the round's random question - a long one is taller than the 300 x 200 body, so its end is never in view; the check now asks that the question starts in view (`startsInside`). Diagnosed from the code and four clean reruns, not reproduced on demand. | done | P2 | Claude Code | - | S | seo |
 | PERF-08 | **Manual screen-reader walk** (new 2026-09-24): NVDA + Firefox on Windows and VoiceOver on an iPhone through landing, journey (both modes), desktop and three apps; automated checks cannot judge whether the announcements make sense. | missing | P1 | Ahmadreza + Claude Code | PERF-01 | M | seo |
-| PERF-09 | **Desktop view's first paint on a slow phone** (new 2026-09-24): LCP 2.59 s against 2.5 s, because the client-only shell chunk is requested only after hydration. Options: preload that chunk from the desktop page's head, or give the server frame a contentful element that keeps the Convergence hand-over pixel-identical. | missing | P2 | Claude Code | - | S | seo |
+| PERF-09 | **Desktop view's first paint on a slow phone** (new 2026-09-24): LCP 2.59 s against 2.5 s, because the client-only shell chunk is requested only after hydration. Options: preload that chunk from the desktop page's head, or give the server frame a contentful element that keeps the Convergence hand-over pixel-identical. Done 2026-09-24: `scripts/preload-shell.mjs`, run by `npm run build`, adds a `<link rel="preload">` for the shell chunk to the three desktop pages (found by a string only the Shell renders; a test pins it). Measured on the slow-phone profile, 7 cold runs each: LCP 2600 ms without, 2464 ms with (budget 2500) - about one round trip, within the run-to-run noise of about 0.1 s, so the gain is plausible rather than proven. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 13 - Deployment and launch
 

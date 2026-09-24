@@ -299,6 +299,13 @@ const terminal = async () => {
   }
   await press('l', ['Control']);
   check('terminal: Ctrl+L clears the screen', (await js(`document.querySelectorAll('${frame('terminal')} [data-terminal-output] > *').length`)) === 0);
+
+  // APP-13: `ask` hands the words to the Assistant, which opens and answers them.
+  await clickOn(input);
+  await typeLine('ask Wo arbeitet Ahmadreza?');
+  check('terminal: ask opens the Assistant', await until(`!!document.querySelector('${content('assistant')}')`, 4000));
+  check('terminal: ask puts the question to the Assistant and it answers', await until(`(() => { const log = document.querySelector('${content('assistant')} [data-assistant-log]'); return !!log && log.textContent.includes('Wo arbeitet Ahmadreza?') && /answered|noMatch/.test(document.querySelector('${content('assistant')}').dataset.assistantState ?? ''); })()`, 6000));
+  check('terminal: ask closes cleanly', await close('assistant'));
 };
 
 const tickets = async () => {

@@ -22,6 +22,7 @@ import {
   type ShellState,
 } from '@/components/apps/terminal/shell';
 import { closeWindow } from '@/components/os/window-actions';
+import { askAssistant } from '@/lib/app-handoff';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { skillAreas } from '@/content/about';
 import { EMAIL, RESUME } from '@/content/profile';
@@ -74,6 +75,13 @@ function Terminal({ appId }: AppProps) {
     if (root?.closest('[data-window]')) closeWindow(appId);
     else if (root?.closest('[data-mobile-app]')) window.history.back();
   }, [shell.exited, appId]);
+
+  // `ask <question>`: hand the words to the Assistant, once (APP-13).
+  useEffect(() => {
+    if (shell.asked === null) return;
+    askAssistant(shell.asked);
+    setShell((state) => ({ ...state, asked: null }));
+  }, [shell.asked]);
 
   const run = (line: string) => {
     setShell((state) => runCommand(state, line));
@@ -277,7 +285,7 @@ function Line({ line, onRun }: { line: ShellLine; onRun: (command: string) => vo
   }
 }
 
-const HELP_SHELL = ['ls', 'cd', 'cat', 'pwd', 'whoami', 'echo', 'history', 'uname', 'clear', 'exit'] as const;
+const HELP_SHELL = ['ask', 'ls', 'cd', 'cat', 'pwd', 'whoami', 'echo', 'history', 'uname', 'clear', 'exit'] as const;
 
 function Help() {
   const t = useTranslations('terminal.help');

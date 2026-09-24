@@ -7,6 +7,7 @@ import { AppMessages } from '@/components/apps/AppMessages';
 import { typingStep, type Phase } from '@/components/apps/assistant/assistant';
 import type { AppProps } from '@/components/apps/types';
 import { useFocusOnFinePointer, useKeyboardInset, useNativeKeydown } from '@/components/apps/use-app-input';
+import { takeWaitingQuestion, onQuestion } from '@/lib/app-handoff';
 import { MAX_QUESTION_LENGTH, type AssistantLocale } from '@/lib/assistant-limits';
 import type { Locale } from '@/lib/i18n-config';
 import { asStringList } from '@/lib/message-shapes';
@@ -121,6 +122,23 @@ function Assistant({ appId }: AppProps) {
       setPhase('noMatch');
     }
   };
+
+  // A question put to the Assistant from elsewhere (the Terminal's `ask`, APP-13):
+  // answered as soon as the index is ready, whether this window was open already
+  // or has just opened for it. The ref keeps the listener on the latest `ask`.
+  const askRef = useRef(ask);
+  useEffect(() => {
+    askRef.current = ask;
+  });
+  useEffect(() => {
+    if (!passages) return;
+    const answerWaiting = () => {
+      const waiting = takeWaitingQuestion();
+      if (waiting) void askRef.current(waiting);
+    };
+    answerWaiting();
+    return onQuestion(answerWaiting);
+  }, [passages]);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
