@@ -67,3 +67,23 @@ export function linkify(text: string): Array<{ text: string; href?: string }> {
   if (last < text.length) parts.push({ text: text.slice(last) });
   return parts;
 }
+
+/**
+ * A Latin term inside Persian text (Cloudflare, IP, TDDDG, Art. 6 ...) has to be
+ * an isolated left-to-right run (`<bdi>`), otherwise the bidi algorithm moves the
+ * punctuation next to it to the wrong side. Returns the plain and the Latin runs
+ * of `text`; in any other locale it is all one plain run (LEG-16).
+ */
+export function bidiParts(text: string, locale: string): Array<{ text: string; latin: boolean }> {
+  if (locale !== 'fa') return [{ text, latin: false }];
+  const parts: Array<{ text: string; latin: boolean }> = [];
+  let last = 0;
+  for (const match of text.matchAll(/[\p{Script=Latin}0-9](?:[\p{Script=Latin}0-9 ./_-]*[\p{Script=Latin}0-9])?/gu)) {
+    const index = match.index ?? 0;
+    if (index > last) parts.push({ text: text.slice(last, index), latin: false });
+    parts.push({ text: match[0], latin: true });
+    last = index + match[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last), latin: false });
+  return parts;
+}

@@ -18,7 +18,7 @@ import { AREAS } from './roadmap.mjs';
 import { fillPlaceholders, progressValues } from './soon-progress.mjs';
 import { renderLanding } from './soon-pages.mjs';
 import { LOCALES, OG_IMAGES, sitemapXml } from './soon-seo.mjs';
-import { linkify, sectionsFor } from '../src/lib/legal-doc.ts';
+import { bidiParts, linkify, sectionsFor } from '../src/lib/legal-doc.ts';
 
 // Before the legal copy is imported: without the address there is no Impressum.
 ensureLegalAddress();
@@ -36,20 +36,26 @@ const kinds = [
 const escape = (text) =>
   String(text).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 
-const rich = (text) =>
-  linkify(text)
-    .map((part) => (part.href ? `<a href="${escape(part.href)}" rel="noopener noreferrer" dir="ltr">${escape(part.text)}</a>` : escape(part.text)))
+// Text of a legal page: in Persian every Latin term sits in <bdi> so the punctuation next to it stays on the right side (LEG-16).
+const iso = (text, localeId) =>
+  bidiParts(text, localeId)
+    .map((part) => (part.latin ? `<bdi>${escape(part.text)}</bdi>` : escape(part.text)))
     .join('');
 
-function block(item, copy) {
+const rich = (text, localeId) =>
+  linkify(text)
+    .map((part) => (part.href ? `<a href="${escape(part.href)}" rel="noopener noreferrer" dir="ltr">${escape(part.text)}</a>` : iso(part.text, localeId)))
+    .join('');
+
+function block(item, copy, localeId) {
   switch (item.type) {
     case 'p':
-      return `<p>${rich(item.text)}</p>`;
+      return `<p>${rich(item.text, localeId)}</p>`;
     case 'list':
-      return `<ul>${item.items.map((entry) => `<li>${escape(entry)}</li>`).join('')}</ul>`;
+      return `<ul>${item.items.map((entry) => `<li>${iso(entry, localeId)}</li>`).join('')}</ul>`;
     case 'table':
-      return `<table><thead><tr>${item.head.map((cell) => `<th>${escape(cell)}</th>`).join('')}</tr></thead><tbody>${item.rows
-        .map((row) => `<tr>${row.map((cell) => `<td>${escape(cell)}</td>`).join('')}</tr>`)
+      return `<table><thead><tr>${item.head.map((cell) => `<th>${iso(cell, localeId)}</th>`).join('')}</tr></thead><tbody>${item.rows
+        .map((row) => `<tr>${row.map((cell) => `<td>${iso(cell, localeId)}</td>`).join('')}</tr>`)
         .join('')}</tbody></table>`;
     case 'contact':
       return `<address><span dir="ltr">${escape(LEGAL_CONTACT.name)}</span><br><span dir="ltr">${escape(LEGAL_CONTACT.street)}</span><br><span dir="ltr">${escape(
@@ -85,7 +91,7 @@ footer a{color:var(--ink)}`;
 function page(locale, kind, copy, labels) {
   const document = copy[kind.id];
   const sections = sectionsFor(document, 'soon')
-    .map((section) => `<section><h2>${escape(section.heading)}</h2>${section.blocks.map((item) => block(item, copy)).join('')}</section>`)
+    .map((section) => `<section><h2>${iso(section.heading, locale.id)}</h2>${section.blocks.map((item) => block(item, copy, locale.id)).join('')}</section>`)
     .join('');
   const switcher = locales
     .map(
@@ -93,7 +99,7 @@ function page(locale, kind, copy, labels) {
         `<a href="/${other.prefix}${kind.slug}/" hreflang="${other.id}" lang="${other.id}"${other.id === locale.id ? ' aria-current="page"' : ''}>${other.label}</a>`,
     )
     .join('');
-  const note = copy.bindingNote ? `<p class="note">${escape(copy.bindingNote)} <a href="/${kind.slug}/" hreflang="de" lang="de">${escape(copy.bindingLink)}</a></p>` : '';
+  const note = copy.bindingNote ? `<p class="note">${iso(copy.bindingNote, locale.id)} <a href="/${kind.slug}/" hreflang="de" lang="de">${escape(copy.bindingLink)}</a></p>` : '';
   // Back to the coming-soon page in this page's language.
   const home = `/${locale.prefix}`;
   return `<!doctype html>
@@ -113,8 +119,8 @@ function page(locale, kind, copy, labels) {
 <div class="wrap">
 <header><a href="${home}">ahmadreza.de</a><nav aria-label="${escape(labels.language)}">${switcher}</nav></header>
 <main>
-<h1>${escape(document.title)}</h1>
-<p class="meta">${escape(copy.updated)}</p>
+<h1>${iso(document.title, locale.id)}</h1>
+<p class="meta">${iso(copy.updated, locale.id)}</p>
 ${note}
 ${sections}
 <p><a href="${home}">${escape(copy.backHome)}</a></p>

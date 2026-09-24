@@ -5,7 +5,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { LEGAL_CONTACT } from '@/content/legal';
-import { linkify, sectionsFor, type LegalBlock, type LegalCopy, type LegalKind } from '@/lib/legal-doc';
+import { bidiParts, linkify, sectionsFor, type LegalBlock, type LegalCopy, type LegalKind } from '@/lib/legal-doc';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
 
@@ -14,7 +14,16 @@ export async function loadLegalCopy(locale: Locale): Promise<LegalCopy> {
   return (await import(`@/messages/legal/${locale}.json`)).default as LegalCopy;
 }
 
-function Text({ text }: { text: string }) {
+/** Plain text; in Persian its Latin terms sit in <bdi> (LEG-16). */
+function Iso({ text, locale }: { text: string; locale: Locale }) {
+  return (
+    <>
+      {bidiParts(text, locale).map((part, index) => (part.latin ? <bdi key={index}>{part.text}</bdi> : part.text))}
+    </>
+  );
+}
+
+function Text({ text, locale }: { text: string; locale: Locale }) {
   return (
     <>
       {linkify(text).map((part, index) =>
@@ -23,26 +32,30 @@ function Text({ text }: { text: string }) {
             {part.text}
           </a>
         ) : (
-          <span key={index}>{part.text}</span>
+          <span key={index}>
+            <Iso text={part.text} locale={locale} />
+          </span>
         ),
       )}
     </>
   );
 }
 
-function Block({ block, copy }: { block: LegalBlock; copy: LegalCopy }) {
+function Block({ block, copy, locale }: { block: LegalBlock; copy: LegalCopy; locale: Locale }) {
   switch (block.type) {
     case 'p':
       return (
         <p>
-          <Text text={block.text} />
+          <Text text={block.text} locale={locale} />
         </p>
       );
     case 'list':
       return (
         <ul className="flex list-disc flex-col gap-2 ps-5">
           {block.items.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>
+              <Iso text={item} locale={locale} />
+            </li>
           ))}
         </ul>
       );
@@ -55,7 +68,7 @@ function Block({ block, copy }: { block: LegalBlock; copy: LegalCopy }) {
               <tr>
                 {block.head.map((cell) => (
                   <th key={cell} scope="col" className="border-b border-edge px-3 py-2 text-start font-mono text-xs text-muted">
-                    {cell}
+                    <Iso text={cell} locale={locale} />
                   </th>
                 ))}
               </tr>
@@ -70,7 +83,7 @@ function Block({ block, copy }: { block: LegalBlock; copy: LegalCopy }) {
                           {cell}
                         </code>
                       ) : (
-                        cell
+                        <Iso text={cell} locale={locale} />
                       )}
                     </td>
                   ))}
@@ -129,11 +142,13 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
 
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 pt-10 pb-12 font-body text-[0.95rem] leading-relaxed sm:px-8">
         <div className="flex flex-col gap-3">
-          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{document.title}</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <Iso text={document.title} locale={locale} />
+          </h1>
           <p className="font-mono text-xs text-muted">{copy.updated}</p>
           {copy.bindingNote ? (
             <p className="rounded-control border border-edge bg-surface px-4 py-3 text-sm">
-              {copy.bindingNote}{' '}
+              <Iso text={copy.bindingNote} locale={locale} />{' '}
               <a href={viewHref('de', kind)} hrefLang="de" lang="de" className="text-accent underline underline-offset-2">
                 {copy.bindingLink}
               </a>
@@ -143,9 +158,11 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
 
         {sectionsFor(document, 'site').map((section) => (
           <section key={section.heading} className="flex flex-col gap-3">
-            <h2 className="font-display text-lg font-bold">{section.heading}</h2>
+            <h2 className="font-display text-lg font-bold">
+              <Iso text={section.heading} locale={locale} />
+            </h2>
             {section.blocks.map((block, index) => (
-              <Block key={index} block={block} copy={copy} />
+              <Block key={index} block={block} copy={copy} locale={locale} />
             ))}
           </section>
         ))}

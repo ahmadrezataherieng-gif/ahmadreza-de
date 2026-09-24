@@ -41,18 +41,18 @@ build time).
 | `desktop` | 6 | 1 | 6 | 44.8 / 66 | 68 % |
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
-| `legal` | 11 | 0 | 6 | 27 / 44 | 61 % |
+| `legal` | 12 | 0 | 5 | 29 / 44 | 66 % |
 | `seo` | 14 | 3 | 8 | 54.7 / 81 | 68 % |
 | `launch` | 7 | 2 | 13 | 23.5 / 84 | 28 % |
-| **all** | 51 | 8 | 42 | 244.2 / 401 | **61 %** |
+| **all** | 52 | 8 | 41 | 246.2 / 401 | **61 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 0 | 12 | 21 |
 | P1 | 13 | 5 | 34 | 52 |
-| P2 | 20 | 3 | 5 | 28 |
-| **total** | **42** | **8** | **51** | **101** |
+| P2 | 19 | 3 | 6 | 28 |
+| **total** | **41** | **8** | **52** | **101** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -141,7 +141,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-13 | **Phone number in the Impressum** (the § 5 DDG grey area: a "second fast way" of contact besides e-mail). **Resolved 2026-09-24 by the owner: no phone number.** The Impressum keeps name, postal address and e-mail; nothing to build. | done | P0 | Ahmadreza | - | XS | legal |
 | LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - | XS | legal |
 | LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md` (the five fonts of the site and the five of the coming-soon page, Martian Grotesk and Departure Mono from their authors' GitHub releases); `scripts/test/fonts.test.mjs` and `soon-style.test.mjs` fail if a font has no licence file or row, is not used, is loaded from a third party, or if a font file is committed outside `soon/fonts/`. | done | P0 | Claude Code | - | S | legal |
-| LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | missing | P2 | Claude Code | LEG-07 | S | legal |
+| LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Done 2026-09-24: `bidiParts()` in `src/lib/legal-doc.ts` feeds both renderers (`LegalPage.tsx`, `build-soon.mjs`), checked by `legal-bidi.test.mjs`; the wording itself is unchanged, only the markup. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | done | P2 | Claude Code | LEG-07 | S | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 
