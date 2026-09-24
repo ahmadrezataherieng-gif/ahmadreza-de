@@ -12,6 +12,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
 import { ensureLegalAddress } from './legal-address.mjs';
+import { currentPhase, roadmapProgress } from './roadmap.mjs';
 import { linkify, sectionsFor } from '../src/lib/legal-doc.ts';
 
 // Before the legal copy is imported: without the address there is no Impressum.
@@ -120,7 +121,24 @@ ${sections}
 
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
-writeFileSync(new URL('index.html', dist), readFileSync(new URL('soon/index.html', root)));
+// The progress figures come from ROADMAP.md at build time, never typed by hand.
+const overall = roadmapProgress();
+const phase = currentPhase() ?? { label: '-', done: 0, total: 0 };
+const values = {
+  DONE: overall.done,
+  TOTAL: overall.total,
+  PERCENT: overall.percent,
+  PHASE: phase.label,
+  PHASE_DONE: phase.done,
+  PHASE_TOTAL: phase.total,
+  DATE: new Date().toISOString().slice(0, 10),
+};
+const landing = readFileSync(new URL('soon/index.html', root), 'utf8').replace(/\{\{([A-Z_]+)\}\}/g, (match, key) => {
+  if (!(key in values)) throw new Error(`soon/index.html: unknown placeholder ${match}`);
+  return escape(values[key]);
+});
+writeFileSync(new URL('index.html', dist), landing);
+console.log(`progress: ${overall.done}/${overall.total} done, ${overall.percent} %; phase ${phase.label}: ${phase.done}/${phase.total}`);
 
 for (const locale of locales) {
   const copy = JSON.parse(readFileSync(new URL(`src/messages/legal/${locale.id}.json`, root), 'utf8'));

@@ -305,5 +305,8 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
   stops without it; git history purged of it on 2026-09-24, DECISIONS.md 60);
   status "LEGAL – owner must verify". The coming-soon page now lives in
   `soon/` with the same legal pages (`npm run build:soon`), live on
-  ahmadreza.de since 2026-09-23 (Worker `silent-lake-8ae2`).
+  ahmadreza.de since 2026-09-23 (Worker `silent-lake-8ae2`). Rebranded to Amonel
+  on 2026-09-24; its progress figure (roadmap items done, the current phase) is
+  computed from ROADMAP.md at build time by `scripts/roadmap.mjs`, so it is as
+  fresh as the last deploy (ROADMAP BR-03).
 - Deployment of the real site (only the coming-soon page is live).

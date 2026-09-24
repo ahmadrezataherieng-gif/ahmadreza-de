@@ -1,18 +1,20 @@
 <!doctype html>
 <!-- The temporary coming-soon page on ahmadreza.de (Worker silent-lake-8ae2). Its
-     copy is placeholder like the rest of the site: CONTENT-TODO CR-1053. Build the
-     deployable folder with: node scripts/build-soon.mjs -->
+     copy is placeholder like the rest of the site: CONTENT-TODO CR-1053, CR-1066.
+     Build the deployable folder with: node scripts/build-soon.mjs - it also fills
+     every double-brace placeholder with the progress read from ROADMAP.md at build
+     time (scripts/roadmap.mjs), so the figure is never typed by hand. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier</title>
-<meta name="description" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier. Das Portfolio AhmadOS entsteht gerade.">
+<meta name="description" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier. Das Portfolio Amonel entsteht gerade.">
 <link rel="canonical" href="https://ahmadreza.de/">
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ahmadreza Taheri — Fachinformatiker für Systemintegration">
-<meta property="og:description" content="Das Portfolio AhmadOS entsteht gerade: 80 Jahre Computergeschichte in 90 Sekunden.">
+<meta property="og:description" content="Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte in 90 Sekunden.">
 <meta property="og:url" content="https://ahmadreza.de/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0e13'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23f0a44a' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
 <script type="application/ld+json">
@@ -95,6 +97,14 @@
   .term-body .p{color:var(--green)}
   .term-body .c{color:var(--ink)}
   .term-body .o{color:var(--muted)}
+  .progress{position:relative;display:flex;align-items:center;gap:10px;margin:4px 0 2px}
+  .progress::before{content:"";flex:1;height:8px;border-radius:4px;background:#1a2230;border:1px solid var(--edge)}
+  .bar-fill{position:absolute;inset-inline-start:0;top:50%;height:8px;margin-top:-4px;border-radius:4px;
+    width:calc((100% - 52px) * var(--p) / 100);background:linear-gradient(90deg,var(--green),var(--amber));
+    animation:grow 1.6s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes grow{from{width:0}}
+  .pct{min-width:42px;text-align:end;color:var(--ink);font-weight:700}
+  .stamp{font-size:11px;opacity:.7}
   .cursor{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:-2px;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
@@ -140,7 +150,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="tag" data-t="tag">AhmadOS · v1.0 im Aufbau</span>
+    <span class="tag" data-t="tag">Amonel · v1.0 im Aufbau</span>
     <nav class="langs" aria-label="Sprache">
       <button type="button" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -156,7 +166,7 @@
 
       <p class="role" data-t="role">Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier.</p>
 
-      <p class="lede" data-t="lede">Hier entsteht <b>AhmadOS</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.</p>
+      <p class="lede" data-t="lede">Hier entsteht <b>Amonel</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.</p>
 
       <ul class="facts">
         <li><b data-t="f1">Systemintegration</b></li>
@@ -168,10 +178,13 @@
       <div class="terminal" aria-hidden="true">
         <div class="bar"><i></i><i></i><i></i></div>
         <div class="term-body">
-          <div><span class="p">ahmadreza@ahmados</span><span class="o">:~$</span> <span class="c">status</span></div>
-          <div class="o" data-t="t1">build: 8 von 13 Phasen abgeschlossen</div>
-          <div class="o" data-t="t2">nächster schritt: feinschliff und start</div>
-          <div><span class="p">ahmadreza@ahmados</span><span class="o">:~$</span> <span class="cursor"></span></div>
+          <div><span class="p">ahmadreza@amonel</span><span class="o">:~$</span> <span class="c">status</span></div>
+          <div class="o" data-t="t1">roadmap: {{DONE}} von {{TOTAL}} punkten erledigt</div>
+          <div class="progress" role="img" aria-label="{{PERCENT}} %"><span class="bar-fill" style="--p:{{PERCENT}}"></span><span class="pct">{{PERCENT}}%</span></div>
+          <div class="o" data-t="t3">aktuelle phase {{PHASE}}: {{PHASE_DONE}} von {{PHASE_TOTAL}} erledigt</div>
+          <div class="o" data-t="t2">nächster schritt: die letzten apps, dann feinschliff und start</div>
+          <div class="o stamp">stand: {{DATE}}</div>
+          <div><span class="p">ahmadreza@amonel</span><span class="o">:~$</span> <span class="cursor"></span></div>
         </div>
       </div>
     </section>
@@ -285,35 +298,38 @@
 <script>
   const T = {
     de:{dir:"ltr",lang:"de",
-      tag:"AhmadOS · v1.0 im Aufbau",
+      tag:"Amonel · v1.0 im Aufbau",
       status:"Seite entsteht gerade",
       role:"Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier.",
-      lede:'Hier entsteht <b>AhmadOS</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.',
+      lede:'Hier entsteht <b>Amonel</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.',
       f1:"Systemintegration", f3:"Trier, Deutschland",
-      t1:"build: 8 von 13 Phasen abgeschlossen",
-      t2:"nächster schritt: feinschliff und start",
+      t1:"roadmap: {{DONE}} von {{TOTAL}} punkten erledigt",
+      t3:"aktuelle phase {{PHASE}}: {{PHASE_DONE}} von {{PHASE_TOTAL}} erledigt",
+      t2:"nächster schritt: die letzten apps, dann feinschliff und start",
       foot:"Das vollständige Portfolio folgt in Kürze.",
       imprint:"Impressum", privacy:"Datenschutz", legal:"Rechtliches", prefix:"",
       title:"Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier"},
     en:{dir:"ltr",lang:"en",
-      tag:"AhmadOS · v1.0 in progress",
+      tag:"Amonel · v1.0 in progress",
       status:"This site is being built",
       role:"IT specialist for systems integration, training at the city administration of Trier.",
-      lede:'<b>AhmadOS</b> is on its way — a portfolio that also shows how computers really work: 80 years of computing in 90 seconds, from the punch card to the cloud.',
+      lede:'<b>Amonel</b> is on its way — a portfolio that also shows how computers really work: 80 years of computing in 90 seconds, from the punch card to the cloud.',
       f1:"Systems integration", f3:"Trier, Germany",
-      t1:"build: 8 of 13 phases complete",
-      t2:"next step: polish and launch",
+      t1:"roadmap: {{DONE}} of {{TOTAL}} items done",
+      t3:"current phase {{PHASE}}: {{PHASE_DONE}} of {{PHASE_TOTAL}} done",
+      t2:"next step: the last apps, then polish and launch",
       foot:"The full portfolio is coming soon.",
       imprint:"Imprint", privacy:"Privacy", legal:"Legal", prefix:"/en",
       title:"Ahmadreza Taheri — IT specialist for systems integration, Trier"},
     fa:{dir:"rtl",lang:"fa",
-      tag:"AhmadOS · نسخه ۱٫۰ در حال ساخت",
+      tag:"Amonel · نسخه ۱٫۰ در حال ساخت",
       status:"این صفحه در حال ساخت است",
       role:"کارآموز رشته‌ی فناوری اطلاعات، گرایش یکپارچه‌سازی سیستم‌ها، در شهرداری تریر.",
-      lede:'<b>AhmadOS</b> در راه است؛ نمونه‌کاری که در کنار معرفی من نشان می‌دهد کامپیوتر واقعاً چطور کار می‌کند: ۸۰ سال تاریخ کامپیوتر در ۹۰ ثانیه، از کارت پانچ تا ابر.',
+      lede:'<b>Amonel</b> در راه است؛ نمونه‌کاری که در کنار معرفی من نشان می‌دهد کامپیوتر واقعاً چطور کار می‌کند: ۸۰ سال تاریخ کامپیوتر در ۹۰ ثانیه، از کارت پانچ تا ابر.',
       f1:"یکپارچه‌سازی سیستم‌ها", f3:"تریر، آلمان",
-      t1:"build: 8 of 13 phases complete",
-      t2:"next step: polish and launch",
+      t1:"roadmap: {{DONE}} of {{TOTAL}} items done",
+      t3:"current phase {{PHASE}}: {{PHASE_DONE}} of {{PHASE_TOTAL}} done",
+      t2:"next step: the last apps, then polish and launch",
       foot:"نسخه‌ی کامل به‌زودی منتشر می‌شود.",
       imprint:"اطلاعات ناشر", privacy:"حریم خصوصی", legal:"اطلاعات حقوقی", prefix:"/fa",
       title:"احمدرضا طاهری — فناوری اطلاعات، تریر"}

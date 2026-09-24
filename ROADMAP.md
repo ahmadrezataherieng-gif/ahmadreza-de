@@ -29,8 +29,8 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 |---|---|---|---|---|
 | P0 | 10 | 0 | 10 | 20 |
 | P1 | 16 | 4 | 12 | 32 |
-| P2 | 18 | 2 | 0 | 20 |
-| **total** | **44** | **6** | **22** | **72** |
+| P2 | 18 | 2 | 1 | 21 |
+| **total** | **44** | **6** | **23** | **73** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -118,7 +118,8 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
 | BR-01 | **Final main logo** still to be designed; the current Amonel mark and wordmark are interim. | partial | P1 | Ahmadreza + Claude Code | - |
-| BR-02 | The live "coming soon" page still says **"AhmadOS"** (the old name) and "8 von 13 Phasen"; bring it in line with Amonel or leave it until launch. **Waiting for owner** (it is content). | missing | P2 | Ahmadreza | - |
+| BR-02 | **Coming-soon page rebranded** (owner, 2026-09-24): «AhmadOS» → «Amonel» everywhere on the page, the terminal prompt `ahmadreza@amonel`, and a progress block (bar, roadmap items done, the current phase, a date stamp) **computed from ROADMAP.md at build time** by `scripts/roadmap.mjs` in `build-soon.mjs` - never typed by hand. Redeployed to `silent-lake-8ae2`. Copy is CONTENT-TODO (CR-1053, CR-1066). | done | P2 | Claude Code | - |
+| BR-03 | **Redeploy the coming-soon page now and then** so its progress figure follows ROADMAP.md (`npm run build:soon`, then `npx wrangler deploy` in `soon/`); the figure is as fresh as the last deploy. Until launch (DEP-06). | missing | P2 | Claude Code | - |
 
 ## Owner tasks - assets and accounts
 
