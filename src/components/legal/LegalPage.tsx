@@ -48,7 +48,8 @@ function Block({ block, copy }: { block: LegalBlock; copy: LegalCopy }) {
       );
     case 'table':
       return (
-        <div className="overflow-x-auto rounded-control border border-edge">
+        // Focusable, so a keyboard can scroll a table wider than a phone (WCAG 2.1.1).
+        <div tabIndex={0} className="overflow-x-auto rounded-control border border-edge focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none">
           <table className="w-full border-collapse text-start text-sm">
             <thead className="bg-surface">
               <tr>

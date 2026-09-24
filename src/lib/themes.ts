@@ -146,7 +146,7 @@ export const themes: Record<ThemeId, Theme> = {
       accentMuted: '#C07A1F',
       warning: '#FFD166',
       success: '#C9A227',
-      error: '#D64500',
+      error: '#E8581C',
       glow: '#FF9500',
       chrome: '#241C12',
       chromeText: '#FFB347',
@@ -274,7 +274,7 @@ export const themes: Record<ThemeId, Theme> = {
       surfaceElevated: '#FFFFFF',
       border: '#000000',
       textPrimary: '#000000',
-      textMuted: '#555555',
+      textMuted: '#404040',
       accent: '#000000',
       accentMuted: '#555555',
       warning: '#000000',
@@ -295,22 +295,25 @@ export const themes: Record<ThemeId, Theme> = {
     sound: 'mac-boot',
   },
 
-  /* 1995 - Windows 95. Teal desktop, grey bevelled 3D chrome. */
+  /* 1995 - Windows 95. Teal desktop, grey bevelled 3D chrome. The teal is a
+     touch lighter and the accent a darker navy than the originals (#008080,
+     #000080), so text on the desktop and accent buttons reach WCAG AA
+     (PERF-04, scripts/test/contrast.test.mjs); the title bars keep #000080. */
   era1995: {
     id: 'era1995',
     year: '1995',
     name: 'Windows 95',
     colors: {
-      background: '#008080',
+      background: '#008C8C',
       surface: '#C0C0C0',
       surfaceElevated: '#DFDFDF',
       border: '#808080',
       textPrimary: '#000000',
       textMuted: '#4A4A4A',
-      accent: '#000080',
+      accent: '#000050',
       accentMuted: '#1084D0',
-      warning: '#808000',
-      success: '#008000',
+      warning: '#505000',
+      success: '#005A00',
       error: '#800000',
       glow: 'transparent',
       chrome: '#000080',

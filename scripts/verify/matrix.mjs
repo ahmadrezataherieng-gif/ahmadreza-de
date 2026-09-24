@@ -1,6 +1,6 @@
 // The whole verification matrix, quietly: one line per configuration.
 //
-//   node scripts/verify/matrix.mjs [--only apps|bonus|desktop|navigation|journey]
+//   node scripts/verify/matrix.mjs [--only apps|bonus|desktop|navigation|journey|a11y]
 //        [--base http://localhost:3001] [--verbose]
 //
 // Needs the export served (npm run build, then node scripts/verify/serve.mjs).
@@ -74,6 +74,10 @@ const MATRIX = [
   ['journey', ['--mode', 'watch', '--api']],
   ['bonus', ['--api']],
   ['bonus', ['--api', ...PHONE, ...fa]],
+  // PERF-04: axe-core over every view, every app and the eight themes.
+  ['a11y', []],
+  ['a11y', fa],
+  ['a11y', [...en, '--width', '380', '--touch']],
 ];
 
 try {

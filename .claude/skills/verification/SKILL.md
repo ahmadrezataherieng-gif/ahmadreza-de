@@ -14,6 +14,8 @@ node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--tou
 node scripts/verify/apps.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/bonus.mjs [--width 380] [--locale fa] [--reduce] [--touch] [--api]
 node scripts/verify/sizes.mjs
+node scripts/verify/a11y.mjs [--locale fa] [--width 380 --touch]   # axe-core: every view, every app, all eight themes (PERF-04)
+node scripts/verify/vitals.mjs [--locale de] [--runs 3]            # FCP, LCP, CLS, TBT per view, phone and desktop profile (PERF-05)
 node scripts/verify/worker-local.mjs          # against `npx wrangler dev --local --port 8787`
 ```
 

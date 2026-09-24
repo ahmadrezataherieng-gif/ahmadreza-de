@@ -157,7 +157,7 @@ function Station({ station, page }: { station: CareerStation; page: boolean }) {
   else period = t.rich('path.range', { start: () => date(station.start), end: () => date(station.end) });
 
   return (
-    <li className={cn('relative flex flex-col gap-1', station.placeholder && 'opacity-80')}>
+    <li className="relative flex flex-col gap-1">
       <span
         aria-hidden="true"
         className={cn(

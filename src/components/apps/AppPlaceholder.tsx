@@ -25,7 +25,7 @@ export function AppPlaceholder({
   const text = body ?? (t.has(`apps.${appId}.body`) ? t(`apps.${appId}.body`) : t('soon'));
 
   return (
-    <div className="flex min-h-full flex-col gap-5 p-6">
+    <div data-app-content={appId} className="flex min-h-full flex-col gap-5 p-6">
       <div className="flex items-center gap-4">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-control border border-edge bg-elevated text-accent">
           <AppGlyph appId={appId} className="h-7 w-7" />

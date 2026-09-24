@@ -336,7 +336,13 @@ function TicketDetail({
   const base = `tickets.${ticket.id}`;
 
   return (
-    <article data-ticket-detail={ticket.id} aria-labelledby={`ticket-${ticket.id}`} className={cn(scrolls && 'min-h-0 overflow-y-auto')}>
+    <article
+      data-ticket-detail={ticket.id}
+      aria-labelledby={`ticket-${ticket.id}`}
+      // A pane that scrolls on its own must be reachable by keyboard to scroll it (WCAG 2.1.1).
+      tabIndex={scrolls ? 0 : undefined}
+      className={cn(scrolls && 'min-h-0 overflow-y-auto focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none')}
+    >
       <div className="flex flex-col gap-5 p-4">
         <header className="flex flex-col gap-1.5">
           <p className="flex flex-wrap items-center gap-2">

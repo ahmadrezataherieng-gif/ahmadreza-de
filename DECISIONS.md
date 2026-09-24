@@ -2131,3 +2131,25 @@ nowhere.
   Start 2P as the display face everywhere, so `check:pixel-font` now also
   scans every desktop string (`os` and every app's de/en copy) for the
   punctuation the face cannot draw.
+
+## 65. Accessibility pass: axe on everything, contrast in every theme (2026-09-24, PERF-04)
+
+- **Two layers of checks.** `scripts/test/contrast.test.mjs` computes WCAG
+  contrast from `themes.ts` for every text token on the surfaces it is read
+  on, in all eight themes (the Time Machine can put any of them on the
+  desktop). `scripts/verify/a11y.mjs` injects axe-core (a dev dependency,
+  never shipped) over CDP into the real export: every view, every desktop app
+  opened in turn, and the desktop in each of the eight themes with apps open.
+  It is part of `matrix.mjs` (de and fa at 1280, en on a phone).
+- **What it found and what changed.** Palette nudges that keep each era's
+  character: 1946's error red `#D64500` → `#E8581C`; 1984's muted grey
+  `#555555` → `#404040`; 1995's teal `#008080` → `#008C8C` with the accent
+  navy `#000080` → `#000050` (title bars keep `#000080`), success `#008000` →
+  `#005A00` and warning `#808000` → `#505000`. Components: the About path's
+  placeholder station lost its extra `opacity-80` (muted text was faded twice);
+  the Tickets detail pane and the privacy table's horizontal scroller are
+  keyboard-focusable (WCAG 2.1.1); the placeholder apps carry
+  `data-app-content` like every other app.
+- **Rule kept in the test:** muted text is checked on panels, not on the page
+  background - in 1984 and 1995 that background is a wallpaper that carries
+  no muted text.

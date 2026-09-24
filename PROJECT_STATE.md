@@ -28,7 +28,7 @@ is left lives in ROADMAP.md.
 - [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
 - [x] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, descriptions, OG images, 404, static About page, journey text layer (DECISIONS.md 59); JSON-LD image/sameAs wait for the owner
 - [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
-- [ ] **Phase 12** — Performance, accessibility, mobile pass
+- [~] **Phase 12** — Performance, accessibility, mobile pass: automated accessibility pass done (PERF-04, DECISIONS.md 65); vitals, phone scroll and real devices open (ROADMAP PERF-*)
 - [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
 
 ## What exists
@@ -152,7 +152,7 @@ is left lives in ROADMAP.md.
   data and copy in plain node; `bonus.mjs` the unlocks and the three bonus apps
   (Phase 9D-1); `navigation.mjs` the hand-over, Zum Desktop from every era and the
   returning visitor; `sizes.mjs` what each view loads; `serve.mjs` serves `out/`
-  so all of them can run against the real export. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 197 lines, three core rules plus pointers; its specialised rules live in `.claude/skills/` (`seo` added in Phase 8B).
+  so all of them can run against the real export; `a11y.mjs` (PERF-04) runs axe-core over every view, every app and all eight themes, and `contrast.test.mjs` pins the themes' WCAG contrast; `vitals.mjs` (PERF-05) measures FCP, LCP, CLS and TBT per view. Every script takes `--quiet`, and `matrix.mjs` runs the whole matrix with one line per configuration (DECISIONS.md 51). CLAUDE.md is 197 lines, three core rules plus pointers; its specialised rules live in `.claude/skills/` (`seo` added in Phase 8B).
 
 ## Budgets (measured on the export)
 
