@@ -1307,8 +1307,8 @@ stations, language levels - is `null` in content and renders as a visibly
 marked "Angabe folgt", never a guess. Skills are grouped (networks, systems,
 support) and carry no levels or percentages: a bar at 80 % is a number nobody
 can check. The apprenticeship is described by what the occupation covers, not
-by anything about its workplace; Stadtverwaltung Trier is only named as the
-place. The résumé control stays behind its flag.
+by anything about its workplace; the employer is never named (LEG-08), only
+the city. The résumé control stays behind its flag.
 
 **Terminal.**
 
@@ -1339,7 +1339,7 @@ place. The résumé control stays behind its flag.
 
 **Tickets.** Nine cases at a fictional company, Talweber Logistik, with
 `.example` names and 10.20.0.0/16 addresses: nothing that could read as a real
-employer's internal case, and a test rejects Trier, Stadtverwaltung and
+employer's internal case, and a test rejects Trier, the employer's name and
 IT-HAUS. Each ticket: the symptom as reported, three diagnosis steps each with
 the evidence it produced (real commands, output in the real tool's shape), the
 solution, and one lesson that holds beyond the case. Statuses are in progress,

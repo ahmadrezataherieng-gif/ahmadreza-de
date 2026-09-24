@@ -3,7 +3,7 @@
   "name": "Ahmadreza Taheri",
   "role": "Fachinformatiker für Systemintegration in Ausbildung",
   "intro": [
-    "Ich bin Ahmadreza Taheri und arbeite in der IT, in Deutschland. Zurzeit mache ich meine Ausbildung zum Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier.",
+    "Ich bin Ahmadreza Taheri und arbeite in der IT, in Deutschland. Zurzeit mache ich meine Ausbildung zum Fachinformatiker für Systemintegration in Trier.",
     "Mich interessiert, was unter der Oberfläche passiert: warum ein Rechner keine Adresse bekommt, welchen Weg ein Datenpaket durchs Netz nimmt, was genau kaputt ist, wenn es heißt, „das Internet geht nicht“. Meine Schwerpunkte sind Netzwerke und Linux.",
     "Diese Website ist mein eigenes Projekt. Sie erzählt 80 Jahre Computergeschichte und erklärt dabei, wie Computer bis heute funktionieren – und sie zeigt, wie ich an Technik herangehe: erst verstehen, dann erklären."
   ],
@@ -21,7 +21,7 @@
     "stations": {
       "apprenticeship": {
         "title": "Ausbildung zum Fachinformatiker für Systemintegration",
-        "place": "Stadtverwaltung Trier",
+        "place": "Trier",
         "text": "Eine duale Ausbildung, im Betrieb und in der Berufsschule. Sie umfasst das Planen, Einrichten und Betreiben von IT-Systemen: Netzwerke, Server und Arbeitsplatzrechner, Benutzerkonten und die Unterstützung der Menschen, die mit all dem arbeiten."
       },
       "earlier": {

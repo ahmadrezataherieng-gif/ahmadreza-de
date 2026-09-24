@@ -3,7 +3,7 @@
   "name": "Ahmadreza Taheri",
   "role": "Apprentice IT specialist for systems integration",
   "intro": [
-    "I'm Ahmadreza Taheri, and I work in IT in Germany. I'm currently training as an IT specialist for systems integration at Stadtverwaltung Trier.",
+    "I'm Ahmadreza Taheri, and I work in IT in Germany. I'm currently training as an IT specialist for systems integration in Trier.",
     "I'm interested in what happens beneath the surface: why a computer gets no address, which way a data packet takes through the network, what exactly is broken when someone says \"the internet isn't working\". My focus is on networks and Linux.",
     "This website is my own project. It tells 80 years of computing history and explains along the way how computers still work today - and it shows how I approach technology: understand it first, then explain it."
   ],
@@ -21,7 +21,7 @@
     "stations": {
       "apprenticeship": {
         "title": "Apprenticeship as an IT specialist for systems integration",
-        "place": "Stadtverwaltung Trier",
+        "place": "Trier",
         "text": "A dual apprenticeship, split between the workplace and vocational school. It covers planning, setting up and running IT systems: networks, servers and workstations, user accounts, and supporting the people who work with all of it."
       },
       "earlier": {

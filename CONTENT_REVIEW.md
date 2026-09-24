@@ -702,7 +702,7 @@ The recruiter's main page: life story, career path, skills, languages.
 | CR-431 | `path.range` | single word / label | de / en / fa | PLACEHOLDER | Short label: range (About app). Now (de): «<start></start> – <end></end>» |
 | CR-432 | `path.present` | single word / label | de / en / fa | PLACEHOLDER | Short label: present (About app). Now (de): «heute» |
 | CR-433 | `path.stations.apprenticeship.title` | short text | de / en / fa | PLACEHOLDER | Title (About app). Now (de): «Ausbildung zum Fachinformatiker für Systemintegr…» |
-| CR-434 | `path.stations.apprenticeship.place` | single word / label | de / en / fa | PLACEHOLDER | Short label: place (About app). Now (de): «Stadtverwaltung Trier» |
+| CR-434 | `path.stations.apprenticeship.place` | single word / label | de / en / fa | PLACEHOLDER | Short label: place (About app). Now (de): «Trier» (employer removed 2026-09-24, LEG-08) |
 | CR-435 | `path.stations.apprenticeship.text` | long text | de / en / fa | PLACEHOLDER | Body text (About app). Now (de): «Eine duale Ausbildung, im Betrieb und in der Ber…» |
 | CR-436 | `path.stations.earlier.title` | single word / label | de / en / fa | PLACEHOLDER | Short label: title (About app). Now (de): «Frühere Stationen» |
 | CR-437 | `path.stations.earlier.place` | single word / label | de / en / fa | PLACEHOLDER | Short label: place (About app). Now (de): «» |
@@ -1553,3 +1553,11 @@ Copy under `eggs` in `src/messages/apps/terminal/{de,en,fa}.json`; commands and 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1078 | `eggs.moth`, `eggs.sl`, `eggs.coffee`, `eggs.rm`, `eggs.editor`, `eggs.hire`, `eggs.uptime`, `eggs.ping`, `eggs.fortune.0`..`6`; the ASCII moth and train (machine text) | short text | de / en / fa | PLACEHOLDER | Now (de): «Der erste „Bug" war echt: Am 9. September 1947 …», «Ausgezeichnete Idee. Der Befehl contact zeigt …». Seven sourced computing facts as fortunes; check each is how the owner wants to sound |
+
+## 33. Role line without the employer (LEG-08)
+
+The employer is never named (owner, 2026-09-24). The new role line replaces the old one everywhere it appeared.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1079 | `landing.role`, the Trier fact in `landing.facts`, `site.description`, About `intro.0` and `path.stations.apprenticeship.place`, `public/llms.txt`, the role line and meta description of `soon/index.html` | short text | de / en / fa | PLACEHOLDER | Now: de «Fachinformatiker für Systemintegration in Ausbildung · Trier», en «IT specialist for system integration in training · Trier», fa «کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) · تریر» (wording given by the owner; confirm in the final review) |

@@ -29,8 +29,8 @@ All user-facing content is placeholder until the final content review with the o
 ## Who this is for
 
 Ahmadreza Taheri, IT professional in Germany, currently in a
-*Fachinformatiker für Systemintegration* apprenticeship at Stadtverwaltung
-Trier. The site exists to **get him hired** and to **rank first for his name**.
+*Fachinformatiker für Systemintegration* apprenticeship in Trier (the employer
+is never named - ROADMAP LEG-08). The site exists to **get him hired** and to **rank first for his name**.
 Every technical decision is subordinate to those two goals. When a choice trades
 a nice interaction against discoverability or against a recruiter's time, the
 recruiter wins.

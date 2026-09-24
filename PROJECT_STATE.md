@@ -4,6 +4,14 @@ Last updated: 2026-09-24
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+- **Employer never named (2026-09-24, LEG-08):** removed from the coming-soon
+  page, the main site, llms.txt and the docs; the role line is
+  "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079).
+  `scripts/test/employer.test.mjs` guards the source and every build output.
+  The name is still in the git history.
+- **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
+  values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
+
 **Master plan until launch: ROADMAP.md** (full audit of 2026-09-23, 67 items by
 phase, status, priority and owner). The phase list below is the history; what
 is left lives in ROADMAP.md.

@@ -160,10 +160,10 @@ DECISIONS.md 57.
   languages, "Sie" not "du", and the data's honesty (below).
 - **Never invent a fact about Ahmadreza.** What he has not supplied is `null` in
   content and renders as a visibly marked placeholder ("Angabe folgt"); TODO.md
-  lists each. No skill levels, no percentages. Stadtverwaltung Trier appears
-  only as the place of the apprenticeship.
+  lists each. No skill levels, no percentages. The employer is never named
+  (LEG-08); the place of the apprenticeship is just "Trier".
 - **Tickets are fiction and say so:** Talweber Logistik, `.example` names,
-  10.20.0.0/16. The test rejects Trier, Stadtverwaltung and IT-HAUS in them.
+  10.20.0.0/16. The test rejects Trier, the employer's name and IT-HAUS in them.
   Commands and their output are real and exact.
 - **Traceroute is a labelled simulation** over prepared routes from an assumed
   home line in Frankfurt, with documentation addresses (RFC 5737, `.example`,

@@ -2,13 +2,12 @@
 
 <!-- CONTENT-TODO CR-1049: placeholder summary for AI crawlers, written from facts the site already states. Review with the owner. -->
 
-> Ahmadreza Taheri is an IT specialist in training for systems integration (German: "Fachinformatiker für Systemintegration in Ausbildung") at the city administration of Trier (Stadtverwaltung Trier), Germany. His focus is networks and Linux. He works in German, English and Persian. ahmadreza.de is his portfolio: an interactive history of computing that teaches how computers work while introducing him.
+> Ahmadreza Taheri is an IT specialist in training for systems integration (German: "Fachinformatiker für Systemintegration in Ausbildung") in Trier, Germany. His focus is networks and Linux. He works in German, English and Persian. ahmadreza.de is his portfolio: an interactive history of computing that teaches how computers work while introducing him.
 
 ## About the person
 
 - Name: Ahmadreza Taheri; in Persian: احمدرضا طاهری
 - Role: Fachinformatiker für Systemintegration in Ausbildung (IT specialist for systems integration, apprentice)
-- Employer during the apprenticeship: Stadtverwaltung Trier (city administration of Trier)
 - Location: Trier, Germany
 - Focus: systems integration, networks, Linux, IT support
 - Languages: German, English, Persian

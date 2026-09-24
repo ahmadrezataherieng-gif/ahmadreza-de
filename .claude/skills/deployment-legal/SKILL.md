@@ -171,12 +171,15 @@ transfer basis.
   **"Impressum"**.
 - **No EU ODR link** - that platform closed in July 2025. Do not add one.
 
-### Stadtverwaltung Trier
+### The employer
 
-May only appear as the plain fact that Ahmadreza trains there: **no logo, no
-workplace photos, no internal information.** The Tickets app must stay
-fictional (see the `desktop-apps` skill - Talweber Logistik, not a real
-employer).
+**Never named anywhere** - not in copy, metadata, JSON-LD, llms.txt, the
+coming-soon page or the docs (owner, 2026-09-24, ROADMAP LEG-08). The role line
+is "Fachinformatiker für Systemintegration in Ausbildung · Trier". The employer
+may only be added with its written permission. `scripts/test/employer.test.mjs`
+fails if the name reaches the source or any built output. No logo, no workplace
+photos, no internal information. The Tickets app must stay fictional (see the
+`desktop-apps` skill - Talweber Logistik, not a real employer).
 
 ### The portrait
 

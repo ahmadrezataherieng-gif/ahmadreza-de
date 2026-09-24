@@ -3,7 +3,7 @@
     "title": "Ahmadreza Taheri – Fachinformatiker für Systemintegration",
     "brand": "Amonel",
     "tagline": "80 Jahre Computergeschichte in 90 Sekunden",
-    "description": "Portfolio von Ahmadreza Taheri, Auszubildender Fachinformatiker für Systemintegration bei der Stadtverwaltung Trier. Ein interaktives Betriebssystem im Browser.",
+    "description": "Portfolio von Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier. Ein interaktives Betriebssystem im Browser.",
     "journeyDescription": "80 Jahre Computergeschichte in sieben Epochen, von ENIAC bis zur Cloud, jede mit einem kleinen Rätsel. Ein interaktives Portfolio von Ahmadreza Taheri, angehender Fachinformatiker in Trier.",
     "desktopDescription": "Amonel OS, der Desktop von Ahmadreza Taheri im Browser: Über mich, Terminal, Helpdesk-Tickets, Traceroute und Computer-Quiz eines angehenden Fachinformatikers für Systemintegration.",
     "aboutDescription": "Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker für Systemintegration in Trier, Werdegang, Schwerpunkte Netzwerke und Linux, Sprachen und Kontakt.",
@@ -374,7 +374,7 @@
     "eyebrow": "Portfolio",
     "firstName": "Ahmadreza",
     "lastName": "Taheri",
-    "role": "Fachinformatiker für Systemintegration in Ausbildung bei der Stadtverwaltung Trier",
+    "role": "Fachinformatiker für Systemintegration in Ausbildung · Trier",
     "factsLabel": "Auf einen Blick",
     "facts": [
       {
@@ -382,8 +382,8 @@
         "label": "Ausbildung zum Fachinformatiker"
       },
       {
-        "value": "Stadtverwaltung Trier",
-        "label": "Ausbildungsbetrieb"
+        "value": "Trier",
+        "label": "Ausbildungsort"
       },
       {
         "value": "Netzwerke · Linux",

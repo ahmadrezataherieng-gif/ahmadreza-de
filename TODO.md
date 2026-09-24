@@ -23,9 +23,9 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 ## Copy to confirm
 
 - **Landing role line** (`landing.role`): "Fachinformatiker für
-  Systemintegration in Ausbildung bei der Stadtverwaltung Trier". Draft; finalise
+  Systemintegration in Ausbildung · Trier". Draft; finalise
   the exact wording, and check the English and Persian versions.
-- **Landing facts** (`landing.facts`): Systemintegration · Stadtverwaltung Trier ·
+- **Landing facts** (`landing.facts`): Systemintegration · Trier ·
   Netzwerke · Linux · Deutsch · Englisch · Persisch. Drafted from what the site
   already says about you; confirm or replace, and say whether English really is
   a working language for you.
@@ -214,8 +214,8 @@ What is left:
   still a processor for the site itself.
 
 - Impressum details: full address, contact, responsible person under § 5 DDG.
-- Whether the employer, Stadtverwaltung Trier, may be named on a personal site,
-  and in what wording.
+- Resolved 2026-09-24: the employer is never named (LEG-08); only with its
+  written permission.
 - The Datenschutzerklärung must disclose Cloudflare as a processor (US company,
   global edge network sees visitor IP addresses). Standard contractual clauses
   and the EU-US Data Privacy Framework are the legal basis to cite.

@@ -27,10 +27,10 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 10 | 0 | 10 | 20 |
+| P0 | 9 | 0 | 11 | 20 |
 | P1 | 12 | 5 | 16 | 33 |
 | P2 | 19 | 3 | 3 | 25 |
-| **total** | **41** | **8** | **29** | **78** |
+| **total** | **40** | **8** | **30** | **78** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -84,7 +84,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. | missing | P0 | Claude Code + Ahmadreza | all feature work |
 | LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. Done 2026-09-23: every fetch type locked to 'self' (scripts/styles also 'unsafe-inline', no nonces in a static export); pinned by `legal.test.mjs`; `serve.mjs --headers` runs the checks under it (apps, bonus, desktop pass). | done | P1 | Claude Code | - |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 |
-| LEG-08 | **May the employer, Stadtverwaltung Trier, be named** on a personal site, and in which wording? **Waiting for owner.** | missing | P0 | Ahmadreza | - |
+| LEG-08 | **Employer name removed everywhere; may only be added with the employer's written permission.** Done 2026-09-24 (owner): gone from the coming-soon page (text, title, description), the landing role and facts, the meta descriptions, About, llms.txt and the docs; the role line is now "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079). `scripts/test/employer.test.mjs` fails if the name is in any tracked file or in `out/` / `soon/dist/`. The name remains in the git history. | done | P0 | Ahmadreza | - |
 | LEG-09 | **Written usage rights for the portrait** from the photographer before it goes online. | missing | P0 | Ahmadreza | OWN-01 |
 | LEG-10 | **Check "Amonel"** in the DPMA and EUIPO registers before any commercial use. | missing | P1 | Ahmadreza | - |
 | LEG-11 | **Cloudflare features that set cookies stay off** (Bot Fight Mode, challenges, Waiting Room, Always Online); rate limit only by IP with Block. Check at deploy. | missing | P0 | Ahmadreza | DEP-06 |

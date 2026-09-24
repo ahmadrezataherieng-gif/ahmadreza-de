@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
+import { EMPLOYER } from './employer-name.mjs';
 import { careerStations, languages, skillAreas } from '../../src/content/about.ts';
 import { projects } from '../../src/content/projects.ts';
 import { routes } from '../../src/content/routes.ts';
@@ -92,7 +93,8 @@ test('Tickets: 6 to 10, several statuses, every step explained in every language
 
 test('Tickets: the organisation is fictional and nothing points at a real employer', () => {
   const everything = [JSON.stringify(tickets), ...LOCALES.map((locale) => JSON.stringify(copy('tickets', locale)))].join('\n');
-  assert.doesNotMatch(everything, /Trier|Stadtverwaltung|IT-HAUS|شهرداری/i);
+  assert.doesNotMatch(everything, /Trier|IT-HAUS/i);
+  assert.doesNotMatch(everything, EMPLOYER);
   // Names under the reserved .example domain; addresses private or public DNS.
   for (const host of everything.match(/\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\.(?:[a-z]{2,})\b/gi) ?? []) {
     if (/^\d/.test(host) || /\.(?:xlsx|pdf|txt)$/i.test(host)) continue;
