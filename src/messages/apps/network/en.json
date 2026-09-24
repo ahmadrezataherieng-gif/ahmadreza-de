@@ -110,6 +110,7 @@
     "formLabel": "Send a ping",
     "targetLabel": "Target",
     "run": "Ping",
+    "trace": "Trace the way there (traceroute)",
     "examples": "Prepared targets",
     "notes": {
       "route": "All four packets came back. The TTL dropped by one per router on the way - {hops, plural, one {# stop} other {# stops}} to the target.",
@@ -155,7 +156,8 @@
       "cname": "The name was an alias (CNAME); the resolver followed it to the address.",
       "hello": "If you read TXT records for fun, you are in the right place."
     },
-    "flush": "Flush the cache"
+    "flush": "Flush the cache",
+    "trace": "Trace the way there (traceroute)"
   },
   "ports": {
     "explain": "An address finds the machine, a port the program on it. There are 65,536 ports per protocol; a service listens on a fixed one - a web server on 443.",

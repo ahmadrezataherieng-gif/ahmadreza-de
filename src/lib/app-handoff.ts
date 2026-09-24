@@ -51,3 +51,30 @@ export function onQuestion(handler: () => void): () => void {
   window.addEventListener(QUESTION_EVENT, handler);
   return () => window.removeEventListener(QUESTION_EVENT, handler);
 }
+
+/* --- a host for the Traceroute app (APP-16): Ping and DNS offer "trace this host" --- */
+
+export const TRACE_EVENT = 'amonel:trace';
+
+let waitingTrace: string | null = null;
+
+/** Open the Traceroute app and trace a host there. The last one wins. */
+export function traceHost(host: string): void {
+  waitingTrace = host.trim() === '' ? null : host.trim();
+  if (waitingTrace === null) return;
+  requestApp('traceroute');
+  emit(TRACE_EVENT);
+}
+
+/** What waits for the Traceroute app, once: taking it clears it. */
+export function takeWaitingTrace(): string | null {
+  const host = waitingTrace;
+  waitingTrace = null;
+  return host;
+}
+
+/** For the Traceroute app: called when a host is handed to it while it may already be open. */
+export function onTrace(handler: () => void): () => void {
+  window.addEventListener(TRACE_EVENT, handler);
+  return () => window.removeEventListener(TRACE_EVENT, handler);
+}

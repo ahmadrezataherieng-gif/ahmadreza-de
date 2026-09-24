@@ -110,6 +110,7 @@
     "formLabel": "Ping senden",
     "targetLabel": "Ziel",
     "run": "Ping",
+    "trace": "Den Weg dorthin verfolgen (Traceroute)",
     "examples": "Vorbereitete Ziele",
     "notes": {
       "route": "Alle vier Pakete kamen zurück. Die TTL sank auf dem Weg um eins pro Router – {hops, plural, one {# Station} other {# Stationen}} bis zum Ziel.",
@@ -155,7 +156,8 @@
       "cname": "Der Name war ein Alias (CNAME); der Resolver ist ihm bis zur Adresse gefolgt.",
       "hello": "Wer TXT-Einträge zum Vergnügen liest, ist hier richtig."
     },
-    "flush": "Cache leeren"
+    "flush": "Cache leeren",
+    "trace": "Den Weg dorthin verfolgen (Traceroute)"
   },
   "ports": {
     "explain": "Eine Adresse findet die Maschine, ein Port das Programm darauf. 65.536 Ports gibt es je Protokoll; wer einen Dienst anbietet, lauscht auf einem festen – ein Webserver auf 443.",

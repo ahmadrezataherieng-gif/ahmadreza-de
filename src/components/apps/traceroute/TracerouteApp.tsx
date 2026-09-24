@@ -16,6 +16,7 @@ import {
   type TraceTarget,
 } from '@/components/apps/traceroute/trace';
 import { routes, type Route } from '@/content/routes';
+import { onTrace, takeWaitingTrace } from '@/lib/app-handoff';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { cn } from '@/lib/cn';
 
@@ -100,6 +101,21 @@ function Traceroute({ appId }: AppProps) {
     setShown(0);
     setRun(target);
   };
+
+  // A host handed over by Ping or DNS in the Network tools (APP-16): traced as
+  // soon as this app is open, whether it was already or has just opened for it.
+  const startRef = useRef(start);
+  useEffect(() => {
+    startRef.current = start;
+  });
+  useEffect(() => {
+    const traceWaiting = () => {
+      const waiting = takeWaitingTrace();
+      if (waiting) startRef.current(waiting);
+    };
+    traceWaiting();
+    return onTrace(traceWaiting);
+  }, []);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();

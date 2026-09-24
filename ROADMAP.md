@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
-| `desktop` | 8 | 1 | 4 | 47.8 / 66 | 72 % |
+| `desktop` | 9 | 0 | 4 | 49 / 66 | 74 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 2 | 6 | 62.2 / 84 | 74 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 62 | 6 | 37 | 260.1 / 406 | **64 %** |
+| **all** | 63 | 5 | 37 | 261.3 / 406 | **64 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 14 | 1 | 14 | 29 |
-| **total** | **37** | **6** | **62** | **105** |
+| P2 | 14 | 0 | 15 | 29 |
+| **total** | **37** | **5** | **63** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -99,7 +99,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. Done 2026-09-24: `ask <question>` opens the Assistant (window or phone app) and it answers at once, through `lib/app-handoff.ts` (two window events, one waiting value, no storage); listed in `help`, completed by Tab; `terminal-shell.test.mjs` and `apps.mjs` cover it; CR-1093. | done | P2 | Claude Code | - | S | desktop |
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |
 | APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 | S | puzzles |
-| APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Still open: Ping and DNS offering "trace this host" into the Traceroute app (needs a way to hand a target to another app's window, on both shells). | partial | P2 | Claude Code | APP-04 | S 40% | desktop |
+| APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Done 2026-09-24: Ping and DNS offer "trace this host" (once the ping has a target / the lookup found something); the host goes through `lib/app-handoff.ts` (the mechanism of APP-13) to the Traceroute app, in a window or on the phone; `bonus.mjs` checks both; CR-1094. | done | P2 | Claude Code | APP-04 | S | desktop |
 | APP-17 | **Time Machine extras** (new idea 2026-09-24): the era's sound profile as a short sample on arrival (with APP-12, only after a click), and each era's cursor style on the desktop (`data-cursor` is already set). | missing | P2 | Claude Code | APP-12 | S | desktop |
 
 ## Phase 10 - SEO layer

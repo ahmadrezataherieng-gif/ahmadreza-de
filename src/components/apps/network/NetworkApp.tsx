@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
 import { eraSectionHash } from '@/components/apps/unlock';
+import { traceHost } from '@/lib/app-handoff';
 import {
   checkGateway,
   formatIPv4,
@@ -442,6 +443,16 @@ function PingPanel() {
               {target.ok ? t(`notes.${target.kind}`, { hops: routeHops(target.host) }) : t('notes.unknown')}
             </p>
           ) : null}
+          {target.ok ? (
+            <button
+              type="button"
+              className="w-fit cursor-pointer font-mono text-xs text-accent underline-offset-4 hover:underline"
+              onClick={() => traceHost(target.host)}
+              data-action="ping-trace"
+            >
+              {t('trace')}
+            </button>
+          ) : null}
         </div>
       ) : null}
       <p className="font-body text-xs leading-relaxed text-muted">{t('ttl')}</p>
@@ -592,6 +603,16 @@ function DnsPanel() {
                 {result.found && result.records.some((record) => record.type === 'CNAME') && type !== 'CNAME' ? ` ${t('notes.cname')}` : ''}
                 {result.name === 'amonel.example' && result.type === 'TXT' && result.found ? ` ${t('notes.hello')}` : ''}
               </p>
+              {result.found ? (
+                <button
+                  type="button"
+                  className="w-fit cursor-pointer font-mono text-xs text-accent underline-offset-4 hover:underline"
+                  onClick={() => traceHost(result.name)}
+                  data-action="dns-trace"
+                >
+                  {t('trace')}
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="w-fit cursor-pointer font-mono text-xs text-muted underline-offset-4 hover:text-accent hover:underline"

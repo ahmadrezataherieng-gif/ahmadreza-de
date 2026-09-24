@@ -193,3 +193,13 @@ test('ask (APP-13): a question is handed over once, with words in the copy; no q
   askAssistant('   ');
   assert.equal(takeWaitingQuestion(), null);
 });
+
+test('APP-16: a host handed to the Traceroute app waits once, the last one wins, blank is dropped', async () => {
+  const { traceHost, takeWaitingTrace } = await import('../../src/lib/app-handoff.ts');
+  traceHost('www.newyork.example');
+  traceHost(' tokyo.example ');
+  assert.equal(takeWaitingTrace(), 'tokyo.example');
+  assert.equal(takeWaitingTrace(), null);
+  traceHost('  ');
+  assert.equal(takeWaitingTrace(), null);
+});

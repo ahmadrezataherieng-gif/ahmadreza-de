@@ -306,6 +306,20 @@ check('network: ports tab has no sideways scroll', await noOverflow('network-too
 const late = await js(`performance.getEntriesByType('resource').slice(${resourcesBefore}).map((entry) => entry.name).filter((name) => !name.startsWith(location.origin))`);
 check('network: nothing is sent to any other host', late.length === 0, late);
 check('storage: the network tools store nothing', (await storageKeys()).join() === keysBeforeNetwork, await storageKeys());
+
+// APP-16: Ping and DNS hand their host to the Traceroute app, which opens and traces it.
+await clickIn('[data-network-tab="ping"]');
+await clickIn('[data-network-example="www.newyork.example"]');
+check('network: ping offers "trace this host"', await until(`!!document.querySelector('[data-action="ping-trace"]')`, 6000));
+await clickIn('[data-action="ping-trace"]');
+check('network: ping hands the host to the Traceroute app, which traces it', await until(`document.querySelector('[data-app-content="traceroute"] [data-trace-input]')?.value === 'www.newyork.example' && !!document.querySelector('[data-app-content="traceroute"] [data-trace]')`, 6000), await js(`document.querySelector('[data-app-content="traceroute"] [data-trace-input]')?.value ?? null`));
+await close('traceroute');
+await clickIn('[data-network-tab="dns"]');
+await clickIn('[data-action="dns"]');
+check('network: DNS offers "trace this host" once it found something', await until(`!!document.querySelector('[data-action="dns-trace"]')`, 8000));
+await clickIn('[data-action="dns-trace"]');
+check('network: DNS hands the name to the Traceroute app too', await until(`!!document.querySelector('[data-app-content="traceroute"] [data-trace]')`, 6000));
+await close('traceroute');
 await close('network-tools');
 
 /* --- Time Machine (APP-05) ------------------------------------------------------------ */
