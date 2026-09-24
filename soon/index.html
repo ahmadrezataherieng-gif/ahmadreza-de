@@ -25,7 +25,7 @@
   /* Design tokens. Dark is the default look; light follows the system. */
   :root{
     --bg:#0b0f15; --surface:#111722; --edge:#222c3a;
-    --ink:#e9edf5; --muted:#a3aec0;
+    --ink:#e9edf5; --muted:#b3bdcc;
     --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
     --track:#1a2230;
     /* Latin face, then the Persian face (it only holds Arabic-script glyphs), then the generic fallback. */
@@ -42,7 +42,7 @@
   @media (prefers-color-scheme:light){
     :root{
       --bg:#f6f7f9; --surface:#ffffff; --edge:#dce1e8;
-      --ink:#0b0f15; --muted:#4d5968;
+      --ink:#0b0f15; --muted:#434e5c;
       --brand:#1d7550; --brand-deep:#155c3e; --on-brand:#ffffff; --amber:#c46f10;
       --track:#e6eaf0;
     }
@@ -56,8 +56,11 @@
 
   /* Header: the main logo (design 6, the "o" is a power symbol) and the languages. */
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--stack-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
-  .logo svg{width:.74em;height:.74em;margin:0 .03em;transform:translateY(.06em);color:var(--brand);overflow:visible}
+  .logo{display:inline-block;font:600 28px/1 var(--stack-head);letter-spacing:-.02em;color:var(--ink);text-decoration:none;direction:ltr;white-space:nowrap}
+  /* The power "o" is drawn in font units (100 = 1em): a ring as tall as the
+     x-height, a stem up to the cap height, the stroke of a semibold stem. Its
+     bottom edge sits on the baseline, like the letters around it. */
+  .logo svg{display:inline-block;width:.56em;height:.72em;margin:0 .015em;vertical-align:baseline;color:var(--brand);overflow:visible}
   .langs{display:flex;gap:6px}
   .langs button{font:600 12px/1 var(--font-mono);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
   .langs button:hover{color:var(--ink)}
@@ -74,6 +77,18 @@
   .role{margin:14px 0 0;font-size:clamp(1.1rem,2.6vw,1.35rem);line-height:1.45;font-weight:600}
   .alt{margin:8px 0 0;font-size:.95rem;color:var(--muted)}
   .alt p{margin:2px 0}
+  /* A line in the other direction keeps the column's edge: in a German or
+     English page the Persian line starts at the left edge like the lines above
+     it (and vice versa in Persian). Persian script runs small next to Latin,
+     so it is set about 12 % larger with more room between lines. */
+  html[dir="ltr"] .alt p[dir="rtl"]{text-align:justify;text-align-last:left}
+  html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
+  .alt [lang="fa"]{font-size:1.12em;line-height:1.75;color:var(--ink)}
+  html[lang="fa"] body{font-size:17.5px;line-height:1.8}
+  /* Headings: tight tracking for Latin, never for Persian (it breaks the joins),
+     and a word space that tracking cannot swallow. */
+  h1,h2,h3,.big,.fa-name{word-spacing:.04em}
+  html[lang="fa"] h2,html[lang="fa"] h3,html[lang="fa"] .overall-label,.fa-name{letter-spacing:0;word-spacing:normal}
   .intro{margin:22px 0 0;font-size:1.08rem;max-width:58ch}
   .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:24px}
   .button{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--on-brand);background:var(--brand);border-radius:10px;padding:12px 18px;text-decoration:none}
@@ -119,8 +134,7 @@
   html[dir="rtl"] .area .counts,html[dir="rtl"] .area .pct{font-family:inherit}
   .stamp{margin:24px 0 0;font:12px/1.4 var(--font-mono);color:var(--muted)}
   html[dir="rtl"] .stamp,html[dir="rtl"] .pill{font-family:inherit;letter-spacing:0}
-  html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
-  .fa-name{font-size:1.5rem;font-weight:700;color:var(--ink)}
+  .alt .fa-name{font-size:1.65rem;font-weight:700;line-height:1.5;color:var(--ink)}
 
   .next p{max-width:62ch}
   footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;font-size:.9rem;color:var(--muted)}
@@ -135,7 +149,7 @@
 <body>
 <div class="wrap">
   <header>
-    <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.2a8 8 0 1 0 10.8 0"/></svg>nel</a>
+    <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 56 72" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"><path d="M28 4.5V38"/><path d="M41.8 29.5A21.5 21.5 0 1 1 14.2 29.5"/></svg>nel</a>
     <nav class="langs" aria-label="Sprache" data-t-label="language">
       <button type="button" data-lang="de" lang="de" aria-pressed="true">DE</button>
       <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>

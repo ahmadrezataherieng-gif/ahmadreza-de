@@ -52,6 +52,29 @@ for (const viewport of VIEWPORTS) {
           percent: document.querySelector('.big').textContent,
           areas: document.querySelectorAll('.area').length,
           height: root.scrollHeight,
+          // The narrowest word space in any heading, in em of its font size.
+          space: (() => {
+            let min = { ratio: 9, text: '' };
+            for (const el of document.querySelectorAll('h1, h2, h3, .overall-label, .fa-name')) {
+              const size = parseFloat(getComputedStyle(el).fontSize);
+              const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+              for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+                for (let i = node.data.indexOf(' '); i >= 0; i = node.data.indexOf(' ', i + 1)) {
+                  const rect = (from) => {
+                    const range = document.createRange();
+                    range.setStart(node, from);
+                    range.setEnd(node, from + 1);
+                    return range.getBoundingClientRect();
+                  };
+                  // A space where the line wraps collapses to nothing, as it should.
+                  if (i === 0 || i + 1 >= node.data.length || Math.abs(rect(i - 1).top - rect(i + 1).top) > 2) continue;
+                  const ratio = rect(i).width / size;
+                  if (ratio < min.ratio) min = { ratio: Math.round(ratio * 1000) / 1000, text: el.textContent.trim().slice(0, 40) };
+                }
+              }
+            }
+            return min;
+          })(),
         };
       })()`);
       const label = `${viewport.name} ${scheme} ${locale}`;
@@ -60,6 +83,7 @@ for (const viewport of VIEWPORTS) {
       check(`${label}: every placeholder filled`, !state.placeholders);
       check(`${label}: the name is the h1`, state.h1 === 'Ahmadreza Taheri');
       check(`${label}: the Persian name is visible, marked fa and rtl`, state.persianName);
+      check(`${label}: every heading keeps a real word space (>= 0.2 em)`, state.space.ratio >= 0.2, `${state.space.ratio} em in "${state.space.text}"`);
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
       check(
         `${label}: the overall figure is in the page's digits`,
