@@ -698,8 +698,6 @@
       "dock": "Dock",
       "apps": "Programme"
     },
-    "soon": "Diese Anwendung entsteht gerade.",
-    "bonusBody": "{year, select, today {Freigeschaltet mit dem Rätsel von heute.} other {Freigeschaltet mit dem Rätsel von {year}.}} Diese Anwendung entsteht gerade.",
     "cv": {
       "download": "Lebenslauf herunterladen (PDF)",
       "pending": "Der Lebenslauf folgt in Kürze."
@@ -721,16 +719,13 @@
         "title": "Assistent"
       },
       "contact": {
-        "title": "Kontakt",
-        "body": "So erreichen Sie Ahmadreza."
+        "title": "Kontakt"
       },
       "timeline": {
-        "title": "Zeitleiste",
-        "body": "Die Stationen seines Werdegangs auf einer Zeitleiste."
+        "title": "Zeitleiste"
       },
       "cv": {
-        "title": "Lebenslauf",
-        "body": "Der Lebenslauf als PDF zum Herunterladen."
+        "title": "Lebenslauf"
       },
       "quiz": {
         "title": "Computer-Quiz"

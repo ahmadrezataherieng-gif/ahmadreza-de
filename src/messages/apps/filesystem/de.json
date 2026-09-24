@@ -1,0 +1,25 @@
+{
+  "intro": "Ein Dateisystem ist ein Baum. Alles hängt an einer Wurzel, und jede Datei hat einen Pfad: die Adresse, die von der Wurzel aus Schritt für Schritt zu ihr führt. Klicken Sie durch den Baum und lesen Sie den Pfad mit.",
+  "treeLabel": "Dateibaum",
+  "showHidden": "Versteckte Dateien zeigen",
+  "hiddenNote": "Namen mit einem Punkt am Anfang sind versteckt. Im Terminal zeigt sie erst ls -a.",
+  "root": "Wurzel",
+  "home": "Ihr Zuhause hier",
+  "open": "{name} aufklappen",
+  "close": "{name} zuklappen",
+  "detail": {
+    "title": "Ausgewählt",
+    "path": "Pfad",
+    "steps": "Schritt für Schritt",
+    "short": "Kurzform mit ~",
+    "kind": "Art",
+    "folder": "Ordner",
+    "file": "Datei",
+    "empty": "Dieser Ordner ist leer.",
+    "reach": "Im Terminal",
+    "content": "Inhalt",
+    "section": "Diese Datei zeigt denselben Text wie der Befehl {command} im Terminal."
+  },
+  "pathExplain": "Der Pfad beginnt mit / für die Wurzel. Jedes weitere Stück ist ein Ordner tiefer, bis zur Datei.",
+  "truth": "Ein Dateisystem ist ein Baum, und jede Datei hat einen Pfad. Genau so ordnet ein Betriebssystem alles, was es speichert – vom Betriebssystem selbst bis zu Ihrem Lebenslauf."
+}

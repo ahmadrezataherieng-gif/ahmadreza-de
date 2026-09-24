@@ -1,0 +1,25 @@
+{
+  "intro": "A filesystem is a tree. Everything hangs off one root, and every file has a path: the address that leads to it from the root, step by step. Click through the tree and read the path as you go.",
+  "treeLabel": "File tree",
+  "showHidden": "Show hidden files",
+  "hiddenNote": "Names starting with a dot are hidden. In the terminal only ls -a shows them.",
+  "root": "root",
+  "home": "your home here",
+  "open": "Expand {name}",
+  "close": "Collapse {name}",
+  "detail": {
+    "title": "Selected",
+    "path": "Path",
+    "steps": "Step by step",
+    "short": "Short form with ~",
+    "kind": "Type",
+    "folder": "Folder",
+    "file": "File",
+    "empty": "This folder is empty.",
+    "reach": "In the terminal",
+    "content": "Contents",
+    "section": "This file shows the same text as the command {command} in the terminal."
+  },
+  "pathExplain": "The path starts with / for the root. Every further piece is one folder deeper, down to the file.",
+  "truth": "A filesystem is a tree, and every file has a path. That is how an operating system orders everything it stores - from the operating system itself to your résumé."
+}

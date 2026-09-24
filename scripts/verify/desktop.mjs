@@ -298,7 +298,7 @@ if (layout === 'desktop') {
   await clickOn('[data-launcher] [data-app="filesystem"]');
   await sleep(700);
   check('launcher: an unlocked bonus app opens', await visible(win('filesystem')));
-  check('launcher: it names the era that unlocked it', /1971/.test(await js(`document.querySelector('${win('filesystem')}').textContent`)));
+  check('launcher: it is the real file tree, not a stand-in', await js(`!!document.querySelector('${win('filesystem')} [data-app-content="filesystem"] [data-fs-tree]')`));
   check('launcher: opening closes it', await js(`document.querySelector('[data-launcher]').hidden`));
   await clickOn('[data-action="launcher"]');
   await press('Escape');

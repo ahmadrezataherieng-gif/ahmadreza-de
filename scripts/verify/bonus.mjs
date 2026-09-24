@@ -380,6 +380,33 @@ check('scheduler: no sideways scroll', await noOverflow('scheduler'));
 check('storage: the batch planner stores nothing', (await storageKeys()).join() === keysBeforeScheduler, await storageKeys());
 await close('scheduler');
 
+/* --- File tree (APP-07) ----------------------------------------------------------------- */
+
+const keysBeforeFiles = (await storageKeys()).join();
+await open('filesystem');
+check('filesystem: its copy loaded', await until(`!/\\bfilesystem\\.[a-zA-Z]/.test(document.querySelector('${content('filesystem')}')?.textContent ?? 'filesystem.x')`, 3000));
+const selectedPath = () => js(`document.querySelector('[data-fs-selected]')?.dataset.fsSelected ?? null`);
+check('filesystem: it starts in the visitor\'s home, with the way down open', (await selectedPath()) === '/home/ahmadreza' && (await js(`!!document.querySelector('[data-fs-node="/home/ahmadreza/README.md"]')`)));
+check('filesystem: hidden files are hidden until asked for', !(await js(`!!document.querySelector('[data-fs-node="/home/ahmadreza/.bash_history"]')`)));
+await clickIn('[data-fs-hidden]', 'filesystem');
+check('filesystem: "show hidden files" shows the dot file', await until(`!!document.querySelector('[data-fs-node="/home/ahmadreza/.bash_history"]')`, 2000));
+await clickIn('[data-fs-node="/home/ahmadreza/projects"]', 'filesystem');
+check('filesystem: clicking a folder selects it and opens it', (await selectedPath()) === '/home/ahmadreza/projects' && (await js(`!!document.querySelector('[data-fs-node="/home/ahmadreza/projects/amonel.md"]')`)));
+await clickIn('[data-fs-node="/home/ahmadreza/projects/amonel.md"]', 'filesystem');
+check('filesystem: clicking a file shows its path, from the root', (await text('[data-fs-path]')) === '/home/ahmadreza/projects/amonel.md' && (await js(`document.querySelectorAll('[data-fs-step]').length`)) === 5);
+check('filesystem: it names the Terminal command that reads the file', /\$ cat \/home\/ahmadreza\/projects\/amonel\.md/.test((await text('[data-fs-commands]')) ?? ''), await text('[data-fs-commands]'));
+await clickIn('[data-fs-step="/home"]', 'filesystem');
+check('filesystem: a step in the path goes back up to that folder', (await selectedPath()) === '/home');
+await clickIn('[data-fs-step="/"]', 'filesystem');
+await clickIn('[data-fs-node="/etc"]', 'filesystem');
+await clickIn('[data-fs-node="/etc/hostname"]', 'filesystem');
+check('filesystem: a small file shows its contents', (await text('[data-fs-content="text"]')) === 'amonel', await text('[data-fs-content="text"]'));
+await clickIn('[data-fs-node="/etc/motd"]', 'filesystem');
+check('filesystem: a file of prose shows its words in the visitor\'s language', ((await text('[data-fs-content="message"]')) ?? '').length > 20 && !/^motd$/.test((await text('[data-fs-content="message"]')) ?? ''));
+check('filesystem: no sideways scroll', await noOverflow('filesystem'));
+check('storage: the file tree stores nothing', (await storageKeys()).join() === keysBeforeFiles, await storageKeys());
+await close('filesystem');
+
 /* --- storage and errors ---------------------------------------------------------------- */
 
 const keys = await storageKeys();

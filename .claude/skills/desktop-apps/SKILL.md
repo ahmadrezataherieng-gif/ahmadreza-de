@@ -75,8 +75,9 @@ Network tools and the Time Machine too (9D-2, DECISIONS.md 63 and 64: `network/n
 `content/network.ts`; ping and DNS are labelled simulations over the
 Traceroute routes and `.example` names, never a real request; the Time Machine
 only calls the theme store, and only the desktop reads `amonel.theme.v1`
-through `DesktopTheme`); the
-file tree shares the stand-in (`bonus/BonusApp.tsx`); the batch planner (APP-06, `scheduler/sched.ts`, pure and tested) is real. Read
+through `DesktopTheme`); the batch planner (APP-06, `scheduler/sched.ts`) and the
+file tree (APP-07, `filesystem/paths.ts`, reading the Terminal's tree through
+`readDir`/`readFile`) are real, both pure and tested, both storing nothing. Read
 DECISIONS.md 57.
 
 - **Bonus apps follow the same rules as base apps** (own chunk, own copy,

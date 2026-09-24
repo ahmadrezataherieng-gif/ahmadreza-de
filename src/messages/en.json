@@ -697,8 +697,6 @@
       "dock": "Dock",
       "apps": "Apps"
     },
-    "soon": "This app is being built.",
-    "bonusBody": "{year, select, today {Unlocked with today’s puzzle.} other {Unlocked with the {year} puzzle.}} This app is being built.",
     "cv": {
       "download": "Download résumé (PDF)",
       "pending": "The résumé is coming soon."
@@ -720,16 +718,13 @@
         "title": "Assistant"
       },
       "contact": {
-        "title": "Contact",
-        "body": "How to reach Ahmadreza."
+        "title": "Contact"
       },
       "timeline": {
-        "title": "Timeline",
-        "body": "The stations of his path on a timeline."
+        "title": "Timeline"
       },
       "cv": {
-        "title": "Résumé",
-        "body": "The résumé as a PDF to download."
+        "title": "Résumé"
       },
       "quiz": {
         "title": "Computer Quiz"

@@ -15,7 +15,7 @@
 /** Sections the component renders from content data and messages. */
 export type PortfolioSection = 'about' | 'skills' | 'projects' | 'cv' | 'contact';
 
-type FileContent =
+export type FileContent =
   | { kind: 'text'; lines: readonly string[] }
   /** Localized prose under `terminal.files.<key>`. */
   | { kind: 'message'; key: string }
@@ -149,6 +149,31 @@ function lookup(absolute: string): Node | null {
     node = child;
   }
   return node;
+}
+
+export interface DirEntry {
+  name: string;
+  dir: boolean;
+}
+
+/**
+ * A directory's entries as `ls` would list them - directories first, then files,
+ * each group by name, dot files included (the caller decides whether to hide
+ * them) - or null when the path is not a directory. Read-only: the File tree
+ * app draws the Terminal's own tree from it (APP-07), so the two never differ.
+ */
+export function readDir(absolute: string): DirEntry[] | null {
+  const node = lookup(absolute);
+  if (!node || node.kind !== 'dir') return null;
+  return Object.entries(node.children)
+    .map(([name, child]) => ({ name, dir: child.kind === 'dir' }))
+    .sort((a, b) => Number(b.dir) - Number(a.dir) || a.name.localeCompare(b.name));
+}
+
+/** What `cat` would print for a file, or null when the path is not a file. */
+export function readFile(absolute: string): FileContent | null {
+  const node = lookup(absolute);
+  return node && node.kind === 'file' ? node.content : null;
 }
 
 function fileLines(content: FileContent): ShellLine[] {

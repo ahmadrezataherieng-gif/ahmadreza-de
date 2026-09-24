@@ -162,7 +162,8 @@ is left lives in ROADMAP.md.
     target, "enter any year", back to the present. The era is remembered in
     `amonel.theme.v1` (only after a jump, removed on return) and read only by
     the desktop; every other page keeps its own theme.
-  - **Batch planner** (1956, APP-06): edit up to six jobs and watch first come first served, shortest job first and round robin run them - the sequence drawn to scale, waiting and turnaround per job, the three averages compared; stores nothing. The file tree (1971) is still the stand-in.
+  - **Batch planner** (1956, APP-06): edit up to six jobs and watch first come first served, shortest job first and round robin run them - the sequence drawn to scale, waiting and turnaround per job, the three averages compared; stores nothing.
+  - **File tree** (1971, APP-07): the Terminal's own tree, clickable; the selected path step by step, its `~` form and the Terminal commands that reach it; dot files behind a switch; stores nothing.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
   own copy file per language:
   - **About:** who Ahmadreza is, his path, what he does now, skills by area,
@@ -370,7 +371,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- The CV app has its layout but only marked placeholder entries and no PDF (waiting for the owner, APP-03, OWN-02, OWN-05), and two bonus apps (scheduler, file tree) share the stand-in. Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
+- The CV app has its layout but only marked placeholder entries and no PDF (waiting for the owner, APP-03, OWN-02, OWN-05). Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
 - The bonus apps' copy (Phase 9D-1) is a draft awaiting native-speaker
   proofreading (TODO.md). The Morse tone has only run in headless Chrome,
   where nothing is heard; touch and pen were emulated.
