@@ -2172,3 +2172,39 @@ nowhere.
   shared route chunk would cost every other view 11 kB, so it stays lazy
   until a better way (a preload of that chunk, or a contentful server frame
   that keeps the hand-over pixel-identical) is built.
+
+## 67. No style writes inside a native scroll event (2026-09-24, PERF-02)
+
+- **The finding.** A CPU profile of the journey on a 4x-slowed phone
+  (`perf.mjs --profile`, new) put 6.9 s of main-thread time into Lenis's
+  `actualScroll` getter. ScrollTrigger's scroll listener sits on the
+  document and fired first; its `onUpdate` ran the resolver, which wrote the
+  scrubbing properties; then Lenis's listener on the window read `scrollY`
+  and forced a full style and layout pass - on every scroll event.
+- **The fix.** When `onUpdate` comes from a native scroll event, the resolver
+  is deferred to `requestAnimationFrame`. Scroll events are dispatched in the
+  same rendering step just before the rAF callbacks, so it still lands in the
+  same frame. Inside the GSAP ticker (already a rAF, after Lenis has read)
+  it runs at once, so wheel scrolling never lags a frame (`tickerDepth` in
+  `Journey.tsx`).
+- **The effect** (headless Chrome, full journey scroll): desktop 48.2 → 53.4
+  fps without GPU (57.3 with), long tasks 9 → 7; phone profile (380 px, light
+  tier, 4x CPU) 35.6 → 38.7 fps, long tasks 113 → 75, script time in slow
+  frames 28.1 s → 0.8 s. What is left in slow frames is style, layout and
+  paint, mostly in the guided puzzle segments - the next step, to be judged on
+  a real phone (PERF-01).
+
+## 68. The Terminal's hidden commands (2026-09-24, APP-08)
+
+- Twelve names in `HIDDEN_COMMANDS`, never in `help`, never offered by Tab:
+  `moth` (the 1947 Harvard Mark II bug, the 1946 era's story), `sl` (a
+  train for whoever mistypes `ls`), `coffee` (HTTP 418, RFC 2324), `rm`
+  (`-rf` gets a joke, anything else "Read-only file system"), `vim`, `vi`,
+  `nano`, `emacs`, `hire` (points at `contact` and `cv`), `fortune` (seven
+  sourced computing facts), `uptime` (years since ENIAC), `ping` (points to
+  the Network tools).
+- **Own drawings only.** The moth and the train are drawn for this site; the
+  classic `cowsay` cow and `sl` locomotive are someone else's art and stay
+  out. Words live in the Terminal's copy under `eggs`, machine lines in
+  `shell.ts`, as for every other command. The Assistant indexes only the
+  Terminal's project entries, so the eggs never surface as search answers.

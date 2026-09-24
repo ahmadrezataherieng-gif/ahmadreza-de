@@ -28,9 +28,9 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 10 | 20 |
-| P1 | 13 | 4 | 16 | 33 |
-| P2 | 20 | 3 | 2 | 25 |
-| **total** | **43** | **7** | **28** | **78** |
+| P1 | 12 | 5 | 16 | 33 |
+| P2 | 19 | 3 | 3 | 25 |
+| **total** | **41** | **8** | **29** | **78** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -43,7 +43,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | APP-05 | **Time Machine app** (today bonus, slot `time-machine`): theme switcher over the eight themes; writes `amonel.theme.v1` (then LEG-02 must list it as used); restyles Snake via `--ao-snake-*`. Built 2026-09-24 (DECISIONS.md 64): eight capsules drawn in their own era's tokens, a year dial that counts to the target, "enter any year" (1946 to now lands in the era current then), back to the present; only the desktop remembers the era (`DesktopTheme`); LEG-02 storage table updated in de/en/fa; `check:pixel-font` now scans every desktop string. | done | P1 | Claude Code | LEG-02 update in the same change |
 | APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. | missing | P2 | Claude Code | - |
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. | missing | P2 | Claude Code | - |
-| APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). | missing | P2 | Claude Code | - |
+| APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - |
 | APP-09 | **GSAP DrawSVG** (free plugin) for line-drawing effects; never ScrollSmoother. | missing | P2 | Claude Code | - |
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. | partial | P2 | Claude Code | - |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). | missing | P2 | Claude Code | - |
@@ -97,7 +97,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
 | PERF-01 | **Real devices**: iPhone, Android phone, iPad, a touchscreen laptop; Safari and Firefox. Everything so far ran in headless Chrome. | missing | P1 | Ahmadreza + Claude Code | - |
-| PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone: lighter era visuals, narrower `--era-progress` readers. | missing | P1 | Claude Code | PERF-01 to re-test |
+| PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone: lighter era visuals, narrower `--era-progress` readers. Partly done 2026-09-24 (DECISIONS.md 67): a forced layout on every scroll event removed (resolver writes deferred out of native scroll events) - phone profile 35.6 → 38.7 fps, long tasks 113 → 75, script time in slow frames 28 s → 0.8 s; `perf.mjs --profile` added. Left: style/layout and paint in the guided puzzle segments; needs the real-phone re-test (PERF-01) to judge. | partial | P1 | Claude Code | PERF-01 to re-test |
 | PERF-03 | **Theme switch cost** (~40 ms restyle at each crossing midpoint). | missing | P2 | Claude Code | - |
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. Done 2026-09-24 (DECISIONS.md 65): `scripts/verify/a11y.mjs` runs axe-core (WCAG 2.2 A/AA) over every view, every app and the desktop in all eight themes, in `matrix.mjs` (de, fa, phone en): 30/30 each; `contrast.test.mjs` pins every theme's token contrast. Fixed: five palette values (1946, 1984, 1995), About's double-faded placeholder, two scroll panes not reachable by keyboard. Keyboard and RTL paths stay covered by `desktop.mjs`, `apps.mjs` and `journey.mjs`. A manual screen-reader walk is PERF-08. | done | P1 | Claude Code | - |
 | PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. Done 2026-09-24 (DECISIONS.md 66): `scripts/verify/vitals.mjs` (FCP, LCP, CLS, TBT in the page, slow-4G phone and desktop profiles); `serve.mjs` now gzips like Cloudflare. Desktop: every view LCP under 0.9 s, TBT 0. Phone: landing and About LCP 1.0 s; two budgets still over and tracked - journey TBT (PERF-02), desktop LCP 2.59 s (PERF-09). | done | P1 | Claude Code | - |

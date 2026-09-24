@@ -98,6 +98,14 @@ await b.evaluate(`(() => {
 // on another page. The last 1.5 screens are the Convergence's settled frame.
 const atEnd = () =>
   b.evaluate('scrollY >= document.documentElement.scrollHeight - innerHeight * 2.5');
+// --profile: sample the main thread for the whole scroll and print the
+// functions that cost the most self time - where to look when a budget slips.
+const PROFILE = Boolean(args.profile);
+if (PROFILE) {
+  await b.send('Profiler.enable');
+  await b.send('Profiler.setSamplingInterval', { interval: 200 });
+  await b.send('Profiler.start');
+}
 let gestures = 0;
 while (!(await atEnd()) && gestures < 400) {
   await b.swipe(Math.round(HEIGHT * 0.8));
@@ -105,6 +113,21 @@ while (!(await atEnd()) && gestures < 400) {
   gestures += 1;
 }
 await sleep(600);
+if (PROFILE) {
+  const { result: { profile } } = await b.send('Profiler.stop');
+  const byId = new Map(profile.nodes.map((node) => [node.id, node]));
+  const self = new Map();
+  const interval = (profile.endTime - profile.startTime) / Math.max(1, profile.samples.length) / 1000;
+  for (const id of profile.samples) {
+    const frame = byId.get(id)?.callFrame;
+    if (!frame) continue;
+    const key = `${frame.functionName || '(anonymous)'} ${String(frame.url).split('/').pop()}:${frame.lineNumber}:${frame.columnNumber}`;
+    self.set(key, (self.get(key) ?? 0) + interval);
+  }
+  const top = [...self].sort((a, b) => b[1] - a[1]).slice(0, 25);
+  console.log('profile (self ms):');
+  for (const [key, ms] of top) console.log(`  ${ms.toFixed(0).padStart(6)}  ${key}`);
+}
 
 const result = await b.evaluate(`(() => {
   window.__perf.running = false;

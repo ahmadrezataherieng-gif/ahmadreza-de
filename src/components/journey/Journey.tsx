@@ -42,6 +42,13 @@ const sectionId = (eraIndex: number) => `era-${eraIndex}`;
 const HAND_OVER_MS = 420;
 
 /**
+ * Greater than zero while the GSAP ticker (a rAF, after Lenis has read the
+ * scroll position) is updating ScrollTrigger: the resolver may write at once.
+ * Anywhere else - a native scroll event - it waits for the frame (PERF-02).
+ */
+let tickerDepth = 0;
+
+/**
  * The first era's tokens as a stylesheet, rendered into the static HTML.
  *
  * The global bootstrap values are the `modern` desktop palette. Without this,
@@ -114,7 +121,9 @@ export function Journey() {
     // touch, in-page anchors, keyboard - with one cheap call per frame.
     const raf = (time: number) => {
       lenis.raf(time * 1000);
+      tickerDepth += 1;
       ScrollTrigger.update();
+      tickerDepth -= 1;
     };
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
@@ -541,6 +550,27 @@ export function Journey() {
       }
     };
 
+    // Never write inside a native scroll event (PERF-02, DECISIONS.md 67).
+    // ScrollTrigger's listener sits on the document and runs before Lenis's
+    // on the window, which then reads scrollY: after our writes, that read
+    // forced a full style and layout pass on every scroll event - most of the
+    // main thread on a slow phone. Scroll events are dispatched just before
+    // the frame's rAF callbacks, so deferring to rAF still lands in the same
+    // frame. Inside the GSAP ticker (already a rAF, reads done) it stays
+    // synchronous, so wheel scrolling never lags a frame.
+    let resolveFrame = 0;
+    const scheduleResolve = () => {
+      if (tickerDepth > 0) {
+        resolve();
+        return;
+      }
+      if (resolveFrame) return;
+      resolveFrame = requestAnimationFrame(() => {
+        resolveFrame = 0;
+        resolve();
+      });
+    };
+
     const context = gsap.context(() => {
       ScrollTrigger.create({
         trigger: container,
@@ -548,7 +578,7 @@ export function Journey() {
         end: 'bottom bottom',
         onUpdate: (self) => {
           setProgress(self.progress);
-          resolve();
+          scheduleResolve();
         },
         onRefresh: () => {
           measure();
@@ -607,6 +637,7 @@ export function Journey() {
     return () => {
       cancelled = true;
       cancelAnimationFrame(refreshFrame);
+      cancelAnimationFrame(resolveFrame);
       resizeObserver.disconnect();
       window.clearTimeout(resizeTimer);
       setLayoutChangeHandler(null);

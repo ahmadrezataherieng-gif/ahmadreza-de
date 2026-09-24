@@ -132,7 +132,8 @@ is left lives in ROADMAP.md.
     as marked placeholders.
   - **Terminal:** a small bash-like shell over an in-memory filesystem - `ls`,
     `cd`, `cat`, `pwd`, history, Tab completion, real error messages - plus
-    `about`, `skills`, `projects`, `cv`, `contact`.
+    `about`, `skills`, `projects`, `cv`, `contact` - and hidden commands
+    (`moth`, `sl`, `coffee`, `fortune`, `uptime` and more, APP-08) that `help` never lists.
   - **Tickets:** nine helpdesk cases at a fictional company, each with symptom,
     diagnosis steps with real command output, solution and lesson; filter by
     status, sort.
@@ -313,6 +314,17 @@ A full scroll of the journey with real input, on the production export
 | 1280, full tier, no GPU | 56.0 | 16.7 / 33.3 ms | 119 | 7 (56 ms) |
 | 380, light tier, 4x CPU throttle, GPU path | 42.2 | 16.7 / 50 ms | 532 | 50 (324 ms) |
 | 380, light tier, 4x CPU throttle, no GPU | 43.3 | 16.7 / 50 ms | 520 | 49 (321 ms) |
+
+**2026-09-24, before and after PERF-02** (DECISIONS.md 67). The journey had
+grown since the table above (the SEO text layer, counters, unlocks), and the
+"before" column is today's baseline on this machine:
+
+| Run | before: fps · long tasks (worst) | after: fps · long tasks (worst) |
+|---|---|---|
+| 1280, full tier, GPU path | - | 57.3 · 6 (60 ms) |
+| 1280, full tier, no GPU | 48.2 · 9 (94 ms) | 53.4 · 7 (63 ms) |
+| 380, light tier, 4x CPU, GPU path | 35.8 · 114 (428 ms) | 38.3 · 78 (368 ms) |
+| 380, light tier, 4x CPU, no GPU | 35.6 · 113 (452 ms) | 38.7 · 75 (519 ms) |
 
 Desktop: the remaining long tasks are the theme switch at each crossing's
 midpoint. Throttled phone: above the 30 fps floor, but each era's own scrubbing
