@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
-| `seo` | 17 | 2 | 8 | 58.2 / 84 | 69 % |
+| `seo` | 18 | 2 | 7 | 60.2 / 84 | 72 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 59 | 6 | 40 | 254.1 / 406 | **63 %** |
+| **all** | 60 | 6 | 39 | 256.1 / 406 | **63 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 17 | 1 | 11 | 29 |
-| **total** | **40** | **6** | **59** | **105** |
+| P2 | 16 | 1 | 12 | 29 |
+| **total** | **39** | **6** | **60** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -156,7 +156,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. Done 2026-09-24 (DECISIONS.md 65): `scripts/verify/a11y.mjs` runs axe-core (WCAG 2.2 A/AA) over every view, every app and the desktop in all eight themes, in `matrix.mjs` (de, fa, phone en): 30/30 each; `contrast.test.mjs` pins every theme's token contrast. Fixed: five palette values (1946, 1984, 1995), About's double-faded placeholder, two scroll panes not reachable by keyboard. Keyboard and RTL paths stay covered by `desktop.mjs`, `apps.mjs` and `journey.mjs`. A manual screen-reader walk is PERF-08. | done | P1 | Claude Code | - | L | seo |
 | PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. Done 2026-09-24 (DECISIONS.md 66): `scripts/verify/vitals.mjs` (FCP, LCP, CLS, TBT in the page, slow-4G phone and desktop profiles); `serve.mjs` now gzips like Cloudflare. Desktop: every view LCP under 0.9 s, TBT 0. Phone: landing and About LCP 1.0 s; two budgets still over and tracked - journey TBT (PERF-02), desktop LCP 2.59 s (PERF-09). | done | P1 | Claude Code | - | M | seo |
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 | S | seo |
-| PERF-07 | **Flaky check**: `apps.mjs` "quiz 300x200: the question is in view" failed once on 2026-09-23 and passed on the rerun; find the timing it depends on. | missing | P2 | Claude Code | - | S | seo |
+| PERF-07 | **Flaky check**: `apps.mjs` "quiz 300x200: the question is in view" failed once on 2026-09-23 and passed on the rerun; find the timing it depends on. Done 2026-09-24: the cause is the round's random question - a long one is taller than the 300 x 200 body, so its end is never in view; the check now asks that the question starts in view (`startsInside`). Diagnosed from the code and four clean reruns, not reproduced on demand. | done | P2 | Claude Code | - | S | seo |
 | PERF-08 | **Manual screen-reader walk** (new 2026-09-24): NVDA + Firefox on Windows and VoiceOver on an iPhone through landing, journey (both modes), desktop and three apps; automated checks cannot judge whether the announcements make sense. | missing | P1 | Ahmadreza + Claude Code | PERF-01 | M | seo |
 | PERF-09 | **Desktop view's first paint on a slow phone** (new 2026-09-24): LCP 2.59 s against 2.5 s, because the client-only shell chunk is requested only after hydration. Options: preload that chunk from the desktop page's head, or give the server frame a contentful element that keeps the Convergence hand-over pixel-identical. | missing | P2 | Claude Code | - | S | seo |
 

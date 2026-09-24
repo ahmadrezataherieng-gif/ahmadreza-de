@@ -91,6 +91,15 @@ const inside = (selector, id) =>
     return a.top >= b.top - 1 && a.bottom <= b.bottom + 1 && a.left >= b.left - 1 && a.right <= b.right + 1;
   })()`);
 
+/** The element's start is in the window body: for text that may be taller than the smallest window and scrolls. */
+const startsInside = (selector, id) =>
+  js(`(() => {
+    const e = document.querySelector(${JSON.stringify(selector)}); const w = document.querySelector('${frame(id)} [data-window-body]');
+    if (!e || !w) return false;
+    const a = e.getBoundingClientRect(), b = w.getBoundingClientRect();
+    return a.top >= b.top - 1 && a.top < b.bottom - 8 && a.left >= b.left - 1 && a.right <= b.right + 1;
+  })()`);
+
 /**
  * Scroll by hand until an element is in view - its own scrolling pane first
  * (the ticket list scrolls itself beside a ticket), then the window body.
@@ -531,7 +540,8 @@ const smallChecks = {
   },
   quiz: async () => {
     await reveal(`${content('quiz')} [data-quiz-question] h2`, 'quiz');
-    check('quiz 300x200: the question is in view', await inside(`${content('quiz')} [data-quiz-question] h2`, 'quiz'));
+    // The question is picked at random and may be taller than the 300 x 200 body: its start must be in view, not its end (PERF-07).
+    check('quiz 300x200: the question starts in view', await startsInside(`${content('quiz')} [data-quiz-question] h2`, 'quiz'));
   },
   traceroute: async () => {
     await reveal(`${content('traceroute')} [data-trace-input]`, 'traceroute');
