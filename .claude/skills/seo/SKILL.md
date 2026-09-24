@@ -96,6 +96,17 @@ never sees it.
   linked by `@id`. The legal pages carry none. Rendered in the locale layout's
   `<head>`; pinned by `scripts/test/seo.test.mjs`.
 
+### The coming-soon page (live until launch, ROADMAP BR-02)
+
+- Everything search-related is built by `npm run build:soon` into `soon/dist/`:
+  the Person JSON-LD and `sitemap.xml` from `scripts/soon-seo.mjs` (facts from
+  `messages/de.json` `site`, `EMAIL`, `PROFILES`; a city and country only, never the
+  street, the legal name or the employer), `robots.txt` copied from `public/`,
+  the share image `og/og-de.png`. The sitemap holds the one indexable URL; the
+  legal pages are `noindex,follow` and stay crawlable (robots.txt disallows nothing).
+- Head text is placeholder (CR-1084, CR-1085); `soon-seo.test.mjs` pins it.
+- Redeploy whenever the progress figures change noticeably (BR-03).
+
 ### Search console verification
 
 Google Search Console (domain property) and Bing Webmaster Tools are already

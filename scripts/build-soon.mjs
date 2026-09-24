@@ -16,6 +16,7 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { ensureLegalAddress } from './legal-address.mjs';
 import { AREAS } from './roadmap.mjs';
 import { fillPlaceholders, progressValues } from './soon-progress.mjs';
+import { jsonLdScript, OG_IMAGE, sitemapXml } from './soon-seo.mjs';
 import { linkify, sectionsFor } from '../src/lib/legal-doc.ts';
 
 // Before the legal copy is imported: without the address there is no Impressum.
@@ -132,7 +133,7 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 // The progress figures come from ROADMAP.md at build time, never typed by hand.
 const values = progressValues();
-const landing = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values);
+const landing = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values).replace('<!--@jsonld-->', () => jsonLdScript());
 writeFileSync(new URL('index.html', dist), landing);
 console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area} ${values[`${area}.percent`]} %`).join(', ')})`);
 
@@ -152,4 +153,10 @@ cpSync(new URL('soon/fonts/', root), new URL('fonts/', dist), { recursive: true 
 cpSync(new URL('public/fonts/LICENSES.md', root), new URL('fonts/LICENSES.md', dist));
 cpSync(new URL('public/fonts/licenses/', root), new URL('fonts/licenses/', dist), { recursive: true });
 
-console.log('soon/dist: index.html + impressum and datenschutz in de, en, fa');
+// Search engines: the share image, robots.txt (every crawler welcome, AI bots included) and a one-URL sitemap. The legal pages are noindex and stay out of it.
+mkdirSync(new URL('og/', dist), { recursive: true });
+cpSync(new URL(OG_IMAGE.file, root), new URL('og/og-de.png', dist));
+cpSync(new URL('public/robots.txt', root), new URL('robots.txt', dist));
+writeFileSync(new URL('sitemap.xml', dist), sitemapXml(values.DATE));
+
+console.log('soon/dist: index.html, robots.txt, sitemap.xml, og/, fonts/ + impressum and datenschutz in de, en, fa');

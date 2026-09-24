@@ -14,9 +14,16 @@ Content review pending: see CONTENT_REVIEW.md (starts after the site is complete
   the work built before the audit is in as `BASE-*`. The coming-soon page in
   `soon/` was rewritten (who, what, progress per area, what's next, contact),
   design-6 logo in the header and the `~$ amonel os` lockup in its terminal
-  panel, dark and light. Built and checked locally (`scripts/verify/soon.mjs`,
-  86/86); **not deployed yet** - fonts and colours are chosen with the owner
-  first (BR-04).
+  panel, dark and light. Style approved by the owner 2026-09-24 (DECISIONS.md
+  70, BR-04): Martian Grotesk / Geist / Geist Mono / Vazirmatn, Departure Mono
+  for the terminal line, near-black dark mode; tokens in `soon/tokens.css`,
+  fonts in `soon/fonts/` with licences in `public/fonts/` (LEG-15). It is the
+  design system for the main site's own pages, not the journey eras (BR-05);
+  applying it there is BR-06, not started. Search layer (Part 4): title and
+  description, Open Graph and Twitter tags, Person JSON-LD (`scripts/soon-seo.mjs`),
+  `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
+  and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,
+  no external request, the legal pages).
 - **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
   values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
 

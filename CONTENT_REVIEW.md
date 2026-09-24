@@ -1573,3 +1573,12 @@ The employer is never named (owner, 2026-09-24). The new role line replaces the 
 | CR-1082 | `progressTitle`, `overall`, `note`, the seven area names and one-line descriptions, `counts`, `stamp` | short text | de / en / fa | PLACEHOLDER | Plain words, no internal codes. Now (de): «So weit bin ich», «Reise durch die Computergeschichte», «{d} fertig · {p} in Arbeit · {m} offen» |
 | CR-1083 | `nextTitle`, `next`, `contact` | short text | de / en / fa | PLACEHOLDER | What's next, and an invitation to write. Now (de): «Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. …» |
 | CR-1084 | `<title>`, meta description, `og:title`, `og:description`, the `title` per language | SEO / meta | de / en / fa | PLACEHOLDER | Name, role and city first, «Amonel» second. The titles run over 60 characters (de 77) - report, never shorten the name |
+
+## 35. Coming-soon page: search-engine text (Part 4, 2026-09-24)
+
+`soon/index.html` head and `scripts/soon-seo.mjs`. The JSON-LD facts come from `messages/de.json` `site` and `EMAIL`/`PROFILES`, so they are copy of the main site, not new copy.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1085 | `og:title`, `og:description`, `og:image:alt`, `twitter:title`, `twitter:description`, `twitter:image:alt`, `og:site_name` (Amonel) | SEO / meta | de | PLACEHOLDER | Now (de): «Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte, die zu einem eigenen Betriebssystem im Browser werden.» The share image itself is the existing `public/og/og-de.png`; regenerate it for the final logo (BR-01) |
+| CR-1084 | `<title>` and `<meta name="description">` (updated) | SEO / meta | de | PLACEHOLDER | Title (77 characters, over the usual 60; the name is never shortened): «Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier». Description (159 characters): «Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier. Sein Portfolio Amonel: 80 Jahre Computergeschichte als eigenes Betriebssystem.» Decide the wording with SEO-14 |
