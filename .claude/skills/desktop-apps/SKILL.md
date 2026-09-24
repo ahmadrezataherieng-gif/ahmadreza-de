@@ -13,7 +13,7 @@ in Act 1 unlock extra apps.
 
 `src/components/os/` and `src/components/apps/`. Read DECISIONS.md 49 first.
 
-- **Its own route, `/desktop/`,** in the `modern` theme, with only the `site`,
+- **Its own route, `/desktop/`,** in the `modern` theme (or the Time Machine's era, APP-05), with only the `site`,
   `nav`, `languages` and `os` messages. It must never import GSAP, Lenis, an era
   or a puzzle - `desktop.mjs` checks every loaded script for them.
 - **The hand-over is one picture.** `DesktopFrame` is the Convergence's last frame
@@ -71,10 +71,12 @@ About, Terminal, Tickets, Traceroute, (Phase 7/8) the Assistant and (Phase 9B)
 the Computer-Quiz are real; Contact, Timeline and CV are still placeholders.
 Read DECISIONS.md 50 first, 53 for the Assistant and 55 for the quiz.
 The bonus apps (Phase 9D-1): Binary & Morse, Snake and Pixel Paint are real;
-Network tools too (9D-2, DECISIONS.md 63: `network/net.ts`, data in
+Network tools and the Time Machine too (9D-2, DECISIONS.md 63 and 64: `network/net.ts`, data in
 `content/network.ts`; ping and DNS are labelled simulations over the
-Traceroute routes and `.example` names, never a real request); the scheduler,
-file tree and Time Machine share the stand-in (`bonus/BonusApp.tsx`). Read
+Traceroute routes and `.example` names, never a real request; the Time Machine
+only calls the theme store, and only the desktop reads `amonel.theme.v1`
+through `DesktopTheme`); the scheduler and the
+file tree share the stand-in (`bonus/BonusApp.tsx`). Read
 DECISIONS.md 57.
 
 - **Bonus apps follow the same rules as base apps** (own chunk, own copy,

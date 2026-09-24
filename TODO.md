@@ -196,7 +196,8 @@ What is left:
   quiz's best score, `amonel.quiz.v1`; since Phase 9D-1 also
   `amonel.snake.v1` (Snake's best score, one number) and `amonel.paint.v1`
   (Pixel Paint's current picture, at most 16 KB, written only after the
-  visitor draws), and `amonel.unlocks.v1` now also holds which puzzles were
+  visitor draws), since APP-05 `amonel.theme.v1` (the Time Machine's era, written
+  only on a jump, removed on the way back), and `amonel.unlocks.v1` now also holds which puzzles were
   watched in Guided mode and whether the journey was finished. All of it is
   the visitor's own feature, stays on the device and needs no consent
   (§ 25 (2) Nr. 2 TDDDG). The counters add `snake.played` to what is counted.

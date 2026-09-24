@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { DesktopFrame } from '@/components/os/DesktopFrame';
 import { DesktopShellLoader } from '@/components/os/DesktopShellLoader';
 import { LegalLinks } from '@/components/ui/SiteFooter';
-import { UseTheme } from '@/components/theme/UseTheme';
+import { DesktopTheme } from '@/components/theme/DesktopTheme';
 import { viewHref } from '@/lib/routing';
 import type { Locale } from '@/lib/i18n-config';
 
@@ -22,7 +22,7 @@ export async function Desktop({ locale }: { locale: Locale }) {
 
   return (
     <main className="relative h-dvh overflow-hidden bg-background text-ink">
-      <UseTheme id="modern" />
+      <DesktopTheme />
       <h1 className="ao-sr-only">{t('heading')}</h1>
       <div className="ao-desktop-screen relative h-dvh w-full bg-background">
         <DesktopFrame seamClassName="ao-desktop-seam" />

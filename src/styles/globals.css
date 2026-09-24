@@ -3146,3 +3146,22 @@ html:not([data-tier='full']) .ao-depth-extra {
   touch-action: none;
 }
 
+
+/* The Time Machine's dial while travelling: the digits blur like a spinning
+   counter. Only ever set when motion is allowed - under reduced motion the
+   jump is instant and the class never appears. */
+@media (prefers-reduced-motion: no-preference) {
+  .ao-time-dial {
+    animation: ao-time-spin 90ms steps(2) infinite;
+  }
+}
+@keyframes ao-time-spin {
+  from {
+    transform: translateY(-1px);
+    filter: blur(0.6px);
+  }
+  to {
+    transform: translateY(1px);
+    filter: blur(0);
+  }
+}

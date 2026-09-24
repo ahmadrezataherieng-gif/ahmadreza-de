@@ -1,0 +1,44 @@
+{
+  "intro": "Steigen Sie ein: Ein Klick, und der ganze Desktop sieht aus wie in einer anderen Epoche – Farben, Schriften, Ecken, Schatten, sogar Snake. Die Programme bleiben dieselben. Nur ein paar Dutzend Variablen ändern sich.",
+  "current": "Sie befinden sich in: {era}",
+  "jumping": "Zeitreise nach {era} …",
+  "arrived": "Angekommen: {era}. Der ganze Desktop sieht jetzt so aus – öffnen Sie ein Programm und sehen Sie selbst.",
+  "backHome": "Zurück in der Gegenwart: Amonel OS.",
+  "backButton": "Zurück in die Gegenwart",
+  "present": "Gegenwart",
+  "today": "heute",
+  "capsules": "Wohin soll es gehen?",
+  "here": "Hier sind Sie",
+  "travel": "Hierhin reisen",
+  "themes": {
+    "era1946": { "name": "ENIAC", "look": "Lampen und Schaltpulte: Bernstein auf Schwarz, kein Bildschirm." },
+    "era1956": { "name": "Großrechner", "look": "Papier aus dem Fernschreiber, Schreibmaschinenschrift." },
+    "era1971": { "name": "UNIX", "look": "Grüner Phosphor, Scanlines, ein blinkender Cursor." },
+    "era1981": { "name": "MS-DOS", "look": "Bernstein auf Schwarz, Zeichen aus dem Textmodus." },
+    "era1984": { "name": "Macintosh", "look": "Schwarz auf Weiß, 1 Bit tief, Pixelschrift." },
+    "era1995": { "name": "Windows 95", "look": "Grau, abgeschrägte Kanten, eine Taskleiste." },
+    "era2024": { "name": "Cloud", "look": "Dunkelmodus und Dashboards." },
+    "modern": { "name": "Amonel OS", "look": "Das Heute dieser Website." }
+  },
+  "effects": {
+    "scanlines": "Scanlines",
+    "phosphorGlow": "Phosphor",
+    "pixelation": "Pixel",
+    "dithering": "Dithering",
+    "noise": "Rauschen",
+    "curvature": "Wölbung"
+  },
+  "destination": {
+    "title": "Ein Jahr eingeben",
+    "explain": "Geben Sie irgendein Jahr ab 1946 ein – die Maschine landet in der Epoche, deren Aussehen damals aktuell war.",
+    "label": "Jahr",
+    "placeholder": "z. B. 1990",
+    "go": "Los",
+    "landed": "{year, number, ::group-off} liegt in der Epoche {era}.",
+    "tooEarly": "{year, number, ::group-off}? So weit zurück reicht diese Maschine nicht: Die Reise dieser Website beginnt 1946 mit dem ENIAC.",
+    "future": "{year, number, ::group-off} ist noch nicht gebaut. Die Maschine fährt nur in die Vergangenheit.",
+    "invalid": "Bitte eine Jahreszahl eingeben, z. B. 1984."
+  },
+  "storage": "Ihre Wahl merkt sich dieser Browser unter „amonel.theme.v1“, bis Sie in die Gegenwart zurückkehren. Sie verlässt Ihr Gerät nie.",
+  "truth": "Ein Theme ist nur Daten: dieselben Programme, andere Werte für Farbe, Schrift und Form. Genau so trennen heutige Oberflächen Inhalt und Aussehen."
+}

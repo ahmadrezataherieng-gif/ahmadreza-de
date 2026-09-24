@@ -11,7 +11,7 @@
 //
 // No dependencies: WOFF 1.0 tables are zlib-deflated, which node:zlib inflates.
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { inflateSync } from 'node:zlib';
 
 const FONT =
@@ -132,9 +132,31 @@ for (const locale of LOCALES) {
   }
 }
 
+// The Time Machine (APP-05) can put the whole desktop into an era whose display
+// face is Press Start 2P, so any desktop string may meet it: every `os` string
+// and every app's copy. Latin-1 is complete in this font; the risk is the
+// General Punctuation block, where it lacks e.g. U+2011 and the thin spaces.
+// Those must not appear in any de or en desktop string.
+const desktopSources = [
+  ...LOCALES.map((locale) => [`src/messages/${locale}.json`, 'os']),
+  ...readdirSync('src/messages/apps').flatMap((app) => LOCALES.map((locale) => [`src/messages/apps/${app}/${locale}.json`, null])),
+];
+for (const [file, namespace] of desktopSources) {
+  const messages = JSON.parse(readFileSync(file, 'utf8'));
+  for (const text of strings(namespace ? messages[namespace] : messages)) {
+    for (const char of text) {
+      const code = char.codePointAt(0);
+      if (code >= 0x2000 && code <= 0x206f && !covered.has(code)) {
+        problems.push(`${file}: "${text.slice(0, 60)}" uses U+${code.toString(16).toUpperCase()} with no glyph (Time Machine)`);
+      }
+    }
+  }
+}
+
 console.log(`Press Start 2P covers ${covered.size} code points.`);
 if (problems.length > 0) {
   console.error(problems.join('\n'));
   process.exit(1);
 }
 console.log(`All ${PIXEL_KEYS.length} pixel-font keys in ${LOCALES.join(', ')} are fully covered.`);
+console.log(`All ${desktopSources.length} desktop copy files are free of punctuation the face cannot draw.`);

@@ -1,0 +1,44 @@
+{
+  "intro": "Step in: one click, and the whole desktop looks like another era - colours, fonts, corners, shadows, even Snake. The programs stay the same. Only a few dozen variables change.",
+  "current": "You are in: {era}",
+  "jumping": "Travelling to {era} …",
+  "arrived": "Arrived: {era}. The whole desktop looks like this now - open a program and see for yourself.",
+  "backHome": "Back in the present: Amonel OS.",
+  "backButton": "Back to the present",
+  "present": "Present",
+  "today": "today",
+  "capsules": "Where to?",
+  "here": "You are here",
+  "travel": "Travel here",
+  "themes": {
+    "era1946": { "name": "ENIAC", "look": "Lamps and switch panels: amber on black, no screen." },
+    "era1956": { "name": "Mainframe", "look": "Paper from the teletype, typewriter type." },
+    "era1971": { "name": "UNIX", "look": "Green phosphor, scanlines, a blinking cursor." },
+    "era1981": { "name": "MS-DOS", "look": "Amber on black, text-mode characters." },
+    "era1984": { "name": "Macintosh", "look": "Black on white, 1 bit deep, a pixel font." },
+    "era1995": { "name": "Windows 95", "look": "Grey, bevelled edges, a taskbar." },
+    "era2024": { "name": "Cloud", "look": "Dark mode and dashboards." },
+    "modern": { "name": "Amonel OS", "look": "This site's own today." }
+  },
+  "effects": {
+    "scanlines": "Scanlines",
+    "phosphorGlow": "Phosphor",
+    "pixelation": "Pixels",
+    "dithering": "Dithering",
+    "noise": "Noise",
+    "curvature": "Curvature"
+  },
+  "destination": {
+    "title": "Enter a year",
+    "explain": "Enter any year from 1946 on - the machine lands in the era whose look was current then.",
+    "label": "Year",
+    "placeholder": "e.g. 1990",
+    "go": "Go",
+    "landed": "{year, number, ::group-off} falls in the era {era}.",
+    "tooEarly": "{year, number, ::group-off}? This machine does not go back that far: this site's journey begins in 1946 with ENIAC.",
+    "future": "{year, number, ::group-off} has not been built yet. The machine only travels into the past.",
+    "invalid": "Please enter a year, e.g. 1984."
+  },
+  "storage": "This browser remembers your choice under \"amonel.theme.v1\" until you return to the present. It never leaves your device.",
+  "truth": "A theme is only data: the same programs, other values for colour, type and shape. That is exactly how today's interfaces keep content and look apart."
+}

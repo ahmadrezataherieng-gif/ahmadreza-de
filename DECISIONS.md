@@ -2099,3 +2099,35 @@ nowhere.
   no request leaves the origin after the app's own chunk and copy.
 - Tabs follow the Binary app's tab pattern (arrows, Home, End, mirrored in
   Persian); all machine text is `dir="ltr"`; the bit view never mirrors.
+
+## 64. The Time Machine, the "today" bonus (2026-09-24, APP-05)
+
+- **The theme engine, unchanged.** A jump is `setTheme(id, { force: true })`
+  plus `lockTheme(true)` - the same call the journey makes at every crossing.
+  The whole desktop changes: colours, fonts, corners, shadows, effects, and
+  Snake through its tokens. No app has Time-Machine-specific code.
+- **Only the desktop remembers.** The choice is `amonel.theme.v1`,
+  `{"v":1,"theme":"era1984"}`, written only when the visitor travels and
+  removed when they return to the present. `DesktopTheme` (replacing the
+  desktop's `UseTheme id="modern"`) reads it after mount: the server still
+  paints the modern frame, so the Convergence hand-over stays one picture and
+  a remembered era cross-fades in after. Landing, About and the legal pages
+  keep forcing `modern` - a page's identity is not a preference. The key is
+  in the Datenschutzerklärung's storage table in all three languages
+  (§ 25(2) Nr. 2 TDDDG: stored because the visitor asked for it); the
+  storage-table test no longer exempts it.
+- **Capsules are real miniatures.** Each of the eight cards wears its era
+  through `data-theme-scope` and the token blocks generated from `themes.ts`
+  - the journey's crossing technique - so a capsule can never drift from its
+  theme.
+- **The dial.** On the full and light tiers a counter runs from the current
+  year to the target in 14 eased stops (about a second) before the desktop
+  changes; under reduced motion the jump is instant. No flash - the change is
+  the engine's own cross-fade.
+- **A year, not only an era:** any year from 1946 to now lands in the era
+  whose look was current then (the cloud era from 2006); earlier years and
+  the future get their own answer. Persian digits are accepted.
+- **Pixel font on the whole desktop.** The 1984 and 1995 themes set Press
+  Start 2P as the display face everywhere, so `check:pixel-font` now also
+  scans every desktop string (`os` and every app's de/en copy) for the
+  punctuation the face cannot draw.

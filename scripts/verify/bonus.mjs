@@ -30,8 +30,8 @@ const BASE = args.base ?? 'http://localhost:3001';
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `bonus-${WIDTH}-${LOCALE}${REDUCE ? '-rm' : ''}${TOUCH ? '-touch' : ''}${API ? '-api' : ''}`;
 const STORE = 'amonel.unlocks.v1';
-const ALLOWED_KEYS = ['amonel.unlocks.v1', 'amonel.snake.v1', 'amonel.paint.v1'];
-const BONUS = { binary: 1, snake: 4, paint: 5, 'network-tools': 6 };
+const ALLOWED_KEYS = ['amonel.unlocks.v1', 'amonel.snake.v1', 'amonel.paint.v1', 'amonel.theme.v1'];
+const BONUS = { binary: 1, snake: 4, paint: 5, 'network-tools': 6, 'time-machine': 7 };
 
 const QUIET = Boolean(args.quiet);
 const log = [];
@@ -250,8 +250,10 @@ const setInput = (selector, value) =>
 const resourcesBefore = await js(`performance.getEntriesByType('resource').length`);
 const keysBeforeNetwork = (await storageKeys()).join();
 // Bring an element into the window body's view by hand (never scrollIntoView), then click it.
-const clickIn = async (selector) => {
-  await js(`(() => { const body = document.querySelector('${frame('network-tools')} [data-window-body]'); const el = document.querySelector(${JSON.stringify(selector)}); if (!body || !el) return false; const top = el.getBoundingClientRect().top - body.getBoundingClientRect().top; if (top < 0 || top > body.clientHeight - 60) body.scrollTop += top - 80; return true; })()`);
+const clickIn = async (selector, app = 'network-tools') => {
+  // Aim at what is actually visible: the window body, cut to the viewport (on a
+  // phone the body can be taller than the screen).
+  await js(`(() => { const body = document.querySelector('${frame(app)} [data-window-body]'); const el = document.querySelector(${JSON.stringify(selector)}); if (!body || !el) return false; const frameBox = body.getBoundingClientRect(); const top = Math.max(frameBox.top, 0); const bottom = Math.min(frameBox.bottom, innerHeight); const box = el.getBoundingClientRect(); const centre = box.top + box.height / 2; if (centre < top + 20 || centre > bottom - 20) body.scrollTop += centre - (top + bottom) / 2; return true; })()`);
   await sleep(120);
   return clickOn(selector);
 };
@@ -305,6 +307,39 @@ const late = await js(`performance.getEntriesByType('resource').slice(${resource
 check('network: nothing is sent to any other host', late.length === 0, late);
 check('storage: the network tools store nothing', (await storageKeys()).join() === keysBeforeNetwork, await storageKeys());
 await close('network-tools');
+
+/* --- Time Machine (APP-05) ------------------------------------------------------------ */
+
+const htmlTheme = () => js(`document.documentElement.dataset.theme ?? null`);
+await open('time-machine');
+// On a phone the app slides in fullscreen: let it settle before aiming at a capsule.
+await sleep(700);
+check('time machine: eight capsules', (await js(`document.querySelectorAll('[data-time-capsule]').length`)) === 8);
+check('time machine: starts in the present', (await htmlTheme()) === 'modern' && (await js(`document.querySelector('[data-time-capsule="modern"]').getAttribute('aria-pressed')`)) === 'true');
+check('storage: opening the Time Machine stores nothing', !(await js(`localStorage.getItem('amonel.theme.v1')`)));
+await clickIn('[data-time-capsule="era1971"]', 'time-machine');
+if (!REDUCE) check('time machine: the dial counts on the way', await until(`document.querySelector('[data-time-dial]')?.dataset.timeDial === 'travelling'`, 1000));
+check('time machine: the whole desktop lands in 1971', await until(`document.documentElement.dataset.theme === 'era1971'`, 4000), await htmlTheme());
+check('time machine: the choice is one versioned value', (await js(`localStorage.getItem('amonel.theme.v1')`)) === '{"v":1,"theme":"era1971"}', await js(`localStorage.getItem('amonel.theme.v1')`));
+check('time machine: no sideways scroll', await noOverflow('time-machine'));
+await b.goto(`${BASE}${PREFIX}/desktop/`, 5000);
+check('time machine: a reload keeps the era on the desktop', await until(`document.documentElement.dataset.theme === 'era1971'`, 4000), await htmlTheme());
+await b.goto(`${BASE}${PREFIX}/about/`, 3000);
+check('time machine: other pages keep their own theme', (await htmlTheme()) === 'modern', await htmlTheme());
+await b.goto(`${BASE}${PREFIX}/desktop/`, 5000);
+await open('time-machine');
+await js(`(() => { const el = document.querySelector('[data-time-year-input]'); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, '1990'); el.dispatchEvent(new Event('input', { bubbles: true })); return true; })()`);
+await sleep(100);
+await js(`(() => { const body = document.querySelector('${frame('time-machine')} [data-window-body]'); const el = document.querySelector('[data-action="time-year"]'); body.scrollTop += el.getBoundingClientRect().top - body.getBoundingClientRect().top - 80; return true; })()`);
+await sleep(120);
+await clickOn('[data-action="time-year"]');
+check('time machine: 1990 lands in the Macintosh era', await until(`document.documentElement.dataset.theme === 'era1984'`, 4000), await htmlTheme());
+await js(`document.querySelector('${frame('time-machine')} [data-window-body]').scrollTop = 0; true`);
+await sleep(120);
+await clickOn('[data-action="time-home"]');
+check('time machine: back to the present', await until(`document.documentElement.dataset.theme === 'modern'`, 4000), await htmlTheme());
+check('storage: the present removes the key', !(await js(`localStorage.getItem('amonel.theme.v1')`)));
+await close('time-machine');
 
 /* --- storage and errors ---------------------------------------------------------------- */
 

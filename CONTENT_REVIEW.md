@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1073 entries.**
+Generated from the codebase on 2026-09-23. **1077 entries.**
 
 ## How to use this file
 
@@ -19,16 +19,16 @@ Generated from the codebase on 2026-09-23. **1073 entries.**
 
 | Type | Entries |
 |---|---|
-| long text | 94 |
-| short text | 214 |
+| long text | 95 |
+| short text | 216 |
 | single word / label | 259 |
 | button | 66 |
 | puzzle / game | 353 |
 | alt text | 1 |
 | SEO / meta | 16 |
 | other | 66 |
-| legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1073** |
+| legal (not placeholder; LEGAL – owner must verify) | 5 |
+| **Total** | **1077** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1477,7 +1477,7 @@ The Impressum and the Datenschutzerklärung are **not placeholders**: they were 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number - decided by the owner (2026-09-23, confirmed 2026-09-24, ROADMAP LEG-13) |
-| CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the five storage keys (§ 25(2) Nr. 2 TDDDG), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
+| CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the six storage keys (§ 25(2) Nr. 2 TDDDG; `amonel.theme.v1` added 2026-09-24 with the Time Machine), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
 | CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
 | CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
 | CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
@@ -1534,3 +1534,14 @@ Copy in `src/messages/apps/network/{de,en,fa}.json`; data in `src/content/networ
 | CR-1071 | `ping.*` (the simulation note, the notes for route, loopback, silent and unknown, the TTL line) | long text | de / en / fa | PLACEHOLDER | Now (de): «Es gibt keinen Ort wie 127.0.0.1 …». The command output itself is Windows 95 machine text |
 | CR-1072 | `dns.*` (simulation note, record types, the five servers, answers, cache notes) | long text | de / en / fa | PLACEHOLDER | Now (de): «Diesmal kam die Antwort aus dem Cache: 0 ms statt einer Reise um die Welt.» |
 | CR-1073 | `ports.*` (explain, the three IANA ranges, search messages, table, the link to the firewall era) | short text | de / en / fa | PLACEHOLDER | Now (de): «Eine Adresse findet die Maschine, ein Port das Programm darauf.» |
+
+## 31. Desktop app: Time Machine (today bonus)
+
+Copy in `src/messages/apps/time-machine/{de,en,fa}.json`; logic in `src/components/apps/time-machine/`.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1074 | `intro`, `current`, `jumping`, `arrived`, `backHome`, `backButton`, `present`, `today`, `capsules`, `here`, `travel`, `storage`, `truth` | long text | de / en / fa | PLACEHOLDER | Now (de): «Steigen Sie ein: Ein Klick, und der ganze Desktop sieht aus wie in einer anderen Epoche …» and the lesson «Ein Theme ist nur Daten …» |
+| CR-1075 | `themes.<id>.name`, `themes.<id>.look`, `effects.*` - the eight capsules | short text | de / en / fa | PLACEHOLDER | One name and one line per era look («Grüner Phosphor, Scanlines, ein blinkender Cursor.») |
+| CR-1076 | `destination.*` - enter a year, and the answers for too early, the future and invalid input; `ERA_STARTS` (the cloud era from 2006) | short text | de / en / fa | PLACEHOLDER | Now (de): «… ist noch nicht gebaut. Die Maschine fährt nur in die Vergangenheit.» Confirm 2006 as the start of the cloud look |
+| CR-1077 | Datenschutzerklärung: the storage-table row for `amonel.theme.v1` (`messages/legal/*.json`) | legal | de / en / fa | LEGAL – owner must verify | «Die Epoche, in die Sie den Desktop mit der Zeitmaschine versetzt haben …; wird erst geschrieben, wenn Sie reisen, und gelöscht, wenn Sie in die Gegenwart zurückkehren.» |

@@ -93,7 +93,7 @@ here, in `STORAGE_KEYS` (`src/lib/constants.ts`), in the same change:
 | Key | Storage | Holds | Since |
 |---|---|---|---|
 | `amonel.unlocks.v1` | localStorage | journey progress: mode, passed and watched eras, artifacts, badges, reached the desktop, finished the journey (which bonus apps are unlocked follows from these) | Phase 2, extended 9D-1 |
-| `amonel.theme.v1` | localStorage | reserved for the chosen theme; defined in `STORAGE_KEYS`, nothing writes it yet | - |
+| `amonel.theme.v1` | localStorage | the era the Time Machine sent the desktop to, `{"v":1,"theme":"era1984"}`; written only on a jump, removed on the way back to the present; read only by the desktop (`DesktopTheme`) | APP-05, DECISIONS.md 64 |
 | `amonel.replay` | sessionStorage | this tab asked to see the journey again | Phase 6 |
 | `amonel.quiz.v1` | localStorage | the Computer-Quiz's best score, one number | Phase 9B |
 | `amonel.snake.v1` | localStorage | Snake's best score, one number | Phase 9D-1 |

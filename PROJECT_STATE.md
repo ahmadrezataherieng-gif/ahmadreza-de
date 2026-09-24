@@ -24,7 +24,7 @@ is left lives in ROADMAP.md.
 - [x] **Phase 9B** — the Computer-Quiz, a base app (DECISIONS.md 55)
 - [x] **Phase 9C** — anonymous public counters on `/api/*`, Worker + D1, not deployed (DECISIONS.md 56)
 - [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
-- [ ] **Phase 9D-2** — network tools and the Time Machine theme switcher (slots registered)
+- [x] **Phase 9D-2** — Network tools and the Time Machine (DECISIONS.md 63, 64; 2026-09-24)
 - [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
 - [x] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, descriptions, OG images, 404, static About page, journey text layer (DECISIONS.md 59); JSON-LD image/sameAs wait for the owner
 - [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
@@ -118,8 +118,13 @@ is left lives in ROADMAP.md.
     and a `.example` zone - and the well-known ports with their IANA ranges.
     Easter eggs: 127.0.0.1, APIPA, port 31337, a TXT greeting. Stores nothing,
     sends nothing.
-  - The Time Machine (today) is the last 9D-2 slot; the scheduler (1956) and
-    file tree (1971) are still the stand-in.
+  - **Time Machine** (today, 2026-09-24, DECISIONS.md 64): re-skins the whole
+    desktop into any of the eight themes through the unchanged theme engine;
+    eight capsules drawn in their own era's tokens, a year dial counting to the
+    target, "enter any year", back to the present. The era is remembered in
+    `amonel.theme.v1` (only after a jump, removed on return) and read only by
+    the desktop; every other page keeps its own theme.
+  - The scheduler (1956) and file tree (1971) are still the stand-in.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
   own copy file per language:
   - **About:** who Ahmadreza is, his path, what he does now, skills by area,
@@ -269,6 +274,7 @@ the views grow only by the registry line.
 |---|---|---|
 | Landing / Journey / Desktop: JS loaded | 136.6 / 226.7 / 147.5 kB | 138.0 / 228.3 / 148.9 kB (incl. the Part A changes of 2026-09-24) |
 | Network tools on open (code + copy, de) | - | **13.8 kB** (9.0 + 4.8) |
+| Time Machine on open (code + copy, de) | - | **3.9 kB** (2.6 + 1.3); `DesktopTheme` adds 0.6 kB to the one route chunk every view loads (landing / journey / desktop 138.6 / 228.9 / 149.5 kB) |
 
 ## Scroll performance (DECISIONS.md 48)
 

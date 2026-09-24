@@ -175,6 +175,11 @@
                 "amonel.paint.v1",
                 "localStorage",
                 "Your current picture in Pixel Paint (at most 16 KB); written only once you draw."
+              ],
+              [
+                "amonel.theme.v1",
+                "localStorage",
+                "The era you sent the desktop to with the Time Machine (e.g. 1984); written only when you travel, deleted when you return to the present."
               ]
             ]
           },
