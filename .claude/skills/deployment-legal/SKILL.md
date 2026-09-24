@@ -171,6 +171,16 @@ transfer basis.
   **"Impressum"**.
 - **No EU ODR link** - that platform closed in July 2025. Do not add one.
 
+### Font licences
+
+Every self-hosted font is SIL OFL 1.1 (verify the licence file itself, not
+only the npm listing). Its licence file goes to `public/fonts/licenses/` and
+its row to `public/fonts/LICENSES.md` in the same change that adds the font;
+`scripts/test/fonts.test.mjs` enforces it and rejects any font CDN. Never a
+commercial font (IRANSans, Yekan Bakh, Dana, Peyda, Satoshi, General Sans,
+Berkeley Mono...). A font from outside npm comes only from its author's
+official release, with the owner's approval.
+
 ### The employer
 
 **Never named anywhere** - not in copy, metadata, JSON-LD, llms.txt, the

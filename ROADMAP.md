@@ -41,18 +41,18 @@ build time).
 | `desktop` | 6 | 1 | 6 | 44.8 / 66 | 68 % |
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
-| `legal` | 10 | 0 | 5 | 25 / 40 | 63 % |
+| `legal` | 10 | 1 | 5 | 26.4 / 42 | 63 % |
 | `seo` | 13 | 3 | 8 | 52.7 / 79 | 67 % |
-| `launch` | 5 | 2 | 14 | 16.5 / 76 | 22 % |
-| **all** | 47 | 8 | 42 | 233.2 / 387 | **60 %** |
+| `launch` | 5 | 3 | 13 | 20 / 76 | 26 % |
+| **all** | 47 | 10 | 41 | 238.1 / 389 | **61 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 9 | 0 | 11 | 20 |
-| P1 | 13 | 5 | 33 | 51 |
+| P0 | 9 | 1 | 11 | 21 |
+| P1 | 12 | 6 | 33 | 51 |
 | P2 | 20 | 3 | 3 | 26 |
-| **total** | **42** | **8** | **47** | **97** |
+| **total** | **41** | **10** | **47** | **98** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -139,6 +139,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - | S | legal |
 | LEG-13 | **Phone number in the Impressum** (the § 5 DDG grey area: a "second fast way" of contact besides e-mail). **Resolved 2026-09-24 by the owner: no phone number.** The Impressum keeps name, postal address and e-mail; nothing to build. | done | P0 | Ahmadreza | - | XS | legal |
 | LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - | XS | legal |
+| LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md`; `scripts/test/fonts.test.mjs` fails if a font package has no licence file or row, or if any font is loaded from a third party. The coming-soon page's fonts are added the same way once chosen (BR-04). | partial | P0 | Claude Code | - | S 70% | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 
@@ -173,7 +174,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-01 | **Final main logo** still to be designed; the current Amonel mark and wordmark are interim. Since 2026-09-24 the coming-soon page uses design 6 (the wordmark "Amonel" whose "o" is a power symbol) as its main logo and design 1 (`~$ amonel os` with a blinking cursor) only in its terminal panel; **the final main logo will be improved later** - design 6 is a stand-in, not the finished mark. | partial | P1 | Ahmadreza + Claude Code | - | L 25% | launch |
 | BR-02 | **Coming-soon page rebranded** (owner, 2026-09-24): «AhmadOS» → «Amonel» everywhere on the page and a progress block computed from ROADMAP.md at build time. Rewritten the same day so anyone understands it in ten seconds: who (name, role line), what the site will be, the weighted progress overall and in seven areas (`scripts/roadmap.mjs`, `scripts/soon-progress.mjs`), what's next, contact and the legal links, in de/en/fa with the other two languages always visible under the role; no item IDs or phase numbers. Checked by `scripts/verify/soon.mjs` (wide and phone, dark and light, three languages). Copy CR-1080..CR-1084. | done | P2 | Claude Code | - | S | launch |
 | BR-03 | **Redeploy the coming-soon page now and then** so its progress figure follows ROADMAP.md (`npm run build:soon`, then `npx wrangler deploy` in `soon/`); the figure is as fresh as the last deploy. Until launch (DEP-06). | missing | P2 | Claude Code | - | XS | launch |
-| BR-04 | **Fonts, style and colours of the coming-soon page** chosen with the owner (new 2026-09-24): at least ten self-hostable (SIL OFL) font candidates incl. a Persian one, 4-6 complete style variants on the real page with WCAG AA contrast checked, iterated until the owner says "approved". Then ask whether it becomes the main site's design system (BR-05). | missing | P1 | Ahmadreza + Claude Code | - | M | launch |
+| BR-04 | **Fonts, style and colours of the coming-soon page** chosen with the owner (new 2026-09-24): self-hostable (SIL OFL) font candidates incl. Persian, complete style variants on the real page with WCAG AA contrast (body text 7:1), iterated until the owner says "approved". Rounds 1-5 so far: 39 OFL packages checked by their licence files; palette D "Forest Luxe" chosen by the owner; Vazirmatn preferred for Persian; Readex Pro rejected (no پ چ ژ گ ی ک or Persian digits); Martian Grotesk and Departure Mono fetched from their authors' GitHub releases with the owner's approval. `soon.mjs` checks orphans and heading word spacing. **Waiting for owner**: pick K5, K6 or K7. Then ask whether it becomes the main site's design system (BR-05). | partial | P1 | Ahmadreza + Claude Code | - | M 70% | launch |
 | BR-05 | **Should the approved coming-soon style become the main site's design system?** Ask the owner after BR-04; apply nothing to the main site without his answer. | missing | P2 | Ahmadreza | BR-04 | S | launch |
 
 ## Owner tasks - assets and accounts

@@ -22,6 +22,9 @@ const args = Object.fromEntries(
 const BASE = args.base ?? 'http://localhost:3002/';
 const TAG = args.tag ?? 'soon';
 const QUIET = Boolean(args.quiet);
+// Calibrated on 2026-09-24: Mona Sans, which the owner read as one word, measured
+// 0.40; IBM Plex and Space Grotesk, which read well, 0.45.
+const MIN_RELATIVE = Number(args['min-space'] ?? 0.45);
 
 const VIEWPORTS = [
   { name: 'wide', width: 1280, height: 800, touch: false },
@@ -78,7 +81,7 @@ for (const viewport of VIEWPORTS) {
             .map((el) => el.textContent.trim().slice(-40)),
           // The narrowest word space in any heading, in em of its font size.
           space: (() => {
-            let min = { ratio: 9, text: '' };
+            let min = { ratio: 9, text: '', relative: 9, relText: '' };
             for (const el of document.querySelectorAll('h1, h2, h3, .overall-label, .fa-name')) {
               const size = parseFloat(getComputedStyle(el).fontSize);
               const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -93,7 +96,16 @@ for (const viewport of VIEWPORTS) {
                   // A space where the line wraps collapses to nothing, as it should.
                   if (i === 0 || i + 1 >= node.data.length || Math.abs(rect(i - 1).top - rect(i + 1).top) > 2) continue;
                   const ratio = rect(i).width / size;
-                  if (ratio < min.ratio) min = { ratio: Math.round(ratio * 1000) / 1000, text: el.textContent.trim().slice(0, 40) };
+                  // A space reads as a gap only next to the letters around it: a wide
+                  // face needs a wider space. Compare it with the heading's average letter.
+                  // Lowercase Latin only: capitals are wide and Persian letters join.
+                  // Only for real headings, and only a space between two Latin letters.
+                  const latin = /[A-Za-zÄÖÜäöüß]/;
+                  const between = el.matches('h1, h2, h3') && latin.test(node.data[i - 1]) && latin.test(node.data[i + 1]);
+                  const lower = [...node.data].map((ch, at) => (/[a-zäöüß]/.test(ch) ? rect(at).width : null)).filter((w) => w !== null);
+                  const relative = between && lower.length >= 4 ? rect(i).width / (lower.reduce((a, b) => a + b, 0) / lower.length) : 9;
+                  if (ratio < min.ratio) min = { ...min, ratio: Math.round(ratio * 1000) / 1000, text: el.textContent.trim().slice(0, 40) };
+                  if (relative < (min.relative ?? 9)) min = { ...min, relative: Math.round(relative * 100) / 100, relText: el.textContent.trim().slice(0, 40) };
                 }
               }
             }
@@ -108,6 +120,11 @@ for (const viewport of VIEWPORTS) {
       check(`${label}: the name is the h1`, state.h1 === 'Ahmadreza Taheri');
       check(`${label}: the Persian name is visible, marked fa and rtl`, state.persianName);
       check(`${label}: every heading keeps a real word space (>= 0.2 em)`, state.space.ratio >= 0.2, `${state.space.ratio} em in "${state.space.text}"`);
+      check(
+        `${label}: every heading space is wide next to its letters (>= ${MIN_RELATIVE} of an average letter)`,
+        state.space.relative >= MIN_RELATIVE,
+        `${state.space.relative} in "${state.space.relText}"`,
+      );
       check(`${label}: no line ends in a single orphaned word`, state.orphans.length === 0, state.orphans.join(' | '));
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
       check(
