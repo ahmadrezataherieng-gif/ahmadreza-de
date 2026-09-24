@@ -106,3 +106,17 @@ test('entity: every locale and the coming-soon pages keep Amonel out of the Pers
     assert.ok(messages.landing.background.length > 10, `${locale} landing.background (the repair background under the role)`);
   }
 });
+
+test('SEO-13: one web manifest per language, each starting in its own language', () => {
+  const files = { de: 'manifest.webmanifest', en: 'manifest.en.webmanifest', fa: 'manifest.fa.webmanifest' };
+  const start = { de: '/', en: '/en/', fa: '/fa/' };
+  for (const locale of ['de', 'en', 'fa']) {
+    const manifest = JSON.parse(read(`public/${files[locale]}`));
+    assert.equal(manifest.lang, locale);
+    assert.equal(manifest.start_url, start[locale]);
+    assert.equal(manifest.scope, start[locale]);
+    assert.equal(manifest.dir, locale === 'fa' ? 'rtl' : 'ltr');
+    assert.ok(manifest.name.includes('Amonel') && manifest.description.length > 20, locale);
+  }
+  assert.match(read('src/app/[[...locale]]/layout.tsx'), /manifest\.\$\{locale\}\.webmanifest/);
+});

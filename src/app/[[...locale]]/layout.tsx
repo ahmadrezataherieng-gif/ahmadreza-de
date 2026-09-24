@@ -160,7 +160,8 @@ export async function generateMetadata({
       ],
       apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
-    manifest: '/manifest.webmanifest',
+    // One manifest per language, so an install from /en/ or /fa/ starts there (SEO-13).
+    manifest: locale === 'de' ? '/manifest.webmanifest' : `/manifest.${locale}.webmanifest`,
     openGraph: {
       type: view === 'landing' ? 'profile' : 'website',
       locale: htmlLang[locale],
