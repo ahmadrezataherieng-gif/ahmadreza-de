@@ -1,0 +1,27 @@
+{
+  "title": "Kontakt",
+  "intro": "Am besten erreichen Sie mich per E-Mail – auf Deutsch, Englisch oder Persisch.",
+  "email": {
+    "label": "E-Mail",
+    "write": "E-Mail schreiben",
+    "copy": "Adresse kopieren",
+    "copied": "Kopiert",
+    "pending": "Die E-Mail-Adresse wird in Kürze ergänzt."
+  },
+  "resume": {
+    "label": "Lebenslauf",
+    "download": "Lebenslauf herunterladen (PDF)",
+    "pending": "Lebenslauf folgt in Kürze"
+  },
+  "location": {
+    "label": "Ort",
+    "value": "Trier, Deutschland"
+  },
+  "profiles": {
+    "label": "Profile",
+    "pending": "Links zu LinkedIn, GitHub und XING folgen."
+  },
+  "legal": {
+    "label": "Rechtliches"
+  }
+}

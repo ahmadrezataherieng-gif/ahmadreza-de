@@ -29,15 +29,15 @@ Recount after each change (one line in Git Bash):
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
 | P1 | 17 | 4 | 11 | 32 |
-| P2 | 16 | 2 | 0 | 18 |
-| **total** | **43** | **6** | **18** | **67** |
+| P2 | 17 | 2 | 0 | 19 |
+| **total** | **44** | **6** | **18** | **68** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
 | APP-01 | **Timeline app** (base app): the seven eras and Ahmadreza's own path as one scrollable timeline, from `content/eras.ts` and `content/about.ts`. Today the placeholder. | missing | P1 | Claude Code | - |
-| APP-02 | **Contact app** (base app): today a placeholder with the `mailto:` link. Needs the full app: email, profiles (LinkedIn, GitHub, XING once OWN-03 is done), résumé, the legal links. `mailto:` only, never a form. | partial | P1 | Claude Code | OWN-03 for the profile links |
+| APP-02 | **Contact app** (base app): today a placeholder with the `mailto:` link. Needs the full app: email, profiles (LinkedIn, GitHub, XING once OWN-03 is done), résumé, the legal links. `mailto:` only, never a form. Built 2026-09-23: its own copy, e-mail with a copy button, résumé, location, legal links; the profile links are **waiting for owner** (OWN-03) - add the URLs in `src/content/profiles.ts`. | partial | P1 | Claude Code | OWN-03 for the profile links |
 | APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). | missing | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 |
 | APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): ping, subnet calculator, DNS/port lookups as labelled simulations - never real network requests. | missing | P1 | Claude Code | - |
 | APP-05 | **Time Machine app** (today bonus, slot `time-machine`): theme switcher over the eight themes; writes `amonel.theme.v1` (then LEG-02 must list it as used); restyles Snake via `--ao-snake-*`. | missing | P1 | Claude Code | LEG-02 update in the same change |
@@ -57,7 +57,7 @@ Recount after each change (one line in Git Bash):
 |---|---|---|---|---|---|
 | SEO-01 | **robots.txt** allowing all crawlers, explicitly including the AI bots (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, CCBot, Google-Extended, meta-externalagent), plus the sitemap line. Built 2026-09-23: `public/robots.txt`, pinned by `scripts/test/seo.test.mjs`. | done | P1 | Claude Code | - |
 | SEO-02 | **sitemap.xml** with every generated URL and its hreflang alternates (`xhtml:link`), generated at build time from `allRouteSegments()`. Built 2026-09-23: `src/app/sitemap.ts` → `out/sitemap.xml`, nine URLs, legal pages left out. | done | P1 | Claude Code | - |
-| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" (never the legal name, owner 2026-09-23), `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. Built 2026-09-23 (`src/lib/structured-data.ts`, in every indexed page's head); `image` and `sameAs` **waiting for owner** (OWN-01, OWN-03). | partial | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) |
+| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" (never the legal name, owner 2026-09-23), `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. Built 2026-09-23 (`src/lib/structured-data.ts`, in every indexed page's head); `image` and `sameAs` **waiting for owner** (OWN-01, OWN-03). `sameAs` now fills itself from `content/profiles.ts` once the URLs are there. | partial | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) |
 | SEO-04 | **llms.txt**: a plain-text summary of the person and the site for AI crawlers. Built 2026-09-23: `public/llms.txt`, facts the site already states, both spellings of the name. | done | P1 | Claude Code | - |
 | SEO-05 | **Open Graph share image**: one 1200 x 630 PNG per language (or one shared), `og:image`, `og:image:alt`, `twitter:card`. Built 2026-09-23: `scripts/og-image.mjs` renders one PNG per language (about 47 kB each) in headless Chrome with the self-hosted fonts; og:image with alt, twitter summary_large_image. Regenerate for the final logo (BR-01). | done | P1 | Claude Code | BR-01 for the final version |
 | SEO-06 | **Per-page meta descriptions**: the journey and the desktop reuse `site.description`; each view (and each new page) needs its own. Done 2026-09-23: `site.journeyDescription`, `site.desktopDescription`; legal pages have their own; drafts run 140-190 characters (CR-1051). | done | P1 | Claude Code | - |
@@ -96,6 +96,7 @@ Recount after each change (one line in Git Bash):
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. | missing | P1 | Claude Code | - |
 | PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. | missing | P1 | Claude Code | - |
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 |
+| PERF-07 | **Flaky check**: `apps.mjs` "quiz 300x200: the question is in view" failed once on 2026-09-23 and passed on the rerun; find the timing it depends on. | missing | P2 | Claude Code | - |
 
 ## Phase 13 - Deployment and launch
 

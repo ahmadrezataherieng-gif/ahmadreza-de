@@ -698,10 +698,6 @@
       "download": "Download résumé (PDF)",
       "pending": "The résumé is coming soon."
     },
-    "contact": {
-      "email": "Write an email",
-      "pending": "The email address will be added soon."
-    },
     "apps": {
       "about": {
         "title": "About me"

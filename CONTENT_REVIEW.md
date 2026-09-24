@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1057 entries.**
+Generated from the codebase on 2026-09-23. **1063 entries.**
 
 ## How to use this file
 
@@ -20,15 +20,15 @@ Generated from the codebase on 2026-09-23. **1057 entries.**
 | Type | Entries |
 |---|---|
 | long text | 91 |
-| short text | 207 |
+| short text | 210 |
 | single word / label | 258 |
-| button | 64 |
+| button | 66 |
 | puzzle / game | 353 |
 | alt text | 1 |
 | SEO / meta | 16 |
-| other | 63 |
+| other | 64 |
 | legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1057** |
+| **Total** | **1063** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -678,8 +678,8 @@ Small apps whose real content is still owed.
 |---|---|---|---|---|---|
 | CR-417 | `os.cv.download` | button | de / en / fa | PLACEHOLDER | Button label: download (Contact / CV app). Now (de): «Lebenslauf herunterladen (PDF)» |
 | CR-418 | `os.cv.pending` | short text | de / en / fa | PLACEHOLDER | Wording for "pending" (Contact / CV app). Now (de): «Der Lebenslauf folgt in Kürze.» |
-| CR-419 | `os.contact.email` | button | de / en / fa | PLACEHOLDER | Button label: email (Contact / CV app). Now (de): «E-Mail schreiben» |
-| CR-420 | `os.contact.pending` | short text | de / en / fa | PLACEHOLDER | Wording for "pending" (Contact / CV app). Now (de): «Die E-Mail-Adresse wird in Kürze ergänzt.» |
+| CR-419 | `os.contact.email` | button | de / en / fa | REMOVED 2026-09-23 (the Contact app has its own copy, section 28) | Button label: email (Contact / CV app). Now (de): «E-Mail schreiben» |
+| CR-420 | `os.contact.pending` | short text | de / en / fa | REMOVED 2026-09-23 (the Contact app has its own copy, section 28) | Wording for "pending" (Contact / CV app). Now (de): «Die E-Mail-Adresse wird in Kürze ergänzt.» |
 
 ## 15. Desktop app: About (Über mich)
 
@@ -1493,3 +1493,18 @@ The About app’s own text (section 15) renders server-side as a page at `/about
 |---|---|---|---|---|---|
 | CR-1056 | `site.aboutDescription` - the About page’s meta description | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
 | CR-1057 | The About page’s URL `/about/` (one slug in all three languages) and its title «Über mich – Ahmadreza Taheri \| Amonel» (from `nav.about`, CR-003) | SEO / meta | de / en / fa | PLACEHOLDER | Confirm the slug (e.g. `/ueber-mich/` would suit German search but not en/fa) and the title |
+
+## 28. Desktop app: Contact
+
+The full Contact app (ROADMAP APP-02). `mailto:` and a copy button only - never a form.
+
+**File:** `src/messages/apps/contact/{de,en,fa}.json`, `src/content/profiles.ts`
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1058 | `title`, `intro` | short text | de / en / fa | PLACEHOLDER | Now (de): «Am besten erreichen Sie mich per E-Mail – auf Deutsch, Englisch oder Persisch.» Say only what is true: which languages, whether he wants a reply promise |
+| CR-1059 | `email.label`, `email.write`, `email.copy`, `email.copied`, `email.pending` | button | de / en / fa | PLACEHOLDER | Labels of the e-mail row and the copy button |
+| CR-1060 | `resume.label`, `resume.download`, `resume.pending` | button | de / en / fa | PLACEHOLDER | Résumé row; the PDF itself is CR-1033 |
+| CR-1061 | `location.label`, `location.value` | short text | de / en / fa | PLACEHOLDER | Now (de): «Trier, Deutschland» - confirm he wants the city shown |
+| CR-1062 | `profiles.label`, `profiles.pending`, `legal.label` | short text | de / en / fa | PLACEHOLDER | Shown until OWN-03 supplies the profile URLs |
+| CR-1063 | `PROFILES` in `src/content/profiles.ts` (LinkedIn, GitHub, XING, all `url: null`) | other | all (machine text) | PLACEHOLDER | The real profile URLs; each appears once it has one, and feeds JSON-LD `sameAs` |

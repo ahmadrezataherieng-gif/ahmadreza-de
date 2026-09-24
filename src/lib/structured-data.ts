@@ -12,6 +12,7 @@
  */
 
 import { EMAIL } from '../content/profile.ts';
+import { PROFILES } from '../content/profiles.ts';
 import { SITE_URL } from './constants.ts';
 
 export interface PersonCopy {
@@ -37,6 +38,7 @@ const WEBSITE_ID = `${SITE_URL}/#website`;
 type JsonLd = Record<string, unknown>;
 
 export function structuredData(copy: PersonCopy): JsonLd {
+  const sameAs = PROFILES.flatMap((profile) => (profile.url ? [profile.url] : []));
   const person: JsonLd = {
     '@type': 'Person',
     '@id': PERSON_ID,
@@ -48,6 +50,8 @@ export function structuredData(copy: PersonCopy): JsonLd {
     knowsAbout: [...copy.knowsAbout],
     knowsLanguage: ['de', 'en', 'fa'],
     ...(EMAIL.available ? { email: `mailto:${EMAIL.address}` } : {}),
+    // The owner's profiles, as soon as `content/profiles.ts` has their URLs.
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   };
   const website: JsonLd = {
     '@type': 'WebSite',

@@ -1,0 +1,27 @@
+{
+  "title": "Contact",
+  "intro": "The best way to reach me is by e-mail – in German, English or Persian.",
+  "email": {
+    "label": "E-mail",
+    "write": "Write an e-mail",
+    "copy": "Copy address",
+    "copied": "Copied",
+    "pending": "The e-mail address will be added shortly."
+  },
+  "resume": {
+    "label": "Résumé",
+    "download": "Download résumé (PDF)",
+    "pending": "Résumé coming soon"
+  },
+  "location": {
+    "label": "Location",
+    "value": "Trier, Germany"
+  },
+  "profiles": {
+    "label": "Profiles",
+    "pending": "Links to LinkedIn, GitHub and XING will follow."
+  },
+  "legal": {
+    "label": "Legal"
+  }
+}

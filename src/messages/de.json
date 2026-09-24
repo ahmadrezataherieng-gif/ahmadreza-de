@@ -699,10 +699,6 @@
       "download": "Lebenslauf herunterladen (PDF)",
       "pending": "Der Lebenslauf folgt in Kürze."
     },
-    "contact": {
-      "email": "E-Mail schreiben",
-      "pending": "Die E-Mail-Adresse wird in Kürze ergänzt."
-    },
     "apps": {
       "about": {
         "title": "Über mich"
