@@ -28,9 +28,9 @@ Recount after each change (one line in Git Bash):
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
-| P1 | 18 | 6 | 8 | 32 |
+| P1 | 18 | 5 | 9 | 32 |
 | P2 | 16 | 2 | 0 | 18 |
-| **total** | **44** | **8** | **15** | **67** |
+| **total** | **44** | **7** | **16** | **67** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -64,7 +64,7 @@ Recount after each change (one line in Git Bash):
 | SEO-07 | **hreflang + canonical** per view incl. `x-default` - done for the nine pages; every new page (legal, About, 404 excluded) must emit them too. | done | P1 | Claude Code | - |
 | SEO-08 | **Persian name "احمدرضا طاهری" coverage**: in `site.title`/`author` (fa) and About (fa) today; missing in JSON-LD, llms.txt, the static fa About page, the fa OG image alt. Since 2026-09-23 also in JSON-LD (`alternateName`), llms.txt and the fa About page; only the OG image alt is left (SEO-05). | partial | P1 | Claude Code | SEO-03, SEO-04, SEO-09 |
 | SEO-09 | **Static, indexable About pages** at `/ueber-mich/`, `/en/about/`, `/fa/about/` (URL to be confirmed): real HTML text from `content/about.ts`, one h1, linked from landing and footer. Built 2026-09-23 at `/about/` in all three locales (one slug, like the legal pages): the About app's own component rendered on the server, name as h1, in the sitemap, linked from every page footer (DECISIONS.md 59). | done | P1 | Claude Code | - |
-| SEO-10 | **Journey text fallback**: today a screen-reader-only list of the eras; expand to the full SEO layer (one truth, insider detail, puzzle summary per era) as real static text. | partial | P1 | Claude Code | - |
+| SEO-10 | **Journey text fallback**: today a screen-reader-only list of the eras; expand to the full SEO layer (one truth, insider detail, puzzle summary per era) as real static text. Done 2026-09-23: per era an h2 with year and name, the truth, the era paragraph, the figures and the insider detail, plus links to the desktop and About - the same sentences the scenes show; puzzle copy stays out (budget). Journey HTML de 43.2 kB gz (limit 48). | done | P1 | Claude Code | - |
 | SEO-11 | **Custom 404 page**: localised, on-brand, `noindex`, links home / desktop / journey; replaces Next's default `404.html` that `not_found_handling: "404-page"` serves. Built 2026-09-23: `src/app/not-found.tsx`, one page in all three languages (a stray URL has no locale), real 404 status, noindex; fonts and CSS moved to the root layout so it is styled. | done | P1 | Claude Code | - |
 | SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 |
 | SEO-13 | Web manifest is German only (`name`, `description`). | partial | P2 | Claude Code | - |

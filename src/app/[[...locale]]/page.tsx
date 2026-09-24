@@ -7,7 +7,8 @@ import { Landing } from '@/components/landing/Landing';
 import { LegalPage } from '@/components/legal/LegalPage';
 import { Desktop } from '@/components/os/Desktop';
 import { eras } from '@/content/eras';
-import { matchSegments } from '@/lib/routing';
+import { asStatList } from '@/lib/message-shapes';
+import { matchSegments, viewHref } from '@/lib/routing';
 
 type PageParams = { locale?: string[] };
 
@@ -26,28 +27,51 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 
   const t = await getTranslations({ locale, namespace: 'site' });
   const tEras = await getTranslations({ locale, namespace: 'eras' });
+  const tNav = await getTranslations({ locale, namespace: 'nav' });
+  const tConvergence = await getTranslations({ locale, namespace: 'convergence' });
 
   return (
     <main>
       {/*
-        Static text fallback. Act 1 hydrates client-side, so this block is what
-        crawlers and screen readers get before any JavaScript runs: every era
-        with its one truth and its insider detail. Phase 10 expands it into the
-        full SEO layer.
+        Static text layer (ROADMAP SEO-10). Act 1 hydrates client-side, so this
+        is what crawlers and screen readers get before any JavaScript runs: per
+        era its year and name, its one truth, the era's own paragraph and
+        figures, and the insider detail - the same sentences the scenes show,
+        never a second version of them. The puzzles' copy stays out: it loads
+        with the puzzle chunk, and the page budget depends on that.
       */}
       <div className="ao-sr-only">
         <h1>{t('title')}</h1>
         <p>{t('tagline')}</p>
-        <ul>
-          {eras.map((era) => (
-            <li key={era.id}>
-              <strong>
+        {eras.map((era) => {
+          const stats = tEras.has(`${era.id}.visual.stats`) ? asStatList(tEras.raw(`${era.id}.visual.stats`)) : [];
+          return (
+            <section key={era.id}>
+              <h2>
                 {era.yearLabelKey ? tEras(era.yearLabelKey) : era.year} — {tEras(era.nameKey)}
-              </strong>{' '}
-              {tEras(era.descriptionKey)} {tEras(`${era.id}.insider`)}
-            </li>
-          ))}
-        </ul>
+              </h2>
+              <p>{tEras(era.descriptionKey)}</p>
+              {tEras.has(`${era.id}.visual.body`) ? <p>{tEras(`${era.id}.visual.body`)}</p> : null}
+              {stats.length > 0 ? (
+                <ul>
+                  {stats.map((stat) => (
+                    <li key={stat.label}>
+                      {stat.value} {stat.label}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <p>{tEras(`${era.id}.insider`)}</p>
+            </section>
+          );
+        })}
+        <section>
+          <h2>{tConvergence('title')}</h2>
+          <p>
+            <a href={viewHref(locale, 'desktop')}>{tNav('skipToDesktop')}</a> ·{' '}
+            <a href={viewHref(locale, 'about')}>{tNav('about')}</a>
+          </p>
+        </section>
       </div>
 
       <JourneyLoader />
