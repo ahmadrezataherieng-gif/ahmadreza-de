@@ -1,0 +1,58 @@
+{
+  "intro": "Ein Großrechner der 1950er Jahre führte immer nur einen Auftrag zugleich aus. Wer zuerst dran ist, entscheidet, wie lange alle anderen warten. Probieren Sie drei Verfahren an denselben Aufträgen aus.",
+  "algorithms": {
+    "label": "Verfahren",
+    "fcfs": {
+      "name": "Der Reihe nach",
+      "short": "FCFS",
+      "explain": "Wer zuerst kommt, wird zuerst bedient und läuft bis zum Ende. Einfach und fair im Sinne der Reihenfolge – aber ein langer Auftrag ganz vorn lässt alle anderen warten."
+    },
+    "sjf": {
+      "name": "Kürzester zuerst",
+      "short": "SJF",
+      "explain": "Von den wartenden Aufträgen läuft der kürzeste zuerst, bis zum Ende. Das ergibt die geringste durchschnittliche Wartezeit – nur muss man die Dauer vorher kennen."
+    },
+    "rr": {
+      "name": "Reihum",
+      "short": "RR",
+      "explain": "Jeder Auftrag bekommt eine Zeitscheibe, danach ist der nächste dran und er stellt sich hinten an. Kurze Aufträge werden schnell fertig und keiner wartet ewig – dafür kostet jeder Wechsel etwas."
+    }
+  },
+  "presets": {
+    "label": "Beispiele",
+    "batch": "Stapel aus dem Rätsel",
+    "staggered": "Aufträge kommen nacheinander"
+  },
+  "jobs": {
+    "title": "Aufträge",
+    "job": "Auftrag {id}",
+    "arrival": "Ankunft (Minute)",
+    "burst": "Dauer (Minuten)",
+    "add": "Auftrag hinzufügen",
+    "remove": "Auftrag {id} entfernen",
+    "limit": "Mehr als sechs Aufträge zeichnet der Plan nicht."
+  },
+  "quantum": {
+    "label": "Zeitscheibe (Minuten)"
+  },
+  "timeline": {
+    "title": "Ablauf",
+    "idle": "Leerlauf",
+    "order": "Reihenfolge"
+  },
+  "results": {
+    "title": "Wartezeiten",
+    "waiting": "Wartezeit",
+    "turnaround": "Durchlaufzeit",
+    "response": "bis zum Start",
+    "average": "Durchschnitt",
+    "unit": "{n, number} min",
+    "switches": "Wechsel zwischen Aufträgen: {count, number}"
+  },
+  "compare": {
+    "title": "Die drei im Vergleich",
+    "average": "Ø Wartezeit",
+    "best": "am kürzesten"
+  },
+  "truth": "Genau dafür gibt es Betriebssysteme: Sie entscheiden, wer als Nächstes rechnen darf – damit Menschen nicht am Schalter stehen und Aufträge einzeln einlegen müssen."
+}

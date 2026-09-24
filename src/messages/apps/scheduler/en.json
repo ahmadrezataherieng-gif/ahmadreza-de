@@ -1,0 +1,58 @@
+{
+  "intro": "A 1950s mainframe ran only one job at a time. Whoever goes first decides how long everyone else waits. Try three methods on the same jobs.",
+  "algorithms": {
+    "label": "Method",
+    "fcfs": {
+      "name": "In order",
+      "short": "FCFS",
+      "explain": "First come, first served, and it runs to the end. Simple and fair in the sense of order - but one long job at the front makes everyone else wait."
+    },
+    "sjf": {
+      "name": "Shortest first",
+      "short": "SJF",
+      "explain": "Of the jobs waiting, the shortest runs first, to the end. That gives the lowest average wait - but you have to know how long a job takes beforehand."
+    },
+    "rr": {
+      "name": "Round robin",
+      "short": "RR",
+      "explain": "Every job gets a time slice, then the next is up and it queues at the back. Short jobs finish quickly and nobody waits forever - but every switch costs something."
+    }
+  },
+  "presets": {
+    "label": "Examples",
+    "batch": "The batch from the puzzle",
+    "staggered": "Jobs arrive one after another"
+  },
+  "jobs": {
+    "title": "Jobs",
+    "job": "Job {id}",
+    "arrival": "Arrival (minute)",
+    "burst": "Duration (minutes)",
+    "add": "Add a job",
+    "remove": "Remove job {id}",
+    "limit": "The plan does not draw more than six jobs."
+  },
+  "quantum": {
+    "label": "Time slice (minutes)"
+  },
+  "timeline": {
+    "title": "Sequence",
+    "idle": "Idle",
+    "order": "Order"
+  },
+  "results": {
+    "title": "Waiting times",
+    "waiting": "Waiting",
+    "turnaround": "Turnaround",
+    "response": "Until start",
+    "average": "Average",
+    "unit": "{n, number} min",
+    "switches": "Switches between jobs: {count, number}"
+  },
+  "compare": {
+    "title": "The three compared",
+    "average": "Average wait",
+    "best": "shortest"
+  },
+  "truth": "That is exactly what operating systems are for: they decide who computes next - so that people do not have to stand at the counter feeding in jobs one by one."
+}

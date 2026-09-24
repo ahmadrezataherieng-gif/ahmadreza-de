@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
-| `desktop` | 9 | 0 | 4 | 49 / 66 | 74 % |
+| `desktop` | 10 | 0 | 3 | 54 / 66 | 82 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 64 | 7 | 34 | 267.3 / 406 | **66 %** |
+| **all** | 65 | 7 | 33 | 272.3 / 406 | **67 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 12 | 6 | 36 | 54 |
-| P2 | 12 | 1 | 16 | 29 |
-| **total** | **34** | **7** | **64** | **105** |
+| P2 | 11 | 1 | 17 | 29 |
+| **total** | **33** | **7** | **65** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -89,7 +89,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). Built 2026-09-24: `content/cv.ts` (structure), `apps/cv/CvApp.tsx` (a readable sheet: contact, work and training, school, skills, languages, certificates), copy in `messages/apps/cv/`; the apprenticeship, skills and languages reuse About's; every entry is a marked placeholder and the PDF control still says "folgt in Kürze" (OWN-02, OWN-05 fill it); CR-1096, `apps.mjs` and `apps.test.mjs` check it. | partial | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 | M 70% | about |
 | APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): four tabs. **Subnet** - a real IPv4 calculator (CIDR, dotted or slash mask), the 32 bits coloured network/host, network/broadcast/first/last/usable, the address kind (private, APIPA, CGNAT, documentation, loopback...), a gateway check (the 1995 puzzle's question) and splitting a block into smaller ones. **Ping** - Windows 95 style output over the Traceroute app's prepared routes (same times), loopback, silent documentation addresses. **DNS** - an iterative lookup (resolver, root, TLD, authoritative) over a prepared `.example` zone, A/AAAA/MX/TXT/CNAME, CNAMEs followed, and the cache: a second lookup answers in 0 ms until the TTL. **Ports** - well-known ports by number or name with the three IANA ranges. Ping and DNS are labelled simulations, never real network requests. Built 2026-09-24 (DECISIONS.md 63): `apps/network/`, `content/network.ts`, 13 unit tests, `bonus.mjs` drives all four tabs; copy CR-1067..1073. | done | P1 | Claude Code | - | L | desktop |
 | APP-05 | **Time Machine app** (today bonus, slot `time-machine`): theme switcher over the eight themes; writes `amonel.theme.v1` (then LEG-02 must list it as used); restyles Snake via `--ao-snake-*`. Built 2026-09-24 (DECISIONS.md 64): eight capsules drawn in their own era's tokens, a year dial that counts to the target, "enter any year" (1946 to now lands in the era current then), back to the present; only the desktop remembers the era (`DesktopTheme`); LEG-02 storage table updated in de/en/fa; `check:pixel-font` now scans every desktop string. | done | P1 | Claude Code | LEG-02 update in the same change | M | desktop |
-| APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. | missing | P2 | Claude Code | - | M | desktop |
+| APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. Built 2026-09-24: `apps/scheduler/sched.ts` (pure, 7 tests: the puzzle's 115 vs 31 minutes, hand-worked round robin, invariants), `SchedulerApp.tsx` (edit up to six jobs, the sequence drawn to scale, waiting and turnaround per job, the three averages side by side, the best marked; nothing stored), copy `messages/apps/scheduler/`; CR-1097; `bonus.mjs` and `a11y.mjs` (eight themes) check it. | done | P2 | Claude Code | - | M | desktop |
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. | missing | P2 | Claude Code | - | M | desktop |
 | APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - | S | puzzles |
 | APP-09 | **Line-drawing effects** (was: GSAP DrawSVG, free plugin; never ScrollSmoother). Done 2026-09-24 in CSS instead of the plugin (DECISIONS.md 71): `.ao-draw` scrubs `stroke-dashoffset` over `--era-progress`, no plugin, no per-frame JS; used for the four links of the 2024 region map. | done | P2 | Claude Code | - | S | journey |

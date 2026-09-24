@@ -162,7 +162,7 @@ is left lives in ROADMAP.md.
     target, "enter any year", back to the present. The era is remembered in
     `amonel.theme.v1` (only after a jump, removed on return) and read only by
     the desktop; every other page keeps its own theme.
-  - The scheduler (1956) and file tree (1971) are still the stand-in.
+  - **Batch planner** (1956, APP-06): edit up to six jobs and watch first come first served, shortest job first and round robin run them - the sequence drawn to scale, waiting and turnaround per job, the three averages compared; stores nothing. The file tree (1971) is still the stand-in.
 - **The core apps** (Phase 7, DECISIONS.md 50), each its own lazy chunk with its
   own copy file per language:
   - **About:** who Ahmadreza is, his path, what he does now, skills by area,

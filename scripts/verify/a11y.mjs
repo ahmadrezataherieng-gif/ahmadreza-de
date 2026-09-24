@@ -29,7 +29,7 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 const TAG = `a11y-${WIDTH}-${LOCALE}${TOUCH ? '-touch' : ''}`;
 const AXE = readFileSync(new URL('../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 const THEMES = ['era1946', 'era1956', 'era1971', 'era1981', 'era1984', 'era1995', 'era2024', 'modern'];
-const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'contact', 'timeline', 'cv', 'quiz', 'binary', 'snake', 'paint', 'network-tools', 'time-machine'];
+const APPS = ['about', 'terminal', 'tickets', 'traceroute', 'assistant', 'contact', 'timeline', 'cv', 'quiz', 'binary', 'snake', 'paint', 'network-tools', 'time-machine', 'scheduler'];
 
 const log = [];
 const check = (name, ok, detail) => {

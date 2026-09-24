@@ -355,6 +355,31 @@ check('time machine: back to the present', await until(`document.documentElement
 check('storage: the present removes the key', !(await js(`localStorage.getItem('amonel.theme.v1')`)));
 await close('time-machine');
 
+/* --- Batch planner (APP-06) ------------------------------------------------------------ */
+
+const keysBeforeScheduler = (await storageKeys()).join();
+await open('scheduler');
+check('scheduler: its copy loaded', await until(`!/\\bscheduler\\.[a-zA-Z]/.test(document.querySelector('${content('scheduler')}')?.textContent ?? 'scheduler.x')`, 3000));
+check('scheduler: the puzzle\'s four jobs in arrival order wait 28.75 minutes on average', (await js(`document.querySelector('[data-average-waiting]')?.dataset.averageWaiting`)) === '28.75', await js(`document.querySelector('[data-average-waiting]')?.dataset.averageWaiting`));
+await clickIn('[data-scheduler-choice="sjf"]', 'scheduler');
+check('scheduler: shortest first waits 7.75 and is marked the shortest of the three', (await js(`document.querySelector('[data-average-waiting]')?.dataset.averageWaiting`)) === '7.75' && (await js(`[...document.querySelectorAll('[data-compare][data-best]')].map((e) => e.dataset.compare).join()`)) === 'sjf');
+check('scheduler: the sequence is drawn to scale', (await js(`[...document.querySelectorAll('[data-segment]')].map((e) => e.dataset.segment).join('')`)) === 'DBCA' && Number(await js(`document.querySelector('[data-scheduler-timeline]').dataset.schedulerTimeline`)) === 52);
+await clickIn('[data-scheduler-choice="rr"]', 'scheduler');
+check('scheduler: round robin asks for a time slice and counts the switches', (await js(`!!document.querySelector('[data-scheduler-quantum]') && Number(document.querySelector('[data-scheduler-switches]')?.dataset.schedulerSwitches) > 3`)));
+await setInput('[data-scheduler-burst="A"]', '2');
+await sleep(150);
+check('scheduler: editing a job redraws the plan (2 + 5 + 15 + 2 = 24 minutes)', Number(await js(`document.querySelector('[data-scheduler-timeline]').dataset.schedulerTimeline`)) === 24);
+await clickIn('[data-scheduler-preset="staggered"]', 'scheduler');
+await clickIn('[data-scheduler-choice="fcfs"]', 'scheduler');
+check('scheduler: the second example (arrivals over time) waits 9.75 in order', (await js(`document.querySelector('[data-average-waiting]')?.dataset.averageWaiting`)) === '9.75', await js(`document.querySelector('[data-average-waiting]')?.dataset.averageWaiting`));
+await clickIn('[data-action="scheduler-add"]', 'scheduler');
+check('scheduler: a job can be added', (await js(`document.querySelector('[data-scheduler-jobs]').dataset.schedulerJobs`)) === '5');
+await clickIn('[data-action="scheduler-remove"][data-job="E"]', 'scheduler');
+check('scheduler: and removed', (await js(`document.querySelector('[data-scheduler-jobs]').dataset.schedulerJobs`)) === '4');
+check('scheduler: no sideways scroll', await noOverflow('scheduler'));
+check('storage: the batch planner stores nothing', (await storageKeys()).join() === keysBeforeScheduler, await storageKeys());
+await close('scheduler');
+
 /* --- storage and errors ---------------------------------------------------------------- */
 
 const keys = await storageKeys();

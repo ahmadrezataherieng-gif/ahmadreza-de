@@ -45,10 +45,10 @@ const COMPONENTS: Record<AppId, LazyExoticComponent<ComponentType<AppProps>>> = 
   cv: load(() => import('@/components/apps/cv/CvApp'), 'CvApp'),
   quiz: load(() => import('@/components/apps/quiz/QuizApp'), 'QuizApp'),
   // Bonus apps (Phase 9D-1, DECISIONS.md 57; network tools 9D-2, DECISIONS.md
-  // 63; the Time Machine, DECISIONS.md 64). The rest share one stand-in: the
-  // scheduler and the file tree, still to come.
+  // 63; the Time Machine, DECISIONS.md 64; the batch planner, APP-06). The file
+  // tree still shares one stand-in.
   binary: load(() => import('@/components/apps/binary/BinaryApp'), 'BinaryApp'),
-  scheduler: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
+  scheduler: load(() => import('@/components/apps/scheduler/SchedulerApp'), 'SchedulerApp'),
   filesystem: load(() => import('@/components/apps/bonus/BonusApp'), 'BonusApp'),
   snake: load(() => import('@/components/apps/snake/SnakeApp'), 'SnakeApp'),
   paint: load(() => import('@/components/apps/paint/PaintApp'), 'PaintApp'),
@@ -67,6 +67,7 @@ const SIZES: Partial<Record<AppId, AppDefinition['size']>> = {
   contact: { width: 480, height: 360 },
   quiz: { width: 560, height: 600 },
   binary: { width: 640, height: 580 },
+  scheduler: { width: 660, height: 620 },
   snake: { width: 480, height: 600 },
   paint: { width: 760, height: 600 },
   'network-tools': { width: 700, height: 600 },
