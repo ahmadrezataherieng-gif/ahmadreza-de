@@ -23,7 +23,7 @@ const get = async (path, init) => {
 const home = await get('/');
 check('/ answers 200 as HTML', home.status === 200 && home.type.startsWith('text/html'), `${home.status} ${home.type}`);
 const html = home.body ?? '';
-check('title has the name, the role and the city', html.includes('<title>Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier</title>'));
+check('title has the name, the role and the city', html.includes('<title>Ahmadreza Taheri – Fachinformatiker (Ausbildung), Trier</title>'));
 check('meta description names Amonel', /<meta name="description" content="[^"]*Trier[^"]*Amonel[^"]*">/.test(html));
 check('canonical is https://ahmadreza.de/', html.includes('<link rel="canonical" href="https://ahmadreza.de/">'));
 check('html lang is de, robots index,follow', html.includes('<html lang="de"') && html.includes('<meta name="robots" content="index,follow">'));

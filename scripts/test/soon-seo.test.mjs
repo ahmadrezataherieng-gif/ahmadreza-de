@@ -16,10 +16,11 @@ const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), '
 const exists = (path) => existsSync(new URL(`../../${path}`, import.meta.url));
 const page = read('soon/index.html');
 const meta = (attribute, name) => page.match(new RegExp(`<meta ${attribute}="${name}" content="([^"]*)">`))?.[1];
-const TITLE = 'Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier';
+const TITLE = 'Ahmadreza Taheri – Fachinformatiker (Ausbildung), Trier';
 
 test('soon SEO: title and description carry the name, the role and the city', () => {
   assert.equal(page.match(/<title>([^<]*)<\/title>/)?.[1], TITLE);
+  assert.ok(TITLE.length <= 60, `the title is ${TITLE.length} characters, over the 60 a result page shows`);
   const description = meta('name', 'description');
   assert.ok(description.length >= 100 && description.length <= 160, `the description is ${description.length} characters`);
   for (const word of ['Ahmadreza Taheri', 'Fachinformatiker für Systemintegration', 'Trier', 'Amonel']) assert.ok(description.includes(word), word);
