@@ -4,5 +4,8 @@
   "erasLabel": "Epochen der Computergeschichte",
   "open": "In der Reise ansehen",
   "now": "Ahmadreza heute",
-  "since": "seit {date}"
+  "since": "seit {date}",
+  "legend": "Legende",
+  "legendNote": "Sie kannten den Trick dieser Epoche.",
+  "legendCount": "Legenden-Abzeichen: {count, number} von {total, number}"
 }

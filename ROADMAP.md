@@ -39,20 +39,20 @@ build time).
 |---|---|---|---|---|---|
 | `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
 | `desktop` | 7 | 1 | 5 | 45.8 / 66 | 69 % |
-| `puzzles` | 7 | 1 | 0 | 36.6 / 38 | 96 % |
+| `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 17 | 2 | 8 | 58.2 / 84 | 69 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 58 | 7 | 40 | 252.7 / 406 | **62 %** |
+| **all** | 59 | 6 | 40 | 254.1 / 406 | **63 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 17 | 2 | 10 | 29 |
-| **total** | **40** | **7** | **58** | **105** |
+| P2 | 17 | 1 | 11 | 29 |
+| **total** | **40** | **6** | **59** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -93,7 +93,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. | missing | P2 | Claude Code | - | M | desktop |
 | APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - | S | puzzles |
 | APP-09 | **GSAP DrawSVG** (free plugin) for line-drawing effects; never ScrollSmoother. | missing | P2 | Claude Code | - | S | journey |
-| APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. | partial | P2 | Claude Code | - | S 30% | puzzles |
+| APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. Done 2026-09-24: the Timeline app shows the earned badges (a "Legende" mark on the era, and a count once one exists; nothing before); `apps.mjs` checks both states; CR-1092. | done | P2 | Claude Code | - | S | puzzles |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. | missing | P2 | Claude Code | - | S | desktop |

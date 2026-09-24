@@ -4,5 +4,8 @@
   "erasLabel": "Eras of computing",
   "open": "See it in the journey",
   "now": "Ahmadreza today",
-  "since": "since {date}"
+  "since": "since {date}",
+  "legend": "Legend",
+  "legendNote": "You knew the trick of this era.",
+  "legendCount": "Legend badges: {count, number} of {total, number}"
 }

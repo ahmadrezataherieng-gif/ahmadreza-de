@@ -4,5 +4,8 @@
   "erasLabel": "دوره‌های تاریخ رایانه",
   "open": "دیدن در سفر",
   "now": "احمدرضا امروز",
-  "since": "از {date}"
+  "since": "از {date}",
+  "legend": "افسانه",
+  "legendNote": "شما ترفند این دوران را می‌شناختید.",
+  "legendCount": "نشان‌های افسانه: {count, number} از {total, number}"
 }

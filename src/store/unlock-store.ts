@@ -26,7 +26,7 @@ export const useUnlockStore = create<UnlockState>()(
  * calling the store's methods, so a re-render follows exactly the data it shows.
  */
 
-/** The hidden "Legende" badges. Read, not displayed, until Phase 9. */
+/** The hidden "Legende" badges; the Timeline app shows the earned ones (APP-10). */
 export const selectLegendEras = (state: UnlockState): readonly EraId[] => state.legendEras;
 
 /**

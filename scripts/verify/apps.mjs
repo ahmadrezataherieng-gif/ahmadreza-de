@@ -562,6 +562,15 @@ if (API) {
   check('api: only allowlisted counters and /api/counts, never a body', wellFormed(apiCalls), apiCalls.slice(0, 8));
 }
 
+
+// APP-10: the hidden Legende badges show in the Timeline once earned, and only then. After the counter checks above: this reloads the page, which resets what counts once per page load.
+const timelineBadges = `document.querySelectorAll('${content('timeline')} [data-legend-badge]').length`;
+check('timeline: no badge before one is earned', (await openFromIcon('timeline')) && (await until(`!!document.querySelector('${content('timeline')} [data-era]')`, 3000)) && (await js(timelineBadges)) === 0);
+await close('timeline');
+await js(`localStorage.setItem('${STORE}', JSON.stringify({ state: { artifacts: [], visitedEras: [], skippedEras: [], passedEras: [], legendEras: ['unix', 'dos'], hasCompletedJourney: true, mode: 'guided' }, version: 2 })); true`);
+await b.goto(`${BASE}${PREFIX}/desktop/`, 4000);
+check('timeline: the earned badges are shown, with their count', (await openFromIcon('timeline')) && (await until(`${timelineBadges} === 2`, 3000)) && (await js(`document.querySelector('${content('timeline')} [data-legend-count]')?.dataset.legendCount`)) === '2');
+await close('timeline');
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;
 console.log(`${QUIET ? '' : '\n'}${TAG}: ${passed}/${log.length} passed`);

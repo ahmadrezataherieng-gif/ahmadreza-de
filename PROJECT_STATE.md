@@ -379,7 +379,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
   under `wrangler dev --local` and against a CDP stub: the real D1, the edge
   cache and the rate-limiting rule exist only after Phase 13 (TODO.md).
 - The phone keyboard handling (Terminal, Assistant) was checked in emulation only.
-- Badges are recorded, readable through `selectLegendEras`, but not displayed.
+- The hidden Legende badges show in the Timeline app once earned (APP-10); nowhere else.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.

@@ -7,9 +7,10 @@ import { AppMessages } from '@/components/apps/AppMessages';
 import { eraSectionHash } from '@/components/apps/unlock';
 import type { AppProps } from '@/components/apps/types';
 import { careerStations } from '@/content/about';
-import { eras } from '@/content/eras';
+import { eras, type EraId } from '@/content/eras';
 import { htmlLang, type Locale } from '@/lib/i18n-config';
 import { viewHref } from '@/lib/routing';
+import { selectLegendEras, useUnlockStore } from '@/store/unlock-store';
 
 /**
  * The seven eras on one line, each with its year, name and one truth and a
@@ -27,6 +28,9 @@ export function TimelineApp(props: AppProps) {
     </AppMessages>
   );
 }
+
+/** The eras whose puzzle has a period trick that earns the hidden Legende badge (the puzzles skill, DECISIONS.md 40). */
+const TRICK_ERAS: readonly EraId[] = ['eniac', 'batch', 'unix', 'dos', 'win95'];
 
 const cache = new Map<Locale, Promise<AbstractIntlMessages>>();
 
@@ -61,6 +65,7 @@ function Timeline({ appId }: AppProps) {
   const tAbout = useTranslations('about');
   const locale = useLocale() as Locale;
   const headingId = useId();
+  const legendEras = useUnlockStore(selectLegendEras).filter((id) => TRICK_ERAS.includes(id));
   const journey = viewHref(locale, 'journey');
   const station = careerStations.find((entry) => entry.current);
   const since = station?.start
@@ -75,6 +80,12 @@ function Timeline({ appId }: AppProps) {
             {t('title')}
           </h2>
           <p className="font-body text-sm text-muted">{t('intro')}</p>
+          {/* The badges stay hidden until one is earned. */}
+          {legendEras.length > 0 ? (
+            <p data-legend-count={legendEras.length} className="font-mono text-xs text-accent">
+              {t('legendCount', { count: legendEras.length, total: TRICK_ERAS.length })}
+            </p>
+          ) : null}
         </header>
 
         <ol aria-label={t('erasLabel')} className="flex flex-col gap-5 border-s border-edge ps-5">
@@ -84,6 +95,12 @@ function Timeline({ appId }: AppProps) {
               <p className="font-mono text-xs tracking-wide text-accent">{era.yearLabelKey ? tEras(era.yearLabelKey) : era.year}</p>
               <h3 className="font-body font-bold text-ink">{tEras(era.nameKey)}</h3>
               <p className="font-body text-sm leading-relaxed text-ink">{tEras(era.descriptionKey)}</p>
+              {legendEras.includes(era.id) ? (
+                <p data-legend-badge={era.id} className="flex flex-wrap items-center gap-x-2 font-body text-sm text-ink">
+                  <span className="ao-themed rounded-control border border-accent px-1.5 font-mono text-[11px] tracking-wide text-accent uppercase">{t('legend')}</span>
+                  {t('legendNote')}
+                </p>
+              ) : null}
               <a href={`${journey}${eraSectionHash(era)}`} className="w-fit font-mono text-xs text-muted underline-offset-4 hover:text-accent hover:underline">
                 {t('open')}
               </a>
