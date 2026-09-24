@@ -88,11 +88,11 @@ never sees it.
 
 ### Structured data (built 2026-09-23, `src/lib/structured-data.ts`)
 
-- **Person:** `name`, `alternateName` (the Persian spelling only - never the
-  legal name), `jobTitle`, address `addressLocality: "Trier"` (never a street),
+- **Person:** `name`, `alternateName` (`NAME_VARIANTS`: spellings of the name only, e.g. Ahmadreza, Taheri, Ahmad Reza Taheri and the Persian forms - never the
+  legal name, never a skill or Amonel), `jobTitle`, address `addressLocality: "Trier"` (never a street),
   `knowsAbout`, `knowsLanguage`, `email`; add `image` with the portrait and
   `sameAs` once the owner's profiles are ready.
-- **WebSite** on every indexed page, **ProfilePage** on the landing page, all
+- **WebSite** (name = the person, not Amonel) on every indexed page, **Amonel** as its own `CreativeWork` with `creator` = the Person, an **ImageObject** (the share image) as the ProfilePage's `primaryImageOfPage`, **ProfilePage** on the landing page, all
   linked by `@id`. The legal pages carry none. Rendered in the locale layout's
   `<head>`; pinned by `scripts/test/seo.test.mjs`.
 

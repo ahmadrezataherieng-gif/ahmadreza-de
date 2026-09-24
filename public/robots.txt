@@ -20,6 +20,7 @@ Allow: /
 # AI training bots
 User-agent: GPTBot
 User-agent: ClaudeBot
+User-agent: anthropic-ai
 User-agent: CCBot
 User-agent: Google-Extended
 User-agent: meta-externalagent

@@ -8,7 +8,7 @@ import { test } from 'node:test';
 import { SEO, T } from '../../soon/copy.mjs';
 import { renderLanding } from '../soon-pages.mjs';
 import { fillPlaceholders, progressValues } from '../soon-progress.mjs';
-import { alternateLinks, jsonLdScript, LOCALES, OG_IMAGES, personJsonLd, sitemapXml } from '../soon-seo.mjs';
+import { alternateLinks, graphJsonLd, jsonLdScript, LOCALES, OG_IMAGES, personJsonLd, sitemapXml } from '../soon-seo.mjs';
 
 const template = readFileSync(new URL('../../soon/index.html', import.meta.url), 'utf8');
 const filled = fillPlaceholders(template.replace('/*@tokens*/', ''), progressValues());
@@ -105,11 +105,11 @@ test('soon pages: the name is visible in both scripts on every page; JSON-LD and
     assert.ok(text.includes('Ahmadreza Taheri') && text.includes('احمدرضا طاهری'), `${locale.id}: both names visible`);
     assert.match(html, /<h1>Ahmadreza Taheri<\/h1>/);
     const inner = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
-    assert.deepEqual(JSON.parse(inner), personJsonLd(locale.id));
+    assert.deepEqual(JSON.parse(inner), graphJsonLd(locale.id));
     assert.ok(html.includes(jsonLdScript(locale.id)));
-    assert.equal(personJsonLd(locale.id).url, `https://ahmadreza.de/${locale.prefix}`);
+    assert.equal(personJsonLd(locale.id).url, 'https://ahmadreza.de/', 'the one entity URL in every language');
     assert.equal(personJsonLd(locale.id)['@id'], 'https://ahmadreza.de/#person', 'one Person entity across the languages');
-    assert.equal(personJsonLd(locale.id).alternateName, 'احمدرضا طاهری');
+    assert.ok(personJsonLd(locale.id).alternateName.includes('احمدرضا طاهری'));
     assert.equal(meta(html, 'property', 'og:url'), `https://ahmadreza.de/${locale.prefix}`);
     assert.equal(meta(html, 'property', 'og:locale'), locale.ogLocale);
     assert.equal(meta(html, 'property', 'og:image'), OG_IMAGES[locale.id].url);

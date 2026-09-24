@@ -4,6 +4,19 @@ Last updated: 2026-09-24
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+## Work queue (started 2026-09-24; resume with "continue the work queue")
+
+Rules: strictly in order; after each item run `npm test` and `npm run lint` (plus `npm run build` when `src/` changed), update ROADMAP.md (`node scripts/roadmap.mjs --write`) and this file, commit and push. No questions between items: open decisions go to TODO.md with the safe default. New or changed visible text gets a CONTENT_REVIEW.md entry (PLACEHOLDER). Never deploy the main site, never touch Cloudflare settings.
+
+- [x] 1. Housekeeping: (a) `.gitattributes` + renormalise, (b) commit the entity/SEO work, `legal.local.ts` stays untracked, (c) stale docs, (d) ROADMAP rows (LEG-17, LEG-18, SEO-16, SEO-17, SEO-12 reworded)
+- [ ] 2. SEO follow-ups: (a) `knowsAbout` the same 7 concepts in de/en/fa, (b) background in meta description and homepage subline, CR-1084 and pinned tests, (c) 301s from the old `/og/og-<locale>.png` on the main site and the coming-soon Worker, (d) `live-soon.mjs` reads the Person from `@graph` (already in the working tree)
+- [ ] 3. XS/S items, one commit each: SEO-13, APP-14, APP-11, APP-10, PERF-07, PERF-09, APP-13, APP-16, APP-09, PERF-03 (only if the theme engine contract stays); SEO-14 (draft landing titles)
+- [ ] 4. M items, one commit each: APP-03, APP-06, APP-07, APP-12, APP-17
+- [ ] 5. BR-06 in steps: (1) tokens and fonts, (2) UI chrome, (3) landing, (4) About, (5) Impressum and Datenschutz, (6) 404; desktop shell out of scope (open question in TODO.md)
+- [ ] 6. Preliminary LEG-05 audit as a report in TODO.md (changes nothing legal)
+- [ ] 7. If progress changed noticeably and the wrangler login works: redeploy the coming-soon page (BR-03); otherwise give the owner the commands
+
+- **Entity signals (2026-09-24):** JSON-LD is now one graph on the main site and on the coming-soon pages (same builder, `structured-data.ts`): Person with name-variant `alternateName`s and the wider `knowsAbout`, WebSite named after the person, Amonel as a separate CreativeWork (`creator` = the Person), ImageObject as `primaryImageOfPage`. Share images renamed to `public/og/ahmadreza-taheri-<locale>.png`; `anthropic-ai` added to robots.txt. Live on the coming-soon pages since the deploy of version `8eac93e8` (2026-09-24); the main site is not deployed. The former 403 for the ClaudeBot and anthropic-ai user agents is fixed: the owner set Cloudflare's AI bot policies Search, Agent and Training all to Allow (ROADMAP SEO-17).
 - **Coming-soon in three languages (2026-09-24, SEO-15):** `/`, `/en/` and `/fa/` are separate pages rendered by `scripts/soon-pages.mjs` from `soon/index.html` and the copy table `soon/copy.mjs`; own lang/dir, title (max 60 characters), description, canonical, hreflang incl. x-default, share tags, JSON-LD; language links are plain URLs, the one `ao-lang` storage entry is kept (privacy policy). Sitemap lists all three. Checked by `soon-pages.test.mjs`.
 - **Employer never named (2026-09-24, LEG-08):** removed from the coming-soon
   page, the main site, llms.txt and the docs; the role line is
@@ -25,7 +38,7 @@ Content review pending: see CONTENT_REVIEW.md (starts after the site is complete
   `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
   and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,
   no external request, the legal pages).
-- **Coming-soon page, last deploy: 2026-09-24** (Worker `silent-lake-8ae2`, version `daacc4f1`, progress 61 %): the K6 style, the search layer, the 55-character title and the separate `/en/` and `/fa/` pages (SEO-15) are live. Verified with `node scripts/verify/live-soon.mjs` (34 checks incl. /en/ and /fa/: page, title, JSON-LD, OG tags, robots.txt, sitemap.xml, the six legal pages, the fonts, 404, www redirect) and `node scripts/verify/soon.mjs --base https://ahmadreza.de/` (196 checks in a real browser, each language loaded as its own URL). Redeploy whenever the progress changes noticeably (BR-03): `npm run build:soon`, `npx wrangler deploy` in `soon/`, then both scripts.
+- **Coming-soon page, last deploy: 2026-09-24** (Worker `silent-lake-8ae2`, version `8eac93e8`, progress 61 %): the K6 style, the search layer, the 55-character title, the separate `/en/` and `/fa/` pages (SEO-15) and the entity work (SEO-16) are live. Verified with `node scripts/verify/live-soon.mjs` (34 checks incl. /en/ and /fa/: page, title, JSON-LD, OG tags, robots.txt, sitemap.xml, the six legal pages, the fonts, 404, www redirect) and `node scripts/verify/soon.mjs --base https://ahmadreza.de/` (196 checks in a real browser, each language loaded as its own URL). Redeploy whenever the progress changes noticeably (BR-03): `npm run build:soon`, `npx wrangler deploy` in `soon/`, then both scripts.
 - **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
   values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
 
@@ -50,7 +63,7 @@ is left lives in ROADMAP.md.
 - [x] **Phase 9C** — anonymous public counters on `/api/*`, Worker + D1, not deployed (DECISIONS.md 56)
 - [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
 - [x] **Phase 9D-2** — Network tools and the Time Machine (DECISIONS.md 63, 64; 2026-09-24)
-- [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
+- [ ] **Phase 9D-3** — easter eggs (APP-08, done 2026-09-24); GSAP DrawSVG (APP-09) is still open
 - [x] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, descriptions, OG images, 404, static About page, journey text layer (DECISIONS.md 59); JSON-LD image/sameAs wait for the owner
 - [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
 - [~] **Phase 12** — Performance, accessibility, mobile pass: automated accessibility pass done (PERF-04, DECISIONS.md 65); vitals, phone scroll and real devices open (ROADMAP PERF-*)
@@ -357,8 +370,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
 ## Not built yet
 
-- Contact, Timeline and CV are placeholders, and four bonus apps (scheduler,
-  file tree, network tools, Time Machine) share the stand-in.
+- The CV app is still a placeholder (waiting for the owner, APP-03), and two bonus apps (scheduler, file tree) share the stand-in. Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
 - The bonus apps' copy (Phase 9D-1) is a draft awaiting native-speaker
   proofreading (TODO.md). The Morse tone has only run in headless Chrome,
   where nothing is heard; touch and pen were emulated.

@@ -8,7 +8,7 @@ import { test } from 'node:test';
 
 import { EMAIL } from '../../src/content/profile.ts';
 import { PROFILES } from '../../src/content/profiles.ts';
-import { jsonLdScript, OG_IMAGE, personJsonLd, sitemapXml } from '../soon-seo.mjs';
+import { graphJsonLd, jsonLdScript, OG_IMAGE, personJsonLd, sitemapXml } from '../soon-seo.mjs';
 import { EMPLOYER } from './employer-name.mjs';
 import { leaksAddress } from './private-address.mjs';
 
@@ -43,7 +43,7 @@ test('soon SEO: the Person JSON-LD is valid, has the right facts and nothing pri
   assert.equal(person['@context'], 'https://schema.org');
   assert.equal(person['@type'], 'Person');
   assert.equal(person.name, 'Ahmadreza Taheri');
-  assert.equal(person.alternateName, 'احمدرضا طاهری');
+  assert.ok(person.alternateName.includes('احمدرضا طاهری'));
   assert.equal(person.jobTitle, 'Fachinformatiker für Systemintegration (in Ausbildung)');
   assert.equal(person.url, 'https://ahmadreza.de/');
   // A city and a country, never a street, a postcode or the employer.
@@ -61,7 +61,7 @@ test('soon SEO: the Person JSON-LD is valid, has the right facts and nothing pri
   const script = jsonLdScript();
   const inner = script.match(/^<script type="application\/ld\+json">([\s\S]*)<\/script>$/)?.[1];
   assert.ok(inner && !inner.includes('<'), 'no raw < inside the script');
-  assert.deepEqual(JSON.parse(inner), person);
+  assert.deepEqual(JSON.parse(inner), graphJsonLd());
   assert.equal(page.match(/<!--@jsonld-->/g)?.length, 1, 'one JSON-LD marker in the template');
 });
 
@@ -103,11 +103,11 @@ test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages wi
   const dist = (path) => read(`soon/dist/${path}`);
   assert.equal(dist('robots.txt'), read('public/robots.txt'));
   assert.deepEqual([...dist('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
-  for (const [folder, id, image] of [['', 'de', 'og-de'], ['en/', 'en', 'og-en'], ['fa/', 'fa', 'og-fa']]) {
+  for (const [folder, id, image] of [['', 'de', 'ahmadreza-taheri-de'], ['en/', 'en', 'ahmadreza-taheri-en'], ['fa/', 'fa', 'ahmadreza-taheri-fa']]) {
     assert.ok(exists('soon/dist/og/' + image + '.png'), image);
     const html = dist(folder + 'index.html');
     const inner = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
-    assert.deepEqual(JSON.parse(inner), personJsonLd(id), id);
+    assert.deepEqual(JSON.parse(inner), graphJsonLd(id), id);
     assert.ok(html.includes('<html lang="' + id + '"'), id);
     assert.doesNotMatch(html, /\{\{|@jsonld|@tokens|@alternates/, 'nothing left unfilled');
     assert.doesNotMatch(html, /Momrabadi/);

@@ -5,9 +5,9 @@
  * page describes the same person and site rather than new ones.
  *
  * Never the legal name or the postal address: those belong to the Impressum
- * alone (DECISIONS.md 58). `image` waits for the portrait and `sameAs` for the
- * owner's profiles (ROADMAP OWN-01, OWN-03); both are added here when they
- * exist. Relative imports so plain node can test it.
+ * alone (DECISIONS.md 58). Amonel is its own CreativeWork with the Person as
+ * `creator`, never a name or alternateName of the Person. `sameAs` waits for the
+ * owner's profiles (ROADMAP OWN-03); it is added here when they exist. Relative imports so plain node can test it.
  * CONTENT-TODO CR-1046
  */
 
@@ -18,14 +18,14 @@ import { SITE_URL } from './constants.ts';
 export interface PersonCopy {
   /** Display name, identical in every language. */
   name: string;
-  /** The Persian spelling, احمدرضا طاهری. */
-  persianName: string;
   jobTitle: string;
   knowsAbout: readonly string[];
   /** The page's own language tag, e.g. `de-DE`. */
   inLanguage: string;
-  /** The site's name, Amonel. */
+  /** The brand, Amonel: its own work, never part of the person. */
   siteName: string;
+  /** The share image (also the page's primary image) and its alt text. */
+  image: { url: string; width: number; height: number; alt: string };
   description: string;
   /** Absolute URL of the page carrying the graph. */
   pageUrl: string;
@@ -34,6 +34,13 @@ export interface PersonCopy {
 
 const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
+const BRAND_ID = `${SITE_URL}/#amonel`;
+
+/**
+ * Spellings of the name only - skills and activities belong in knowsAbout.
+ * Machine text, identical in every language; never the legal name.
+ */
+export const NAME_VARIANTS: readonly string[] = ['Ahmadreza', 'Taheri', 'Ahmad Reza Taheri', 'احمدرضا', 'احمدرضا طاهری'];
 
 type JsonLd = Record<string, unknown>;
 
@@ -43,7 +50,7 @@ export function structuredData(copy: PersonCopy): JsonLd {
     '@type': 'Person',
     '@id': PERSON_ID,
     name: copy.name,
-    alternateName: [copy.persianName],
+    alternateName: [...NAME_VARIANTS],
     jobTitle: copy.jobTitle,
     url: `${SITE_URL}/`,
     address: { '@type': 'PostalAddress', addressLocality: 'Trier', addressCountry: 'DE' },
@@ -56,14 +63,31 @@ export function structuredData(copy: PersonCopy): JsonLd {
   const website: JsonLd = {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
-    name: copy.siteName,
+    name: copy.name,
     url: `${SITE_URL}/`,
     inLanguage: ['de-DE', 'en', 'fa-IR'],
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
   };
-  const graph: JsonLd[] = [person, website];
+  const brand: JsonLd = {
+    '@type': 'CreativeWork',
+    '@id': BRAND_ID,
+    name: copy.siteName,
+    url: `${SITE_URL}/`,
+    creator: { '@id': PERSON_ID },
+  };
+  const graph: JsonLd[] = [person, website, brand];
   if (copy.isProfilePage) {
+    const imageId = `${copy.pageUrl}#primaryimage`;
+    graph.push({
+      '@type': 'ImageObject',
+      '@id': imageId,
+      url: copy.image.url,
+      contentUrl: copy.image.url,
+      width: copy.image.width,
+      height: copy.image.height,
+      caption: copy.image.alt,
+    });
     graph.push({
       '@type': 'ProfilePage',
       '@id': `${copy.pageUrl}#profile`,
@@ -72,6 +96,7 @@ export function structuredData(copy: PersonCopy): JsonLd {
       description: copy.description,
       inLanguage: copy.inLanguage,
       isPartOf: { '@id': WEBSITE_ID },
+      primaryImageOfPage: { '@id': imageId },
       mainEntity: { '@id': PERSON_ID },
     });
   }

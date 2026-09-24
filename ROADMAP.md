@@ -41,18 +41,18 @@ build time).
 | `desktop` | 6 | 1 | 6 | 44.8 / 66 | 68 % |
 | `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
-| `legal` | 12 | 0 | 5 | 29 / 44 | 66 % |
-| `seo` | 14 | 3 | 8 | 54.7 / 81 | 68 % |
+| `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
+| `seo` | 16 | 3 | 8 | 57.7 / 84 | 69 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 53 | 8 | 41 | 247.2 / 402 | **61 %** |
+| **all** | 55 | 8 | 42 | 250.2 / 406 | **62 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 9 | 0 | 12 | 21 |
-| P1 | 13 | 5 | 34 | 52 |
+| P0 | 10 | 0 | 12 | 22 |
+| P1 | 13 | 5 | 36 | 54 |
 | P2 | 19 | 3 | 7 | 29 |
-| **total** | **41** | **8** | **53** | **102** |
+| **total** | **42** | **8** | **55** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -117,7 +117,9 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-09 | **Static, indexable About pages** at `/ueber-mich/`, `/en/about/`, `/fa/about/` (URL to be confirmed): real HTML text from `content/about.ts`, one h1, linked from landing and footer. Built 2026-09-23 at `/about/` in all three locales (one slug, like the legal pages): the About app's own component rendered on the server, name as h1, in the sitemap, linked from every page footer (DECISIONS.md 59). | done | P1 | Claude Code | - | M | about |
 | SEO-10 | **Journey text fallback**: today a screen-reader-only list of the eras; expand to the full SEO layer (one truth, insider detail, puzzle summary per era) as real static text. Done 2026-09-23: per era an h2 with year and name, the truth, the era paragraph, the figures and the insider detail, plus links to the desktop and About - the same sentences the scenes show; puzzle copy stays out (budget). Journey HTML de 43.2 kB gz (limit 48). | done | P1 | Claude Code | - | M | seo |
 | SEO-11 | **Custom 404 page**: localised, on-brand, `noindex`, links home / desktop / journey; replaces Next's default `404.html` that `not_found_handling: "404-page"` serves. Built 2026-09-23: `src/app/not-found.tsx`, one page in all three languages (a stray URL has no locale), real 404 status, noindex; fonts and CSS moved to the root layout so it is styled. | done | P1 | Claude Code | - | S | seo |
-| SEO-12 | **Submit the sitemap** in Google Search Console and Bing Webmaster Tools (both already verified by the owner). | missing | P1 | Ahmadreza | SEO-02, DEP-06 | XS | seo |
+| SEO-12 | **Submit the sitemap and request indexing** (reworded 2026-09-24): Google Search Console already has a verified Domain property, so only submit `sitemap.xml` there and request indexing for `/`, `/en/` and `/fa/`; submit the same sitemap in Bing Webmaster Tools. | missing | P1 | Ahmadreza | SEO-02 | XS | seo |
+| SEO-16 | **Entity signals** (2026-09-24, Claude Code): one JSON-LD `@graph` (Person with name variants and `knowsAbout`, WebSite named after the person, Amonel as a separate CreativeWork, ImageObject), on the main site and on the coming-soon pages; share images renamed to `ahmadreza-taheri-<locale>.png`; `anthropic-ai` in robots.txt. The coming-soon pages carry it live (version `8eac93e8`). | done | P1 | Claude Code | - | S | seo |
+| SEO-17 | **Cloudflare AI bot policies** (owner, 2026-09-24): Search, Agent and Training all set to Allow, so ClaudeBot and anthropic-ai no longer get a 403. | done | P1 | Ahmadreza | - | XS | seo |
 | SEO-13 | Web manifest is German only (`name`, `description`). | partial | P2 | Claude Code | - | XS 50% | seo |
 | SEO-14 | Landing titles run over 60 characters (de 66, en 64, fa 66): **waiting for owner** decision on the wording (never shorten the name). | missing | P2 | Ahmadreza | FIN-01 | XS | seo |
 | SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
@@ -142,6 +144,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - | XS | legal |
 | LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md` (the five fonts of the site and the five of the coming-soon page, Martian Grotesk and Departure Mono from their authors' GitHub releases); `scripts/test/fonts.test.mjs` and `soon-style.test.mjs` fail if a font has no licence file or row, is not used, is loaded from a third party, or if a font file is committed outside `soon/fonts/`. | done | P0 | Claude Code | - | S | legal |
 | LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Done 2026-09-24: `bidiParts()` in `src/lib/legal-doc.ts` feeds both renderers (`LegalPage.tsx`, `build-soon.mjs`), checked by `legal-bidi.test.mjs`; the wording itself is unchanged, only the markup. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | done | P2 | Claude Code | LEG-07 | S | legal |
+| LEG-17 | **GitHub Support purge of the cached commits** (new 2026-09-24): ten cached commits on GitHub still contain the old address after the history rewrite; ticket sent 2026-09-24, waiting for GitHub. | missing | P0 | Ahmadreza | LEG-12 | XS | legal || LEG-18 | **Verify the purge, then delete the backup** (new 2026-09-24): after GitHub confirms, open one old commit SHA URL to check it is gone, then delete the backup bundle outside the repo (LEG-12). | missing | P0 | Ahmadreza | LEG-17 | XS | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 

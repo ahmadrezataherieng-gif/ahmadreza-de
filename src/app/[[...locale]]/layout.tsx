@@ -170,13 +170,13 @@ export async function generateMetadata({
       url: viewHref(locale, view),
       // One share image per language (scripts/og-image.mjs, ROADMAP SEO-05).
       // CONTENT-TODO CR-1050
-      images: [{ url: `/og/og-${locale}.png`, width: 1200, height: 630, alt: t('ogAlt'), type: 'image/png' }],
+      images: [{ url: `/og/ahmadreza-taheri-${locale}.png`, width: 1200, height: 630, alt: t('ogAlt'), type: 'image/png' }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [{ url: `/og/og-${locale}.png`, alt: t('ogAlt') }],
+      images: [{ url: `/og/ahmadreza-taheri-${locale}.png`, alt: t('ogAlt') }],
     },
   };
 }
@@ -222,11 +222,11 @@ export default async function LocaleLayout({
       : serialiseJsonLd(
           structuredData({
             name: tSite('author'),
-            persianName: tSite('persianName'),
             jobTitle: tSite('jobTitle'),
             knowsAbout: tSite.raw('knowsAbout') as string[],
             inLanguage: htmlLang[locale],
             siteName: tSite('brand'),
+            image: { url: `${SITE_URL}/og/ahmadreza-taheri-${locale}.png`, width: 1200, height: 630, alt: tSite('ogAlt') },
             description: tSite('description'),
             pageUrl: `${SITE_URL}${viewHref(locale, view)}`,
             isProfilePage: view === 'landing',

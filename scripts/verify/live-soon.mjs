@@ -30,8 +30,9 @@ check('html lang is de, robots index,follow', html.includes('<html lang="de"') &
 check('h1 is the name; the Persian and English lines are visible text', html.includes('<h1>Ahmadreza Taheri</h1>') && html.includes('احمدرضا طاهری،') && html.includes('IT specialist for system integration in training'));
 const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
 let person;
-try { person = JSON.parse(ld); } catch { /* reported below */ }
-check('JSON-LD parses as a Person with the Persian alternateName, city and country only', person?.['@type'] === 'Person' && person.name === 'Ahmadreza Taheri' && person.alternateName === 'احمدرضا طاهری' && person.address?.addressLocality === 'Trier' && person.address?.addressCountry === 'DE' && !('streetAddress' in person.address) && !('postalCode' in person.address), ld?.slice(0, 80));
+let graph;
+try { graph = JSON.parse(ld)['@graph']; person = graph?.find((node) => node['@type'] === 'Person'); } catch { /* reported below */ }
+check('JSON-LD parses as a Person with the Persian alternateName, city and country only', person?.['@type'] === 'Person' && person.name === 'Ahmadreza Taheri' && person.alternateName?.includes('احمدرضا طاهری') && person.address?.addressLocality === 'Trier' && person.address?.addressCountry === 'DE' && !('streetAddress' in person.address) && !('postalCode' in person.address), ld?.slice(0, 80));
 check('JSON-LD has the site e-mail, the url and no legal name', person?.email?.startsWith('mailto:') && person.url === 'https://ahmadreza.de/' && !/Momrabadi/.test(ld ?? ''));
 check('Open Graph and Twitter tags with the share image', ['og:title', 'og:description', 'og:url', 'og:image', 'og:image:alt', 'og:site_name'].every((name) => html.includes(`property="${name}"`)) && html.includes('name="twitter:card" content="summary_large_image"') && html.includes('name="twitter:image"'));
 check('the employer is not named', !EMPLOYER.test(html));
@@ -55,7 +56,7 @@ for (const path of ['/impressum/', '/datenschutz/', '/en/impressum/', '/en/daten
   const legal = await get(path);
   check(`${path} answers 200, is noindex, has no employer and no dummy address`, legal.status === 200 && (legal.body ?? '').includes('<meta name="robots" content="noindex,follow">') && !EMPLOYER.test(legal.body ?? '') && !/Musterstra|Musterstadt/.test(legal.body ?? ''), `${legal.status}`);
 }
-for (const [path, type] of [['/og/og-de.png', 'image/png'], ['/fonts/martian-grotesk-vf.woff2', 'font/woff2'], ['/fonts/geist-latin-wght.woff2', 'font/woff2'], ['/fonts/geist-mono-latin-wght.woff2', 'font/woff2'], ['/fonts/vazirmatn-arabic-wght.woff2', 'font/woff2'], ['/fonts/departure-mono-regular.woff2', 'font/woff2'], ['/fonts/LICENSES.md', ''], ['/fonts/licenses/martian-grotesk-OFL.txt', 'text/plain']]) {
+for (const [path, type] of [['/og/ahmadreza-taheri-de.png', 'image/png'], ['/fonts/martian-grotesk-vf.woff2', 'font/woff2'], ['/fonts/geist-latin-wght.woff2', 'font/woff2'], ['/fonts/geist-mono-latin-wght.woff2', 'font/woff2'], ['/fonts/vazirmatn-arabic-wght.woff2', 'font/woff2'], ['/fonts/departure-mono-regular.woff2', 'font/woff2'], ['/fonts/LICENSES.md', ''], ['/fonts/licenses/martian-grotesk-OFL.txt', 'text/plain']]) {
   const asset = await get(path, { method: 'HEAD' });
   check(`${path} answers 200${type ? ` as ${type}` : ''}`, asset.status === 200 && (!type || asset.type.startsWith(type)), `${asset.status} ${asset.type}`);
 }

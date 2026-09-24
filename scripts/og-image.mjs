@@ -71,8 +71,8 @@ try {
     await sleep(300);
     const shot = await chrome.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1200, height: 630, scale: 1 } });
     const png = await sharp(Buffer.from(shot.result.data, 'base64')).png({ compressionLevel: 9, palette: true, quality: 90 }).toBuffer();
-    writeFileSync(new URL(`public/og/og-${locale}.png`, root), png);
-    console.log(`public/og/og-${locale}.png ${(png.length / 1024).toFixed(1)} kB`);
+    writeFileSync(new URL(`public/og/ahmadreza-taheri-${locale}.png`, root), png);
+    console.log(`public/og/ahmadreza-taheri-${locale}.png ${(png.length / 1024).toFixed(1)} kB`);
   }
 } finally {
   chrome.close();
