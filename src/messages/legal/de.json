@@ -212,7 +212,7 @@
           },
           {
             "type": "p",
-            "text": "Für das Zählen wird nichts auf Ihrem Gerät gespeichert oder ausgelesen - kein Cookie und kein Speichereintrag -, daher ist keine Einwilligung nach § 25 TDDDG erforderlich. Ihre IP-Adresse verarbeitet dabei nur Cloudflare während der Übertragung, wie unter „Hosting und Auslieferung durch Cloudflare“ beschrieben, auch um die Zähl-Schnittstelle durch eine Begrenzung der Anfragen je IP-Adresse vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO). Zur Fehlersuche kann Cloudflare Aufrufe dieser Schnittstelle (Zeitpunkt, Adresse, Statuscode) für wenige Tage protokollieren."
+            "text": "Für das Zählen wird nichts auf Ihrem Gerät gespeichert oder ausgelesen - kein Cookie und kein Speichereintrag -, daher ist keine Einwilligung nach § 25 TDDDG erforderlich. Ihre IP-Adresse verarbeitet dabei nur Cloudflare während der Übertragung, wie unter „Hosting und Auslieferung durch Cloudflare“ beschrieben, auch um die Zähl-Schnittstelle durch eine Begrenzung der Anfragen je IP-Adresse vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO)."
           }
         ]
       },

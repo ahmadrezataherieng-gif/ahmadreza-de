@@ -27,10 +27,10 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 10 | 0 | 9 | 19 |
+| P0 | 10 | 0 | 10 | 20 |
 | P1 | 16 | 4 | 12 | 32 |
 | P2 | 18 | 2 | 0 | 20 |
-| **total** | **44** | **6** | **21** | **71** |
+| **total** | **44** | **6** | **22** | **72** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -87,6 +87,7 @@ Recount after each change: `node scripts/roadmap.mjs --write` rewrites this tabl
 | LEG-11 | **Cloudflare features that set cookies stay off** (Bot Fight Mode, challenges, Waiting Room, Always Online); rate limit only by IP with Block. Check at deploy. | missing | P0 | Ahmadreza | DEP-06 |
 | LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - |
 | LEG-13 | **Phone number in the Impressum** (the § 5 DDG grey area: a "second fast way" of contact besides e-mail). **Resolved 2026-09-24 by the owner: no phone number.** The Impressum keeps name, postal address and e-mail; nothing to build. | done | P0 | Ahmadreza | - |
+| LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - |
 
 ## Phase 12 - Performance, accessibility, mobile
 

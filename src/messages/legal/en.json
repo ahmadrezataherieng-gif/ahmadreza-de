@@ -212,7 +212,7 @@
           },
           {
             "type": "p",
-            "text": "Nothing is stored on or read from your device for counting - no cookie and no storage entry - so no consent under § 25 TDDDG is required. Your IP address is processed only by Cloudflare in transit, as described under \"Hosting and delivery by Cloudflare\", including to protect the counting interface against abuse by limiting requests per IP address (Art. 6(1)(f) GDPR). For troubleshooting, Cloudflare may log requests to this interface (time, address, status code) for a few days."
+            "text": "Nothing is stored on or read from your device for counting - no cookie and no storage entry - so no consent under § 25 TDDDG is required. Your IP address is processed only by Cloudflare in transit, as described under \"Hosting and delivery by Cloudflare\", including to protect the counting interface against abuse by limiting requests per IP address (Art. 6(1)(f) GDPR)."
           }
         ]
       },

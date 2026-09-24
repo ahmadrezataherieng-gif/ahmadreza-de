@@ -22,5 +22,11 @@
   // dashboard, and listing only some of them here would detach the rest.
   // workers.dev stays as it was (on), preview URLs off.
   "workers_dev": true,
-  "preview_urls": false
+  "preview_urls": false,
+  // Worker logs off, as for the real site (DECISIONS.md 62). Stated explicitly:
+  // the Worker was created in the dashboard, which may have switched them on.
+  "observability": {
+    "enabled": false,
+    "logs": { "enabled": false, "invocation_logs": false }
+  }
 }

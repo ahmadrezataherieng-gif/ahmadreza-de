@@ -13,8 +13,8 @@
  *
  * What is stored is a counter name and an integer - nothing about who sent
  * it: no IP, no user agent, no identifier, no timestamp, no cookie. No
- * request body is read. Nothing here calls `console`: `observability` is on,
- * so a log line would be kept. Abuse is limited by the allowlist, the Origin
+ * request body is read. Nothing here calls `console`, and Worker logs are off
+ * in wrangler.jsonc (DECISIONS.md 62) - two locks, so nothing is kept. Abuse is limited by the allowlist, the Origin
  * check and a Cloudflare rate-limiting rule (TODO.md, Phase 13), which counts
  * inside Cloudflare so this code never has to see an IP at all.
  */

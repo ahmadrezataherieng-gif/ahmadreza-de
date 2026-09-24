@@ -192,3 +192,14 @@ test('wrangler: only /api/* runs the Worker first; the site stays assets; D1 is 
   assert.match(config, /"binding":\s*"COUNTERS_DB"/);
   assert.match(config, /"migrations_dir":\s*"migrations"/);
 });
+
+test('wrangler: Worker logs are off for both Workers, and the privacy policy no longer mentions a counter log', () => {
+  for (const file of ['wrangler.jsonc', 'soon/wrangler.jsonc']) {
+    const config = readFileSync(path.join(ROOT, file), 'utf8');
+    assert.match(config, /"observability":\s*\{\s*"enabled":\s*false,\s*"logs":\s*\{\s*"enabled":\s*false,\s*"invocation_logs":\s*false\s*\}\s*\}/, file);
+  }
+  for (const locale of ['de', 'en', 'fa']) {
+    const copy = readFileSync(path.join(ROOT, `src/messages/legal/${locale}.json`), 'utf8');
+    assert.doesNotMatch(copy, /Fehlersuche|troubleshooting|رفع خطا/, locale);
+  }
+});
