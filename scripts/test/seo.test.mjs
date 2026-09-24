@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import { structuredData, serialiseJsonLd } from '../../src/lib/structured-data.ts';
+import { leaksAddress } from './private-address.mjs';
 
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 
@@ -28,7 +29,8 @@ test('llms.txt: names the person in both spellings, links the site, never the ad
   assert.match(llms, /^# Ahmadreza Taheri/);
   assert.ok(llms.includes('احمدرضا طاهری'));
   assert.ok(llms.includes('https://ahmadreza.de/amonel/'));
-  assert.doesNotMatch(llms, /Momrabadi|[Adresse entfernt]|[PLZ entfernt]/);
+  assert.doesNotMatch(llms, /Momrabadi/);
+  assert.ok(!leaksAddress(llms));
 });
 
 test('JSON-LD: one Person and one WebSite by @id, a ProfilePage only on the landing page, never the legal name or address', () => {
@@ -40,6 +42,7 @@ test('JSON-LD: one Person and one WebSite by @id, a ProfilePage only on the land
   assert.equal(landing['@graph'][2].mainEntity['@id'], landing['@graph'][0]['@id']);
   assert.deepEqual(structuredData({ ...copy, isProfilePage: false })['@graph'].map((node) => node['@type']), ['Person', 'WebSite']);
   const json = serialiseJsonLd(landing);
-  assert.doesNotMatch(json, /Momrabadi|[Adresse entfernt]|[PLZ entfernt]|streetAddress/);
+  assert.doesNotMatch(json, /Momrabadi|streetAddress/);
+  assert.ok(!leaksAddress(json));
   assert.ok(!serialiseJsonLd({ x: '</script>' }).includes('</script>'));
 });

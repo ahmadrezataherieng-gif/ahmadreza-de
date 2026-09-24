@@ -53,3 +53,6 @@ next-env.d.ts
 Bearbeitung/
 Claude outputs/
 soon/dist/
+
+# the postal address for the Impressum - never in the repository (DECISIONS.md 60)
+src/content/legal.local.ts

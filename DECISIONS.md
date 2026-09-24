@@ -2009,3 +2009,31 @@ a placeholder with a CONTENT_REVIEW.md entry.
 - robots.txt allows every crawler and names the AI bots; the sitemap lists
   every indexed page with hreflang and leaves out the `noindex` legal pages;
   `llms.txt` states only facts the site already states.
+
+## 60. The postal address never enters the repository (2026-09-24)
+
+**Decided by Ahmadreza:** his home address must not be readable on GitHub, now
+or in any past commit.
+
+- The address moved into `src/content/legal.local.ts`, git-ignored. The
+  committed `legal.example.ts` holds dummy data to copy from.
+  `src/content/legal.ts` imports the local file; everything else about the
+  Impressum is unchanged.
+- **The build fails without it, with a readable message.**
+  `scripts/legal-address.mjs` runs from `next.config.mjs` (so `next build`
+  and `next dev`) and from `build-soon.mjs`; it also refuses the dummy values.
+  A TypeScript "cannot find module" would have been a failure too, but not one
+  that says what to do.
+- **The build environment may supply it instead:** with `LEGAL_STREET` and
+  `LEGAL_POSTCODE_CITY` set, the guard writes the local file. That is the path
+  for Cloudflare Workers Builds (POST-01): a build secret, never the repo
+  (ROADMAP POST-04).
+- **Tests never spell the address.** They read it from the local file
+  (`scripts/test/private-address.mjs`) and check that it appears in no other
+  source file and no project document; on a machine without the file there is
+  nothing to leak.
+- **The history was rewritten** with `git filter-repo --replace-text`, every
+  occurrence of the street and postcode replaced by a placeholder, then
+  force-pushed. A bundle of the old history was kept outside the repository
+  first. The rewrite changed every commit SHA from the first one that held the
+  address.

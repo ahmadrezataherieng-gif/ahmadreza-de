@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
@@ -299,7 +299,9 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
   per view, and a trilingual 404 page with a real 404 status. The fonts and
   the stylesheet are imported by the root layout now, so the 404 is styled.
 - **Legal pages** (Phase 11, DECISIONS.md 58): built in all three languages
-  from `messages/legal/`, `noindex`, the address only in `content/legal.ts`;
+  from `messages/legal/`, `noindex`, the legal name only in `content/legal.ts`,
+  the postal address only in the git-ignored `content/legal.local.ts` (the build
+  stops without it; git history purged of it on 2026-09-24, DECISIONS.md 60);
   status "LEGAL – owner must verify". The coming-soon page now lives in
   `soon/` with the same legal pages (`npm run build:soon`), live on
   ahmadreza.de since 2026-09-23 (Worker `silent-lake-8ae2`).

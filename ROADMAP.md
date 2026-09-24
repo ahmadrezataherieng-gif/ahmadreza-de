@@ -22,15 +22,15 @@ lint` and `npm test` (142 tests) all green; nine pages generated.
 
 ## Summary
 
-Recount after each change (one line in Git Bash):
-`grep -E "^\| [A-Z]+-[0-9]+ \|" ROADMAP.md | awk -F'|' '{gsub(/ /,"",$4);gsub(/ /,"",$5);print $5,$4}' | sort | uniq -c`
+Recount after each change: `node scripts/roadmap.mjs --write` rewrites this table
+(the same parser gives the coming-soon page its progress figure).
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 10 | 0 | 7 | 17 |
+| P0 | 11 | 0 | 8 | 19 |
 | P1 | 16 | 4 | 12 | 32 |
 | P2 | 17 | 2 | 0 | 19 |
-| **total** | **43** | **6** | **19** | **68** |
+| **total** | **44** | **6** | **20** | **70** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
@@ -85,6 +85,7 @@ Recount after each change (one line in Git Bash):
 | LEG-09 | **Written usage rights for the portrait** from the photographer before it goes online. | missing | P0 | Ahmadreza | OWN-01 |
 | LEG-10 | **Check "Amonel"** in the DPMA and EUIPO registers before any commercial use. | missing | P1 | Ahmadreza | - |
 | LEG-11 | **Cloudflare features that set cookies stay off** (Bot Fight Mode, challenges, Waiting Room, Always Online); rate limit only by IP with Block. Check at deploy. | missing | P0 | Ahmadreza | DEP-06 |
+| LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - |
 
 ## Phase 12 - Performance, accessibility, mobile
 
@@ -127,7 +128,7 @@ Recount after each change (one line in Git Bash):
 | OWN-04 | **German proofreading by a native speaker** (and Persian); all copy is a draft. | missing | P1 | Ahmadreza | FIN-01 |
 | OWN-05 | **About/CV facts**: apprenticeship start and end date, earlier stations, language levels, skill list, projects (TODO.md, Phase 7). | missing | P1 | Ahmadreza | - |
 | OWN-06 | **Decide the GitHub repo link** is public on the site (Projects). | missing | P2 | Ahmadreza | - |
-| OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. Given 2026-09-23; used only in `src/content/legal.ts`. | done | P0 | Ahmadreza | - |
+| OWN-07 | **Postal address and published e-mail** for the Impressum and Datenschutzerklärung. Given 2026-09-23; the address lives only in the git-ignored `src/content/legal.local.ts` since 2026-09-24 (LEG-12). | done | P0 | Ahmadreza | - |
 | OWN-08 | **Cloudflare login for deploys** (`npx wrangler login` on this machine, or deploy `soon/` yourself): nothing can be deployed without it. Done 2026-09-23 (OAuth, approved by the owner). | done | P0 | Ahmadreza | - |
 | OWN-09 | **Make `kontakt@ahmadreza.de` or the Gmail address the one contact**: the site shows `kontakt@ahmadreza.de`, the legal pages the Gmail address the owner chose. Both are fine legally once DEP-01 works; decide whether to keep two. | missing | P2 | Ahmadreza | DEP-01 |
 
@@ -138,6 +139,7 @@ Recount after each change (one line in Git Bash):
 | POST-01 | **Connect GitHub to Cloudflare** (Workers Builds) so every push to `main` auto-deploys; build command `npm run build`. | missing | P1 | Ahmadreza + Claude Code | DEP-06 |
 | POST-02 | **Optional CMS** (Decap or Sveltia at `/admin`) once the GitHub-edit workflow works; must not add third-party requests for visitors. | missing | P2 | Claude Code | POST-01 |
 | POST-03 | **Era 1977, the Apple II**: truth, sourced insider detail, visual, puzzle, theme, between 1971 and 1981. | missing | P2 | Claude Code | DEP-06 |
+| POST-04 | **The address as a Cloudflare build secret**: once Workers Builds deploys from GitHub (POST-01), set `LEGAL_STREET` and `LEGAL_POSTCODE_CITY` as build secrets; `scripts/legal-address.mjs` writes `legal.local.ts` from them. Never commit the address to make a build pass. | missing | P0 | Ahmadreza + Claude Code | POST-01 |
 
 ## Final phase
 

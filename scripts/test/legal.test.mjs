@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 import { matchSegments, allRouteSegments, viewHref } from '../../src/lib/routing.ts';
 import { sectionsFor, linkify } from '../../src/lib/legal-doc.ts';
+import { leaksAddress } from './private-address.mjs';
 
 const root = new URL('../../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, root), 'utf8');
@@ -31,7 +32,20 @@ test('legal: the postal address and legal name are imported only by the legal pa
   assert.deepEqual(importers, ['src/components/legal/LegalPage.tsx']);
   for (const file of sourceFiles('src/')) {
     if (file === 'src/content/legal.ts') continue;
-    assert.doesNotMatch(read(file), /[Adresse entfernt]|Momrabadi|ahmadrezataheride/, file);
+    assert.doesNotMatch(read(file), /Momrabadi/, file);
+    if (file !== 'src/content/legal.local.ts') assert.ok(!leaksAddress(read(file)), `${file} carries the private address`);
+  }
+});
+
+test('legal: the postal address stays out of the repository - git-ignored local file, a dummy template, a build guard', () => {
+  assert.match(read('.gitignore'), /^src\/content\/legal\.local\.ts$/m);
+  assert.match(read('src/content/legal.ts'), /from '\.\/legal\.local\.ts'/);
+  assert.doesNotMatch(read('src/content/legal.ts'), /street:\s*'/);
+  assert.match(read('src/content/legal.example.ts'), /Musterstraße 1/);
+  assert.match(read('next.config.mjs'), /ensureLegalAddress\(\)/);
+  assert.match(read('scripts/build-soon.mjs'), /ensureLegalAddress\(\)/);
+  for (const file of ['README.md', 'ROADMAP.md', 'PROJECT_STATE.md', 'TODO.md', 'DECISIONS.md', 'CONTENT_REVIEW.md', 'soon/index.html']) {
+    assert.ok(!leaksAddress(read(file)), `${file} carries the private address`);
   }
 });
 

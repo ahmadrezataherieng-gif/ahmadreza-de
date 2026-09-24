@@ -11,8 +11,12 @@
 
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
-import { LEGAL_CONTACT } from '../src/content/legal.ts';
+import { ensureLegalAddress } from './legal-address.mjs';
 import { linkify, sectionsFor } from '../src/lib/legal-doc.ts';
+
+// Before the legal copy is imported: without the address there is no Impressum.
+ensureLegalAddress();
+const { LEGAL_CONTACT } = await import('../src/content/legal.ts');
 
 const root = new URL('../', import.meta.url);
 const dist = new URL('soon/dist/', root);

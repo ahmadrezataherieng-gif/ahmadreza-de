@@ -121,8 +121,15 @@ transfer basis.
 
 - `/impressum/` and `/datenschutz/` in every locale (German slug in en and
   fa), rendered by `components/legal/LegalPage.tsx` from
-  `messages/legal/{de,en,fa}.json`; the address and e-mail only in
-  `content/legal.ts`, imported by nothing else. `noindex, follow`. German is
+  `messages/legal/{de,en,fa}.json`; the legal name only in
+  `content/legal.ts`, imported by nothing else. **The postal address is never
+  in the repository** (DECISIONS.md 60): it lives in the git-ignored
+  `content/legal.local.ts` (template `legal.example.ts`, dummy data);
+  `scripts/legal-address.mjs` stops `next build` and `build:soon` without it,
+  or writes it from `LEGAL_STREET` / `LEGAL_POSTCODE_CITY` in the build
+  environment (a Cloudflare build secret once POST-01 is set up, POST-04). Never
+  write the address into code, tests, docs or a commit message; tests read it
+  from the local file (`scripts/test/private-address.mjs`). `noindex, follow`. German is
   binding. Status in CONTENT_REVIEW.md: **LEGAL – owner must verify** - never
   CONTENT-TODO, never marked final without Ahmadreza.
 - **Any change to what the site stores, sends or loads changes the

@@ -5,12 +5,18 @@
  * index, the Terminal, About or structured data. The legal name is the only
  * place "Momrabadi" may appear on the site (the `seo` skill).
  *
+ * The postal address lives in the git-ignored `legal.local.ts` (template:
+ * `legal.example.ts`), never in the repository: `scripts/legal-address.mjs`
+ * stops every build that lacks it (DECISIONS.md 60).
+ *
  * Machine text, identical in every language; the country name and the e-mail
  * label come from `messages/legal/`.
  */
+import { LEGAL_ADDRESS } from './legal.local.ts';
+
 export const LEGAL_CONTACT = {
   name: 'Ahmadreza Taheri Momrabadi',
-  street: '[Adresse entfernt]',
-  postcodeCity: '[PLZ entfernt] Trier',
+  street: LEGAL_ADDRESS.street,
+  postcodeCity: LEGAL_ADDRESS.postcodeCity,
   email: 'ahmadrezataheride@gmail.com',
 } as const;
