@@ -51,3 +51,9 @@ The matrix run through Phase 8A (each configuration is one command; `node script
 ## Quiet output
 
 Every script takes `--quiet`: one line per configuration with the pass count, and detail only for failures. `matrix.mjs` uses it by default and prints one line per configuration; `--only apps|desktop|navigation|journey` narrows the run and `--verbose` drops `--quiet`. A long unquiet run floods the session, and every later message pays for it.
+
+## The coming-soon page
+
+- `node scripts/verify/serve.mjs --dir soon/dist --port 3002` (launch config `soon`), then `node scripts/verify/soon.mjs [--base URL] [--quiet]`: wide and phone, dark and light, de/en/fa - lang and dir, no horizontal scroll, the fonts loaded, Latin terms in Persian isolated with `<bdi>`, heading word spacing, orphans, no request leaving the domain, and the six legal pages. It takes `--base https://ahmadreza.de/` to check the live page.
+- `node scripts/verify/live-soon.mjs` after a deploy: the same things curl shows (title, JSON-LD, robots.txt, sitemap.xml, the legal pages, assets, 404, www redirect), cache-busted.
+- `npm test` covers it too: `soon-style.test.mjs`, `soon-seo.test.mjs`, `roadmap.test.mjs`, `fonts.test.mjs`, `employer.test.mjs`.

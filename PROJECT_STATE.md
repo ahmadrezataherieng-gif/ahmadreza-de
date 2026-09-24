@@ -24,6 +24,7 @@ Content review pending: see CONTENT_REVIEW.md (starts after the site is complete
   `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
   and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,
   no external request, the legal pages).
+- **Coming-soon page, last deploy: 2026-09-24** (Worker `silent-lake-8ae2`, version `2f70679d`, progress 60 %): the K6 style, the search layer and the Part 1 employer removal are live. Verified with `node scripts/verify/live-soon.mjs` (30 checks: page, title, JSON-LD, OG tags, robots.txt, sitemap.xml, the six legal pages, the fonts, 404, www redirect) and `node scripts/verify/soon.mjs --base https://ahmadreza.de/` (196 checks in a real browser). Redeploy whenever the progress changes noticeably (BR-03): `npm run build:soon`, `npx wrangler deploy` in `soon/`, then both scripts.
 - **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
   values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
 
