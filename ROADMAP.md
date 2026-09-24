@@ -28,15 +28,15 @@ Recount after each change (one line in Git Bash):
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 7 | 17 |
-| P1 | 17 | 4 | 11 | 32 |
+| P1 | 16 | 4 | 12 | 32 |
 | P2 | 17 | 2 | 0 | 19 |
-| **total** | **44** | **6** | **18** | **68** |
+| **total** | **43** | **6** | **19** | **68** |
 
 ## Phase 9D-2 / 9D-3 - the remaining apps (Act 3)
 
 | ID | Description | Status | Priority | Owner | Depends on |
 |---|---|---|---|---|---|
-| APP-01 | **Timeline app** (base app): the seven eras and Ahmadreza's own path as one scrollable timeline, from `content/eras.ts` and `content/about.ts`. Today the placeholder. | missing | P1 | Claude Code | - |
+| APP-01 | **Timeline app** (base app): the seven eras and Ahmadreza's own path as one scrollable timeline, from `content/eras.ts` and `content/about.ts`. Today the placeholder. Built 2026-09-23: the eras from the journey's own copy (the page-messages chunk the puzzles already load) with links to `/amonel/#era-N`, then the current station from About's copy; its start date is owed (OWN-05). | done | P1 | Claude Code | - |
 | APP-02 | **Contact app** (base app): today a placeholder with the `mailto:` link. Needs the full app: email, profiles (LinkedIn, GitHub, XING once OWN-03 is done), résumé, the legal links. `mailto:` only, never a form. Built 2026-09-23: its own copy, e-mail with a copy button, résumé, location, legal links; the profile links are **waiting for owner** (OWN-03) - add the URLs in `src/content/profiles.ts`. | partial | P1 | Claude Code | OWN-03 for the profile links |
 | APP-03 | **CV app** (base app): today a placeholder. A readable CV view from `content/` plus the PDF download. The structure can be built now; the entries are **waiting for owner** (OWN-02, OWN-05). | missing | P1 | Claude Code + Ahmadreza | OWN-02, OWN-05 |
 | APP-04 | **Network tools app** (1995 bonus, slot `network-tools`): ping, subnet calculator, DNS/port lookups as labelled simulations - never real network requests. | missing | P1 | Claude Code | - |

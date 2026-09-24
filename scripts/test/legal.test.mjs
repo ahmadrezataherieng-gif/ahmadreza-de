@@ -36,7 +36,7 @@ test('legal: the postal address and legal name are imported only by the legal pa
 });
 
 test('legal: every template import over messages/ excludes the legal copy, so it never reaches a client chunk', () => {
-  for (const file of ['src/i18n/request.ts', 'src/components/puzzles/PuzzleMessages.tsx']) {
+  for (const file of ['src/i18n/request.ts', 'src/components/puzzles/PuzzleMessages.tsx', 'src/components/apps/timeline/TimelineApp.tsx']) {
     assert.match(read(file), /webpackExclude: \/\[\\\\\/\]\(apps\|legal\)\[\\\\\/\]\//, file);
   }
 });

@@ -2,7 +2,7 @@
 
 **Status of all content on this site: PLACEHOLDER.** Every text, label, puzzle, game, section and metadata value was written by Claude as a stand-in. The real wording is written together with the owner **after the whole site is finished**. Until then only structure and features are built.
 
-Generated from the codebase on 2026-09-23. **1063 entries.**
+Generated from the codebase on 2026-09-23. **1065 entries.**
 
 ## How to use this file
 
@@ -20,15 +20,15 @@ Generated from the codebase on 2026-09-23. **1063 entries.**
 | Type | Entries |
 |---|---|
 | long text | 91 |
-| short text | 210 |
-| single word / label | 258 |
+| short text | 211 |
+| single word / label | 259 |
 | button | 66 |
 | puzzle / game | 353 |
 | alt text | 1 |
 | SEO / meta | 16 |
 | other | 64 |
 | legal (not placeholder; LEGAL – owner must verify) | 4 |
-| **Total** | **1063** |
+| **Total** | **1065** |
 
 ## 1. Global chrome: navigation and language switcher
 
@@ -1423,7 +1423,7 @@ Nothing to mark in code yet. Registered so they are not forgotten; each gets rea
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1031 | 404 page: `notFound.*` in `src/messages/{de,en,fa}.json` + the title pattern in `src/app/not-found.tsx` (built 2026-09-23) | short text | de / en / fa | PLACEHOLDER | One page in all three languages (a stray URL has no locale): title, one sentence, links home, journey, desktop; noindex. Now (de): «Seite nicht gefunden» |
-| CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | PLACEHOLDER | Real timeline entries of the career path |
+| CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | BUILT 2026-09-23 - see section 29 | Real timeline entries of the career path |
 | CR-1033 | Résumé PDF (`/files/ahmadreza-taheri-lebenslauf.pdf`) - file itself | other | de / en / fa | PLACEHOLDER | The actual CV document, in which languages |
 | CR-1034 | Portrait photo (`/images/portrait.jpg`) - file itself | other | de / en / fa | PLACEHOLDER | Real photo, rights and consent, final alt text |
 | CR-1035 | Network-tools app (bonus, era 6, Phase 9D-2): all copy | long text | de / en / fa | PLACEHOLDER | Title, description and content of the tool |
@@ -1508,3 +1508,14 @@ The full Contact app (ROADMAP APP-02). `mailto:` and a copy button only - never 
 | CR-1061 | `location.label`, `location.value` | short text | de / en / fa | PLACEHOLDER | Now (de): «Trier, Deutschland» - confirm he wants the city shown |
 | CR-1062 | `profiles.label`, `profiles.pending`, `legal.label` | short text | de / en / fa | PLACEHOLDER | Shown until OWN-03 supplies the profile URLs |
 | CR-1063 | `PROFILES` in `src/content/profiles.ts` (LinkedIn, GitHub, XING, all `url: null`) | other | all (machine text) | PLACEHOLDER | The real profile URLs; each appears once it has one, and feeds JSON-LD `sameAs` |
+
+## 29. Desktop app: Timeline
+
+The Timeline app (ROADMAP APP-01): the seven eras with their year, name and truth (the journey’s own `eras` copy, not repeated) and a link into the journey, ending with Ahmadreza’s current station (About’s copy).
+
+**File:** `src/messages/apps/timeline/{de,en,fa}.json`
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1064 | `title`, `intro`, `erasLabel` | short text | de / en / fa | PLACEHOLDER | Now (de): «Achtzig Jahre Computergeschichte in sieben Stationen – und am Ende, wo Ahmadreza heute steht.» |
+| CR-1065 | `open`, `now`, `since` | single word / label | de / en / fa | PLACEHOLDER | «In der Reise ansehen», «Ahmadreza heute», «seit {date}»; the start date itself is owed (OWN-05) |
