@@ -27,3 +27,10 @@
 
 # /favicon.ico is a real file since Phase 9A (public/favicon.ico), so it needs
 # no redirect any more.
+
+# The share images were renamed on 2026-09-24 (ROADMAP SEO-16). Anything that
+# cached the old URLs (link previews, other sites) keeps getting the picture.
+# The coming-soon Worker carries the same rules (soon/_redirects).
+/og/og-de.png  /og/ahmadreza-taheri-de.png  301
+/og/og-en.png  /og/ahmadreza-taheri-en.png  301
+/og/og-fa.png  /og/ahmadreza-taheri-fa.png  301

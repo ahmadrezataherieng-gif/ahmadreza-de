@@ -3,7 +3,7 @@
     "title": "Ahmadreza Taheri – IT Specialist for System Integration",
     "brand": "Amonel",
     "tagline": "80 years of computing in 90 seconds",
-    "description": "Portfolio of Ahmadreza Taheri, IT specialist for system integration in training in Trier. An interactive operating system in the browser.",
+    "description": "Ahmadreza Taheri, IT specialist for system integration in training in Trier, with a background in computer and mobile phone repair. Portfolio as an operating system.",
     "journeyDescription": "80 years of computing in seven eras, from ENIAC to the cloud, each with a small puzzle. An interactive portfolio by Ahmadreza Taheri, IT systems integration trainee in Trier.",
     "desktopDescription": "Amonel OS, Ahmadreza Taheri’s desktop in the browser: about him, a terminal, helpdesk tickets, traceroute and a computer quiz from an IT systems integration trainee.",
     "aboutDescription": "About Ahmadreza Taheri: IT specialist for systems integration in training in Trier, his path, his focus on networks and Linux, languages and contact.",
@@ -11,10 +11,10 @@
     "persianName": "احمدرضا طاهری",
     "jobTitle": "IT Specialist for Systems Integration (apprentice)",
     "knowsAbout": [
-      "Systems integration",
+      "IT support",
+      "System integration",
       "Computer networks",
       "Linux",
-      "IT support",
       "Computer repair",
       "Mobile phone repair",
       "Endpoint management"
@@ -377,6 +377,7 @@
     "firstName": "Ahmadreza",
     "lastName": "Taheri",
     "role": "IT specialist for system integration in training · Trier",
+    "background": "With a background in computer and mobile phone repair",
     "factsLabel": "At a glance",
     "facts": [
       {

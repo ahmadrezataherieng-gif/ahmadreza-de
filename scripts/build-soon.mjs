@@ -165,6 +165,7 @@ cpSync(new URL('public/fonts/licenses/', root), new URL('fonts/licenses/', dist)
 mkdirSync(new URL('og/', dist), { recursive: true });
 for (const image of Object.values(OG_IMAGES)) cpSync(new URL(image.file, root), new URL(image.path, dist));
 cpSync(new URL('public/robots.txt', root), new URL('robots.txt', dist));
+cpSync(new URL('soon/_redirects', root), new URL('_redirects', dist));
 writeFileSync(new URL('sitemap.xml', dist), sitemapXml(values.DATE));
 
 console.log('soon/dist: index.html + en/ and fa/ landing pages, robots.txt, sitemap.xml, og/, fonts/ + impressum and datenschutz in de, en, fa');

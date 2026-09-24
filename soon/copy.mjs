@@ -6,6 +6,7 @@ export const T = {
     title:"Ahmadreza Taheri – Fachinformatiker (Ausbildung), Trier",
     language:"Sprache", status:"Im Aufbau",
     role:"Fachinformatiker für Systemintegration in Ausbildung · Trier",
+    background:"Mit Hintergrund in Computer- und Handyreparatur",
     intro:"Hier entsteht mein persönliches Portfolio. Noch ist es nicht fertig – auf dieser Seite sehen Sie, was kommt und wie weit ich schon bin.",
     write:"E-Mail schreiben",
     whatTitle:"Was hier entsteht",
@@ -32,6 +33,7 @@ export const T = {
     title:"Ahmadreza Taheri – IT System Integration Apprentice, Trier",
     language:"Language", status:"Under construction",
     role:"IT specialist for system integration in training · Trier",
+    background:"With a background in computer and mobile phone repair",
     intro:"This is where my personal portfolio is being built. It isn't finished yet – this page shows what is coming and how far along it is.",
     write:"Send an e-mail",
     whatTitle:"What is being built",
@@ -58,6 +60,7 @@ export const T = {
     title:"احمدرضا طاهری – کارآموز فناوری اطلاعات، تریر",
     language:"زبان", status:"در حال ساخت",
     role:"کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) · تریر",
+    background:"با پیشینهٔ تعمیر کامپیوتر و موبایل",
     intro:"این‌جا نمونه‌کار شخصی من ساخته می‌شود. هنوز کامل نیست؛ در این صفحه می‌بینید چه چیزی در راه است و کار تا کجا پیش رفته است.",
     write:"ایمیل بفرستید",
     whatTitle:"چه چیزی ساخته می‌شود",
@@ -94,17 +97,17 @@ export const FA_NAME = '<p class="fa-name" lang="fa" dir="rtl">احمدرضا ط
 // Search-result and share texts per language (CONTENT-TODO CR-1084, CR-1085).
 export const SEO = {
   de: {
-    description: 'Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier. Sein Portfolio Amonel: 80 Jahre Computergeschichte als eigenes Betriebssystem.',
+    description: 'Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier, mit Hintergrund in Computer- und Handyreparatur. Portfolio Amonel.',
     shareDescription: 'Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte, die zu einem eigenen Betriebssystem im Browser werden.',
     imageAlt: 'Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung, Trier – Portfolio Amonel',
   },
   en: {
-    description: 'Ahmadreza Taheri, IT specialist for system integration in training in Trier, Germany. His portfolio Amonel: 80 years of computer history as an operating system.',
+    description: 'Ahmadreza Taheri, IT specialist for system integration in training in Trier, with a background in computer and mobile phone repair. Portfolio Amonel.',
     shareDescription: 'The portfolio Amonel is being built: 80 years of computer history that turn into an operating system of its own in the browser.',
     imageAlt: 'Ahmadreza Taheri, IT specialist for system integration in training, Trier – portfolio Amonel',
   },
   fa: {
-    description: 'احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) در تریر آلمان. نمونه‌کار او Amonel: ۸۰ سال تاریخ رایانه در قالب یک سیستم‌عامل.',
+    description: 'احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) در تریر، با پیشینهٔ تعمیر کامپیوتر و موبایل. نمونه‌کار Amonel: ۸۰ سال تاریخ رایانه.',
     shareDescription: 'نمونه‌کار Amonel در حال ساخت است: ۸۰ سال تاریخ رایانه که در مرورگر به یک سیستم‌عامل تبدیل می‌شود.',
     imageAlt: 'احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات، تریر – نمونه‌کار Amonel',
   },

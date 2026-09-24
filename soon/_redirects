@@ -1,0 +1,6 @@
+# The share images were renamed on 2026-09-24 (ROADMAP SEO-16). Anything that
+# cached the old URLs (link previews, other sites) keeps getting the picture.
+# The same three rules are in public/_redirects for the real site.
+/og/og-de.png  /og/ahmadreza-taheri-de.png  301
+/og/og-en.png  /og/ahmadreza-taheri-en.png  301
+/og/og-fa.png  /og/ahmadreza-taheri-fa.png  301

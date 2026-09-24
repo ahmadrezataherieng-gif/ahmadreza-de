@@ -68,6 +68,7 @@ export async function Landing() {
           </h1>
           <span className="h-px w-16 bg-accent" aria-hidden="true" />
           <p className="max-w-xl font-body text-lg leading-snug text-ink sm:text-xl">{t('role')}</p>
+          <p className="-mt-2 max-w-xl font-body text-base leading-snug text-muted">{t('background')}</p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <ResumeLink variant="inline" />
             <EmailLink />

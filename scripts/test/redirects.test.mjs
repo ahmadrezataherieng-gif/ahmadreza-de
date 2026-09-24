@@ -30,3 +30,16 @@ test('redirects: /de still goes home, and the new pages are never redirected', (
     assert.equal(firstMatch(path), undefined, path);
   }
 });
+
+test('redirects: the old share-image URLs 301 to the renamed files, on the site and on the coming-soon Worker', () => {
+  const soonRules = readFileSync(new URL('../../soon/_redirects', import.meta.url), 'utf8')
+    .split(/\r?\n/)
+    .map((line) => line.trim().split(/\s+/))
+    .filter(([from]) => from && !from.startsWith('#'));
+  for (const locale of ['de', 'en', 'fa']) {
+    const from = `/og/og-${locale}.png`;
+    const to = `/og/ahmadreza-taheri-${locale}.png`;
+    assert.deepEqual(firstMatch(from), { from, to, status: '301' }, from);
+    assert.deepEqual(soonRules.find(([source]) => source === from), [from, to, '301'], `soon ${from}`);
+  }
+});
