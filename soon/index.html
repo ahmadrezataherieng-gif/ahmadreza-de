@@ -16,42 +16,17 @@
 <link rel="canonical" href="https://ahmadreza.de/">
 <meta name="robots" content="index,follow">
 <meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#07090a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f4ee" media="(prefers-color-scheme: light)">
+<link rel="preload" href="/fonts/martian-grotesk-vf.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier">
 <meta property="og:description" content="Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte, die zu einem eigenen Betriebssystem im Browser werden.">
 <meta property="og:url" content="https://ahmadreza.de/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f15'/%3E%3Cg fill='none' stroke='%235de2a4' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M16 7v9'/%3E%3Cpath d='M10.3 10.5a8 8 0 1 0 11.4 0'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307090a'/%3E%3Cg fill='none' stroke='%234be3a3' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M16 7v9'/%3E%3Cpath d='M10.3 10.5a8 8 0 1 0 11.4 0'/%3E%3C/g%3E%3C/svg%3E">
 <style>
-  /* Design tokens. Dark is the default look; light follows the system. */
-  :root{
-    --bg:#0b0f15; --surface:#111722; --edge:#222c3a;
-    --ink:#e9edf5; --muted:#b3bdcc;
-    --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
-    --track:#1a2230;
-    /* Latin face, then the Persian face (it only holds Arabic-script glyphs), then the generic fallback. */
-    --font-head:"Segoe UI",-apple-system,Roboto,"Helvetica Neue",Arial;
-    --font-body:"Segoe UI",-apple-system,Roboto,"Helvetica Neue",Arial;
-    --font-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-    --font-fa:Tahoma;
-    --font-fallback:system-ui,sans-serif;
-    --stack-head:var(--font-head),var(--font-fa),var(--font-fallback);
-    --stack-body:var(--font-body),var(--font-fa),var(--font-fallback);
-    --head-weight:700; --head-tracking:-.03em;
-    --radius:14px;
-    /* Depth: one very soft light behind the top of the page and the progress card. */
-    --glow:rgba(93,226,164,.10);
-    /* A pixel face for tiny terminal details only; the mono face until one is chosen. */
-    --font-pixel:var(--font-mono);
-  }
-  @media (prefers-color-scheme:light){
-    :root{
-      --bg:#f6f7f9; --surface:#ffffff; --edge:#dce1e8;
-      --ink:#0b0f15; --muted:#434e5c;
-      --brand:#1d7550; --brand-deep:#155c3e; --on-brand:#ffffff; --amber:#c46f10;
-      --track:#e6eaf0;
-      --glow:rgba(29,117,80,.07);
-    }
-  }
+  /*@tokens*/
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:radial-gradient(70rem 36rem at 85% -12rem,var(--glow),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -93,10 +68,12 @@
   html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
   .alt [lang="fa"]{font-size:1.12em;line-height:1.75;color:var(--ink)}
   html[lang="fa"] body{font-size:17.5px;line-height:1.8}
-  /* Headings: tight tracking for Latin, never for Persian (it breaks the joins),
-     and a word space that tracking cannot swallow. */
-  h1,h2,h3,.big,.fa-name{word-spacing:.08em}
-  html[lang="fa"] h2,html[lang="fa"] h3,html[lang="fa"] .overall-label,.fa-name{letter-spacing:0}
+  /* The extra word space is for Latin text only. Persian headings keep their own
+     spacing (and no letter-spacing, which breaks the joins); a Latin term inside a
+     Persian heading sits in a <bdi> and gets the Latin spacing back. */
+  h1,h2,h3,.big{word-spacing:.08em}
+  html[lang="fa"] h2,html[lang="fa"] h3,html[lang="fa"] .overall-label,.fa-name{letter-spacing:0;word-spacing:normal}
+  h2 bdi,h3 bdi{word-spacing:.08em}
   .intro{margin:22px 0 0;font-size:1.08rem;max-width:58ch}
   .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:24px}
   .button{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--on-brand);background:var(--brand);border-radius:10px;padding:12px 18px;text-decoration:none}
@@ -117,8 +94,9 @@
   /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
   .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 80px -40px var(--glow)}
   .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
-  .os{direction:ltr;font-family:var(--font-pixel);font-weight:700;color:var(--brand)}
-  .os .p{color:var(--muted);font-weight:400}
+  /* Departure Mono is drawn on an 11 px grid; 22 px is exactly 2x, so its pixels stay sharp. */
+  .os{direction:ltr;font-family:var(--font-pixel);font-size:22px;line-height:1;font-weight:400;font-synthesis:none;letter-spacing:0;color:var(--brand)}
+  .os .p{color:var(--muted)}
   .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
   .panel-body{padding:22px 18px 24px}
@@ -324,12 +302,19 @@
       contact:"می‌خواهید همین حالا با من در تماس باشید؟ خوشحال می‌شوم برایم بنویسید:",
       imprint:"اطلاعات ناشر", privacy:"حریم خصوصی", legalNav:"اطلاعات حقوقی", prefix:"/fa"}
   };
+  // A Latin term inside Persian text is an isolated left-to-right run (<bdi>), so
+  // the punctuation next to it - the full stop after "Amonel OS" - lands on the
+  // correct side instead of being reordered by the bidi algorithm.
+  function bidi(text){
+    const safe=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return safe.replace(/[A-Za-z0-9][A-Za-z0-9 ]*[A-Za-z0-9]|[A-Za-z]/g,m=>'<bdi>'+m+'</bdi>');
+  }
   const btns=[...document.querySelectorAll('[data-lang]')];
   function set(l,remember){
     const t=T[l]; if(!t) return;
     const root=document.documentElement;
     root.lang=l; root.dir=t.dir; document.title=t.title;
-    document.querySelectorAll('[data-t]').forEach(el=>{const v=t[el.dataset.t]; if(v!=null) el.textContent=v;});
+    document.querySelectorAll('[data-t]').forEach(el=>{const v=t[el.dataset.t]; if(v!=null){ if(l==='fa') el.innerHTML=bidi(v); else el.textContent=v; }});
     document.querySelectorAll('[data-t-label]').forEach(el=>el.setAttribute('aria-label',t[el.dataset.tLabel]));
     document.getElementById('alt').innerHTML=(l==='fa'?FA_NAME:'')+Object.keys(ALT).filter(k=>k!==l).map(k=>ALT[k]).join('');
     // Numbers in the page language: Persian digits and the Persian calendar in fa.

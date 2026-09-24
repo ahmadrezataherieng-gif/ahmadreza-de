@@ -6,10 +6,12 @@
 //
 //   node scripts/build-soon.mjs          then, in soon/:  npx wrangler deploy
 //
-// Output goes to soon/dist/ (git-ignored). Plain static HTML, no script, no
-// external request: the same fonts-from-the-system approach as index.html.
+// Output goes to soon/dist/ (git-ignored). Static HTML with one small inline
+// script (the language switch) and no external request: the fonts are
+// self-hosted from soon/fonts/ with their licences (public/fonts/), and the design
+// tokens of soon/tokens.css are injected into every page.
 
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
 import { ensureLegalAddress } from './legal-address.mjs';
 import { AREAS } from './roadmap.mjs';
@@ -21,6 +23,7 @@ ensureLegalAddress();
 const { LEGAL_CONTACT } = await import('../src/content/legal.ts');
 
 const root = new URL('../', import.meta.url);
+const TOKENS = readFileSync(new URL('soon/tokens.css', root), 'utf8').trim();
 const dist = new URL('soon/dist/', root);
 const locales = [
   { id: 'de', prefix: '', dir: 'ltr', label: 'DE' },
@@ -61,23 +64,26 @@ function block(item, copy) {
   }
 }
 
-const STYLE = `:root{--bg:#080a0f;--panel:#0e1219;--edge:#1d2531;--ink:#e9edf5;--muted:#8e9bb0;--amber:#f0a44a;
---mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
---sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+// The legal pages share the coming-soon page's tokens (soon/tokens.css), so the
+// whole domain has one look. Their text is legal copy, never decoration.
+const STYLE = `*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html[lang="fa"] body{font-size:17.5px;line-height:1.8}
 .wrap{max-width:760px;margin:0 auto;padding:22px 20px 48px}
-header{display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--mono);font-size:13px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--font-mono);font-size:13px}
 header nav{display:flex;gap:6px}
-header nav a{color:var(--muted);border:1px solid var(--edge);border-radius:999px;padding:5px 11px;text-decoration:none}
-header nav a[aria-current]{color:#0b0e13;background:var(--amber);border-color:var(--amber);font-weight:700}
-a{color:var(--amber)}h1{font-size:clamp(1.9rem,6vw,2.6rem);margin:36px 0 4px;letter-spacing:-.02em}
-h2{font-size:1.1rem;margin:32px 0 8px}.meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0}
-.note{border:1px solid var(--edge);background:var(--panel);border-radius:10px;padding:12px 14px;margin-top:16px}
+header nav a{color:var(--muted);border:1px solid var(--edge);border-radius:999px;padding:6px 12px;text-decoration:none}
+header nav a[aria-current]{color:var(--on-brand);background:var(--brand);border-color:var(--brand);font-weight:700}
+a{color:var(--brand);text-underline-offset:3px}a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+h1{font:var(--head-weight) clamp(1.9rem,6vw,2.6rem)/1.15 var(--stack-head);letter-spacing:var(--head-tracking);word-spacing:.08em;margin:36px 0 4px;text-wrap:balance}
+h2{font:600 1.1rem/1.3 var(--stack-head);margin:32px 0 8px;text-wrap:balance}
+html[lang="fa"] h1,html[lang="fa"] h2{letter-spacing:0;word-spacing:normal}
+p,li{text-wrap:pretty}
+.meta{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin:0}
+.note{border:1px solid var(--edge);background:var(--surface);border-radius:10px;padding:12px 14px;margin-top:16px}
 address{font-style:normal}ul{padding-inline-start:20px}table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border-bottom:1px solid var(--edge);padding:8px;text-align:start;vertical-align:top}th{font-family:var(--mono);font-size:12px;color:var(--muted)}
+th,td{border-bottom:1px solid var(--edge);padding:8px;text-align:start;vertical-align:top}th{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:16px;font-size:13px}
 footer a{color:var(--ink)}`;
-
 function page(locale, kind, copy, labels) {
   const document = copy[kind.id];
   const sections = sectionsFor(document, 'soon')
@@ -101,7 +107,9 @@ function page(locale, kind, copy, labels) {
 <meta name="description" content="${escape(document.description)}">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://ahmadreza.de/${locale.prefix}${kind.slug}/">
-<style>${STYLE}</style>
+<meta name="theme-color" content="#07090a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f4ee" media="(prefers-color-scheme: light)">
+<style>${TOKENS}${STYLE}</style>
 </head>
 <body>
 <div class="wrap">
@@ -124,7 +132,7 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 // The progress figures come from ROADMAP.md at build time, never typed by hand.
 const values = progressValues();
-const landing = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8'), values);
+const landing = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values);
 writeFileSync(new URL('index.html', dist), landing);
 console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area} ${values[`${area}.percent`]} %`).join(', ')})`);
 
@@ -138,5 +146,10 @@ for (const locale of locales) {
     writeFileSync(new URL('index.html', folder), page(locale, kind, copy, labels));
   }
 }
+
+// Fonts and their licences travel together (the SIL OFL asks for it).
+cpSync(new URL('soon/fonts/', root), new URL('fonts/', dist), { recursive: true });
+cpSync(new URL('public/fonts/LICENSES.md', root), new URL('fonts/LICENSES.md', dist));
+cpSync(new URL('public/fonts/licenses/', root), new URL('fonts/licenses/', dist), { recursive: true });
 
 console.log('soon/dist: index.html + impressum and datenschutz in de, en, fa');

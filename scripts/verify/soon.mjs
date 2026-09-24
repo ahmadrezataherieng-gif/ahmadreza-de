@@ -38,16 +38,50 @@ const check = (label, ok, detail = '') => {
 
 for (const viewport of VIEWPORTS) {
   const page = await launch({ width: viewport.width, height: viewport.height, touch: viewport.touch, tag: `${TAG}-${viewport.name}` });
+  // Every request the pages make: none may leave the domain (no CDN, no font service).
+  const requests = [];
+  await page.send('Network.enable');
+  page.on('Network.requestWillBeSent', (message) => requests.push(message.params.request.url));
   await page.goto(BASE, 2500);
   for (const scheme of ['dark', 'light']) {
     await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
     for (const locale of ['de', 'en', 'fa']) {
       await page.evaluate(`document.querySelector('[data-lang="${locale}"]').click()`);
       await sleep(300);
-      const state = await page.evaluate(`(() => {
+      const state = await page.evaluate(`(async () => {
+        await document.fonts.ready;
         const root = document.documentElement;
+        const inLatinContext = (el) => el.closest('bdi, script, style, [dir="ltr"]') || getComputedStyle(el).direction === 'ltr';
         return {
           lang: root.lang, dir: root.dir,
+          fontsLoaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')),
+          heading: getComputedStyle(document.querySelector('h1')).fontFamily,
+          os: (() => { const os = getComputedStyle(document.querySelector('.os')); return { size: os.fontSize, family: os.fontFamily }; })(),
+          // A text node that mixes Persian letters with unwrapped Latin ones: the bidi algorithm would misplace the punctuation.
+          bidiMixed: (() => {
+            const bad = [];
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+              if (/[A-Za-z]/.test(node.data) && /[\\u0600-\\u06FF]/.test(node.data) && !inLatinContext(node.parentElement)) bad.push(node.data.trim().slice(0, 50));
+            }
+            return bad;
+          })(),
+          // Punctuation right after an isolated Latin term must sit on the far side of it: to its left in a right-to-left line.
+          bidiPunctuation: (() => {
+            const bad = [];
+            for (const term of document.querySelectorAll('bdi')) {
+              const next = term.nextSibling;
+              if (!next || next.nodeType !== 3 || !/^[.،؛:؟!)]/.test(next.data) || getComputedStyle(term.parentElement).direction !== 'rtl') continue;
+              const range = document.createRange();
+              range.setStart(next, 0);
+              range.setEnd(next, 1);
+              const mark = range.getBoundingClientRect();
+              const box = term.getBoundingClientRect();
+              if (mark.top > box.bottom || mark.bottom < box.top) continue; // the mark wrapped onto another line
+              if (mark.right > box.left + 1) bad.push(term.textContent + next.data.slice(0, 1));
+            }
+            return bad;
+          })(),
           overflow: root.scrollWidth - window.innerWidth,
           placeholders: /\\{\\{/.test(document.documentElement.outerHTML),
           h1: document.querySelector('h1').textContent,
@@ -127,6 +161,12 @@ for (const viewport of VIEWPORTS) {
       );
       check(`${label}: no line ends in a single orphaned word`, state.orphans.length === 0, state.orphans.join(' | '));
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
+      const wanted = ['Martian Grotesk', 'Geist', 'Geist Mono', 'Departure Mono', 'Vazirmatn'];
+      check(`${label}: the five self-hosted fonts are loaded`, wanted.every((name) => state.fontsLoaded.includes(name)), `loaded: ${state.fontsLoaded.join(', ')}`);
+      check(`${label}: the headings use Martian Grotesk`, state.heading.startsWith('"Martian Grotesk"'), state.heading);
+      check(`${label}: the terminal line is Departure Mono at 22 px (2x its grid)`, state.os.size === '22px' && state.os.family.startsWith('"Departure Mono"'), `${state.os.size} ${state.os.family}`);
+      check(`${label}: every Latin term in Persian text is isolated in a <bdi>`, state.bidiMixed.length === 0, state.bidiMixed.join(' | '));
+      check(`${label}: punctuation after a Latin term in Persian text lands on the correct side`, state.bidiPunctuation.length === 0, state.bidiPunctuation.join(' | '));
       check(
         `${label}: the overall figure is in the page's digits`,
         locale === 'fa' ? /^[۰-۹]+٪$/.test(state.percent.trim()) : /^\d+\s?%$/.test(state.percent.trim()),
@@ -141,6 +181,21 @@ for (const viewport of VIEWPORTS) {
       writeFileSync(path.join(OUT, `${TAG}-${viewport.name}-${scheme}-${locale}.png`), Buffer.from(shot.result.data, 'base64'));
     }
   }
+  // The legal pages: same look, no horizontal scroll, the same fonts, still noindex.
+  const origin = new URL(BASE).origin;
+  for (const legal of ['impressum', 'en/impressum', 'fa/impressum', 'datenschutz', 'en/datenschutz', 'fa/datenschutz']) {
+    await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] });
+    await page.goto(`${origin}/${legal}/`, 1500);
+    const info = await page.evaluate(`(async () => {
+      await document.fonts.ready;
+      return { overflow: document.documentElement.scrollWidth - innerWidth, robots: document.querySelector('meta[name=robots]')?.content,
+        h1: getComputedStyle(document.querySelector('h1')).fontFamily, bg: getComputedStyle(document.body).backgroundColor,
+        loaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')) };
+    })()`);
+    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, near-black, Martian Grotesk headings`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(7, 9, 10)' && info.h1.startsWith('"Martian Grotesk"') && info.loaded.includes('Martian Grotesk'), JSON.stringify(info));
+  }
+  const external = [...new Set(requests.filter((url) => !url.startsWith(origin) && !url.startsWith('data:')))];
+  check(`${viewport.name}: no request leaves the domain (${requests.length} requests, all to ${origin})`, external.length === 0, external.join(' | '));
   check(`${viewport.name}: no console errors`, page.errors.length === 0, page.errors.join(' | '));
   page.close();
 }
