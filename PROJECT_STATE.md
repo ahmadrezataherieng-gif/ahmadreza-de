@@ -9,6 +9,14 @@ Content review pending: see CONTENT_REVIEW.md (starts after the site is complete
   "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079).
   `scripts/test/employer.test.mjs` guards the source and every build output.
   The name is still in the git history.
+- **Weighted progress and a new coming-soon page (2026-09-24, DECISIONS.md
+  69, BR-02):** every ROADMAP.md row has an effort and one of seven areas;
+  the work built before the audit is in as `BASE-*`. The coming-soon page in
+  `soon/` was rewritten (who, what, progress per area, what's next, contact),
+  design-6 logo in the header and the `~$ amonel os` lockup in its terminal
+  panel, dark and light. Built and checked locally (`scripts/verify/soon.mjs`,
+  86/86); **not deployed yet** - fonts and colours are chosen with the owner
+  first (BR-04).
 - **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
   values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
 

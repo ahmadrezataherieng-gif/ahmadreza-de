@@ -2208,3 +2208,24 @@ nowhere.
   out. Words live in the Terminal's copy under `eggs`, machine lines in
   `shell.ts`, as for every other command. The Assistant indexes only the
   Terminal's project entries, so the eggs never surface as search answers.
+
+## 69. Weighted progress, and the coming-soon page a visitor understands (2026-09-24, BR-02)
+
+- **Progress is weighted by effort**, not counted by items: every ROADMAP.md
+  row carries an effort (XS 1, S 2, M 5, L 8, XL 13) and an area; a partial
+  item carries how much of it is really done (`M 40%`). A row with a missing
+  or malformed effort or area stops `build:soon` - a figure that silently
+  skips rows would be worse than none.
+- **The work built before the audit is in the roadmap** (`BASE-01`..`BASE-17`,
+  all done). The audit of 2026-09-23 listed only what was left, so without
+  these rows the journey - essentially finished - would have shown as a third
+  done. With them the page reports the whole site (60 %); the remaining items
+  alone would read 40 %. The owner may ask to drop them.
+- **Seven areas** a visitor understands (journey, desktop, puzzles, about,
+  legal, seo, launch); post-launch and P2 items count too, as asked.
+- **The page never shows internal codes** - no item IDs, no phase numbers -
+  and a test fails if one appears. The two other languages stay visible under
+  the role line, so the Persian name is always on the page.
+- **The chosen language is stored only after a click** on a language button,
+  as the Datenschutzerklärung says; the first visit only reads the browser's
+  language.

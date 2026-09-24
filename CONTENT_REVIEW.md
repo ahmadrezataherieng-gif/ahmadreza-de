@@ -1561,3 +1561,15 @@ The employer is never named (owner, 2026-09-24). The new role line replaces the 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1079 | `landing.role`, the Trier fact in `landing.facts`, `site.description`, About `intro.0` and `path.stations.apprenticeship.place`, `public/llms.txt`, the role line and meta description of `soon/index.html` | short text | de / en / fa | PLACEHOLDER | Now: de «Fachinformatiker für Systemintegration in Ausbildung · Trier», en «IT specialist for system integration in training · Trier», fa «کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) · تریر» (wording given by the owner; confirm in the final review) |
+
+## 34. Coming-soon page, rewritten (BR-02)
+
+`soon/index.html` (the static German HTML and the `T` dictionary for de/en/fa). The progress figures are not copy: they come from ROADMAP.md at build time.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1080 | `status`, `intro`, `write`, the three lines in `ALT` (the page in the other two languages) and `FA_NAME` | short text | de / en / fa | PLACEHOLDER | Who and what in ten seconds. Now (de): «Hier entsteht mein persönliches Portfolio. Noch ist es nicht fertig – auf dieser Seite sehen Sie, was kommt und wie weit ich schon bin.» |
+| CR-1081 | `whatTitle`, `whatLead`, the four cards `c1t`..`c4` | long text | de / en / fa | PLACEHOLDER | What the site will be: the journey through ~80 years, the puzzles, Amonel OS with working apps, the path Tehran → Trier, CV and contact, three languages. Confirm naming Tehran publicly |
+| CR-1082 | `progressTitle`, `overall`, `note`, the seven area names and one-line descriptions, `counts`, `stamp` | short text | de / en / fa | PLACEHOLDER | Plain words, no internal codes. Now (de): «So weit bin ich», «Reise durch die Computergeschichte», «{d} fertig · {p} in Arbeit · {m} offen» |
+| CR-1083 | `nextTitle`, `next`, `contact` | short text | de / en / fa | PLACEHOLDER | What's next, and an invitation to write. Now (de): «Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. …» |
+| CR-1084 | `<title>`, meta description, `og:title`, `og:description`, the `title` per language | SEO / meta | de / en / fa | PLACEHOLDER | Name, role and city first, «Amonel» second. The titles run over 60 characters (de 77) - report, never shorten the name |

@@ -1,360 +1,333 @@
 <!doctype html>
-<!-- The temporary coming-soon page on ahmadreza.de (Worker silent-lake-8ae2). Its
-     copy is placeholder like the rest of the site: CONTENT-TODO CR-1053, CR-1066; the role line CR-1079.
-     Build the deployable folder with: node scripts/build-soon.mjs - it also fills
-     every double-brace placeholder with the progress read from ROADMAP.md at build
-     time (scripts/roadmap.mjs), so the figure is never typed by hand. -->
-<html lang="de">
+<!-- The temporary coming-soon page on ahmadreza.de (Worker silent-lake-8ae2).
+     CONTENT-TODO CR-1080..CR-1084: every visible text on this page is placeholder
+     until the final content review (the role line is CR-1079).
+     Build the deployable folder with: npm run build:soon - it fills every
+     double-brace placeholder with the weighted progress read from ROADMAP.md at
+     build time (scripts/roadmap.mjs), so no figure is ever typed by hand.
+     Design tokens (fonts, colours) sit on :root so style variants can be
+     swapped without touching the layout. -->
+<html lang="de" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier</title>
-<meta name="description" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier. Das Portfolio Amonel entsteht gerade.">
+<title>Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier</title>
+<meta name="description" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier. Sein Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte, die zu einem eigenen Betriebssystem im Browser werden.">
 <link rel="canonical" href="https://ahmadreza.de/">
 <meta name="robots" content="index,follow">
+<meta name="color-scheme" content="dark light">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Ahmadreza Taheri — Fachinformatiker für Systemintegration">
-<meta property="og:description" content="Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte in 90 Sekunden.">
+<meta property="og:title" content="Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier">
+<meta property="og:description" content="Das Portfolio Amonel entsteht gerade: 80 Jahre Computergeschichte, die zu einem eigenen Betriebssystem im Browser werden.">
 <meta property="og:url" content="https://ahmadreza.de/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0e13'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%23f0a44a' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Ahmadreza Taheri","url":"https://ahmadreza.de","jobTitle":"Fachinformatiker für Systemintegration (in Ausbildung)","address":{"@type":"PostalAddress","addressLocality":"Trier","addressCountry":"DE"},"knowsLanguage":["de","en","fa"],"knowsAbout":["Systemintegration","Netzwerke","Linux","IT-Support"]}
-</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f15'/%3E%3Cg fill='none' stroke='%235de2a4' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M16 7v9'/%3E%3Cpath d='M10.3 10.5a8 8 0 1 0 11.4 0'/%3E%3C/g%3E%3C/svg%3E">
 <style>
+  /* Design tokens. Dark is the default look; light follows the system. */
   :root{
-    --bg:#080a0f; --panel:#0e1219; --edge:#1d2531;
-    --ink:#e9edf5; --muted:#8e9bb0;
-    --amber:#f0a44a; --green:#5de2a4; --blue:#6aa9ff;
-    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-    --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    --bg:#0b0f15; --surface:#111722; --edge:#222c3a;
+    --ink:#e9edf5; --muted:#a3aec0;
+    --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
+    --track:#1a2230;
+    --font-head:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    --font-body:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    --font-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+    --font-fa:Tahoma,"Segoe UI",system-ui,sans-serif;
+    --head-weight:700; --head-tracking:-.03em;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:light){
+    :root{
+      --bg:#f6f7f9; --surface:#ffffff; --edge:#dce1e8;
+      --ink:#0b0f15; --muted:#4d5968;
+      --brand:#1d7550; --brand-deep:#155c3e; --on-brand:#ffffff; --amber:#c46f10;
+      --track:#e6eaf0;
+    }
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
-  }
-  body::before{
-    content:"";position:fixed;inset:0;z-index:-2;
-    background:
-      radial-gradient(60vw 60vw at 78% 18%,rgba(240,164,74,.16),transparent 60%),
-      radial-gradient(50vw 50vw at 12% 82%,rgba(106,169,255,.13),transparent 60%);
-  }
-  body::after{
-    content:"";position:fixed;inset:0;z-index:-1;opacity:.35;
-    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-    background-size:64px 64px;
-    mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 100%);
-  }
-  .wrap{max-width:1120px;margin:0 auto;padding:22px 20px 56px;display:flex;flex-direction:column;min-height:100%}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--font-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  [lang="fa"]{font-family:var(--font-fa)}
+  a{color:inherit}
+  .wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
+  @media (min-width:720px){.wrap{padding:28px 32px 64px}}
+
+  /* Header: the main logo (design 6, the "o" is a power symbol) and the languages. */
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+  .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--font-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
+  .logo svg{width:.74em;height:.74em;margin:0 .03em;transform:translateY(.06em);color:var(--brand);overflow:visible}
   .langs{display:flex;gap:6px}
-  .langs button{
-    font-family:var(--mono);font-size:12px;color:var(--muted);background:transparent;
-    border:1px solid var(--edge);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.18s;
-  }
-  .langs button:hover{color:var(--ink);border-color:#31405a}
-  .langs button[aria-pressed="true"]{color:#0b0e13;background:var(--amber);border-color:var(--amber);font-weight:700}
+  .langs button{font:600 12px/1 var(--font-mono);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
+  .langs button:hover{color:var(--ink)}
+  .langs button[aria-pressed="true"]{color:var(--on-brand);background:var(--brand);border-color:var(--brand)}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 
-  main{flex:1;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:center;padding-top:36px}
-  @media(min-width:900px){main{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:56px;padding-top:56px}}
+  /* Who and what, readable in ten seconds. */
+  .hero{padding:48px 0 8px;max-width:760px}
+  @media (min-width:720px){.hero{padding-top:72px}}
+  .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}
+  .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 1.8s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  h1{margin:18px 0 0;font:var(--head-weight) clamp(2.6rem,9vw,4.6rem)/1.02 var(--font-head);letter-spacing:var(--head-tracking)}
+  .role{margin:14px 0 0;font-size:clamp(1.1rem,2.6vw,1.35rem);line-height:1.45;font-weight:600}
+  .alt{margin:8px 0 0;font-size:.95rem;color:var(--muted)}
+  .alt p{margin:2px 0}
+  .intro{margin:22px 0 0;font-size:1.08rem;max-width:58ch}
+  .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:24px}
+  .button{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--on-brand);background:var(--brand);border-radius:10px;padding:12px 18px;text-decoration:none}
+  .button:hover{background:var(--brand-deep);color:#fff}
+  .mail{font-family:var(--font-mono);font-size:.9rem;color:var(--muted);overflow-wrap:anywhere}
 
-  .status{
-    display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;
-    letter-spacing:.12em;text-transform:uppercase;color:var(--green);
-    border:1px solid rgba(93,226,164,.32);background:rgba(93,226,164,.07);
-    border-radius:999px;padding:7px 14px;
-  }
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+  section{margin-top:64px}
+  h2{margin:0;font:var(--head-weight) clamp(1.5rem,4vw,2rem)/1.2 var(--font-head);letter-spacing:calc(var(--head-tracking) / 2)}
+  .lead{margin:10px 0 0;color:var(--muted);max-width:62ch;font-size:1.05rem}
 
-  h1{
-    margin:20px 0 0;font-weight:800;line-height:.94;letter-spacing:-.03em;
-    font-size:clamp(2.9rem,10vw,5.6rem);
-  }
-  h1 .last{display:block;font-weight:300;color:var(--muted);font-size:clamp(1.4rem,4.6vw,2.4rem);letter-spacing:-.01em;margin-top:.35rem}
-  .role{margin:18px 0 0;font-size:clamp(1rem,2.4vw,1.2rem);line-height:1.5;color:var(--ink);max-width:34ch}
-  .lede{margin:14px 0 0;color:var(--muted);line-height:1.65;max-width:46ch}
-  .lede b{color:var(--amber);font-weight:600}
+  .cards{display:grid;gap:12px;margin:24px 0 0;padding:0;list-style:none}
+  @media (min-width:720px){.cards{grid-template-columns:1fr 1fr}}
+  .card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);padding:18px 20px}
+  .card h3{margin:0;font:600 1.08rem/1.3 var(--font-head)}
+  .card p{margin:6px 0 0;color:var(--muted)}
+  .card .num{display:block;font:600 12px/1 var(--font-mono);color:var(--brand);margin-bottom:10px}
 
-  .facts{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0;padding:0;list-style:none}
-  .facts li{
-    font-family:var(--mono);font-size:12px;color:var(--muted);
-    border:1px solid var(--edge);border-radius:8px;padding:7px 11px;background:rgba(255,255,255,.02)
-  }
-  .facts li b{color:var(--ink);font-weight:600}
-
-  .terminal{
-    margin:30px 0 0;border:1px solid var(--edge);border-radius:12px;background:var(--panel);
-    box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden;max-width:520px
-  }
-  .bar{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--edge);background:rgba(255,255,255,.02)}
-  .bar i{width:10px;height:10px;border-radius:50%;background:#2a3444;display:block}
-  .bar i:first-child{background:#3d4a5e}
-  .term-body{padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.85}
-  .term-body .p{color:var(--green)}
-  .term-body .c{color:var(--ink)}
-  .term-body .o{color:var(--muted)}
-  .progress{position:relative;display:flex;align-items:center;gap:10px;margin:4px 0 2px}
-  .progress::before{content:"";flex:1;height:8px;border-radius:4px;background:#1a2230;border:1px solid var(--edge)}
-  .bar-fill{position:absolute;inset-inline-start:0;top:50%;height:8px;margin-top:-4px;border-radius:4px;
-    width:calc((100% - 52px) * var(--p) / 100);background:linear-gradient(90deg,var(--green),var(--amber));
-    animation:grow 1.6s cubic-bezier(.2,.8,.2,1) both}
+  /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
+  .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden}
+  .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
+  .os{direction:ltr;font-weight:700;color:var(--brand)}
+  .os .p{color:var(--muted);font-weight:400}
+  .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .panel-body{padding:22px 18px 24px}
+  @media (min-width:720px){.panel-body{padding:28px 28px 30px}}
+  .overall{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+  .big{font:var(--head-weight) clamp(3rem,10vw,4.4rem)/1 var(--font-head);letter-spacing:var(--head-tracking);color:var(--brand)}
+  .overall-label{font-size:1.1rem;font-weight:600}
+  .meter{position:relative;height:10px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:14px}
+  .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--brand-deep),var(--brand));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
+  html[dir="rtl"] .meter span{background:linear-gradient(270deg,var(--brand-deep),var(--brand))}
   @keyframes grow{from{width:0}}
-  .pct{min-width:42px;text-align:end;color:var(--ink);font-weight:700}
-  .stamp{font-size:11px;opacity:.7}
-  .cursor{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:-2px;animation:blink 1.05s steps(1) infinite}
-  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  .note{margin:12px 0 0;font-size:.9rem;color:var(--muted)}
+  .areas{display:grid;gap:22px 32px;margin:28px 0 0;padding:0;list-style:none}
+  @media (min-width:720px){.areas{grid-template-columns:1fr 1fr}}
+  .area-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .area h3{margin:0;font:600 1rem/1.35 var(--font-head)}
+  .area .pct{font:700 .95rem/1 var(--font-mono);color:var(--ink);white-space:nowrap}
+  .area .meter{height:6px;margin-top:8px}
+  .area p{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
+  .area .counts{font-size:.82rem;font-family:var(--font-mono)}
+  html[dir="rtl"] .area .counts,html[dir="rtl"] .area .pct{font-family:inherit}
+  .stamp{margin:24px 0 0;font:12px/1.4 var(--font-mono);color:var(--muted)}
+  html[dir="rtl"] .stamp,html[dir="rtl"] .pill{font-family:inherit;letter-spacing:0}
+  html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
+  .fa-name{font-size:1.5rem;font-weight:700;color:var(--ink)}
 
-  .scene{position:relative;width:100%;max-width:520px;margin:0 auto}
-  .scene svg{width:100%;height:auto;display:block;overflow:visible}
-  .float-a{animation:floatA 7s ease-in-out infinite}
-  .float-b{animation:floatB 9s ease-in-out infinite}
-  .float-c{animation:floatC 8s ease-in-out infinite}
-  @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
-  @keyframes floatC{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-  .spin{transform-box:fill-box;transform-origin:center;animation:spin 16s linear infinite}
-  .spin-rev{transform-box:fill-box;transform-origin:center;animation:spin 22s linear infinite reverse}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .flow{stroke-dasharray:5 9;animation:flow 2.4s linear infinite}
-  @keyframes flow{to{stroke-dashoffset:-28}}
-  .glow{animation:glow 3.2s ease-in-out infinite}
-  @keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}
-  .lamp{animation:lamp 2.6s ease-in-out infinite}
-  .lamp:nth-of-type(2){animation-delay:.5s}
-  .lamp:nth-of-type(3){animation-delay:1s}
-  .lamp:nth-of-type(4){animation-delay:1.5s}
-  @keyframes lamp{0%,100%{opacity:.25}50%{opacity:1}}
-
-  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--edge);
-    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center;
-    font-size:13px;color:var(--muted)}
-  footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(240,164,74,.5)}
-  footer a:hover{color:var(--amber)}
-  .legal{display:flex;gap:16px}
-  .copy{font-family:var(--mono);font-size:12px}
-
-  html[dir="rtl"] .role,html[dir="rtl"] .lede{max-width:40ch}
-  html[dir="rtl"] h1{letter-spacing:0}
-  html[dir="rtl"] .term-body{direction:ltr;text-align:left}
+  .next p{max-width:62ch}
+  footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;font-size:.9rem;color:var(--muted)}
+  footer nav{display:flex;gap:18px}
+  footer a{color:var(--ink);text-underline-offset:3px}
 
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
-    .cursor{opacity:1}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <span class="tag" data-t="tag">Amonel · v1.0 im Aufbau</span>
-    <nav class="langs" aria-label="Sprache">
-      <button type="button" data-lang="de" aria-pressed="true">DE</button>
-      <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      <button type="button" data-lang="fa" aria-pressed="false">FA</button>
+    <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.2a8 8 0 1 0 10.8 0"/></svg>nel</a>
+    <nav class="langs" aria-label="Sprache" data-t-label="language">
+      <button type="button" data-lang="de" lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-lang="fa" lang="fa" aria-pressed="false">FA</button>
     </nav>
   </header>
 
   <main>
-    <section>
-      <span class="status"><span class="dot"></span><span data-t="status">Seite entsteht gerade</span></span>
-
-      <h1>Ahmadreza<span class="last">Taheri</span></h1>
-
+    <div class="hero">
+      <span class="pill" data-t="status">Im Aufbau</span>
+      <h1>Ahmadreza Taheri</h1>
       <p class="role" data-t="role">Fachinformatiker für Systemintegration in Ausbildung · Trier</p>
+      <div class="alt" id="alt">
+        <p lang="en" dir="ltr">IT specialist for system integration in training, Trier – my portfolio is coming soon.</p>
+        <p lang="fa" dir="rtl">احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات در تریر – نمونه‌کار من به‌زودی منتشر می‌شود.</p>
+      </div>
+      <p class="intro" data-t="intro">Hier entsteht mein persönliches Portfolio. Noch ist es nicht fertig – auf dieser Seite sehen Sie, was kommt und wie weit ich schon bin.</p>
+      <div class="cta">
+        <a class="button" href="mailto:ahmadrezataheride@gmail.com" data-t="write">E-Mail schreiben</a>
+        <span class="mail" dir="ltr">ahmadrezataheride@gmail.com</span>
+      </div>
+    </div>
 
-      <p class="lede" data-t="lede">Hier entsteht <b>Amonel</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.</p>
-
-      <ul class="facts">
-        <li><b data-t="f1">Systemintegration</b></li>
-        <li><b>Netzwerke</b> · <b>Linux</b></li>
-        <li data-t="f3">Trier, Deutschland</li>
-        <li>DE · EN · FA</li>
+    <section aria-labelledby="what">
+      <h2 id="what" data-t="whatTitle">Was hier entsteht</h2>
+      <p class="lead" data-t="whatLead">Eine Reise durch rund 80 Jahre Computergeschichte, die sich am Ende in mein eigenes Betriebssystem im Browser verwandelt: Amonel OS.</p>
+      <ul class="cards">
+        <li class="card"><span class="num" aria-hidden="true">01</span><h3 data-t="c1t">Durch die Geschichte scrollen</h3><p data-t="c1">Sieben Epochen, von ENIAC 1946 bis zur Cloud von heute. Jede zeigt etwas über Computer, das bis heute gilt.</p></li>
+        <li class="card"><span class="num" aria-hidden="true">02</span><h3 data-t="c2t">Kleine Rätsel</h3><p data-t="c2">In jeder Epoche wartet ein Rätsel. Sie lösen es selbst – oder sehen zu, wie es sich von allein löst.</p></li>
+        <li class="card"><span class="num" aria-hidden="true">03</span><h3 data-t="c3t">Amonel OS</h3><p data-t="c3">Am Ende der Reise öffnet sich ein Desktop im Browser, mit Apps, die wirklich funktionieren: Terminal, Netzwerk-Werkzeuge, Quiz und mehr.</p></li>
+        <li class="card"><span class="num" aria-hidden="true">04</span><h3 data-t="c4t">Mein Weg</h3><p data-t="c4">Von Teheran nach Trier: Werdegang, Lebenslauf und Kontakt. Alles auf Deutsch, Englisch und Persisch.</p></li>
       </ul>
+    </section>
 
-      <div class="terminal" aria-hidden="true">
-        <div class="bar"><i></i><i></i><i></i></div>
-        <div class="term-body">
-          <div><span class="p">ahmadreza@amonel</span><span class="o">:~$</span> <span class="c">status</span></div>
-          <div class="o" data-t="t1">roadmap: {{DONE}} von {{TOTAL}} punkten erledigt</div>
-          <div class="progress" role="img" aria-label="{{PERCENT}} %"><span class="bar-fill" style="--p:{{PERCENT}}"></span><span class="pct">{{PERCENT}}%</span></div>
-          <div class="o" data-t="t3">aktuelle phase {{PHASE}}: {{PHASE_DONE}} von {{PHASE_TOTAL}} erledigt</div>
-          <div class="o" data-t="t2">nächster schritt: die letzten apps, dann feinschliff und start</div>
-          <div class="o stamp">stand: {{DATE}}</div>
-          <div><span class="p">ahmadreza@amonel</span><span class="o">:~$</span> <span class="cursor"></span></div>
+    <section aria-labelledby="progress">
+      <h2 id="progress" data-t="progressTitle">So weit bin ich</h2>
+      <div class="panel">
+        <div class="panel-bar"><span class="os" aria-hidden="true"><span class="p">~$ </span>amonel os<span class="cursor"></span></span></div>
+        <div class="panel-body">
+          <div class="overall">
+            <span class="big" data-pct="{{all.percent}}">{{all.percent}} %</span>
+            <span class="overall-label" data-t="overall">der Arbeit sind erledigt</span>
+          </div>
+          <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{all.percent}}" aria-labelledby="progress"><span style="--p:{{all.percent}}"></span></div>
+          <p class="note" data-t="note">Gewichtet nach Aufwand: Große Aufgaben zählen mehr als kleine.</p>
+          <ul class="areas">
+            <li class="area"><div class="area-head"><h3 id="a-journey" data-t="journey">Reise durch die Computergeschichte</h3><span class="pct" data-pct="{{journey.percent}}">{{journey.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{journey.percent}}" aria-labelledby="a-journey"><span style="--p:{{journey.percent}}"></span></div><p data-t="journeyText">Sieben Epochen zum Durchscrollen, mit Bildern, Übergängen und Texten.</p><p class="counts" data-counts="{{journey.done}},{{journey.partial}},{{journey.missing}}">{{journey.done}} fertig · {{journey.partial}} in Arbeit · {{journey.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-desktop" data-t="desktop">Amonel OS: Desktop und Apps</h3><span class="pct" data-pct="{{desktop.percent}}">{{desktop.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{desktop.percent}}" aria-labelledby="a-desktop"><span style="--p:{{desktop.percent}}"></span></div><p data-t="desktopText">Das Betriebssystem im Browser: Fenster, Taskleiste und die Apps darin.</p><p class="counts" data-counts="{{desktop.done}},{{desktop.partial}},{{desktop.missing}}">{{desktop.done}} fertig · {{desktop.partial}} in Arbeit · {{desktop.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-puzzles" data-t="puzzles">Rätsel und Spiele</h3><span class="pct" data-pct="{{puzzles.percent}}">{{puzzles.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{puzzles.percent}}" aria-labelledby="a-puzzles"><span style="--p:{{puzzles.percent}}"></span></div><p data-t="puzzlesText">Die sieben Rätsel, das Computer-Quiz und kleine Spiele wie Snake.</p><p class="counts" data-counts="{{puzzles.done}},{{puzzles.partial}},{{puzzles.missing}}">{{puzzles.done}} fertig · {{puzzles.partial}} in Arbeit · {{puzzles.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-about" data-t="about">Über mich, Lebenslauf und Kontakt</h3><span class="pct" data-pct="{{about.percent}}">{{about.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{about.percent}}" aria-labelledby="a-about"><span style="--p:{{about.percent}}"></span></div><p data-t="aboutText">Werdegang, Foto, Lebenslauf, Kontakt und meine Profile.</p><p class="counts" data-counts="{{about.done}},{{about.partial}},{{about.missing}}">{{about.done}} fertig · {{about.partial}} in Arbeit · {{about.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-legal" data-t="legal">Recht und Datenschutz</h3><span class="pct" data-pct="{{legal.percent}}">{{legal.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{legal.percent}}" aria-labelledby="a-legal"><span style="--p:{{legal.percent}}"></span></div><p data-t="legalText">Impressum, Datenschutz und die rechtliche Prüfung jeder Funktion.</p><p class="counts" data-counts="{{legal.done}},{{legal.partial}},{{legal.missing}}">{{legal.done}} fertig · {{legal.partial}} in Arbeit · {{legal.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-seo" data-t="seo">Suchmaschinen, Tempo und Barrierefreiheit</h3><span class="pct" data-pct="{{seo.percent}}">{{seo.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{seo.percent}}" aria-labelledby="a-seo"><span style="--p:{{seo.percent}}"></span></div><p data-t="seoText">Schnell laden, gut gefunden werden und für alle bedienbar sein – auch auf dem Handy.</p><p class="counts" data-counts="{{seo.done}},{{seo.partial}},{{seo.missing}}">{{seo.done}} fertig · {{seo.partial}} in Arbeit · {{seo.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><h3 id="a-launch" data-t="launch">Letzte Texte, Logo und Start</h3><span class="pct" data-pct="{{launch.percent}}">{{launch.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{launch.percent}}" aria-labelledby="a-launch"><span style="--p:{{launch.percent}}"></span></div><p data-t="launchText">Alle Texte gemeinsam prüfen, das endgültige Logo, dann der Start.</p><p class="counts" data-counts="{{launch.done}},{{launch.partial}},{{launch.missing}}">{{launch.done}} fertig · {{launch.partial}} in Arbeit · {{launch.missing}} offen</p></li>
+          </ul>
+          <p class="stamp"><span data-t="stamp">Stand:</span> <time datetime="{{DATE}}" data-date="{{DATE}}">{{DATE_DE}}</time></p>
         </div>
       </div>
     </section>
 
-    <section class="scene" aria-hidden="true">
-      <svg viewBox="0 0 460 420" role="img">
-        <defs>
-          <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#0d1a16"/><stop offset="1" stop-color="#07100d"/>
-          </linearGradient>
-          <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#1b2230"/><stop offset="1" stop-color="#11161f"/>
-          </linearGradient>
-          <radialGradient id="orb">
-            <stop offset="0" stop-color="#9ec8ff"/><stop offset="55%" stop-color="#3f7fe0"/><stop offset="100%" stop-color="#16305c"/>
-          </radialGradient>
-          <linearGradient id="phone" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#202a3a"/><stop offset="1" stop-color="#131a26"/>
-          </linearGradient>
-        </defs>
-
-        <!-- connecting data lines -->
-        <path class="flow" d="M150 190 C 210 150, 250 150, 300 128" fill="none" stroke="#f0a44a" stroke-opacity=".55" stroke-width="2"/>
-        <path class="flow" d="M160 250 C 220 290, 260 300, 312 296" fill="none" stroke="#6aa9ff" stroke-opacity=".5" stroke-width="2"/>
-
-        <!-- CRT terminal, the old machine -->
-        <g class="float-a">
-          <rect x="24" y="140" width="140" height="118" rx="14" fill="url(#metal)" stroke="#2b3547" stroke-width="2"/>
-          <rect x="38" y="154" width="112" height="78" rx="9" fill="url(#screen)" stroke="#204035" stroke-width="2"/>
-          <g class="glow">
-            <rect x="48" y="166" width="44" height="5" rx="2.5" fill="#5de2a4" opacity=".85"/>
-            <rect x="48" y="178" width="72" height="5" rx="2.5" fill="#5de2a4" opacity=".55"/>
-            <rect x="48" y="190" width="30" height="5" rx="2.5" fill="#5de2a4" opacity=".7"/>
-            <rect x="48" y="206" width="10" height="12" rx="2" fill="#5de2a4"/>
-          </g>
-          <rect x="70" y="258" width="48" height="10" rx="4" fill="#1a2230"/>
-          <rect x="54" y="268" width="80" height="8" rx="4" fill="#212b3b"/>
-          <!-- ENIAC lamps -->
-          <circle class="lamp" cx="40" cy="246" r="4" fill="#f0a44a"/>
-          <circle class="lamp" cx="54" cy="246" r="4" fill="#f0a44a"/>
-          <circle class="lamp" cx="68" cy="246" r="4" fill="#f0a44a"/>
-          <circle class="lamp" cx="82" cy="246" r="4" fill="#f0a44a"/>
-        </g>
-
-        <!-- smartphone, the modern machine -->
-        <g class="float-b">
-          <rect x="300" y="212" width="98" height="176" rx="20" fill="url(#phone)" stroke="#2b3547" stroke-width="2"/>
-          <rect x="310" y="228" width="78" height="140" rx="12" fill="#0a1017" stroke="#1d2635"/>
-          <rect x="336" y="219" width="26" height="4" rx="2" fill="#2b3547"/>
-          <g class="glow">
-            <rect x="320" y="242" width="40" height="6" rx="3" fill="#6aa9ff" opacity=".9"/>
-            <rect x="320" y="256" width="58" height="6" rx="3" fill="#6aa9ff" opacity=".45"/>
-            <rect x="320" y="270" width="48" height="6" rx="3" fill="#6aa9ff" opacity=".6"/>
-          </g>
-          <rect x="320" y="292" width="58" height="34" rx="8" fill="#141d2b" stroke="#22304a"/>
-          <rect x="330" y="304" width="38" height="5" rx="2.5" fill="#8e9bb0" opacity=".7"/>
-          <rect x="330" y="314" width="22" height="5" rx="2.5" fill="#8e9bb0" opacity=".45"/>
-          <circle cx="349" cy="352" r="11" fill="#141d2b" stroke="#22304a"/>
-          <circle cx="349" cy="352" r="4" fill="#f0a44a" class="glow"/>
-        </g>
-
-        <!-- AI core -->
-        <g class="float-c">
-          <circle cx="330" cy="104" r="34" fill="url(#orb)" opacity=".92"/>
-          <circle cx="330" cy="104" r="34" fill="none" stroke="#9ec8ff" stroke-opacity=".35"/>
-          <g class="spin">
-            <ellipse cx="330" cy="104" rx="60" ry="22" fill="none" stroke="#6aa9ff" stroke-opacity=".55" stroke-width="2"/>
-            <circle cx="390" cy="104" r="4" fill="#9ec8ff"/>
-          </g>
-          <g class="spin-rev">
-            <ellipse cx="330" cy="104" rx="22" ry="60" fill="none" stroke="#f0a44a" stroke-opacity=".45" stroke-width="2"/>
-            <circle cx="330" cy="44" r="3.5" fill="#f0a44a"/>
-          </g>
-          <g class="glow" opacity=".9">
-            <circle cx="318" cy="98" r="3" fill="#eaf3ff"/>
-            <circle cx="338" cy="110" r="2.5" fill="#eaf3ff"/>
-            <circle cx="330" cy="92" r="2" fill="#eaf3ff"/>
-            <path d="M318 98 L330 92 L338 110 Z" fill="none" stroke="#eaf3ff" stroke-opacity=".5"/>
-          </g>
-        </g>
-
-        <!-- punch card, where it all started -->
-        <g class="float-c" opacity=".95">
-          <rect x="40" y="316" width="150" height="66" rx="6" fill="#141a24" stroke="#2b3547" stroke-width="2" transform="rotate(-6 115 349)"/>
-          <g transform="rotate(-6 115 349)" fill="#f0a44a" opacity=".85">
-            <rect x="54" y="330" width="9" height="7" rx="1.5"/>
-            <rect x="70" y="344" width="9" height="7" rx="1.5"/>
-            <rect x="86" y="330" width="9" height="7" rx="1.5"/>
-            <rect x="102" y="358" width="9" height="7" rx="1.5"/>
-            <rect x="118" y="344" width="9" height="7" rx="1.5"/>
-            <rect x="134" y="330" width="9" height="7" rx="1.5"/>
-            <rect x="150" y="358" width="9" height="7" rx="1.5"/>
-            <rect x="166" y="344" width="9" height="7" rx="1.5"/>
-          </g>
-          <path d="M46 322 L188 312" stroke="#5de2a4" stroke-opacity=".5" stroke-width="2" transform="rotate(-6 115 349)"/>
-        </g>
-      </svg>
+    <section class="next" aria-labelledby="next">
+      <h2 id="next" data-t="nextTitle">Wie es weitergeht</h2>
+      <p class="lead" data-t="next">Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. Danach gehe ich jeden Text noch einmal durch – dann geht die Seite online.</p>
+      <p data-t="contact">Sie möchten mich schon jetzt erreichen? Schreiben Sie mir gern:</p>
+      <p><a href="mailto:ahmadrezataheride@gmail.com" dir="ltr">ahmadrezataheride@gmail.com</a></p>
     </section>
   </main>
 
   <footer>
-    <span data-t="foot">Das vollständige Portfolio folgt in Kürze.</span>
-    <nav class="legal" aria-label="Rechtliches" data-t-label="legal">
+    <span dir="ltr">© <span id="y">2026</span> Ahmadreza Taheri</span>
+    <nav aria-label="Rechtliches" data-t-label="legalNav">
       <a href="/impressum/" data-legal="impressum" data-t="imprint">Impressum</a>
       <a href="/datenschutz/" data-legal="datenschutz" data-t="privacy">Datenschutz</a>
     </nav>
-    <span class="copy">© <span id="y"></span> Ahmadreza Taheri · Trier</span>
   </footer>
 </div>
 
 <script>
+  // One line in each language; the two that are not the page language stay
+  // visible under the role, so every visitor sees the name in their script.
+  const ALT = {
+    de:'<p lang="de" dir="ltr">Fachinformatiker für Systemintegration in Ausbildung, Trier – mein Portfolio entsteht gerade.</p>',
+    en:'<p lang="en" dir="ltr">IT specialist for system integration in training, Trier – my portfolio is coming soon.</p>',
+    fa:'<p lang="fa" dir="rtl">احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات در تریر – نمونه‌کار من به‌زودی منتشر می‌شود.</p>'
+  };
+  // In Persian the Latin h1 gets the name in Persian script right under it.
+  const FA_NAME = '<p class="fa-name" lang="fa" dir="rtl">احمدرضا طاهری</p>';
   const T = {
-    de:{dir:"ltr",lang:"de",
-      tag:"Amonel · v1.0 im Aufbau",
-      status:"Seite entsteht gerade",
+    de:{dir:"ltr",
+      title:"Ahmadreza Taheri – Fachinformatiker für Systemintegration in Ausbildung, Trier",
+      language:"Sprache", status:"Im Aufbau",
       role:"Fachinformatiker für Systemintegration in Ausbildung · Trier",
-      lede:'Hier entsteht <b>Amonel</b> — ein Portfolio, das nebenbei zeigt, wie Computer wirklich funktionieren: 80 Jahre Computergeschichte in 90 Sekunden, von der Lochkarte bis zur Cloud.',
-      f1:"Systemintegration", f3:"Trier, Deutschland",
-      t1:"roadmap: {{DONE}} von {{TOTAL}} punkten erledigt",
-      t3:"aktuelle phase {{PHASE}}: {{PHASE_DONE}} von {{PHASE_TOTAL}} erledigt",
-      t2:"nächster schritt: die letzten apps, dann feinschliff und start",
-      foot:"Das vollständige Portfolio folgt in Kürze.",
-      imprint:"Impressum", privacy:"Datenschutz", legal:"Rechtliches", prefix:"",
-      title:"Ahmadreza Taheri — Fachinformatiker für Systemintegration, Trier"},
-    en:{dir:"ltr",lang:"en",
-      tag:"Amonel · v1.0 in progress",
-      status:"This site is being built",
+      intro:"Hier entsteht mein persönliches Portfolio. Noch ist es nicht fertig – auf dieser Seite sehen Sie, was kommt und wie weit ich schon bin.",
+      write:"E-Mail schreiben",
+      whatTitle:"Was hier entsteht",
+      whatLead:"Eine Reise durch rund 80 Jahre Computergeschichte, die sich am Ende in mein eigenes Betriebssystem im Browser verwandelt: Amonel OS.",
+      c1t:"Durch die Geschichte scrollen", c1:"Sieben Epochen, von ENIAC 1946 bis zur Cloud von heute. Jede zeigt etwas über Computer, das bis heute gilt.",
+      c2t:"Kleine Rätsel", c2:"In jeder Epoche wartet ein Rätsel. Sie lösen es selbst – oder sehen zu, wie es sich von allein löst.",
+      c3t:"Amonel OS", c3:"Am Ende der Reise öffnet sich ein Desktop im Browser, mit Apps, die wirklich funktionieren: Terminal, Netzwerk-Werkzeuge, Quiz und mehr.",
+      c4t:"Mein Weg", c4:"Von Teheran nach Trier: Werdegang, Lebenslauf und Kontakt. Alles auf Deutsch, Englisch und Persisch.",
+      progressTitle:"So weit bin ich", overall:"der Arbeit sind erledigt",
+      note:"Gewichtet nach Aufwand: Große Aufgaben zählen mehr als kleine.",
+      journey:"Reise durch die Computergeschichte", journeyText:"Sieben Epochen zum Durchscrollen, mit Bildern, Übergängen und Texten.",
+      desktop:"Amonel OS: Desktop und Apps", desktopText:"Das Betriebssystem im Browser: Fenster, Taskleiste und die Apps darin.",
+      puzzles:"Rätsel und Spiele", puzzlesText:"Die sieben Rätsel, das Computer-Quiz und kleine Spiele wie Snake.",
+      about:"Über mich, Lebenslauf und Kontakt", aboutText:"Werdegang, Foto, Lebenslauf, Kontakt und meine Profile.",
+      legal:"Recht und Datenschutz", legalText:"Impressum, Datenschutz und die rechtliche Prüfung jeder Funktion.",
+      seo:"Suchmaschinen, Tempo und Barrierefreiheit", seoText:"Schnell laden, gut gefunden werden und für alle bedienbar sein – auch auf dem Handy.",
+      launch:"Letzte Texte, Logo und Start", launchText:"Alle Texte gemeinsam prüfen, das endgültige Logo, dann der Start.",
+      counts:"{d} fertig · {p} in Arbeit · {m} offen", stamp:"Stand:",
+      nextTitle:"Wie es weitergeht",
+      next:"Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. Danach gehe ich jeden Text noch einmal durch – dann geht die Seite online.",
+      contact:"Sie möchten mich schon jetzt erreichen? Schreiben Sie mir gern:",
+      imprint:"Impressum", privacy:"Datenschutz", legalNav:"Rechtliches", prefix:""},
+    en:{dir:"ltr",
+      title:"Ahmadreza Taheri – IT specialist for system integration in training, Trier",
+      language:"Language", status:"Under construction",
       role:"IT specialist for system integration in training · Trier",
-      lede:'<b>Amonel</b> is on its way — a portfolio that also shows how computers really work: 80 years of computing in 90 seconds, from the punch card to the cloud.',
-      f1:"Systems integration", f3:"Trier, Germany",
-      t1:"roadmap: {{DONE}} of {{TOTAL}} items done",
-      t3:"current phase {{PHASE}}: {{PHASE_DONE}} of {{PHASE_TOTAL}} done",
-      t2:"next step: the last apps, then polish and launch",
-      foot:"The full portfolio is coming soon.",
-      imprint:"Imprint", privacy:"Privacy", legal:"Legal", prefix:"/en",
-      title:"Ahmadreza Taheri — IT specialist for systems integration, Trier"},
-    fa:{dir:"rtl",lang:"fa",
-      tag:"Amonel · نسخه ۱٫۰ در حال ساخت",
-      status:"این صفحه در حال ساخت است",
+      intro:"This is where my personal portfolio is being built. It isn't finished yet – this page shows what is coming and how far along it is.",
+      write:"Send an e-mail",
+      whatTitle:"What is being built",
+      whatLead:"A journey through about 80 years of computer history that turns into my own operating system in the browser: Amonel OS.",
+      c1t:"Scroll through history", c1:"Seven eras, from ENIAC in 1946 to today's cloud. Each one shows something about computers that is still true today.",
+      c2t:"Small puzzles", c2:"Every era has a puzzle waiting. Solve it yourself – or watch it solve itself.",
+      c3t:"Amonel OS", c3:"At the end of the journey a desktop opens in your browser, with apps that really work: a terminal, network tools, a quiz and more.",
+      c4t:"My path", c4:"From Tehran to Trier: my background, CV and contact. All in German, English and Persian.",
+      progressTitle:"How far along it is", overall:"of the work is done",
+      note:"Weighted by effort: big tasks count more than small ones.",
+      journey:"Journey through computer history", journeyText:"Seven eras to scroll through, with pictures, transitions and texts.",
+      desktop:"Amonel OS: desktop and apps", desktopText:"The operating system in the browser: windows, a taskbar and the apps inside.",
+      puzzles:"Puzzles and games", puzzlesText:"The seven puzzles, the computer quiz and small games such as Snake.",
+      about:"About me, CV and contact", aboutText:"My background, photo, CV, contact and profiles.",
+      legal:"Legal and privacy", legalText:"Imprint, privacy policy and a legal check of every feature.",
+      seo:"Search engines, speed and accessibility", seoText:"Loading fast, being easy to find and usable by everyone – on phones too.",
+      launch:"Final texts, logo and launch", launchText:"Reviewing every text together, the final logo, then the launch.",
+      counts:"{d} done · {p} in progress · {m} to do", stamp:"Last updated:",
+      nextTitle:"What's next",
+      next:"Next up: the last apps, tests on real phones and tablets, a photo and my CV. Then I'll go through every text once more – and the site goes live.",
+      contact:"Would you like to get in touch already? I'd be glad to hear from you:",
+      imprint:"Imprint", privacy:"Privacy", legalNav:"Legal", prefix:"/en"},
+    fa:{dir:"rtl",
+      title:"احمدرضا طاهری – کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها)، تریر",
+      language:"زبان", status:"در حال ساخت",
       role:"کارآموز متخصص فناوری اطلاعات (یکپارچه‌سازی سیستم‌ها) · تریر",
-      lede:'<b>Amonel</b> در راه است؛ نمونه‌کاری که در کنار معرفی من نشان می‌دهد کامپیوتر واقعاً چطور کار می‌کند: ۸۰ سال تاریخ کامپیوتر در ۹۰ ثانیه، از کارت پانچ تا ابر.',
-      f1:"یکپارچه‌سازی سیستم‌ها", f3:"تریر، آلمان",
-      t1:"roadmap: {{DONE}} of {{TOTAL}} items done",
-      t3:"current phase {{PHASE}}: {{PHASE_DONE}} of {{PHASE_TOTAL}} done",
-      t2:"next step: the last apps, then polish and launch",
-      foot:"نسخه‌ی کامل به‌زودی منتشر می‌شود.",
-      imprint:"اطلاعات ناشر", privacy:"حریم خصوصی", legal:"اطلاعات حقوقی", prefix:"/fa",
-      title:"احمدرضا طاهری — فناوری اطلاعات، تریر"}
+      intro:"این‌جا نمونه‌کار شخصی من ساخته می‌شود. هنوز کامل نیست؛ در این صفحه می‌بینید چه چیزی در راه است و کار تا کجا پیش رفته است.",
+      write:"ایمیل بفرستید",
+      whatTitle:"چه چیزی ساخته می‌شود",
+      whatLead:"سفری در حدود ۸۰ سال تاریخ رایانه که در پایان به سیستم‌عامل خود من در مرورگر تبدیل می‌شود: Amonel OS.",
+      c1t:"سفر در تاریخ", c1:"هفت دوره، از ENIAC در سال ۱۹۴۶ تا ابر امروز. هر دوره نکته‌ای دربارهٔ رایانه‌ها نشان می‌دهد که هنوز هم درست است.",
+      c2t:"معماهای کوچک", c2:"در هر دوره یک معما منتظر شماست. می‌توانید خودتان حلش کنید یا تماشا کنید که چطور خودش حل می‌شود.",
+      c3t:"Amonel OS", c3:"در پایان سفر، یک دسکتاپ در مرورگر شما باز می‌شود با برنامه‌هایی که واقعاً کار می‌کنند: ترمینال، ابزارهای شبکه، مسابقه و چیزهای دیگر.",
+      c4t:"مسیر من", c4:"از تهران تا تریر: سوابق، رزومه و راه تماس. همه به آلمانی، انگلیسی و فارسی.",
+      progressTitle:"کار تا کجا پیش رفته است", overall:"از کل کار انجام شده است",
+      note:"بر اساس حجم کار: کارهای بزرگ بیشتر از کارهای کوچک حساب می‌شوند.",
+      journey:"سفر در تاریخ رایانه", journeyText:"هفت دوره برای پیمایش، با تصویر، گذار و متن.",
+      desktop:"دسکتاپ و برنامه‌های Amonel OS", desktopText:"سیستم‌عامل درون مرورگر: پنجره‌ها، نوار وظیفه و برنامه‌های آن.",
+      puzzles:"معماها و بازی‌ها", puzzlesText:"هفت معما، مسابقهٔ رایانه و بازی‌های کوچکی مثل Snake.",
+      about:"دربارهٔ من، رزومه و تماس", aboutText:"سوابق، عکس، رزومه، راه تماس و پروفایل‌های من.",
+      legal:"مسائل حقوقی و حریم خصوصی", legalText:"اطلاعات ناشر، حریم خصوصی و بررسی حقوقی هر بخش.",
+      seo:"موتورهای جست‌وجو، سرعت و دسترس‌پذیری", seoText:"سریع بارگیری شود، به‌آسانی پیدا شود و برای همه قابل استفاده باشد؛ روی گوشی هم.",
+      launch:"متن‌های نهایی، لوگو و انتشار", launchText:"بازبینی مشترک همهٔ متن‌ها، لوگوی نهایی و سپس انتشار.",
+      counts:"{d} انجام شده · {p} در حال انجام · {m} باقی‌مانده", stamp:"آخرین به‌روزرسانی:",
+      nextTitle:"قدم بعدی",
+      next:"در ادامه: آخرین برنامه‌ها، آزمایش روی گوشی و تبلت واقعی، عکس و رزومه. بعد همهٔ متن‌ها را یک بار دیگر بازبینی می‌کنم و سایت منتشر می‌شود.",
+      contact:"می‌خواهید همین حالا با من در تماس باشید؟ خوشحال می‌شوم برایم بنویسید:",
+      imprint:"اطلاعات ناشر", privacy:"حریم خصوصی", legalNav:"اطلاعات حقوقی", prefix:"/fa"}
   };
   const btns=[...document.querySelectorAll('[data-lang]')];
-  function set(l){
+  function set(l,remember){
     const t=T[l]; if(!t) return;
-    document.documentElement.lang=t.lang;
-    document.documentElement.dir=t.dir;
-    document.title=t.title;
-    document.querySelectorAll('[data-t]').forEach(el=>{
-      const v=t[el.dataset.t]; if(v!=null) el.innerHTML=v;
+    const root=document.documentElement;
+    root.lang=l; root.dir=t.dir; document.title=t.title;
+    document.querySelectorAll('[data-t]').forEach(el=>{const v=t[el.dataset.t]; if(v!=null) el.textContent=v;});
+    document.querySelectorAll('[data-t-label]').forEach(el=>el.setAttribute('aria-label',t[el.dataset.tLabel]));
+    document.getElementById('alt').innerHTML=(l==='fa'?FA_NAME:'')+Object.keys(ALT).filter(k=>k!==l).map(k=>ALT[k]).join('');
+    // Numbers in the page language: Persian digits and the Persian calendar in fa.
+    const num=new Intl.NumberFormat(l), pct=new Intl.NumberFormat(l,{style:'percent'});
+    document.querySelectorAll('[data-pct]').forEach(el=>{el.textContent=pct.format(el.dataset.pct/100);});
+    document.querySelectorAll('[data-counts]').forEach(el=>{
+      const [d,p,m]=el.dataset.counts.split(',').map(Number);
+      el.textContent=t.counts.replace('{d}',num.format(d)).replace('{p}',num.format(p)).replace('{m}',num.format(m));
     });
+    document.querySelectorAll('[data-date]').forEach(el=>{el.textContent=new Intl.DateTimeFormat(l,{dateStyle:'long'}).format(new Date(el.dataset.date+'T12:00:00Z'));});
     btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
     document.querySelectorAll('[data-legal]').forEach(a=>a.setAttribute('href',t.prefix+'/'+a.dataset.legal+'/'));
-    document.querySelectorAll('[data-t-label]').forEach(el=>el.setAttribute('aria-label',t[el.dataset.tLabel]));
-    try{localStorage.setItem('ao-lang',l)}catch(e){}
+    if(remember){try{localStorage.setItem('ao-lang',l)}catch(e){}}
   }
-  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lang)));
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lang,true)));
   document.getElementById('y').textContent=new Date().getFullYear();
+  let start='de';
   try{
     const saved=localStorage.getItem('ao-lang');
-    if(saved&&T[saved])set(saved);
-    else{const n=(navigator.language||'de').slice(0,2);if(T[n])set(n);}
+    if(saved&&T[saved]) start=saved;
+    else{const n=(navigator.language||'de').slice(0,2); if(T[n]) start=n;}
   }catch(e){}
+  set(start);
 </script>
 </body>
 </html>
