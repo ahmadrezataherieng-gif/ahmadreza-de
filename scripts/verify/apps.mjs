@@ -476,6 +476,9 @@ const quiz = async () => {
   }))()`);
   check('quiz: the score is announced, focus on the result', result.live.length > 5 && result.focus === 'H2', result);
   check('quiz: the best score is stored in this browser, one number', JSON.parse(result.stored ?? '{}').state?.best === result.score, result.stored);
+  // APP-11: every era that was missed leads into the journey at its section.
+  const missed = await js(`[...document.querySelectorAll('${Q('[data-quiz-missed] li')}')].map((li) => ({ era: li.dataset.era, hash: li.querySelector('[data-action="quiz-to-era"]')?.dataset.eraHash ?? null }))`);
+  check('quiz: every missed era has a link to its journey section', missed.every((item) => /^#era-[1-7]$/.test(item.hash ?? '')), missed);
   // Phase 9C: the round is counted - that it ended, nothing more - and the total shown under the button.
   await sleep(800);
   const rounds = await js(`document.querySelector('${Q('[data-public-count="quiz.completed"]')}')?.textContent ?? null`);

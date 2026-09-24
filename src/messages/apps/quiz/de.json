@@ -26,6 +26,7 @@
     },
     "newBest": "Neuer Bestwert.",
     "revisit": "Diese Epochen lohnen einen zweiten Blick:",
+    "toEra": "Zur Epoche in der Reise",
     "again": "Neue Runde",
     "rounds": "Bisher wurden hier {count, number} Runden zu Ende gespielt."
   },

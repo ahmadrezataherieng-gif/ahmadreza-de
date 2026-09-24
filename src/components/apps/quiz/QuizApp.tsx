@@ -1,10 +1,14 @@
 'use client';
 
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
+import { eraSectionHash } from '@/components/apps/unlock';
+import { replayJourney } from '@/components/os/replay';
+import { getEra } from '@/content/eras';
+import type { Locale } from '@/lib/i18n-config';
 import { pickRound, resultBand, ROUND_SIZE, scoreRound, type RoundQuestion, type RoundScore } from '@/components/apps/quiz/quiz';
 import { quizQuestions, type QuizOptionId } from '@/content/quiz';
 import { selectQuizBest, useQuizStore } from '@/store/quiz-store';
@@ -251,6 +255,7 @@ function Result({
   onAgain: () => void;
 }) {
   const t = useTranslations('quiz');
+  const locale = useLocale() as Locale;
   const { score, total, missedEras } = phase.score;
   const sectionRef = useRef<HTMLElement>(null);
   const rounds = publicCount(usePublicCounts(sectionRef), QUIZ_COMPLETED);
@@ -275,6 +280,17 @@ function Result({
             {missedEras.map((era) => (
               <li key={era} data-era={era} className="font-body text-sm text-ink">
                 {t(`eras.${era}`)}
+                {/* Through replayJourney like the locked-app notice: a returning visitor's direct visit to the journey would otherwise land back on the desktop. */}
+                <button
+                  type="button"
+                  data-action="quiz-to-era"
+                  data-era-hash={eraSectionHash(getEra(era))}
+                  onClick={() => replayJourney(locale, eraSectionHash(getEra(era)))}
+                  className="ms-2 cursor-pointer text-accent underline underline-offset-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                >
+                  {t('result.toEra')}
+                  <span className="sr-only">: {t(`eras.${era}`)}</span>
+                </button>
               </li>
             ))}
           </ul>

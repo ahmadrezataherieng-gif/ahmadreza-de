@@ -39,20 +39,20 @@ build time).
 |---|---|---|---|---|---|
 | `journey` | 5 | 0 | 2 | 47 / 62 | 76 % |
 | `desktop` | 7 | 1 | 5 | 45.8 / 66 | 69 % |
-| `puzzles` | 6 | 1 | 1 | 35.6 / 38 | 94 % |
+| `puzzles` | 7 | 1 | 0 | 36.6 / 38 | 96 % |
 | `about` | 2 | 1 | 6 | 11.6 / 26 | 45 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 17 | 2 | 8 | 58.2 / 84 | 69 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 57 | 7 | 41 | 251.7 / 406 | **62 %** |
+| **all** | 58 | 7 | 40 | 252.7 / 406 | **62 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 13 | 5 | 36 | 54 |
-| P2 | 18 | 2 | 9 | 29 |
-| **total** | **41** | **7** | **57** | **105** |
+| P2 | 17 | 2 | 10 | 29 |
+| **total** | **40** | **7** | **58** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -94,7 +94,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - | S | puzzles |
 | APP-09 | **GSAP DrawSVG** (free plugin) for line-drawing effects; never ScrollSmoother. | missing | P2 | Claude Code | - | S | journey |
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. | partial | P2 | Claude Code | - | S 30% | puzzles |
-| APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). | missing | P2 | Claude Code | - | XS | puzzles |
+| APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |
 | APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. | missing | P2 | Claude Code | - | S | desktop |
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |

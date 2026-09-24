@@ -26,6 +26,7 @@
     },
     "newBest": "New best score.",
     "revisit": "These eras are worth a second look:",
+    "toEra": "To this era in the journey",
     "again": "New round",
     "rounds": "{count, number} rounds completed here so far."
   },
