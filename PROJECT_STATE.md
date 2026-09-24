@@ -26,7 +26,7 @@ is left lives in ROADMAP.md.
 - [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
 - [ ] **Phase 9D-2** — network tools and the Time Machine theme switcher (slots registered)
 - [ ] **Phase 9D-3** — easter eggs (the Terminal's `HIDDEN_COMMANDS`), GSAP DrawSVG
-- [~] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, per-view descriptions, 404, static About page done (DECISIONS.md 59); OG image and the full journey text fallback open
+- [x] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, descriptions, OG images, 404, static About page, journey text layer (DECISIONS.md 59); JSON-LD image/sameAs wait for the owner
 - [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
 - [ ] **Phase 12** — Performance, accessibility, mobile pass
 - [ ] **Phase 13** — Cloudflare deployment: GitHub integration, custom domain, DNS, TLS
@@ -286,8 +286,8 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
 - Audio. Every theme's `sound` profile is still unused.
-- The Open Graph image and the full journey text fallback (ROADMAP SEO-05,
-  SEO-10).
+- (Phase 10 is complete except JSON-LD `image`/`sameAs`, which wait for the
+  portrait and the profiles.) OG images: `public/og/`, from `scripts/og-image.mjs`.
 - **Static About page** (`/about/`, en, fa; DECISIONS.md 59): the About app's
   component rendered on the server, linked from every page footer, in the
   sitemap. **CSP** in `_headers` (everything `'self'`); `serve.mjs --headers`

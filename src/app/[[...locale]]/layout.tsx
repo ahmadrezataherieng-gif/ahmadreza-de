@@ -69,7 +69,7 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
 };
 
 /** `site` keys used only by metadata and JSON-LD, never by a client component. */
-const SERVER_ONLY_SITE_KEYS: readonly string[] = ['journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout'];
+const SERVER_ONLY_SITE_KEYS: readonly string[] = ['ogAlt', 'journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout'];
 
 /**
  * Page title per view, the name always ahead of the brand (the `seo` skill):
@@ -168,6 +168,15 @@ export async function generateMetadata({
       description,
       siteName: t('brand'),
       url: viewHref(locale, view),
+      // One share image per language (scripts/og-image.mjs, ROADMAP SEO-05).
+      // CONTENT-TODO CR-1050
+      images: [{ url: `/og/og-${locale}.png`, width: 1200, height: 630, alt: t('ogAlt'), type: 'image/png' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [{ url: `/og/og-${locale}.png`, alt: t('ogAlt') }],
     },
   };
 }
