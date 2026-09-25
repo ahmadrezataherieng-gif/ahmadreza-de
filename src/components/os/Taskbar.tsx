@@ -7,6 +7,7 @@ import { AppGlyph } from '@/components/apps/icons';
 import { Clock } from '@/components/os/Clock';
 import { Launcher } from '@/components/os/Launcher';
 import { ResumeControl } from '@/components/os/ResumeControl';
+import { SoundToggle } from '@/components/os/SoundToggle';
 import { toggleFromTaskbar } from '@/components/os/window-actions';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { cn } from '@/lib/cn';
@@ -68,6 +69,7 @@ export function Taskbar() {
         })}
       </ul>
       <ResumeControl />
+      <SoundToggle />
       <LanguageSwitcher className="shrink-0" />
       <Clock className="shrink-0 px-2 text-sm text-ink" />
     </section>

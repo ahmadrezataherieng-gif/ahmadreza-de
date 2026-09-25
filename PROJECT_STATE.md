@@ -383,7 +383,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The hidden Legende badges show in the Timeline app once earned (APP-10); nowhere else.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
-- Audio. Every theme's `sound` profile is still unused.
+- Audio: a switch (off on every load, in memory only) plays generic synthesised sounds on opening and closing an app, per era profile (APP-12).
 - (Phase 10 is complete except JSON-LD `image`/`sameAs`, which wait for the
   portrait and the profiles.) OG images: `public/og/`, from `scripts/og-image.mjs`.
 - **Static About page** (`/about/`, en, fa; DECISIONS.md 59): the About app's

@@ -43,6 +43,8 @@ const check = (name, ok, detail) => {
 
 const b = await launch({ width: WIDTH, height: HEIGHT, reduce: REDUCE, touch: TOUCH, tag: TAG });
 const js = (code) => b.evaluate(code);
+// APP-12: count audio contexts and oscillators from the very first script, to prove nothing sounds before the visitor turns sound on.
+await b.send('Page.addScriptToEvaluateOnNewDocument', { source: `(() => { const Original = window.AudioContext; if (!Original) return; window.__audio = { contexts: 0, oscillators: 0 }; window.AudioContext = class extends Original { constructor(...args) { super(...args); window.__audio.contexts++; const make = this.createOscillator.bind(this); this.createOscillator = () => { window.__audio.oscillators++; return make(); }; } }; })();` });
 
 // The 1971 puzzle solved (its artifact unlocks the file tree); everything else locked.
 await b.goto(`${BASE}${PREFIX}/`, 2500);
@@ -358,6 +360,32 @@ if (layout === 'desktop') {
   await sleep(500);
 }
 
+
+// APP-12: sound is off until a click, and then the desktop's own events make it.
+const audio = () => js(`window.__audio ?? { contexts: 0, oscillators: 0 }`);
+const soundOn = () => js(`document.querySelector('[data-action="sound-toggle"]')?.getAttribute('aria-pressed')`);
+check('sound: nothing sounded on load, in any window opened so far', (await audio()).contexts === 0 && (await audio()).oscillators === 0, await audio());
+check('sound: the switch is off to begin with', (await soundOn()) === 'false');
+await clickOn('[data-action="sound-toggle"]');
+await sleep(300);
+check('sound: a click turns it on and answers with a sound', (await soundOn()) === 'true' && (await audio()).contexts === 1 && (await audio()).oscillators > 0, await audio());
+const before = (await audio()).oscillators;
+// A script click: earlier windows may cover the icon.
+await js(`document.querySelector('${layout === 'desktop' ? '[data-layout="desktop"] nav [data-app="quiz"]' : '.ao-home [data-app="quiz"]'}').click(); true`);
+await sleep(500);
+check('sound: opening an app makes its sound, on the one context', (await audio()).oscillators > before && (await audio()).contexts === 1, await audio());
+if (layout !== 'desktop') {
+  await js('history.back(); true');
+  await sleep(500);
+}
+await clickOn('[data-action="sound-toggle"]');
+await sleep(200);
+const muted = (await audio()).oscillators;
+check('sound: a second click turns it off', (await soundOn()) === 'false');
+await js(`document.querySelector('${layout === 'desktop' ? '[data-layout="desktop"] nav [data-app="tickets"]' : '.ao-home [data-app="tickets"]'}').click(); true`);
+await sleep(400);
+check('sound: and it stays quiet', (await audio()).oscillators === muted, await audio());
+check('sound: nothing is stored for it', !(await js(`Object.keys(localStorage).concat(Object.keys(sessionStorage)).some((key) => /sound|audio/i.test(key))`)));
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;
 console.log(`${QUIET ? '' : '\n'}${TAG}: ${passed}/${log.length} passed`);

@@ -12,7 +12,9 @@ import { AppIcon } from '@/components/os/AppIcon';
 import { Clock } from '@/components/os/Clock';
 import { LockedNotice } from '@/components/os/LockedNotice';
 import { replayJourney } from '@/components/os/replay';
+import { SoundToggle } from '@/components/os/SoundToggle';
 import { onOpenAppRequest } from '@/lib/app-handoff';
+import { playSound } from '@/lib/sound-engine';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
@@ -63,6 +65,7 @@ export function MobileShell() {
       const current = (window.history.state as Record<string, unknown> | null) ?? {};
       window.history.pushState({ ...current, [HISTORY_KEY]: id }, '', window.location.href);
       setOpenId(id);
+      playSound('open');
     },
     [dismissLocked],
   );
@@ -101,6 +104,7 @@ export function MobileShell() {
           <Link href={viewHref(locale, 'landing')} className="hover:text-ink">
             {t('home')}
           </Link>
+          <SoundToggle />
           <LanguageSwitcher />
           <LegalLinks className="justify-center" />
         </div>

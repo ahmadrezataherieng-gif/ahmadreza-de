@@ -683,6 +683,12 @@
       "gripHint": "Arrow keys move, Shift+arrow keys resize, Enter maximises.",
       "loading": "Loading…"
     },
+    "sound": {
+      "label": "Sound",
+      "on": "Sound is on - click to turn it off",
+      "off": "Sound is off - click to turn it on",
+      "unavailable": "This browser cannot play sound."
+    },
     "locked": {
       "label": "Locked",
       "message": "{year, select, today {Today’s puzzle unlocks “{app}” – solved, shown or watched.} other {The {year} puzzle unlocks “{app}” – solved, shown or watched.}}",

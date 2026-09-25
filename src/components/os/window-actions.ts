@@ -5,6 +5,7 @@ import { getApp } from '@/components/apps/registry';
 import { selectIsAppUnlocked, useUnlockStore } from '@/store/unlock-store';
 import { useShellStore } from '@/store/shell-store';
 import { useWindowStore } from '@/store/window-store';
+import { playSound } from '@/lib/sound-engine';
 
 /**
  * Window actions with their focus management, for every control that triggers
@@ -58,6 +59,7 @@ export function launchApp(id: AppId): boolean {
     openers.set(id, document.activeElement);
   }
   useWindowStore.getState().open(id, getApp(id).size);
+  playSound('open');
   focusWindow(id);
   return true;
 }
@@ -66,6 +68,7 @@ export function closeWindow(id: AppId): void {
   const opener = openers.get(id);
   openers.delete(id);
   useWindowStore.getState().requestClose(id);
+  playSound('close');
   const next = useWindowStore.getState().focusedId;
   afterRender(() => {
     if (opener?.isConnected && opener.offsetParent !== null) {

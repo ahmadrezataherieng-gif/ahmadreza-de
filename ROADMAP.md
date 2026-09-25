@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
-| `desktop` | 11 | 0 | 2 | 59 / 66 | 89 % |
+| `desktop` | 12 | 0 | 1 | 64 / 66 | 97 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 66 | 7 | 32 | 277.3 / 406 | **68 %** |
+| **all** | 67 | 7 | 31 | 282.3 / 406 | **70 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 12 | 6 | 36 | 54 |
-| P2 | 10 | 1 | 18 | 29 |
-| **total** | **32** | **7** | **66** | **105** |
+| P2 | 9 | 1 | 19 | 29 |
+| **total** | **31** | **7** | **67** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -95,7 +95,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-09 | **Line-drawing effects** (was: GSAP DrawSVG, free plugin; never ScrollSmoother). Done 2026-09-24 in CSS instead of the plugin (DECISIONS.md 71): `.ao-draw` scrubs `stroke-dashoffset` over `--era-progress`, no plugin, no per-frame JS; used for the four links of the 2024 region map. | done | P2 | Claude Code | - | S | journey |
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. Done 2026-09-24: the Timeline app shows the earned badges (a "Legende" mark on the era, and a count once one exists; nothing before); `apps.mjs` checks both states; CR-1092. | done | P2 | Claude Code | - | S | puzzles |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |
-| APP-12 | **Audio**: every theme's `sound` profile is unused. Only on a click, never autoplay. | missing | P2 | Claude Code | - | M | desktop |
+| APP-12 | **Audio** - every theme's `sound` profile. Done 2026-09-25: `lib/sound.ts` (per profile and event a few synthesised tones, pure, 3 tests: short, soft, in range, every theme covered), `lib/sound-engine.ts` (Web Audio, created only by the click on the new sound switch in the taskbar and the phone home screen; off on every load, not persisted, so **no new storage key** and the Datenschutz table needs no change), plays on opening and closing an app; the profile is read from `<html data-sound>`. `desktop.mjs` proves no AudioContext exists before the click. CR-1099. | done | P2 | Claude Code | - | M | desktop |
 | APP-13 | Terminal `ask` command that hands a question to the Assistant. Done 2026-09-24: `ask <question>` opens the Assistant (window or phone app) and it answers at once, through `lib/app-handoff.ts` (two window events, one waiting value, no storage); listed in `help`, completed by Tab; `terminal-shell.test.mjs` and `apps.mjs` cover it; CR-1093. | done | P2 | Claude Code | - | S | desktop |
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |
 | APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 | S | puzzles |

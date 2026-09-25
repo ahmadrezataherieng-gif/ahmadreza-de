@@ -684,6 +684,12 @@
       "gripHint": "Pfeiltasten verschieben, Umschalt+Pfeiltasten ändern die Größe, die Eingabetaste maximiert.",
       "loading": "Wird geladen …"
     },
+    "sound": {
+      "label": "Ton",
+      "on": "Ton ist an - zum Ausschalten klicken",
+      "off": "Ton ist aus - zum Einschalten klicken",
+      "unavailable": "Dieser Browser kann keinen Ton ausgeben."
+    },
     "locked": {
       "label": "Gesperrt",
       "message": "{year, select, today {Das Rätsel von heute schaltet „{app}“ frei – selbst gelöst, gezeigt oder angeschaut.} other {Das Rätsel von {year} schaltet „{app}“ frei – selbst gelöst, gezeigt oder angeschaut.}}",
