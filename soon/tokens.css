@@ -27,3 +27,14 @@
   --radius:14px;
   color-scheme:dark;
 }
+/* PROPOSAL (branch proposal/light-old-palette, not merged): light follows the
+   system, dark stays the default. The old mint and amber, deepened for AA. */
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#f3f6f9; --surface:#ffffff; --edge:#d3dce6;
+    --ink:#0b0f15; --muted:#434e5f;
+    --brand:#16794f; --brand-deep:#0f5c3b; --on-brand:#ffffff; --amber:#9a5308;
+    --track:#e2e8ef;
+    color-scheme:light;
+  }
+}

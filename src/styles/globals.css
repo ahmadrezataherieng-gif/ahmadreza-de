@@ -3214,3 +3214,62 @@ html:not([data-tier='full']) .ao-depth-extra {
 .ao-site-page [lang^='fa'] * {
   font-family: var(--ao-font-vazirmatn);
 }
+
+/* ==========================================================================
+   PROPOSAL (branch proposal/light-old-palette, not merged; ROADMAP BR-08):
+   a light mode for the site's own pages in the old palette. It follows the
+   system setting; dark stays the default. The same --ao-* tokens the theme
+   engine writes on <html> are overridden on the page root (.ao-site-page),
+   so every semantic class follows. The accents are the old cyan, mint and
+   amber, darkened just enough to reach WCAG AA on the light grounds.
+   ========================================================================== */
+@media (prefers-color-scheme: light) {
+  .ao-site-page {
+    --ao-color-background: #f3f6f9;
+    --ao-color-surface: #ffffff;
+    --ao-color-surface-elevated: #e8eef4;
+    --ao-color-border: #c9d3de;
+    --ao-color-text: #0b1320;
+    --ao-color-text-muted: #4a5668;
+    --ao-color-accent: #0b7285;
+    --ao-color-accent-muted: #0c5f6e;
+    --ao-color-warning: #9a5308;
+    --ao-color-success: #18794e;
+    --ao-color-error: #b42318;
+    --ao-color-glow: #0b7285;
+    --ao-color-chrome: #ffffff;
+    --ao-color-chrome-text: #0b1320;
+    --ao-shadow-window: 0 18px 40px rgba(11, 19, 32, 0.12), 0 0 0 1px #c9d3de;
+    --ao-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    /* The logo: a navy wordmark and a mint mark that stays mint, only deeper,
+       so it reads on the light page; the amber cursor a shade darker. */
+    --ao-brand-ink: #0b0f15;
+    --ao-brand-green-light: #2aa874;
+    --ao-brand-green: #1d8a5c;
+    --ao-brand-green-deep: #146b47;
+    --ao-brand-amber: #b8660f;
+    background-color: var(--ao-color-background);
+    color: var(--ao-color-text);
+    color-scheme: light;
+  }
+
+  /* The page root and the body behind it: the scrollbar gutter and any space
+     below a short page show the root's colour, which the theme engine keeps
+     dark - a dark strip down the edge otherwise. */
+  html:has(.ao-site-page),
+  html:has(.ao-site-page) body {
+    background-color: #f3f6f9;
+    color-scheme: light;
+  }
+
+  /* The landing's two pools of light, in the old mint and amber, on paper. */
+  .ao-site-page .ao-landing-glow {
+    background:
+      radial-gradient(ellipse 50% 45% at 22% 18%, color-mix(in srgb, #5de2a4 28%, transparent), transparent 70%),
+      radial-gradient(ellipse 50% 45% at 78% 88%, color-mix(in srgb, #f0a44a 22%, transparent), transparent 70%);
+  }
+  .ao-site-page .ao-landing-grain {
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+  }
+}

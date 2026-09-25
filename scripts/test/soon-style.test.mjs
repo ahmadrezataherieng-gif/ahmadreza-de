@@ -10,11 +10,17 @@ import { test } from 'node:test';
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const css = read('soon/tokens.css');
 
-/** The custom properties of `:root` - the only colour block: the page is dark-only. */
+/** The custom properties of `:root` (dark, the default) and of the light proposal on top. */
+const props = (block) => Object.fromEntries([...block.matchAll(/--([a-z-]+):\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
 function tokens() {
   const root = css.match(/\n:root\{([^}]*)\}/)?.[1];
   assert.ok(root, 'a :root block');
-  return Object.fromEntries([...root.matchAll(/--([a-z-]+):\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
+  return props(root);
+}
+function lightTokens() {
+  const light = css.match(/@media \(prefers-color-scheme:light\)\{\s*:root\{([^}]*)\}/)?.[1];
+  assert.ok(light, 'a light-scheme block');
+  return { ...tokens(), ...props(light) };
 }
 
 const luminance = (hex) => {
@@ -26,29 +32,28 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-test('soon style: body text 7:1, the mint 4.5:1, non-text 3:1', () => {
-  const palette = tokens();
-  const pairs = [
-    ['ink', 'bg', 7], ['ink', 'surface', 7], ['muted', 'bg', 7], ['muted', 'surface', 7],
-    ['brand', 'bg', 4.5], ['brand', 'surface', 4.5], ['on-brand', 'brand', 4.5], ['on-brand', 'brand-deep', 4.5],
-    ['amber', 'bg', 3], ['amber', 'surface', 3], ['brand', 'track', 3], ['brand-deep', 'track', 3],
-  ];
-  for (const [fg, bg, minimum] of pairs) {
-    const value = contrast(palette[fg], palette[bg]);
-    assert.ok(value >= minimum, `${fg} on ${bg} is ${value.toFixed(2)}, needs ${minimum}`);
+test('soon style: body text 7:1, the mint 4.5:1, non-text 3:1 - dark and light', () => {
+  for (const palette of [tokens(), lightTokens()]) {
+    const pairs = [
+      ['ink', 'bg', 7], ['ink', 'surface', 7], ['muted', 'bg', 7], ['muted', 'surface', 7],
+      ['brand', 'bg', 4.5], ['brand', 'surface', 4.5], ['on-brand', 'brand', 4.5], ['on-brand', 'brand-deep', 4.5],
+      ['amber', 'bg', 3], ['amber', 'surface', 3], ['brand', 'track', 3], ['brand-deep', 'track', 3],
+    ];
+    for (const [fg, bg, minimum] of pairs) {
+      const value = contrast(palette[fg], palette[bg]);
+      assert.ok(value >= minimum, `${palette.bg}: ${fg} on ${bg} is ${value.toFixed(2)}, needs ${minimum}`);
+    }
   }
 });
 
-test('soon style: the old look - navy page, blue-grey cards, mint accent - and dark only', () => {
+test('soon style: the old look - navy page, blue-grey cards, mint accent - dark by default, light proposal follows the system', () => {
   const palette = tokens();
   assert.equal(palette.bg, '#0b0f15');
   assert.equal(palette.surface, '#111722');
   assert.equal(palette.brand, '#5de2a4');
-  assert.doesNotMatch(css, /prefers-color-scheme/, 'no light mode');
   assert.match(css, /color-scheme:dark/);
   const page = read('soon/index.html');
-  assert.match(page, /<meta name="color-scheme" content="dark">/);
-  assert.doesNotMatch(page, /prefers-color-scheme/);
+  assert.match(page, /<meta name="color-scheme" content="dark light">/);
 });
 
 test('soon style: Persian in Vazirmatn ahead of the system faces; no letter-spacing in Persian headings', () => {

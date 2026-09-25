@@ -111,7 +111,8 @@ function page(locale, kind, copy, labels) {
 <meta name="description" content="${escape(document.description)}">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://ahmadreza.de/${locale.prefix}${kind.slug}/">
-<meta name="theme-color" content="#0b0f15">
+<meta name="theme-color" content="#0b0f15" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f6f9" media="(prefers-color-scheme: light)">
 <style>${TOKENS}${STYLE}</style>
 </head>
 <body>
