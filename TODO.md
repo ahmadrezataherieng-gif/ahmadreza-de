@@ -339,6 +339,14 @@ Timeboxed audit (25 minutes) of the built `out/` (private-preview rules: nothing
 
 <!-- audit-2026-09-26:end -->
 
+## Work queue 2026-09-26 arrived cut off (2026-09-26)
+
+- **The prompt ends in the middle of item 6** ("... fa «میزکا") and items 7-11 (including item 11, the only one allowed to deploy) are missing. Default taken: items 1-6 are copied into PROJECT_STATE.md as received (item 6's remainder read as the "Doubtful wording" list of K6 revert step 3), 7-11 are a marked placeholder row, and **no deploy happens** until the owner resends item 11.
+
+## Empty work queue (2026-09-25)
+
+- **The prompt "run the work queue below" arrived without a queue** (the message ended after that sentence). The only queue on record, PROJECT_STATE.md "Work queue (started 2026-09-24)", is fully done (items 1-7 checked). Default taken: no code, content or deploy change; nothing invented. To continue, send the queue again; the open P1/P2 audit findings above are the natural next candidates (P2 XS: sitemap `lastmod`, dead `Panel.tsx` and `.ao-dither`).
+
 ## Answered
 
 - Domain: **ahmadreza.de**, registered and owned.
