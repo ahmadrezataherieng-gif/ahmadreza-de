@@ -351,17 +351,34 @@ html[lang^='fa'] {
 
 /* --- layout: document flow by default, pinned where there is room --------- */
 
+/* One percent of the journey's viewport height (PERF-02). The dynamic unit
+   (dvh) follows a phone's toolbar, so every toolbar move resized every stage
+   and scene of the journey and the whole page was laid out and re-measured. The
+   large unit (lvh) does not move: the stages are as tall as the screen with the
+   toolbar hidden. On touch devices `holdViewportHeight` (lib/stable-viewport.ts)
+   pins it to pixels on the journey element and follows only a rotation or a
+   resize that is not a toolbar. */
+:root {
+  --ao-vh: 1lvh;
+}
+
+@supports not (height: 1lvh) {
+  :root {
+    --ao-vh: 1vh;
+  }
+}
+
 /* Default: each era is an ordinary block at least one viewport tall. This is
    what phones and reduced-motion visitors get - nothing is clipped, and every
    era is a fully composed frame. */
 .ao-era-section {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
 }
 
 .ao-era-stage {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
 }
 
 /* Wide, tall viewports with motion allowed: the tall outer section provides the
@@ -372,13 +389,13 @@ html[lang^='fa'] {
    depends on (DECISIONS.md, entry 9). */
 @media (min-width: 768px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
   .ao-era-section {
-    height: calc(var(--era-length, 2) * 100dvh);
+    height: calc(var(--era-length, 2) * (100 * var(--ao-vh)));
   }
 
   .ao-era-stage {
     position: sticky;
     top: 0;
-    height: 100dvh;
+    height: calc(100 * var(--ao-vh));
     min-height: 0;
     overflow: hidden;
   }
@@ -1214,21 +1231,21 @@ html[data-tier='light'] .ao-lamp {
    viewport even on a phone, and the assembly is the point. */
 .ao-conv-section {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
 }
 
 .ao-conv-stage {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
   container-type: size;
   container-name: conv;
-  height: 100dvh;
+  height: calc(100 * var(--ao-vh));
   overflow: hidden;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .ao-conv-section {
-    height: calc(var(--era-length, 3) * 100dvh);
+    height: calc(var(--era-length, 3) * (100 * var(--ao-vh)));
   }
 
   .ao-conv-stage {
@@ -1883,13 +1900,13 @@ html.ao-anchor-held body {
    even where the eras flow as a document. */
 @media (prefers-reduced-motion: no-preference) {
   .ao-puzzle-layer {
-    height: calc(var(--puzzle-length, 2) * 100dvh);
+    height: calc(var(--puzzle-length, 2) * (100 * var(--ao-vh)));
   }
 
   .ao-puzzle-sticky {
     position: sticky;
     top: 0;
-    height: 100dvh;
+    height: calc(100 * var(--ao-vh));
     padding-top: 4rem;
     padding-bottom: 4.5rem;
     overflow: hidden;
@@ -2313,19 +2330,19 @@ html[data-tier='light'] .ao-conv-section {
 }
 
 /* Scroll-distance markers: one zero-height element per phase boundary, so the
-   resolver reads exact pixels instead of recomputing dvh arithmetic. */
+   resolver reads exact pixels instead of recomputing viewport arithmetic. */
 .ao-mark {
   position: absolute;
   inset-inline: 0;
   height: 0;
-  top: calc(var(--mark) * 100dvh);
+  top: calc(var(--mark) * (100 * var(--ao-vh)));
   pointer-events: none;
 }
 
 .ao-era-scene,
 .ao-conv-scene {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
 }
 
 /* Clipped here rather than on the stage: the stage owns the perspective, and an
@@ -2367,7 +2384,7 @@ html[data-tier='light'] .ao-conv-section {
 
 .ao-camera {
   position: relative;
-  min-height: 100dvh;
+  min-height: calc(100 * var(--ao-vh));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2382,14 +2399,14 @@ html[data-tier='light'] .ao-conv-section {
     position: relative;
     z-index: 1;
     order: -1;
-    height: calc(var(--boundary-length, 1.4) * 100dvh);
+    height: calc(var(--boundary-length, 1.4) * (100 * var(--ao-vh)));
     pointer-events: none;
   }
 
   .ao-bridge-panel {
     position: sticky;
     top: 0;
-    height: 100dvh;
+    height: calc(100 * var(--ao-vh));
     overflow: hidden;
     container-type: size;
   }
@@ -2506,7 +2523,7 @@ html[data-tier='light'] .ao-conv-section {
      and the page never shows a seam. */
   .ao-era-section[data-follows],
   .ao-conv-section[data-follows] {
-    margin-top: calc(-1 * (1 + var(--boundary-length, 1.4)) * 100dvh);
+    margin-top: calc(-1 * (1 + var(--boundary-length, 1.4)) * (100 * var(--ao-vh)));
   }
 
   .ao-era-stage,

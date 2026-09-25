@@ -35,7 +35,7 @@ export function EraEniac({ headingId }: { headingId: string }) {
   const columns = encodeCard(CARD_TEXT);
 
   return (
-    <div className="ao-era-exit relative flex min-h-dvh w-full flex-col md:h-full">
+    <div className="ao-era-exit relative flex min-h-[calc(var(--ao-vh)*100)] w-full flex-col md:h-full">
       <MetalPanel />
 
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-7 px-5 pt-20 pb-14 sm:px-10 md:pe-28 md:pt-16 md:pb-10 lg:flex-row lg:items-center lg:gap-12">

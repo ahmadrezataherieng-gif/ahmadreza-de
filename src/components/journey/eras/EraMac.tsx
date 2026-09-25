@@ -72,7 +72,7 @@ export function EraMac({ headingId }: { headingId: string }) {
   const desktopIcons = asStringList(t.raw('visual.desktopIcons'));
 
   return (
-    <div className="ao-era-exit ao-final-frame relative flex min-h-dvh w-full flex-col bg-background md:h-full">
+    <div className="ao-era-exit ao-final-frame relative flex min-h-[calc(var(--ao-vh)*100)] w-full flex-col bg-background md:h-full">
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-8 px-5 pt-20 pb-14 sm:px-10 md:pe-28 md:py-0 lg:flex-row lg:items-center lg:gap-12">
         <EraTitle
           year="1984"

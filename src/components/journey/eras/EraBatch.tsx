@@ -32,7 +32,7 @@ export function EraBatch({ headingId }: { headingId: string }) {
   });
 
   return (
-    <div className="ao-era-exit relative flex min-h-dvh w-full flex-col bg-background md:h-full md:overflow-hidden">
+    <div className="ao-era-exit relative flex min-h-[calc(var(--ao-vh)*100)] w-full flex-col bg-background md:h-full md:overflow-hidden">
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 pt-20 pb-14 sm:px-10 md:pe-28 md:flex-row md:items-center md:gap-12 md:py-0">
         <EraTitle
           year="1956"
@@ -55,7 +55,7 @@ export function EraBatch({ headingId }: { headingId: string }) {
 
         <div className="relative w-full md:flex md:h-full md:w-[66%] md:items-start md:justify-center">
           <div
-            className="ao-depth-mid ao-paper-feed ao-paper ao-themed relative mx-auto flex w-full max-w-xl shadow-window md:min-h-[125dvh]"
+            className="ao-depth-mid ao-paper-feed ao-paper ao-themed relative mx-auto flex w-full max-w-xl shadow-window md:min-h-[calc(var(--ao-vh)*125)]"
             role="img"
             aria-label={t('visual.paperLabel')}
           >

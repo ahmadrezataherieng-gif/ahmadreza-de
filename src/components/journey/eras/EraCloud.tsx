@@ -77,7 +77,7 @@ export function EraCloud({ headingId }: { headingId: string }) {
   const prompt = t('visual.prompt');
 
   return (
-    <div className="ao-era-exit ao-final-frame relative flex min-h-dvh w-full flex-col bg-background md:h-full">
+    <div className="ao-era-exit ao-final-frame relative flex min-h-[calc(var(--ao-vh)*100)] w-full flex-col bg-background md:h-full">
       {/* md:pe-40: the dashboard runs to its right edge, so it needs more room
           than the other eras to stay clear of the progress rail. */}
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-8 px-5 pt-20 pb-14 sm:px-10 md:pe-40 md:pt-16 md:pb-8 lg:flex-row lg:items-center lg:gap-10">
@@ -102,7 +102,7 @@ export function EraCloud({ headingId }: { headingId: string }) {
             {/* Height-capped: the schematic scales with the panel's width, and on
                 a wide dashboard it grew tall enough to push the prompt panel
                 out of the pinned stage. */}
-            <svg viewBox="0 0 300 112" className="mx-auto block h-auto max-h-[18dvh] w-full" aria-hidden="true">
+            <svg viewBox="0 0 300 112" className="mx-auto block h-auto max-h-[calc(var(--ao-vh)*18)] w-full" aria-hidden="true">
               {/* The links draw themselves one after another (APP-09), once the nodes are up. */}
               <g>
                 {EDGES.map(([a, b], edge) => (

@@ -46,9 +46,9 @@ export function EraWin95({ headingId }: { headingId: string }) {
   const pageLines = asStringList(t.raw('visual.pageLines'));
 
   return (
-    <div className="ao-era-exit ao-final-frame relative min-h-dvh w-full bg-background md:h-full">
+    <div className="ao-era-exit ao-final-frame relative min-h-[calc(var(--ao-vh)*100)] w-full bg-background md:h-full">
       <div
-        className="ao-depth-mid ao-w95-scene relative flex w-full flex-col gap-5 px-4 pt-20 pb-6 md:block md:h-dvh md:p-0"
+        className="ao-depth-mid ao-w95-scene relative flex w-full flex-col gap-5 px-4 pt-20 pb-6 md:block md:h-[calc(var(--ao-vh)*100)] md:p-0"
         role="group"
         aria-label={t('visual.screenLabel')}
       >

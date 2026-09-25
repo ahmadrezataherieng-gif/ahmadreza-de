@@ -16,6 +16,7 @@ import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { scrollToEra, setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
 import { applyThemeToDocument, scopeThemeTo, themeToCssVars } from '@/lib/apply-theme';
 import { startPrinting } from '@/lib/print-controller';
+import { holdViewportHeight } from '@/lib/stable-viewport';
 import { TECH_FROM, TECH_TO } from '@/components/journey/crossing-timing';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
@@ -161,6 +162,14 @@ export function Journey() {
     };
   }, []);
 
+  /* --- a viewport height the toolbar does not move ------------------------ */
+  // Before the resolver's first measure: every stage and scene is sized in this
+  // unit, and each toolbar move used to resize and re-measure all of them.
+  useEffect(() => {
+    const container = containerRef.current;
+    return container ? holdViewportHeight(container) : undefined;
+  }, []);
+
   /* --- era detection and theme switching -------------------------------- */
   useEffect(() => {
     const container = containerRef.current;
@@ -273,13 +282,13 @@ export function Journey() {
       const pinned = stage !== null && getComputedStyle(stage).position === 'sticky';
 
       // The markers are absolutely positioned at their phase boundary, so this
-      // reads the real pixels instead of re-deriving dvh arithmetic - which is
+      // reads the real pixels instead of re-deriving viewport arithmetic - which is
       // not the same number as innerHeight on a phone with a dynamic toolbar.
       const markAt = (name: string, fallback: number) => {
         const mark = section.querySelector<HTMLElement>(`[data-mark="${name}"]`);
         return mark ? mark.getBoundingClientRect().top + scrollY - top : fallback;
       };
-      // The stage is one viewport tall in CSS (100dvh). Measuring it, rather
+      // The stage is one viewport tall in CSS (100 * --ao-vh). Measuring it, rather
       // than trusting innerHeight, keeps the maths exact where the two differ.
       const stageHeight = pinned && stage ? stage.offsetHeight : viewport;
       const travel = Math.max(1, height - stageHeight);
