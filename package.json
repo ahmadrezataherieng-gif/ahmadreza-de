@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/preload-shell.mjs",
+    "build": "next build && node scripts/preload-shell.mjs && node scripts/prune-static-css.mjs",
     "start": "next start",
     "lint": "eslint",
     "check:pixel-font": "node scripts/check-pixel-font.mjs",
@@ -39,6 +39,7 @@
     "axe-core": "^4.13.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.25",
+    "postcss": "^8.5.28",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

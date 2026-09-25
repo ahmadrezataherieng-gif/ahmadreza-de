@@ -52,6 +52,7 @@ next-env.d.ts
 # local working folders: brand kit sources and Claude outputs, never deployed
 Bearbeitung/
 Claude outputs/
+/out-pruned/
 soon/dist/
 
 # the postal address for the Impressum - never in the repository (DECISIONS.md 60)

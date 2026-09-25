@@ -15,6 +15,7 @@ import { replayJourney } from '@/components/os/replay';
 import { cycleWindows, launchApp } from '@/components/os/window-actions';
 import { onOpenAppRequest } from '@/lib/app-handoff';
 import { viewHref } from '@/lib/routing';
+import { useIntentPrefetch } from '@/lib/intent-prefetch';
 import type { Locale } from '@/lib/i18n-config';
 
 /** Typing targets keep their own keys; the window shortcut stays out of them. */
@@ -39,6 +40,7 @@ export function DesktopShell() {
   const t = useTranslations('os');
   const tNav = useTranslations('nav');
   const locale = useLocale() as Locale;
+  const homeIntent = useIntentPrefetch(viewHref(locale, 'landing'));
 
   // An app asking for another (the Terminal's `ask` opens the Assistant, APP-13).
   useEffect(() => onOpenAppRequest((appId) => void launchApp(appId)), []);
@@ -60,7 +62,7 @@ export function DesktopShell() {
       <div className="ao-topbar ao-reveal absolute inset-x-0 top-0 flex h-[3.5cqh] items-center justify-between gap-3 px-3 text-[max(10px,1.35cqh)]">
         <AmonelOsLockup label={t('brand')} />
         <span className="flex items-center gap-4 font-mono text-muted">
-          <Link href={viewHref(locale, 'landing')} className="hover:text-ink focus-visible:text-ink">
+          <Link href={viewHref(locale, 'landing')} {...homeIntent} className="hover:text-ink focus-visible:text-ink">
             {tNav('home')}
           </Link>
           <button

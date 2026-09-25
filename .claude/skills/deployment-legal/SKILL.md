@@ -52,7 +52,7 @@ reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
 - Custom domain is **ahmadreza.de**. Workers custom domains require the zone's
   nameservers to be managed by Cloudflare — a CNAME from an external DNS
   provider is not enough, unlike Pages.
-- `npm run build` must keep producing nothing but a static `out/` directory.
+- `npm run build` must keep producing nothing but a static `out/` directory. Its last step, `scripts/prune-static-css.mjs`, gives the static pages a pruned copy of the stylesheet (DECISIONS 79); it needs no browser and no network, so it runs on Cloudflare's build machine, and it never fails the build (on a problem the static pages keep the full stylesheet).
   Nothing in the application code may know it is running on Cloudflare.
 
 ### The assistant — a local search, not an external AI service

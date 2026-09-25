@@ -33,6 +33,7 @@ import { gateBottom, isGateActive, measureGates, tickGate } from '@/components/p
 import { PuzzleGate } from '@/components/puzzles/PuzzleGate';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
+import { useIntentPrefetch } from '@/lib/intent-prefetch';
 import type { Locale } from '@/lib/i18n-config';
 import { count } from '@/lib/count';
 import { JOURNEY_COMPLETED } from '@/lib/counters';
@@ -119,6 +120,7 @@ export function Journey() {
   const tNav = useTranslations('nav');
   const locale = useLocale() as Locale;
   const desktopHref = viewHref(locale, 'desktop');
+  const homeIntent = useIntentPrefetch(viewHref(locale, 'landing'));
   const setActiveEra = useJourneyStore((state) => state.setActiveEra);
   const setProgress = useJourneyStore((state) => state.setProgress);
   const setTheme = useThemeStore((state) => state.setTheme);
@@ -808,6 +810,7 @@ export function Journey() {
       <header className="ao-journey-chrome ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] flex items-center gap-1 rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
         <Link
           href={viewHref(locale, 'landing')}
+          {...homeIntent}
           className="ao-themed rounded-control px-2 py-1 font-mono text-xs text-muted hover:text-ink"
         >
           {tNav('home')}

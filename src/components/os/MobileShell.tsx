@@ -18,6 +18,7 @@ import { playSound } from '@/lib/sound-engine';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { viewHref } from '@/lib/routing';
+import { useIntentPrefetch } from '@/lib/intent-prefetch';
 import { count } from '@/lib/count';
 import { appOpened } from '@/lib/counters';
 import type { Locale } from '@/lib/i18n-config';
@@ -44,6 +45,7 @@ function appInState(state: unknown): AppId | null {
 export function MobileShell() {
   const t = useTranslations('os');
   const locale = useLocale() as Locale;
+  const homeIntent = useIntentPrefetch(viewHref(locale, 'landing'));
   const [openId, setOpenId] = useState<AppId | null>(null);
   const dismissLocked = useShellStore((store) => store.dismissLocked);
 
@@ -101,7 +103,7 @@ export function MobileShell() {
           >
             {t('replay')}
           </button>
-          <Link href={viewHref(locale, 'landing')} className="hover:text-ink">
+          <Link href={viewHref(locale, 'landing')} {...homeIntent} className="hover:text-ink">
             {t('home')}
           </Link>
           <SoundToggle />

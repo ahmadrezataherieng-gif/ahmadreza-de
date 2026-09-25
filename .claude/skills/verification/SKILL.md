@@ -10,6 +10,7 @@ node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [-
 node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
 node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4] [--mode open] [--touch] [--profile]   # worstByPlace: the longest frame in each crossing (PERF-02); --touch: a tablet profile above 768 px
 node scripts/verify/load-tasks.mjs [--path /amonel/] [--width 380] [--cpu 4] [--slow]   # long tasks after FCP, long animation frames and a CPU profile of a view's load (the journey's TBT, PERF-02)
+node scripts/verify/css-equal.mjs [--full http://localhost:3001] [--pruned http://localhost:3003] [--only "phone light /about/"]   # the pruned stylesheet of the static pages changes no computed style (queue 3b; needs `cp -r out out-pruned && node scripts/prune-static-css.mjs --dir out-pruned` served on 3003, and the unpruned export on 3001; delete out-pruned afterwards)
 node scripts/verify/toolbar.mjs [--width 390 --height 844 --delta 64] [--tablet: --width 768 --height 1024 --delta 80]   # a phone toolbar's height change mid-scroll: layouts, long tasks, document height must not move (PERF-02, exits 1 on failure)
 node scripts/verify/crossing-frames.mjs [--width 390] [--locale fa] [--frames 0,25,50,75,100] [--only 1946] [--reduce] [--out dir]   # screenshots of each crossing (BR-10)
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]

@@ -94,8 +94,9 @@ test('soon fonts: every file is licensed, used, and served from the domain - no 
     assert.match(read(path), /SIL OPEN FONT LICENSE Version 1\.1/i, `${path} is not the OFL`);
     assert.ok(index.includes(`licenses/${licence}-OFL.txt`), `${licence} has no row in LICENSES.md`);
   }
-  // Font files live in soon/fonts/ and nowhere else in the repository.
+  // Font files live in soon/fonts/ and nowhere else in the repository - except the
+  // language switcher's 2 kB cut of Vazirmatn (queue 3a, scripts/vazirmatn-label.mjs).
   const tracked = execFileSync('git', ['ls-files'], { cwd: new URL('../../', import.meta.url), encoding: 'utf8' }).split('\n');
-  const stray = tracked.filter((file) => /\.(woff2?|ttf|otf|eot)$/i.test(file) && !file.startsWith('soon/fonts/'));
+  const stray = tracked.filter((file) => /\.(woff2?|ttf|otf|eot)$/i.test(file) && !file.startsWith('soon/fonts/') && file !== 'src/styles/fonts/vazirmatn-label-400.woff2');
   assert.deepEqual(stray, []);
 });
