@@ -12,7 +12,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
 - [x] 2. SEO follow-ups: (a) `knowsAbout` the same 7 concepts in de/en/fa, (b) background in meta description and homepage subline, CR-1084 and pinned tests, (c) 301s from the old `/og/og-<locale>.png` on the main site and the coming-soon Worker, (d) `live-soon.mjs` reads the Person from `@graph` (already in the working tree)
 - [x] 3. XS/S items, one commit each: SEO-13, APP-14, APP-11, APP-10, PERF-07, PERF-09, APP-13, APP-16, APP-09 (in CSS, DECISIONS 71) all done; PERF-03 measured and skipped (options in TODO.md); SEO-14 landing titles drafted (CR-1095, wording waits for the owner)
 - [x] 4. M items, one commit each: APP-03, APP-06, APP-07, APP-12, APP-17 - all done (APP-03 keeps marked placeholders, waits for the owner's facts)
-- [ ] 5. BR-06 in steps: (1) tokens and fonts, (2) UI chrome, (3) landing, (4) About, (5) Impressum and Datenschutz, (6) 404; desktop shell out of scope (open question in TODO.md)
+- [ ] 5. BR-06 in steps: (1) tokens and fonts [x], (2) UI chrome, (3) landing, (4) About, (5) Impressum and Datenschutz, (6) 404; desktop shell out of scope (open question in TODO.md)
 - [ ] 6. Preliminary LEG-05 audit as a report in TODO.md (changes nothing legal)
 - [ ] 7. If progress changed noticeably and the wrangler login works: redeploy the coming-soon page (BR-03); otherwise give the owner the commands
 

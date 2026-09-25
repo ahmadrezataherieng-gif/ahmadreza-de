@@ -3197,3 +3197,85 @@ html:not([data-tier='full']) .ao-depth-extra {
 [data-cursor='underscore'] [data-shell] :is(input, textarea) {
   caret-shape: underscore;
 }
+
+/* ==========================================================================
+   The K6 style for the main site's own pages (ROADMAP BR-06, DECISIONS.md 70)
+   --------------------------------------------------------------------------
+   The style the owner approved on the coming-soon page: Martian Grotesk for
+   headings, Geist for text, Geist Mono for technical details, Vazirmatn for
+   Persian, near-black and neutral in dark mode, cream and forest green in light
+   mode. It is scoped to `[data-style='k6']`: the landing page, About, the legal
+   pages and the 404 page wear it (`SiteSurface`); the journey eras keep their
+   own themes, and the desktop shell is not included (TODO.md, open question).
+   It overrides the same --ao-* tokens the theme engine writes on <html>, so
+   every semantic class (bg-surface, text-ink, ...) follows without a second
+   set of rules. The fonts are the files in public/fonts/, self-hosted, SIL OFL,
+   licences next to them (LEG-15); nothing is fetched from another origin.
+   ========================================================================== */
+
+@font-face { font-family: "Martian Grotesk"; src: url(/fonts/martian-grotesk-vf.woff2) format("woff2"); font-weight: 100 800; font-display: swap; }
+@font-face { font-family: "Geist"; src: url(/fonts/geist-latin-wght.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url(/fonts/geist-mono-latin-wght.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+/* Only Arabic-script glyphs: this face answers for those alone. */
+@font-face { font-family: "Vazirmatn"; src: url(/fonts/vazirmatn-arabic-wght.woff2) format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
+@font-face { font-family: "Departure Mono"; src: url(/fonts/departure-mono-regular.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+
+[data-style='k6'] {
+  --ao-color-background: #07090a;
+  --ao-color-surface: #0d1110;
+  --ao-color-surface-elevated: #131918;
+  --ao-color-border: #1e2322;
+  --ao-color-text: #edf0ee;
+  --ao-color-text-muted: #b3bab7;
+  --ao-color-accent: #4be3a3;
+  --ao-color-accent-muted: #25b87c;
+  --ao-color-warning: #d8b46a;
+  --ao-color-success: #4be3a3;
+  --ao-color-error: #ff8a80;
+  --ao-color-glow: rgba(75, 227, 163, 0.03);
+  --ao-color-chrome: #0d1110;
+  --ao-color-chrome-text: #edf0ee;
+  /* Latin face, then the Persian face, then the generic fallback. */
+  --ao-font-display: "Martian Grotesk", "Vazirmatn", system-ui, sans-serif;
+  --ao-font-body: "Geist", "Vazirmatn", system-ui, sans-serif;
+  --ao-font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  --ao-radius-window: 14px;
+  --ao-radius-control: 10px;
+  --ao-shadow-window: none;
+  --ao-shadow-inset: none;
+  background: var(--ao-color-background);
+  color: var(--ao-color-text);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  [data-style='k6'] {
+    /* Forest Luxe on paper: soft cream and a deep forest green. */
+    --ao-color-background: #f5f4ee;
+    --ao-color-surface: #fffefa;
+    --ao-color-surface-elevated: #ffffff;
+    --ao-color-border: #e0ddd0;
+    --ao-color-text: #0b1a14;
+    --ao-color-text-muted: #44524b;
+    --ao-color-accent: #0d6b45;
+    --ao-color-accent-muted: #0a5536;
+    --ao-color-warning: #80590c;
+    --ao-color-success: #0d6b45;
+    --ao-color-error: #b3261e;
+    --ao-color-glow: rgba(13, 107, 69, 0.07);
+    --ao-color-chrome: #fffefa;
+    --ao-color-chrome-text: #0b1a14;
+    color-scheme: light;
+  }
+}
+
+/* Headings: the approved weight and tracking - Latin only, Persian joins must stay intact. */
+[data-style='k6'] :is(h1, h2, h3, h4) {
+  font-weight: 700;
+}
+[data-style='k6']:not(:lang(fa)) :is(h1, h2, h3, h4) {
+  letter-spacing: -0.025em;
+}
+[data-style='k6'] :is(p, li) {
+  text-wrap: pretty;
+}
