@@ -7,9 +7,10 @@ import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-700.css';
 import '@fontsource/space-grotesk/latin-500.css';
 import '@fontsource/space-grotesk/latin-700.css';
-import '@fontsource/inter/latin-400.css';
+// 400.css, not latin-400 + latin-ext-400: only it carries the unicode-range per
+// subset, so the 35 kB latin-ext file is fetched when a page needs it, not on every load.
+import '@fontsource/inter/400.css';
 import '@fontsource/inter/latin-700.css';
-import '@fontsource/inter/latin-ext-400.css';
 import '@fontsource-variable/vazirmatn/index.css';
 import '@fontsource/vt323/latin-400.css';
 import '@fontsource/press-start-2p/latin-400.css';
