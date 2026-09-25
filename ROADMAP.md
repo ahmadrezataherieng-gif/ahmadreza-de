@@ -43,16 +43,16 @@ build time).
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
-| `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 68 | 7 | 30 | 284.3 / 406 | **70 %** |
+| `launch` | 9 | 2 | 12 | 32.5 / 85 | 38 % |
+| **all** | 69 | 7 | 29 | 292.3 / 406 | **72 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
-| P1 | 12 | 6 | 36 | 54 |
+| P1 | 11 | 6 | 37 | 54 |
 | P2 | 8 | 1 | 20 | 29 |
-| **total** | **30** | **7** | **68** | **105** |
+| **total** | **29** | **7** | **69** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -182,7 +182,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-03 | **Redeploy the coming-soon page whenever the ROADMAP progress changes noticeably** (a few percentage points, or an area finishing; owner, 2026-09-24): its figures are computed at build time, so they are exactly as fresh as the last deploy (`npm run build:soon`, then `npx wrangler deploy` in `soon/`, then the curl checks in PROJECT_STATE.md). Until launch (DEP-06). Last deploy: see PROJECT_STATE.md. | missing | P2 | Claude Code | - | XS | launch |
 | BR-04 | **Fonts, style and colours of the coming-soon page**: approved by the owner 2026-09-24 after five review rounds (DECISIONS.md 70). Style "K6": Martian Grotesk headings, Geist body, Geist Mono, Vazirmatn for Persian, Departure Mono only for the `~$ amonel os` line at 22 px; near-black dark mode (page #07090a, surfaces #0d1110, neutral borders and tracks, green only as the accent), Forest Luxe paper and forest green in light mode. Tokens in `soon/tokens.css`, fonts in `soon/fonts/` with licences (LEG-15); Latin-only heading word spacing, `<bdi>` for Latin terms in Persian, no orphans; `scripts/verify/soon.mjs` (196 checks) and `soon-style.test.mjs` pin it. | done | P1 | Ahmadreza + Claude Code | - | M | launch |
 | BR-05 | **Should the approved style become the main site's design system?** Decided by the owner 2026-09-24: **yes**, for the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) - **not** for the journey eras, which keep their historical styles (DECISIONS.md 70). Applying it is BR-06. | done | P2 | Ahmadreza | BR-04 | S | launch |
-| BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. | missing | P1 | Claude Code | BR-05 | L | launch |
+| BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. Done 2026-09-25 (owner's queue, DECISIONS.md 72): the tokens and self-hosted fonts as the scoped `[data-style=k6]` layer, then the UI chrome, the landing page, About, Impressum and Datenschutz and the 404 page, one commit each, each checked with axe (de, fa) and the journey/vitals scripts. The desktop shell is not included - open question in TODO.md. | done | P1 | Claude Code | BR-05 | L | launch |
 
 ## Owner tasks - assets and accounts
 

@@ -12,7 +12,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
 - [x] 2. SEO follow-ups: (a) `knowsAbout` the same 7 concepts in de/en/fa, (b) background in meta description and homepage subline, CR-1084 and pinned tests, (c) 301s from the old `/og/og-<locale>.png` on the main site and the coming-soon Worker, (d) `live-soon.mjs` reads the Person from `@graph` (already in the working tree)
 - [x] 3. XS/S items, one commit each: SEO-13, APP-14, APP-11, APP-10, PERF-07, PERF-09, APP-13, APP-16, APP-09 (in CSS, DECISIONS 71) all done; PERF-03 measured and skipped (options in TODO.md); SEO-14 landing titles drafted (CR-1095, wording waits for the owner)
 - [x] 4. M items, one commit each: APP-03, APP-06, APP-07, APP-12, APP-17 - all done (APP-03 keeps marked placeholders, waits for the owner's facts)
-- [ ] 5. BR-06 in steps: (1) tokens and fonts [x], (2) UI chrome [x], (3) landing [x], (4) About [x], (5) Impressum and Datenschutz [x], (6) 404; desktop shell out of scope (open question in TODO.md)
+- [x] 5. BR-06 in steps: (1) tokens and fonts [x], (2) UI chrome [x], (3) landing [x], (4) About [x], (5) Impressum and Datenschutz [x], (6) 404 [x] - item done; desktop shell out of scope (open question in TODO.md)
 - [ ] 6. Preliminary LEG-05 audit as a report in TODO.md (changes nothing legal)
 - [ ] 7. If progress changed noticeably and the wrangler login works: redeploy the coming-soon page (BR-03); otherwise give the owner the commands
 
@@ -33,7 +33,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
   for the terminal line, near-black dark mode; tokens in `soon/tokens.css`,
   fonts in `soon/fonts/` with licences in `public/fonts/` (LEG-15). It is the
   design system for the main site's own pages, not the journey eras (BR-05);
-  applying it there is BR-06, not started. Search layer (Part 4): title and
+  applying it there is BR-06, done 2026-09-25 for the landing, About, legal and 404 pages (DECISIONS.md 72). Search layer (Part 4): title and
   description, Open Graph and Twitter tags, Person JSON-LD (`scripts/soon-seo.mjs`),
   `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
   and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,

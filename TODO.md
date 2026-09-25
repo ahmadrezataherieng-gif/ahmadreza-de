@@ -302,6 +302,8 @@ Recorded while working through the queue in PROJECT_STATE.md, so nothing waits o
 
 
 - **CV entries (APP-03).** The CV app shows the apprenticeship (start date owed), the computer and mobile phone repair background (your own statement; period, place and tasks owed), and marked placeholders for earlier stations, school, studies and certificates. Please send the facts listed in OWN-05 plus the repair details. Default taken: nothing is invented, every gap is marked.
+
+- **BR-06, the desktop shell (Act 3): question for you.** The K6 style now covers the landing page, About, Impressum, Datenschutz, the 404 page and the UI chrome inside those. The desktop (`/desktop/`, the window manager, its apps and the phone home screen) still wears the `modern` theme (cyan on blue-grey), so a visitor goes from a green-on-near-black page to a cyan desktop. Options: (1) keep it - the desktop is a place of its own; (2) give the `modern` theme the K6 values (one change in `themes.ts`, the Time Machine keeps the seven era themes); (3) only the fonts. Default taken: nothing changed. Also open: the journey's own chrome (progress, Zum Desktop, mode switch) keeps the era themes by design.
 <!-- queue-notes:end -->
 
 ## Answered

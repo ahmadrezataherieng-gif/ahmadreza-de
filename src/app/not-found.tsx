@@ -29,7 +29,8 @@ const link = 'rounded-control border border-edge px-3 py-1.5 font-mono text-sm t
 export default function NotFound() {
   return (
     <html lang="de-DE" dir="ltr">
-      <body className="antialiased">
+      {/* The K6 style on the body, so the page colour fills the whole window and not only the text column (BR-06). */}
+      <body data-style="k6" className="antialiased">
         <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col justify-center gap-10 bg-background px-5 py-16 text-ink sm:px-8">
           <p className="font-mono text-6xl font-bold tracking-tight text-accent sm:text-7xl" aria-hidden="true">
             404
