@@ -56,3 +56,6 @@ soon/dist/
 
 # the postal address for the Impressum - never in the repository (DECISIONS.md 60)
 src/content/legal.local.ts
+
+# the owner's local portrait candidates - never in the public repo
+/Photo/

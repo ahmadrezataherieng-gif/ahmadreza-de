@@ -3,6 +3,7 @@
 Last updated: 2026-09-25
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
+`out/` currently holds the private preview build (dummy address); rebuild before any real deploy.
 
 ## Smooth crossings and crossing cards, PERF-02, PERF-03, BR-10 (2026-09-25, owner tested on Android/Firefox; DECISIONS 77)
 
@@ -78,7 +79,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
   `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
   and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,
   no external request, the legal pages).
-- **Coming-soon page, last deploy: 2026-09-24** (Worker `silent-lake-8ae2`, version `bbcc21b1`, 2026-09-25, progress 72 %): the K6 style, the search layer, the 55-character title, the separate `/en/` and `/fa/` pages (SEO-15) and the entity work (SEO-16) are live. Verified with `node scripts/verify/live-soon.mjs` (34 checks incl. /en/ and /fa/: page, title, JSON-LD, OG tags, robots.txt, sitemap.xml, the six legal pages, the fonts, 404, www redirect) and `node scripts/verify/soon.mjs --base https://ahmadreza.de/` (196 checks in a real browser, each language loaded as its own URL). Redeploy whenever the progress changes noticeably (BR-03): `npm run build:soon`, `npx wrangler deploy` in `soon/`, then both scripts.
+- **Coming-soon page, last deploy: 2026-09-25** (Worker `silent-lake-8ae2`, version `c2e5dc63`, the BR-09 design, see the section above; earlier deploys: `bbcc21b1` on 09-25 with the K6 style, `8eac93e8` on 09-24): the search layer, the 55-character title, the separate `/en/` and `/fa/` pages (SEO-15) and the entity work (SEO-16) are live. Verified with `node scripts/verify/live-soon.mjs` (34 checks incl. /en/ and /fa/: page, title, JSON-LD, OG tags, robots.txt, sitemap.xml, the six legal pages, the fonts, 404, www redirect) and `node scripts/verify/soon.mjs --base https://ahmadreza.de/` (196 checks in a real browser, each language loaded as its own URL). Redeploy whenever the progress changes noticeably (BR-03): `npm run build:soon`, `npx wrangler deploy` in `soon/`, then both scripts.
 - **PERF-04 contrast changes accepted (owner, 2026-09-24):** the five palette
   values changed for WCAG AA in the 1946, 1984 and 1995 themes stay; no revert.
 
@@ -103,7 +104,7 @@ is left lives in ROADMAP.md.
 - [x] **Phase 9C** — anonymous public counters on `/api/*`, Worker + D1, not deployed (DECISIONS.md 56)
 - [x] **Phase 9D-1** — bonus-app unlocks; Binary & Morse, Snake, Pixel Paint (DECISIONS.md 57)
 - [x] **Phase 9D-2** — Network tools and the Time Machine (DECISIONS.md 63, 64; 2026-09-24)
-- [ ] **Phase 9D-3** — easter eggs (APP-08, done 2026-09-24); GSAP DrawSVG (APP-09) is still open
+- [x] **Phase 9D-3** - easter eggs (APP-08) and the line-drawing effects (APP-09, done in CSS instead of GSAP DrawSVG, DECISIONS.md 71), both done 2026-09-24
 - [x] **Phase 10** — SEO layer: robots.txt, sitemap, llms.txt, JSON-LD, descriptions, OG images, 404, static About page, journey text layer (DECISIONS.md 59); JSON-LD image/sameAs wait for the owner
 - [~] **Phase 11** — Legal pages: Impressum and Datenschutzerklärung built in de/en/fa, linked one click from every page (DECISIONS.md 58), CSP in place; owner verification and the pre-launch legal check open (ROADMAP.md LEG-*)
 - [~] **Phase 12** — Performance, accessibility, mobile pass: automated accessibility pass done (PERF-04, DECISIONS.md 65); vitals, phone scroll and real devices open (ROADMAP PERF-*)
@@ -409,7 +410,7 @@ Desktop: the remaining long tasks are the theme switch at each crossing's
 midpoint. Throttled phone: above the 30 fps floor, but each era's own scrubbing
 still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 
-## Not built yet
+## Not built yet / still open (what is left overall lives in ROADMAP.md)
 
 - The CV app has its layout but only marked placeholder entries and no PDF (waiting for the owner, APP-03, OWN-02, OWN-05). Contact and Timeline (2026-09-23), Network tools and the Time Machine (2026-09-24) are built.
 - The bonus apps' copy (Phase 9D-1) is a draft awaiting native-speaker
@@ -423,7 +424,7 @@ still produces long tasks - restructuring the heavy visuals is Phase 12 work.
 - The hidden Legende badges show in the Timeline app once earned (APP-10); nowhere else.
 - The motion tiers have only been measured in headless Chrome; no real phone or
   Safari/Firefox run yet (Phase 12).
-- Audio: a switch (off on every load, in memory only) plays generic synthesised sounds on opening and closing an app, per era profile (APP-12).
+- Audio (built, APP-12): a switch (off on every load, in memory only) plays generic synthesised sounds on opening and closing an app, per era profile (APP-12).
 - (Phase 10 is complete except JSON-LD `image`/`sameAs`, which wait for the
   portrait and the profiles.) OG images: `public/og/`, from `scripts/og-image.mjs`.
 - **Static About page** (`/about/`, en, fa; DECISIONS.md 59): the About app's

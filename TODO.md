@@ -83,9 +83,6 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - **The facts:** every answer was chosen to be safe and textbook-level; still
   read them once as the person the site introduces. Structure and right answers
   are in `src/content/quiz.ts`.
-- **Maybe later:** links from the result to the journey at a missed era, once
-  the journey has a deep-link entry that respects Play-mode gates and the
-  returning-visitor redirect (DECISIONS.md 55).
 
 ### Phase 9C — the anonymous counters (draft, needs native-speaker proofreading)
 
@@ -118,11 +115,6 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 - **The era mapping** (DECISIONS.md 57): 1946 Binary & Morse, 1981 Snake, 1984
   Paint, 1995 network tools, today the Time Machine. Change it in
   `src/content/eras.ts` if you prefer another.
-- **The locked notice on the window manager** sits at the bottom centre and,
-  now that it carries a description line, covers the lowest desktop icon on
-  a tall 768 px screen until dismissed (Escape, its button, or another app).
-  On phones it no longer overlaps. Moving it (e.g. beside the icon column) is
-  a small Phase 12 layout task.
 
 ## After launch
 
@@ -148,16 +140,6 @@ Things that need a decision from Ahmadreza before the phase that depends on them
   (Phase 13, below).
 - ~~Unlockable apps~~ - Phase 9D-1 (DECISIONS.md 57): the unlocks, Binary &
   Morse, Snake and Pixel Paint.
-- **Phase 9D-2:** network tools (the 1995 slot, `network-tools`) and the Time
-  Machine (the `time-machine` slot) - both registered and locked on the
-  stand-in. The Time Machine can restyle Snake through the `--ao-snake-*`
-  tokens (the phosphor set under the 1971 theme is the example).
-- **Phase 9D-3:** easter eggs through `HIDDEN_COMMANDS` in the Terminal's
-  `shell.ts` (empty today), and GSAP DrawSVG.
-- The scheduler (1956) and the file tree (1971) are still stand-ins; no phase
-  is planned for them yet.
-- **The quiz could link its missed eras now** - the journey honours
-  `#era-N` since 9D-1 (DECISIONS.md 55 had ruled that out for lack of one).
 - **The free GSAP plugins** (MorphSVG, DrawSVG) are candidates for this phase
   or Phase 12. **Never ScrollSmoother** - decided by Ahmadreza.
 
@@ -184,8 +166,6 @@ What is left:
 - **Real devices:** the phone-keyboard handling of the Terminal and the Assistant
   was checked by shrinking the emulated viewport only. Test an iPhone and an
   Android phone, and the window manager on a touchscreen laptop and an iPad.
-- **Maybe:** a Terminal `ask` command that hands a question to the assistant; the
-  journey teaser could open the assistant window directly (it opens the desktop).
 - **Copy to confirm:** the assistant's copy (`messages/apps/assistant/`, and the
   journey teaser `assistant-journey/`) is a draft; German is the source.
 
@@ -228,9 +208,6 @@ What is left:
   about 43 fps but still has long tasks: each era's scrubbing restyles its whole
   visual, and some are large (the 1956 printout is ~730 spans). Options: fewer
   nodes in the printers, or narrower readers of `--era-progress`.
-- **Theme switch cost.** Each crossing's midpoint restyles nearly the whole page
-  (~40 ms) because theme tokens are written onto `<html>`. Removing it means
-  changing the theme engine's contract - decide before Phase 9's Time Machine.
 
 - **On a real phone, elements inside the scenes move badly during scroll**
   (reported by Ahmadreza after testing on a physical device). The full fix
@@ -298,7 +275,6 @@ What is left:
 
 Recorded while working through the queue in PROJECT_STATE.md, so nothing waits on an answer; each entry says the default that was taken.
 
-- **PERF-03, theme switch cost: not changed, options recorded.** A first measurement in a plain page (one custom property flipped on `<html>`, style recalculation forced) costs under 1 ms with 2,400 elements and 48 `.ao-themed` ones, so the ~40 ms seen at each crossing is not the restyle itself but what follows it (paint, the `.ao-themed` colour transitions, compositing on a throttled CPU). A fix worth doing needs a trace first (`node scripts/verify/trace.mjs --invalidations`, then which elements restyle and repaint). Options, none taken: (1) limit the `.ao-themed` transition to the properties that change and switch it off for the frame of the switch; (2) write only the tokens that differ between the two themes; (3) scope the tokens to the era section instead of `<html>` - this one changes the engine's contract (one root, `setTheme` the only entry point), so it needs your go. Default taken: leave the engine as it is.
 
 
 - **CV entries (APP-03).** The CV app shows the apprenticeship (start date owed), the computer and mobile phone repair background (your own statement; period, place and tasks owed), and marked placeholders for earlier stations, school, studies and certificates. Please send the facts listed in OWN-05 plus the repair details. Default taken: nothing is invented, every gap is marked.
@@ -352,3 +328,10 @@ Method: code search over `src/` and `worker/`, the built `out/`, `public/`, the 
 - Hosting: **Cloudflare Workers with static assets**.
 - Assistant: **a local search over the site's own content, no external AI
   service** (DECISIONS.md 53).
+- 2026-09-25: PERF-03 (theme switch cost) done with the owner's go: the theme is scoped to the chrome and effects layer (DECISIONS 77).
+- 2026-09-24: the scheduler (1956) and the file tree (1971) are no longer stand-ins: Batch planner (APP-06) and File tree (APP-07) are built.
+- 2026-09-24: the quiz links its missed eras to `/amonel/#era-N` (APP-11).
+- 2026-09-24: the locked-app notice no longer covers the lowest desktop icon on a 768 px screen (APP-14).
+- 2026-09-24: the Terminal `ask` command hands a question to the Assistant (APP-13).
+- 2026-09-24: Phase 9D-2 (Network tools, Time Machine) is built (DECISIONS 63, 64); Phase 9D-3 too: easter eggs (APP-08) and line-drawing effects in CSS (APP-09, DECISIONS 71).
+- 2026-09-25: the Phase 12 "theme switch cost" note is settled by PERF-03 (theme scoped, DECISIONS 77); the heavy era visuals, real phone, Safari/Firefox and dvh toolbar stay open in the Phase 12 section.

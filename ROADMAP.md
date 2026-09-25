@@ -41,18 +41,18 @@ build time).
 | `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
-| `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
+| `legal` | 13 | 1 | 5 | 32 / 46 | 70 % |
 | `seo` | 20 | 3 | 4 | 67.1 / 84 | 80 % |
 | `launch` | 13 | 2 | 12 | 52.5 / 105 | 50 % |
-| **all** | 74 | 8 | 27 | 318.7 / 426 | **75 %** |
+| **all** | 75 | 8 | 27 | 319.7 / 427 | **75 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 9 | 1 | 12 | 22 |
+| P0 | 9 | 1 | 13 | 23 |
 | P1 | 11 | 6 | 40 | 57 |
 | P2 | 7 | 1 | 22 | 30 |
-| **total** | **27** | **8** | **74** | **109** |
+| **total** | **27** | **8** | **75** | **110** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -144,7 +144,8 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-14 | **Worker logs off** (owner, 2026-09-24): `observability` (logs and invocation logs) disabled in `wrangler.jsonc` (counter Worker `ahmadreza-de`, never deployed yet - takes effect at DEP-06) and `soon/wrangler.jsonc` (live coming-soon Worker, redeployed); the counter-log sentence removed from the Datenschutzerklärung in de/en/fa; pinned by `worker.test.mjs` (DECISIONS.md 62). | done | P0 | Claude Code | - | XS | legal |
 | LEG-15 | **Font licences shipped with the fonts** (owner, 2026-09-24): every self-hosted font's OFL licence file in `public/fonts/licenses/` and a credits list in `public/fonts/LICENSES.md` (the five fonts of the site and the five of the coming-soon page, Martian Grotesk and Departure Mono from their authors' GitHub releases); `scripts/test/fonts.test.mjs` and `soon-style.test.mjs` fail if a font has no licence file or row, is not used, is loaded from a third party, or if a font file is committed outside `soon/fonts/`. | done | P0 | Claude Code | - | S | legal |
 | LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Done 2026-09-24: `bidiParts()` in `src/lib/legal-doc.ts` feeds both renderers (`LegalPage.tsx`, `build-soon.mjs`), checked by `legal-bidi.test.mjs`; the wording itself is unchanged, only the markup. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | done | P2 | Claude Code | LEG-07 | S | legal |
-| LEG-17 | **GitHub Support purge of the cached commits** (new 2026-09-24): ten cached commits on GitHub still contain the old address after the history rewrite; ticket sent 2026-09-24, waiting for GitHub. | missing | P0 | Ahmadreza | LEG-12 | XS | legal || LEG-18 | **Verify the purge, then delete the backup** (new 2026-09-24): after GitHub confirms, open one old commit SHA URL to check it is gone, then delete the backup bundle outside the repo (LEG-12). | missing | P0 | Ahmadreza | LEG-17 | XS | legal |
+| LEG-17 | **GitHub Support purge of the cached commits** (new 2026-09-24): ten cached commits on GitHub still contained the old address after the history rewrite. Done 2026-09-25: GitHub Support ticket 4790804 confirmed the cached commits are purged. | done | P0 | Ahmadreza | LEG-12 | XS | legal |
+| LEG-18 | **Verify the purge, then delete the backup** (new 2026-09-24): GitHub confirmed the purge (LEG-17); the owner must still open one old commit SHA URL to check it is gone, then delete the backup bundle outside the repo (LEG-12). | missing | P0 | Ahmadreza | LEG-17 | XS | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 
@@ -179,7 +180,7 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | BR-01 | **Final main logo** still to be designed; the current Amonel mark and wordmark are interim. Since 2026-09-24 the coming-soon page uses design 6 (the wordmark "Amonel" whose "o" is a power symbol) as its main logo and design 1 (`~$ amonel os` with a blinking cursor) only in its terminal panel; **the final main logo will be improved later** - design 6 is a stand-in, not the finished mark. | partial | P1 | Ahmadreza + Claude Code | - | L 25% | launch |
 | BR-02 | **Coming-soon page rebranded** (owner, 2026-09-24): «AhmadOS» → «Amonel» everywhere on the page and a progress block computed from ROADMAP.md at build time. Rewritten the same day so anyone understands it in ten seconds: who (name, role line), what the site will be, the weighted progress overall and in seven areas (`scripts/roadmap.mjs`, `scripts/soon-progress.mjs`), what's next, contact and the legal links, in de/en/fa with the other two languages always visible under the role; no item IDs or phase numbers. Checked by `scripts/verify/soon.mjs` (wide and phone, dark and light, three languages). Copy CR-1080..CR-1084. | done | P2 | Claude Code | - | S | launch |
-| BR-03 | **Redeploy the coming-soon page whenever the ROADMAP progress changes noticeably** (a few percentage points, or an area finishing; owner, 2026-09-24): its figures are computed at build time, so they are exactly as fresh as the last deploy (`npm run build:soon`, then `npx wrangler deploy` in `soon/`, then the curl checks in PROJECT_STATE.md). Until launch (DEP-06). Last deploy: see PROJECT_STATE.md. | missing | P2 | Claude Code | - | XS | launch |
+| BR-03 | **Redeploy the coming-soon page whenever the ROADMAP progress changes noticeably** (a few percentage points, or an area finishing; owner, 2026-09-24): its figures are computed at build time, so they are exactly as fresh as the last deploy (`npm run build:soon`, then `npx wrangler deploy` in `soon/`, then the curl checks in PROJECT_STATE.md). Recurring until DEP-06 (launch), so it stays open; last deploy: see PROJECT_STATE.md. | missing | P2 | Claude Code | - | XS | launch |
 | BR-04 | **Fonts, style and colours of the coming-soon page**: approved by the owner 2026-09-24 after five review rounds (DECISIONS.md 70). Style "K6": Martian Grotesk headings, Geist body, Geist Mono, Vazirmatn for Persian, Departure Mono only for the `~$ amonel os` line at 22 px; near-black dark mode (page #07090a, surfaces #0d1110, neutral borders and tracks, green only as the accent), Forest Luxe paper and forest green in light mode. Tokens in `soon/tokens.css`, fonts in `soon/fonts/` with licences (LEG-15); Latin-only heading word spacing, `<bdi>` for Latin terms in Persian, no orphans; `scripts/verify/soon.mjs` (196 checks) and `soon-style.test.mjs` pin it. Its look was reverted by the owner on 2026-09-25 (BR-07, DECISIONS.md 73); Vazirmatn for Persian stays. | done | P1 | Ahmadreza + Claude Code | - | M | launch |
 | BR-05 | **Should the approved style become the main site's design system?** Decided by the owner 2026-09-24: **yes**, for the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) - **not** for the journey eras, which keep their historical styles (DECISIONS.md 70). Applying it is BR-06. | done | P2 | Ahmadreza | BR-04 | S | launch |
 | BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. Done 2026-09-25 (owner's queue, DECISIONS.md 72): the tokens and self-hosted fonts as the scoped `[data-style=k6]` layer, then the UI chrome, the landing page, About, Impressum and Datenschutz and the 404 page, one commit each, each checked with axe (de, fa) and the journey/vitals scripts. The desktop shell is not included - open question in TODO.md. **Visual part reverted by the owner 2026-09-25** after comparing old and new side by side (DECISIONS.md 73, BR-07): the old look is back; the non-colour fixes stay. | done | P1 | Claude Code | BR-05 | L | launch |
