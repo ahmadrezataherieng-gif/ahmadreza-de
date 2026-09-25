@@ -33,9 +33,11 @@ const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 // every era already passed in Play, so no gate stops the scroll and no guided
 // playback renders - the crossings and eras alone.
 const MODE = args.mode === 'open' ? 'open' : 'watch';
-const TAG = `perf-${WIDTH}-${TIER}-cpu${CPU}-${MODE}${process.env.VERIFY_GPU ? '-gpu' : ''}`;
+const TAG = `perf-${WIDTH}-${TIER}-cpu${CPU}-${MODE}${args.touch ? '-touch' : ''}${process.env.VERIFY_GPU ? '-gpu' : ''}`;
 
-const b = await launch({ width: WIDTH, height: HEIGHT, touch: WIDTH < 768, tag: TAG });
+// --touch: a touch profile above the phone width too (a tablet).
+const TOUCH = Boolean(args.touch) || WIDTH < 768;
+const b = await launch({ width: WIDTH, height: HEIGHT, touch: TOUCH, tag: TAG });
 
 // Watch mode: no gate stands in the way of a full scroll.
 await b.goto(`${BASE}${PREFIX}/amonel/?tier=${TIER}`, 2000);
