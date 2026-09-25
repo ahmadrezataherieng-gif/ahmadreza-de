@@ -97,13 +97,13 @@ function Block({ block, copy, locale }: { block: LegalBlock; copy: LegalCopy; lo
       // The postal address and e-mail appear on these two pages only.
       return (
         <address className="not-italic">
-          <span dir="ltr" className="block">
+          <span dir="ltr" className="block w-fit">
             {LEGAL_CONTACT.name}
           </span>
-          <span dir="ltr" className="block">
+          <span dir="ltr" className="block w-fit">
             {LEGAL_CONTACT.street}
           </span>
-          <span dir="ltr" className="block">
+          <span dir="ltr" className="block w-fit">
             {LEGAL_CONTACT.postcodeCity}
           </span>
           <span className="block">{copy.country}</span>
@@ -142,7 +142,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
 
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 pt-10 pb-12 font-body text-[0.95rem] leading-relaxed sm:px-8">
         <div className="flex flex-col gap-3">
-          <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="font-display text-2xl font-bold tracking-tight [overflow-wrap:anywhere] sm:text-4xl">
             <Iso text={document.title} locale={locale} />
           </h1>
           <p className="font-mono text-xs text-muted">{copy.updated}</p>

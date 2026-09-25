@@ -40,6 +40,10 @@ const check = (name, ok, detail) => {
 };
 
 const b = await launch({ width: WIDTH, height: HEIGHT, touch: TOUCH, tag: TAG });
+// `--scheme light` audits the K6 pages in light mode (the default is the browser's dark run).
+if (args.scheme) {
+  await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: String(args.scheme) }, { name: 'prefers-reduced-motion', value: 'no-preference' }] });
+}
 const js = (code) => b.evaluate(code);
 const until = async (expression, ms = 6000) => {
   const end = Date.now() + ms;

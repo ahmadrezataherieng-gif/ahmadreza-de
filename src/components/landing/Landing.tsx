@@ -48,7 +48,7 @@ export async function Landing() {
           <span className="hidden h-4 w-px bg-edge sm:inline" aria-hidden="true" />
           <span className="hidden sm:inline">{t('eyebrow')}</span>
         </p>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <ResumeLink variant="header" />
           <LanguageSwitcher />
         </div>

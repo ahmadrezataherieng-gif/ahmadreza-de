@@ -3238,7 +3238,7 @@ html:not([data-tier='full']) .ao-depth-extra {
   /* Latin face, then the Persian face, then the generic fallback. */
   --ao-font-display: "Martian Grotesk", "Vazirmatn", system-ui, sans-serif;
   --ao-font-body: "Geist", "Vazirmatn", system-ui, sans-serif;
-  --ao-font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  --ao-font-mono: "Geist Mono", "Vazirmatn", ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
   --ao-radius-window: 14px;
   --ao-radius-control: 10px;
   --ao-shadow-window: none;
@@ -3265,8 +3265,18 @@ html:not([data-tier='full']) .ao-depth-extra {
     --ao-color-glow: rgba(13, 107, 69, 0.07);
     --ao-color-chrome: #fffefa;
     --ao-color-chrome-text: #0b1a14;
+    /* The logo's wordmark is drawn in the near-white brand ink for dark pages; on cream it vanished. */
+    --ao-brand-ink: #0b1a14;
     color-scheme: light;
   }
+}
+
+/* Persian is a joined script: letter-spacing (the tracked mono labels, buttons and eyebrows) pulls the letters apart. */
+[data-style='k6']:lang(fa),
+[data-style='k6']:lang(fa) *,
+[data-style='k6'] :lang(fa),
+[data-style='k6'] :lang(fa) * {
+  letter-spacing: normal !important;
 }
 
 /* Headings: the approved weight and tracking - Latin only, Persian joins must stay intact. */
