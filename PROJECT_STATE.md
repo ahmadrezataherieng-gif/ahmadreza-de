@@ -4,6 +4,10 @@ Last updated: 2026-09-25
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+## Coming-soon page deployed, BR-09 design (2026-09-25)
+
+Owner approved the BR-09 design. Fix before deploy: the star field shows only outside the content column (mask on `.sky`), and the English and Persian lines under the name wrap balanced. Deployed from `soon/` (Worker `silent-lake-8ae2`, version c2e5dc63-f66d-4131-962d-8892d067658a); `scripts/verify/live-soon.mjs` all checks passed. Lint, 242 tests, build, `soon.mjs` 208/208 green. The main site is not deployed.
+
 ## K6 revert (2026-09-25; owner chose the old design after comparing both)
 
 One commit per step, lint, tests and build green before each, nothing deployed.
