@@ -304,6 +304,46 @@ Recorded while working through the queue in PROJECT_STATE.md, so nothing waits o
 - **CV entries (APP-03).** The CV app shows the apprenticeship (start date owed), the computer and mobile phone repair background (your own statement; period, place and tasks owed), and marked placeholders for earlier stations, school, studies and certificates. Please send the facts listed in OWN-05 plus the repair details. Default taken: nothing is invented, every gap is marked.
 
 - **BR-06, the desktop shell (Act 3): question for you.** The K6 style now covers the landing page, About, Impressum, Datenschutz, the 404 page and the UI chrome inside those. The desktop (`/desktop/`, the window manager, its apps and the phone home screen) still wears the `modern` theme (cyan on blue-grey), so a visitor goes from a green-on-near-black page to a cyan desktop. Options: (1) keep it - the desktop is a place of its own; (2) give the `modern` theme the K6 values (one change in `themes.ts`, the Time Machine keeps the seven era themes); (3) only the fonts. Default taken: nothing changed. Also open: the journey's own chrome (progress, Zum Desktop, mode switch) keeps the era themes by design.
+
+### Preliminary LEG-05 audit (Claude Code, 2026-09-25) - findings only, nothing legal was changed
+
+Method: code search over `src/` and `worker/`, the built `out/`, `public/`, the privacy copy in `src/messages/legal/`. Not legal advice; the owner (and ideally a lawyer or the Verbraucherzentrale, LEG-07) decides. Status of each line: OK = nothing to do, CHECK = someone should look, OPEN = a task exists.
+
+**External requests (TDDDG, DSGVO Art. 44 ff.)**
+- OK: no `fetch`, XHR, beacon, WebSocket or EventSource in `src/` except the two same-origin calls of the anonymous counters (`/api/count/<name>`, `/api/counts`, `src/lib/count.ts`), which exist only once the Worker is deployed (DEP-03/04/05); without it nothing is sent after the first failure.
+- OK: the only absolute URLs in the source are links a visitor can click (the site, the GitHub repository in `content/projects.ts`) and machine text; no script, style, font, image or frame is loaded from another origin. The CSP in `public/_headers` allows `'self'` only (plus `data:` and `blob:` images, used by the pixel-art PNG download and the cursor images of the Time Machine).
+- OK: every font is self-hosted (ten fonts, all SIL OFL 1.1, licence files next to them); no Google Fonts.
+- CHECK: `public/fonts/LICENSES.md` still says, in one heading, that the five `soon/fonts/` files are "served by the coming-soon page". Since BR-06 the main site serves the same files from `public/fonts/` too; the sentence should say so. (A documentation edit; left for the owner because the file is the licence index.)
+
+**Cookies and consent (TDDDG § 25)**
+- OK: no cookie is set by any code of the site (`document.cookie` and `Set-Cookie` appear nowhere). No consent banner is needed as long as this stays true.
+- OPEN (LEG-11): Cloudflare features that set cookies (Bot Fight Mode, challenges, Waiting Room, Always Online) must stay off at the launch deploy. The owner set the AI-bot policies to Allow on 2026-09-24; that is not a cookie feature, but the list should be checked once more at DEP-06.
+
+**Browser storage vs the Datenschutz table**
+- Keys used by the code: `amonel.unlocks.v1`, `amonel.quiz.v1`, `amonel.snake.v1`, `amonel.paint.v1`, `amonel.theme.v1` (localStorage) and `amonel.replay` (sessionStorage). The privacy copy lists exactly these six (`legal/de.json`, en and fa parallel) - OK, no key is missing and none is listed that is unused.
+- OK: the new features of this queue add **no** key: the sound switch (APP-12) lives in memory and is off on every load, the Filesystem, Scheduler, CV and Timeline badges read or write nothing new, the manifest, the `ask` and "trace this host" hand-overs use in-page events only.
+- OK: the language of the coming-soon pages keeps its one `ao-lang` entry (that page has its own privacy text).
+- CHECK: the table's wording (purpose, retention, "strictly necessary") is the owner's to confirm (LEG-07); the Time Machine writes `amonel.theme.v1` only after a visitor's own choice - the text should keep saying that.
+
+**Data flows and the Worker (when it goes live)**
+- The counters send a counter's name, never an identifier, a score or an answer; the Worker keeps one integer per name; Worker logs are off (LEG-14). OPEN until DEP-03/04/06: create the D1 database and the rate-limit rule, then check the live `curl` list in TODO.md, Phase 13.
+- OK: the Assistant, the Terminal, the quiz, the scheduler and every other app run entirely in the browser; the Assistant's privacy line ("nothing a visitor types leaves the device") is still true - `ask` only moves text between two windows of the same page.
+- OK: the Contact app's copy button uses the local clipboard; the e-mail address is a `mailto:` link, never a form.
+- CHECK: the Web Audio API (Morse tone, desktop sounds) needs no data and sets nothing; if the owner wants it stated for completeness, one sentence in the Datenschutz would do (not a legal requirement as far as we can see).
+
+**Imprint and address**
+- OK: the postal address is only in the git-ignored `src/content/legal.local.ts`; the build stops without it; the built pages were checked in earlier phases.
+- OPEN (LEG-17/LEG-18): ten commits cached by GitHub still contain the old address until GitHub Support answers; then verify one old SHA URL and delete the backup bundle.
+- OK: the employer is not named anywhere in the site, the copy or the docs (`employer.test.mjs`); the legal name appears only in the Impressum.
+
+**Images, sounds and third-party rights**
+- OK: no photograph is on the site yet. The portrait is a placeholder (OWN-01); OPEN (LEG-09): written usage rights from the photographer before it goes online, and the image-rights/GDPR point that it shows the owner.
+- OK: logo, icons and share images are the project's own (`scripts/brand/`, `scripts/og-image.mjs`); no third-party artwork.
+- OK: the desktop sounds are synthesised tones (`src/lib/sound.ts`), generic on purpose - no recording of any product's start-up sound; the pixel-art and era scenes are drawn in code.
+- CHECK (trademarks): era and product names (ENIAC, UNIX, IBM PC, MS-DOS, Macintosh, Windows 95) are used descriptively in a computing-history context, and no vendor logo appears (a search for logo-like SVGs found none). Worth a one-time look by whoever reviews the texts; the fortune and insider facts are recorded as sourced facts, not quotations (DECISIONS.md 32).
+- OPEN (LEG-10): check "Amonel" in the DPMA and EUIPO registers before any commercial use.
+
+**Summary for the owner:** nothing found that needs a consent banner, no third-party request, storage table complete. Still open before launch, as listed: LEG-07 (your read of the texts), LEG-09 (portrait rights), LEG-10 (name check), LEG-11 (Cloudflare cookie features at deploy), LEG-17/18 (GitHub purge), the counters' go-live steps, and the one licence-index wording above.
 <!-- queue-notes:end -->
 
 ## Answered

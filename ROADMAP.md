@@ -41,18 +41,18 @@ build time).
 | `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
-| `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
+| `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 9 | 2 | 12 | 32.5 / 85 | 38 % |
-| **all** | 69 | 7 | 29 | 292.3 / 406 | **72 %** |
+| **all** | 69 | 8 | 28 | 294.3 / 406 | **72 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 10 | 0 | 12 | 22 |
+| P0 | 9 | 1 | 12 | 22 |
 | P1 | 11 | 6 | 37 | 54 |
 | P2 | 8 | 1 | 20 | 29 |
-| **total** | **29** | **7** | **69** | **105** |
+| **total** | **28** | **8** | **69** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -132,7 +132,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-02 | **Datenschutzerklärung** at `/datenschutz/` (+ en, fa), written from an audit of the real data flows: Cloudflare hosting and logs, no external requests, the browser storage table, the anonymous counters, the local assistant, email contact, rights, LfDI RLP. German binding. Built 2026-09-23; the audit found no external request, so nothing had to be self-hosted. | done | P0 | Claude Code + Ahmadreza | OWN-07 | L | legal |
 | LEG-03 | **Legal links in the footer of every view** (landing, journey, desktop, About, 404) - one click from every page, labelled exactly "Impressum" / "Datenschutz". Done for every existing view: landing and legal footers, desktop top bar, home screen, journey chrome corner; new pages (About, 404) must add `SiteFooter`. | done | P0 | Claude Code | LEG-01, LEG-02 | S | legal |
 | LEG-04 | **Legal pages and links on the live "coming soon" page** (Worker `silent-lake-8ae2`), deployed to production. Built in `soon/` (`npm run build:soon`), deployed 2026-09-23; ahmadreza.de/impressum/ and /datenschutz/ (and en, fa) verified live. | done | P0 | Claude Code | LEG-01, LEG-02 | S | legal |
-| LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. | missing | P0 | Claude Code + Ahmadreza | all feature work | M | legal |
+| LEG-05 | **Legal check of every feature before launch** (DSGVO, TDDDG, DDG, copyright, image rights): no external request, no cookie, no consent banner needed, storage table complete. Preliminary audit written 2026-09-25 (TODO.md, "Preliminary LEG-05 audit"): no external request, no cookie, storage table complete; open points listed there. The final check still waits for all feature work and the owner. | partial | P0 | Claude Code + Ahmadreza | all feature work | M 40% | legal |
 | LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. Done 2026-09-23: every fetch type locked to 'self' (scripts/styles also 'unsafe-inline', no nonces in a static export); pinned by `legal.test.mjs`; `serve.mjs --headers` runs the checks under it (apps, bonus, desktop pass). | done | P1 | Claude Code | - | S | legal |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 | M | legal |
 | LEG-08 | **Employer name removed everywhere; may only be added with the employer's written permission.** Done 2026-09-24 (owner): gone from the coming-soon page (text, title, description), the landing role and facts, the meta descriptions, About, llms.txt and the docs; the role line is now "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079). `scripts/test/employer.test.mjs` fails if the name is in any tracked file or in `out/` / `soon/dist/`. The name remains in the git history. | done | P0 | Ahmadreza | - | XS | legal |
