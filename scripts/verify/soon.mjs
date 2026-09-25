@@ -167,7 +167,8 @@ for (const viewport of VIEWPORTS) {
       check(`${label}: the self-hosted Vazirmatn is loaded`, state.fontsLoaded.includes('Vazirmatn'), `loaded: ${state.fontsLoaded.join(', ')}`);
       check(`${label}: the headings use Vazirmatn for Persian, then Segoe UI and the system face`, /^"?Vazirmatn"?, "Segoe UI", system-ui/.test(state.heading), state.heading);
       check(`${label}: the terminal line is the bold system mono`, state.os.weight === '700' && /ui-monospace/.test(state.os.family), `${state.os.weight} ${state.os.family}`);
-      check(`${label}: the page is navy even when the system asks for light`, state.bg === 'rgb(11, 15, 21)', state.bg);
+      // Light-mode proposal (branch proposal/light-old-palette): light follows the system.
+      check(`${label}: the page follows the colour scheme`, state.bg === (scheme === 'light' ? 'rgb(243, 246, 249)' : 'rgb(11, 15, 21)'), state.bg);
       check(`${label}: every Latin term in Persian text is isolated in a <bdi>`, state.bidiMixed.length === 0, state.bidiMixed.join(' | '));
       check(`${label}: punctuation after a Latin term in Persian text lands on the correct side`, state.bidiPunctuation.length === 0, state.bidiPunctuation.join(' | '));
       check(
