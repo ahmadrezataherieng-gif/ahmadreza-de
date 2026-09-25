@@ -69,9 +69,9 @@ test('coming-soon page: Amonel, no internal codes, every figure a placeholder th
   assert.throws(() => fillPlaceholders('{{nope.percent}}', {}), /unknown placeholder/);
 });
 
-test('coming-soon page: the main logo is design 6 (power "o"), the terminal lockup design 1, both inline', () => {
+test('coming-soon page: the main logo is design 6 (power "o"), the terminal line "ahmadreza@amonel:~$ status" (BR-09), both inline', () => {
   const page = read('soon/index.html');
   assert.match(page, /class="logo"[^>]*aria-label="Amonel">Am<svg[\s\S]*?<\/svg>nel<\/a>/);
-  assert.match(page, /<span class="p">~\$ <\/span>amonel os<span class="cursor"><\/span>/);
+  assert.match(page, /<span class="u">ahmadreza@amonel<\/span><span class="p">:~\$ <\/span>status<span class="cursor"><\/span>/);
   assert.doesNotMatch(page, /<img/);
 });

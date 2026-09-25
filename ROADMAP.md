@@ -43,16 +43,16 @@ build time).
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
-| `launch` | 11 | 2 | 12 | 39.5 / 92 | 43 % |
-| **all** | 71 | 8 | 28 | 301.3 / 413 | **73 %** |
+| `launch` | 11 | 3 | 12 | 41.5 / 97 | 43 % |
+| **all** | 71 | 9 | 28 | 303.3 / 418 | **73 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 1 | 12 | 22 |
 | P1 | 11 | 6 | 39 | 56 |
-| P2 | 8 | 1 | 20 | 29 |
-| **total** | **28** | **8** | **71** | **107** |
+| P2 | 8 | 2 | 20 | 30 |
+| **total** | **28** | **9** | **71** | **108** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -185,6 +185,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. Done 2026-09-25 (owner's queue, DECISIONS.md 72): the tokens and self-hosted fonts as the scoped `[data-style=k6]` layer, then the UI chrome, the landing page, About, Impressum and Datenschutz and the 404 page, one commit each, each checked with axe (de, fa) and the journey/vitals scripts. The desktop shell is not included - open question in TODO.md. **Visual part reverted by the owner 2026-09-25** after comparing old and new side by side (DECISIONS.md 73, BR-07): the old look is back; the non-colour fixes stay. | done | P1 | Claude Code | BR-05 | L | launch |
 | BR-07 | **Revert the K6 look** (owner, 2026-09-25, DECISIONS.md 73): the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) and the coming-soon page get their old look back - navy-teal page with the green and amber glows, blue-tinted cards, cyan and mint accents, the old heading and name fonts, dark only. Kept: all content, the app, SEO and performance work, the 301s, the tests, Vazirmatn for Persian everywhere, no letter-spacing in Persian, and the phone/RTL layout fixes of BR-06. Unused font files removed, `public/fonts/LICENSES.md` matches what ships. | done | P1 | Claude Code | BR-06 | M | launch |
 | BR-08 | **Owner choices applied (DECISIONS 74):** fonts and light mode done; left: redeploy the coming-soon page (BR-03). | done | P1 | Ahmadreza + Claude Code | BR-07 | S | launch |
+| BR-09 | **Illustrations and small learning details in one system** (owner, 2026-09-25, DECISIONS.md 75): the final design stays (navy palette, glows, Space Grotesk / Inter / JetBrains Mono / Vazirmatn, dark default with the sun/moon toggle); pages get inline-SVG illustrations, a 24 px icon set and at most three translated "Wussten Sie schon?" snippets each, all from `src/components/illustrations/` (icons.ts, illustrations.css, React components; the coming-soon build injects the same CSS and icons). Step 1 coming-soon page (the e365de3 scene upgraded, star field, `ahmadreza@amonel:~$ status` terminal header, chips, icons, three snippets) done; step 2 landing, About, 404 (legal pages stay sober); step 3 checks and screenshots. Not deployed. | partial | P2 | Claude Code | BR-08 | M 40% | launch |
 
 ## Owner tasks - assets and accounts
 

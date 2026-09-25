@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- The temporary coming-soon page on ahmadreza.de (Worker silent-lake-8ae2).
-     CONTENT-TODO CR-1080..CR-1085: every visible text on this page is placeholder
+     CONTENT-TODO CR-1080..CR-1085, CR-1103, CR-1104: every visible text on this page is placeholder
      until the final content review (the role line is CR-1079; the title, meta
      description, Open Graph and JSON-LD text CR-1084, CR-1085).
      Build the deployable folder with: npm run build:soon - it fills every
@@ -64,9 +64,39 @@
   .langs a[aria-current="page"]{color:var(--on-brand);background:var(--brand);border-color:var(--brand)}
   button:focus-visible,a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 
-  /* Who and what, readable in ten seconds. */
+  /* The illustration system: src/components/illustrations/illustrations.css, injected at build time. */
+  /*@illustrations*/
+  .ill-tip-code{font-family:var(--font-mono)}
+  .ill-tip-label{font-family:var(--stack-body)}
+
+  /* The sky behind the page: a few still stars, a second layer that twinkles
+     slowly, and a faint band of galaxy light. Decoration only, behind everything. */
+  .sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;--star:color-mix(in srgb,var(--ao-ill-star) 55%,transparent)}
+  .sky::before,.sky::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 12% 18%,var(--star) 0 1px,transparent 1.6px),radial-gradient(circle at 63% 7%,var(--star) 0 .8px,transparent 1.4px),radial-gradient(circle at 38% 62%,var(--star) 0 .7px,transparent 1.3px),radial-gradient(circle at 86% 44%,var(--star) 0 1.1px,transparent 1.7px)}
+  .sky::before{background-size:211px 197px,263px 241px,173px 229px,317px 283px}
+  .sky::after{background-size:389px 347px,293px 331px,241px 269px,457px 401px;background-position:90px 40px,20px 150px,130px 70px,200px 10px;opacity:.8}
+  .sky i{position:absolute;top:-10%;inset-inline-end:-20%;width:90%;height:55%;transform:rotate(-18deg);background:radial-gradient(ellipse 50% 22% at 50% 50%,color-mix(in srgb,var(--ao-ill-cyan) 9%,transparent),transparent 70%),radial-gradient(ellipse 30% 10% at 42% 52%,color-mix(in srgb,var(--ao-ill-mint) 7%,transparent),transparent 70%)}
+  html[data-scheme="light"] .sky{--star:color-mix(in srgb,var(--ao-ill-star) 16%,transparent)}
+  html[data-scheme="light"] .sky i{opacity:0}
+  @media (prefers-reduced-motion:no-preference){.sky::after{animation:twinkle 7s ease-in-out infinite}}
+  @keyframes twinkle{50%{opacity:.15}}
+  .wrap{position:relative;z-index:1}
+
+  /* Who and what, readable in ten seconds; the scene beside it on wide screens, below it on phones. */
+  .top{display:grid;gap:12px 48px}
+  @media (min-width:900px){.top{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:center}}
   .hero{padding:48px 0 8px;max-width:760px}
   @media (min-width:720px){.hero{padding-top:72px}}
+  .side{display:flex;flex-direction:column;gap:18px;align-items:center}
+  @media (min-width:900px){.side{padding-top:72px}}
+  .scene{margin:0;width:100%;max-width:340px}
+  @media (min-width:900px){.scene{max-width:440px}}
+  .scene svg{display:block;width:100%;height:auto}
+  .side .ill-tip{width:100%;max-width:400px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+  .chips li{display:inline-flex;align-items:center;gap:6px;font:600 .82rem/1.2 var(--stack-body);color:var(--muted);border:1px solid var(--edge);border-radius:8px;padding:7px 11px;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+  .chips .ill-icon{width:1rem;height:1rem;color:var(--ao-ill-cyan)}
+  .chips li[dir="ltr"]{font-family:var(--font-mono);font-weight:400}
   .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--stack-body);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}
   .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 1.8s infinite}
   @keyframes pulse{50%{opacity:.35}}
@@ -101,12 +131,22 @@
   .card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);padding:18px 20px}
   .card h3{margin:0;font:600 1.08rem/1.3 var(--stack-head)}
   .card p{margin:6px 0 0;color:var(--muted)}
-  .card .num{display:block;font:600 12px/1 var(--stack-body);color:var(--brand);margin-bottom:10px}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .card .num{font:600 12px/1 var(--stack-body);color:var(--brand)}
+  /* A section head with a snippet in the free space beside the lead (wide screens) or under it (phones). */
+  .sec-head{display:grid;gap:18px 40px;align-items:end}
+  @media (min-width:900px){.sec-head{grid-template-columns:minmax(0,1fr) 340px}}
+  .next-grid{display:grid;gap:18px 40px;align-items:start}
+  @media (min-width:900px){.next-grid{grid-template-columns:minmax(0,1fr) 340px}}
 
   /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
   .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden}
-  .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
-  .os{direction:ltr;font-weight:700;color:var(--mint)}
+  .panel-bar{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted);direction:ltr}
+  .dots{display:flex;gap:6px}
+  .dots i{width:10px;height:10px;border-radius:50%;background:var(--edge)}
+  .dots i:first-child{background:var(--amber)}
+  .os{direction:ltr;font-weight:700;color:var(--ink)}
+  .os .u{color:var(--mint)}
   .os .p{color:var(--muted);font-weight:400}
   .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
@@ -116,13 +156,17 @@
   .big{font:var(--head-weight) clamp(3rem,10vw,4.4rem)/1 var(--stack-head);letter-spacing:var(--head-tracking);color:var(--brand)}
   .overall-label{font-size:1.1rem;font-weight:600}
   .meter{position:relative;height:10px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:14px}
-  .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--brand-deep),var(--mint));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
-  html[dir="rtl"] .meter span{background:linear-gradient(270deg,var(--brand-deep),var(--mint))}
+  /* Green to amber, like the old terminal's status bar. */
+  .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--mint),var(--amber));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
+  html[dir="rtl"] .meter span{background:linear-gradient(270deg,var(--mint),var(--amber))}
   @keyframes grow{from{width:0}}
   .note{margin:12px 0 0;font-size:.9rem;color:var(--muted)}
   .areas{display:grid;gap:22px 32px;margin:28px 0 0;padding:0;list-style:none}
   @media (min-width:720px){.areas{grid-template-columns:1fr 1fr}}
-  .area-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .area-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .area-title{display:flex;align-items:center;gap:10px;min-width:0}
+  .area-title .ill-tile{width:1.9rem;height:1.9rem;border-radius:8px}
+  .area-title .ill-icon{width:1.05rem;height:1.05rem}
   .area h3{margin:0;font:600 1rem/1.35 var(--stack-head)}
   .area .pct{font:700 .95rem/1 var(--stack-body);color:var(--ink);white-space:nowrap}
   .area .meter{height:6px;margin-top:8px}
@@ -144,6 +188,7 @@
 </style>
 </head>
 <body>
+<div class="sky" aria-hidden="true"><i></i></div>
 <div class="wrap">
   <header>
     <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.2a8 8 0 1 0 10.8 0"/></svg>nel</a>
@@ -158,11 +203,18 @@
   </header>
 
   <main>
+    <div class="top">
     <div class="hero">
-      <span class="pill" data-t="status">Im Aufbau</span>
+      <span class="pill" data-t="status">Amonel · v1.0 im Aufbau</span>
       <h1>Ahmadreza Taheri</h1>
       <p class="role" data-t="role">Fachinformatiker für Systemintegration in Ausbildung · Trier</p>
       <p class="background" data-t="background">Mit Hintergrund in Computer- und Handyreparatur</p>
+      <ul class="chips">
+        <li><!--@icon:server--><span data-t="chip1">Systemintegration</span></li>
+        <li><!--@icon:network--><span data-t="chip2">Netzwerke · Linux</span></li>
+        <li><!--@icon:pin--><span data-t="chip3">Trier, Deutschland</span></li>
+        <li dir="ltr"><!--@icon:languages-->DE · EN · FA</li>
+      </ul>
       <div class="alt" id="alt">
         <p lang="en" dir="ltr">IT specialist for system integration in training, Trier – my portfolio is coming soon.</p>
         <p lang="fa" dir="rtl">احمدرضا طاهری، کارآموز متخصص فناوری اطلاعات در تریر – نمونه‌کار من به‌زودی منتشر می‌شود.</p>
@@ -173,22 +225,95 @@
         <span class="mail" dir="ltr">ahmadrezataheride@gmail.com</span>
       </div>
     </div>
+    <div class="side">
+      <!-- The scene of e365de3 in the illustration system: the old machine (a CRT with ENIAC's lamps), the punch card where it began,
+           today's phone and the AI orb, joined by flowing data. Decoration only. -->
+      <figure class="scene" aria-hidden="true">
+        <svg class="ill" viewBox="0 0 460 400" focusable="false">
+          <defs>
+            <radialGradient id="soon-orb" cx=".4" cy=".38" r=".65"><stop offset="0" class="stop-cyan" stop-opacity=".95"/><stop offset=".55" class="stop-cyan" stop-opacity=".4"/><stop offset="1" class="stop-body" stop-opacity="1"/></radialGradient>
+          </defs>
+          <g class="t-edge"><ellipse cx="230" cy="215" rx="222" ry="150" class="flow" opacity=".45"/></g>
+          <g>
+            <circle class="star twinkle" cx="190" cy="40" r="1.6"/><circle class="star twinkle" cx="238" cy="78" r="1.1"/><circle class="star twinkle" cx="118" cy="92" r="1.3"/>
+            <circle class="star twinkle" cx="430" cy="210" r="1.4"/><circle class="star twinkle" cx="262" cy="380" r="1.2"/><circle class="star twinkle" cx="20" cy="300" r="1.5"/>
+            <circle class="star twinkle" cx="410" cy="30" r="1.1"/><circle class="star twinkle" cx="60" cy="60" r="1.2"/>
+          </g>
+          <!-- data lines -->
+          <path class="t-amber flow" d="M166 168C220 128 262 118 298 106"/>
+          <path class="t-mint flow" d="M172 222C232 262 262 284 298 290"/>
+          <path class="t-cyan flow" d="M196 344C240 350 270 342 298 332"/>
+          <!-- the old machine -->
+          <g class="float">
+            <rect class="body" x="22" y="126" width="152" height="122" rx="14"/>
+            <rect class="screen" x="36" y="140" width="124" height="80" rx="9"/>
+            <path class="t-mint glow" d="M50 158h40M50 171h70M50 184h28"/>
+            <rect class="t-mint fill blink" x="50" y="196" width="9" height="12" rx="1.5"/>
+            <g class="t-amber"><circle class="fill lamp glow" cx="44" cy="234" r="3.6"/><circle class="fill lamp glow" cx="58" cy="234" r="3.6"/><circle class="fill lamp glow" cx="72" cy="234" r="3.6"/><circle class="fill lamp glow" cx="86" cy="234" r="3.6"/></g>
+            <path class="t-edge" d="M130 234h28M98 248v12M74 262h48"/>
+          </g>
+          <!-- the punch card -->
+          <g class="float-late">
+            <g transform="rotate(-6 115 346)">
+              <path class="body" d="M40 314h150v64H52l-12-12z"/>
+              <path class="t-mint" d="M54 324h120" opacity=".7"/>
+              <g class="t-amber"><rect class="fill" x="56" y="334" width="8" height="6" rx="1.5"/><rect class="fill" x="72" y="348" width="8" height="6" rx="1.5"/><rect class="fill" x="88" y="334" width="8" height="6" rx="1.5"/><rect class="fill" x="104" y="360" width="8" height="6" rx="1.5"/><rect class="fill" x="120" y="348" width="8" height="6" rx="1.5"/><rect class="fill" x="136" y="334" width="8" height="6" rx="1.5"/><rect class="fill" x="152" y="360" width="8" height="6" rx="1.5"/><rect class="fill" x="168" y="348" width="8" height="6" rx="1.5"/></g>
+            </g>
+          </g>
+          <!-- today's phone -->
+          <g class="float">
+            <rect class="body" x="300" y="204" width="100" height="178" rx="20"/>
+            <rect class="screen" x="311" y="220" width="78" height="146" rx="12"/>
+            <path class="t-edge" d="M338 212h24"/>
+            <path class="t-cyan glow" d="M322 240h40M322 254h56M322 268h46"/>
+            <rect class="t-edge" x="322" y="286" width="56" height="34" rx="8"/>
+            <path class="t-edge" d="M332 298h36M332 308h22"/>
+            <circle class="t-edge" cx="350" cy="344" r="10"/>
+            <circle class="t-amber fill glow" cx="350" cy="344" r="3.5"/>
+          </g>
+          <!-- the AI orb -->
+          <g class="float-late">
+            <circle cx="340" cy="100" r="34" fill="url(#soon-orb)" stroke="none"/>
+            <circle class="t-cyan" cx="340" cy="100" r="34" opacity=".5"/>
+            <g class="orbit"><ellipse class="t-cyan" cx="340" cy="100" rx="62" ry="22" opacity=".7"/><circle class="t-cyan fill" cx="402" cy="100" r="3.5"/></g>
+            <g class="orbit-rev"><ellipse class="t-amber" cx="340" cy="100" rx="22" ry="62" opacity=".6"/><circle class="t-amber fill" cx="340" cy="38" r="3.2"/></g>
+            <path class="t-mint" d="M328 94l12-6 8 18z" opacity=".8"/>
+            <circle class="star" cx="328" cy="94" r="2.4"/><circle class="star" cx="340" cy="88" r="2"/><circle class="star" cx="348" cy="106" r="2.2"/>
+          </g>
+        </svg>
+      </figure>
+      <div class="ill-tip" role="note">
+        <p class="ill-tip-label"><!--@icon:bulb--><span data-t="tipLabel">Wussten Sie schon?</span></p>
+        <code class="ill-tip-code" dir="ltr">A = 65 = 01000001</code>
+        <p class="ill-tip-text" data-t="tip1">Für einen Computer ist der Buchstabe A die Zahl 65 – gespeichert als acht Bits, also achtmal an oder aus.</p>
+      </div>
+    </div>
+    </div>
 
     <section aria-labelledby="what">
-      <h2 id="what" data-t="whatTitle">Was hier entsteht</h2>
-      <p class="lead" data-t="whatLead">Eine Reise durch rund 80 Jahre Computergeschichte, die sich am Ende in mein eigenes Betriebssystem im Browser verwandelt: Amonel OS.</p>
+      <div class="sec-head">
+        <div>
+          <h2 id="what" data-t="whatTitle">Was hier entsteht</h2>
+          <p class="lead" data-t="whatLead">Eine Reise durch rund 80 Jahre Computergeschichte, die sich am Ende in mein eigenes Betriebssystem im Browser verwandelt: Amonel OS.</p>
+        </div>
+        <div class="ill-tip" role="note">
+          <p class="ill-tip-label"><!--@icon:bulb--><span data-t="tipLabel">Wussten Sie schon?</span></p>
+          <code class="ill-tip-code" dir="ltr">$ ping example.org  →  time=14 ms</code>
+          <p class="ill-tip-text" data-t="tip2">Der Befehl ping misst, wie lange ein kleines Datenpaket zu einem anderen Rechner und wieder zurück braucht.</p>
+        </div>
+      </div>
       <ul class="cards">
-        <li class="card"><span class="num" aria-hidden="true">01</span><h3 data-t="c1t">Durch die Geschichte scrollen</h3><p data-t="c1">Sieben Epochen, von ENIAC 1946 bis zur Cloud von heute. Jede zeigt etwas über Computer, das bis heute gilt.</p></li>
-        <li class="card"><span class="num" aria-hidden="true">02</span><h3 data-t="c2t">Kleine Rätsel</h3><p data-t="c2">In jeder Epoche wartet ein Rätsel. Sie lösen es selbst – oder sehen zu, wie es sich von allein löst.</p></li>
-        <li class="card"><span class="num" aria-hidden="true">03</span><h3 data-t="c3t">Amonel OS</h3><p data-t="c3">Am Ende der Reise öffnet sich ein Desktop im Browser, mit Apps, die wirklich funktionieren: Terminal, Netzwerk-Werkzeuge, Quiz und mehr.</p></li>
-        <li class="card"><span class="num" aria-hidden="true">04</span><h3 data-t="c4t">Mein Weg</h3><p data-t="c4">Von Teheran nach Trier: Werdegang, Lebenslauf und Kontakt. Alles auf Deutsch, Englisch und Persisch.</p></li>
+        <li class="card"><div class="card-top"><span class="ill-tile"><!--@icon:history--></span><span class="num" aria-hidden="true">01</span></div><h3 data-t="c1t">Durch die Geschichte scrollen</h3><p data-t="c1">Sieben Epochen, von ENIAC 1946 bis zur Cloud von heute. Jede zeigt etwas über Computer, das bis heute gilt.</p></li>
+        <li class="card"><div class="card-top"><span class="ill-tile"><!--@icon:puzzle--></span><span class="num" aria-hidden="true">02</span></div><h3 data-t="c2t">Kleine Rätsel</h3><p data-t="c2">In jeder Epoche wartet ein Rätsel. Sie lösen es selbst – oder sehen zu, wie es sich von allein löst.</p></li>
+        <li class="card"><div class="card-top"><span class="ill-tile"><!--@icon:window--></span><span class="num" aria-hidden="true">03</span></div><h3 data-t="c3t">Amonel OS</h3><p data-t="c3">Am Ende der Reise öffnet sich ein Desktop im Browser, mit Apps, die wirklich funktionieren: Terminal, Netzwerk-Werkzeuge, Quiz und mehr.</p></li>
+        <li class="card"><div class="card-top"><span class="ill-tile"><!--@icon:route--></span><span class="num" aria-hidden="true">04</span></div><h3 data-t="c4t">Mein Weg</h3><p data-t="c4">Von Teheran nach Trier: Werdegang, Lebenslauf und Kontakt. Alles auf Deutsch, Englisch und Persisch.</p></li>
       </ul>
     </section>
 
     <section aria-labelledby="progress">
       <h2 id="progress" data-t="progressTitle">So weit bin ich</h2>
       <div class="panel">
-        <div class="panel-bar"><span class="os" aria-hidden="true"><span class="p">~$ </span>amonel os<span class="cursor"></span></span></div>
+        <div class="panel-bar" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="os"><span class="u">ahmadreza@amonel</span><span class="p">:~$ </span>status<span class="cursor"></span></span></div>
         <div class="panel-body">
           <div class="overall">
             <span class="big" data-pct="{{all.percent}}">{{all.percent}} %</span>
@@ -197,13 +322,13 @@
           <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{all.percent}}" aria-labelledby="progress"><span style="--p:{{all.percent}}"></span></div>
           <p class="note" data-t="note">Gewichtet nach Aufwand: Große Aufgaben zählen mehr als kleine.</p>
           <ul class="areas">
-            <li class="area"><div class="area-head"><h3 id="a-journey" data-t="journey">Reise durch die Computergeschichte</h3><span class="pct" data-pct="{{journey.percent}}">{{journey.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{journey.percent}}" aria-labelledby="a-journey"><span style="--p:{{journey.percent}}"></span></div><p data-t="journeyText">Sieben Epochen zum Durchscrollen, mit Bildern, Übergängen und Texten.</p><p class="counts" data-counts="{{journey.done}},{{journey.partial}},{{journey.missing}}">{{journey.done}} fertig · {{journey.partial}} in Arbeit · {{journey.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-desktop" data-t="desktop">Amonel OS: Desktop und Apps</h3><span class="pct" data-pct="{{desktop.percent}}">{{desktop.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{desktop.percent}}" aria-labelledby="a-desktop"><span style="--p:{{desktop.percent}}"></span></div><p data-t="desktopText">Das Betriebssystem im Browser: Fenster, Taskleiste und die Apps darin.</p><p class="counts" data-counts="{{desktop.done}},{{desktop.partial}},{{desktop.missing}}">{{desktop.done}} fertig · {{desktop.partial}} in Arbeit · {{desktop.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-puzzles" data-t="puzzles">Rätsel und Spiele</h3><span class="pct" data-pct="{{puzzles.percent}}">{{puzzles.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{puzzles.percent}}" aria-labelledby="a-puzzles"><span style="--p:{{puzzles.percent}}"></span></div><p data-t="puzzlesText">Die sieben Rätsel, das Computer-Quiz und kleine Spiele wie Snake.</p><p class="counts" data-counts="{{puzzles.done}},{{puzzles.partial}},{{puzzles.missing}}">{{puzzles.done}} fertig · {{puzzles.partial}} in Arbeit · {{puzzles.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-about" data-t="about">Über mich, Lebenslauf und Kontakt</h3><span class="pct" data-pct="{{about.percent}}">{{about.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{about.percent}}" aria-labelledby="a-about"><span style="--p:{{about.percent}}"></span></div><p data-t="aboutText">Werdegang, Foto, Lebenslauf, Kontakt und meine Profile.</p><p class="counts" data-counts="{{about.done}},{{about.partial}},{{about.missing}}">{{about.done}} fertig · {{about.partial}} in Arbeit · {{about.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-legal" data-t="legal">Recht und Datenschutz</h3><span class="pct" data-pct="{{legal.percent}}">{{legal.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{legal.percent}}" aria-labelledby="a-legal"><span style="--p:{{legal.percent}}"></span></div><p data-t="legalText">Impressum, Datenschutz und die rechtliche Prüfung jeder Funktion.</p><p class="counts" data-counts="{{legal.done}},{{legal.partial}},{{legal.missing}}">{{legal.done}} fertig · {{legal.partial}} in Arbeit · {{legal.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-seo" data-t="seo">Suchmaschinen, Tempo und Barrierefreiheit</h3><span class="pct" data-pct="{{seo.percent}}">{{seo.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{seo.percent}}" aria-labelledby="a-seo"><span style="--p:{{seo.percent}}"></span></div><p data-t="seoText">Schnell laden, gut gefunden werden und für alle bedienbar sein – auch auf dem Handy.</p><p class="counts" data-counts="{{seo.done}},{{seo.partial}},{{seo.missing}}">{{seo.done}} fertig · {{seo.partial}} in Arbeit · {{seo.missing}} offen</p></li>
-            <li class="area"><div class="area-head"><h3 id="a-launch" data-t="launch">Letzte Texte, Logo und Start</h3><span class="pct" data-pct="{{launch.percent}}">{{launch.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{launch.percent}}" aria-labelledby="a-launch"><span style="--p:{{launch.percent}}"></span></div><p data-t="launchText">Alle Texte gemeinsam prüfen, das endgültige Logo, dann der Start.</p><p class="counts" data-counts="{{launch.done}},{{launch.partial}},{{launch.missing}}">{{launch.done}} fertig · {{launch.partial}} in Arbeit · {{launch.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:history--></span><h3 id="a-journey" data-t="journey">Reise durch die Computergeschichte</h3></div><span class="pct" data-pct="{{journey.percent}}">{{journey.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{journey.percent}}" aria-labelledby="a-journey"><span style="--p:{{journey.percent}}"></span></div><p data-t="journeyText">Sieben Epochen zum Durchscrollen, mit Bildern, Übergängen und Texten.</p><p class="counts" data-counts="{{journey.done}},{{journey.partial}},{{journey.missing}}">{{journey.done}} fertig · {{journey.partial}} in Arbeit · {{journey.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:window--></span><h3 id="a-desktop" data-t="desktop">Amonel OS: Desktop und Apps</h3></div><span class="pct" data-pct="{{desktop.percent}}">{{desktop.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{desktop.percent}}" aria-labelledby="a-desktop"><span style="--p:{{desktop.percent}}"></span></div><p data-t="desktopText">Das Betriebssystem im Browser: Fenster, Taskleiste und die Apps darin.</p><p class="counts" data-counts="{{desktop.done}},{{desktop.partial}},{{desktop.missing}}">{{desktop.done}} fertig · {{desktop.partial}} in Arbeit · {{desktop.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:puzzle--></span><h3 id="a-puzzles" data-t="puzzles">Rätsel und Spiele</h3></div><span class="pct" data-pct="{{puzzles.percent}}">{{puzzles.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{puzzles.percent}}" aria-labelledby="a-puzzles"><span style="--p:{{puzzles.percent}}"></span></div><p data-t="puzzlesText">Die sieben Rätsel, das Computer-Quiz und kleine Spiele wie Snake.</p><p class="counts" data-counts="{{puzzles.done}},{{puzzles.partial}},{{puzzles.missing}}">{{puzzles.done}} fertig · {{puzzles.partial}} in Arbeit · {{puzzles.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:route--></span><h3 id="a-about" data-t="about">Über mich, Lebenslauf und Kontakt</h3></div><span class="pct" data-pct="{{about.percent}}">{{about.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{about.percent}}" aria-labelledby="a-about"><span style="--p:{{about.percent}}"></span></div><p data-t="aboutText">Werdegang, Foto, Lebenslauf, Kontakt und meine Profile.</p><p class="counts" data-counts="{{about.done}},{{about.partial}},{{about.missing}}">{{about.done}} fertig · {{about.partial}} in Arbeit · {{about.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:shield--></span><h3 id="a-legal" data-t="legal">Recht und Datenschutz</h3></div><span class="pct" data-pct="{{legal.percent}}">{{legal.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{legal.percent}}" aria-labelledby="a-legal"><span style="--p:{{legal.percent}}"></span></div><p data-t="legalText">Impressum, Datenschutz und die rechtliche Prüfung jeder Funktion.</p><p class="counts" data-counts="{{legal.done}},{{legal.partial}},{{legal.missing}}">{{legal.done}} fertig · {{legal.partial}} in Arbeit · {{legal.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:search--></span><h3 id="a-seo" data-t="seo">Suchmaschinen, Tempo und Barrierefreiheit</h3></div><span class="pct" data-pct="{{seo.percent}}">{{seo.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{seo.percent}}" aria-labelledby="a-seo"><span style="--p:{{seo.percent}}"></span></div><p data-t="seoText">Schnell laden, gut gefunden werden und für alle bedienbar sein – auch auf dem Handy.</p><p class="counts" data-counts="{{seo.done}},{{seo.partial}},{{seo.missing}}">{{seo.done}} fertig · {{seo.partial}} in Arbeit · {{seo.missing}} offen</p></li>
+            <li class="area"><div class="area-head"><div class="area-title"><span class="ill-tile"><!--@icon:rocket--></span><h3 id="a-launch" data-t="launch">Letzte Texte, Logo und Start</h3></div><span class="pct" data-pct="{{launch.percent}}">{{launch.percent}} %</span></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{launch.percent}}" aria-labelledby="a-launch"><span style="--p:{{launch.percent}}"></span></div><p data-t="launchText">Alle Texte gemeinsam prüfen, das endgültige Logo, dann der Start.</p><p class="counts" data-counts="{{launch.done}},{{launch.partial}},{{launch.missing}}">{{launch.done}} fertig · {{launch.partial}} in Arbeit · {{launch.missing}} offen</p></li>
           </ul>
           <p class="stamp"><span data-t="stamp">Stand:</span> <time datetime="{{DATE}}" data-date="{{DATE}}">{{DATE_DE}}</time></p>
         </div>
@@ -211,10 +336,19 @@
     </section>
 
     <section class="next" aria-labelledby="next">
-      <h2 id="next" data-t="nextTitle">Wie es weitergeht</h2>
-      <p class="lead" data-t="next">Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. Danach gehe ich jeden Text noch einmal durch – dann geht die Seite online.</p>
-      <p data-t="contact">Sie möchten mich schon jetzt erreichen? Schreiben Sie mir gern:</p>
-      <p><a href="mailto:ahmadrezataheride@gmail.com" dir="ltr">ahmadrezataheride@gmail.com</a></p>
+      <div class="next-grid">
+        <div>
+          <h2 id="next" data-t="nextTitle">Wie es weitergeht</h2>
+          <p class="lead" data-t="next">Als Nächstes: die letzten Apps, Tests auf echten Handys und Tablets, Foto und Lebenslauf. Danach gehe ich jeden Text noch einmal durch – dann geht die Seite online.</p>
+          <p data-t="contact">Sie möchten mich schon jetzt erreichen? Schreiben Sie mir gern:</p>
+          <p><a href="mailto:ahmadrezataheride@gmail.com" dir="ltr">ahmadrezataheride@gmail.com</a></p>
+        </div>
+        <div class="ill-tip" role="note">
+          <p class="ill-tip-label"><!--@icon:bulb--><span data-t="tipLabel">Wussten Sie schon?</span></p>
+          <code class="ill-tip-code" dir="ltr">192.168.0.0/16</code>
+          <p class="ill-tip-text" data-t="tip3">Dieser Adressbereich ist privat und für lokale Netze reserviert. Die 16 nach dem Schrägstrich heißt: Die ersten 16 Bits benennen das Netz, die übrigen 16 reichen für 65.536 Adressen.</p>
+        </div>
+      </div>
     </section>
   </main>
 

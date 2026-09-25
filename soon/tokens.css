@@ -35,6 +35,11 @@
   --stack-body:var(--font-fa),var(--font-body);
   --head-weight:700; --head-tracking:-.03em;
   --radius:14px;
+  /* Illustrations (BR-09): the same token names as the main site, read by src/components/illustrations/illustrations.css. */
+  --ao-ill-cyan:#22d3ee; --ao-ill-mint:#5de2a4; --ao-ill-amber:#f0a44a; --ao-ill-edge:#2b3547;
+  --ao-ill-body:#111722; --ao-ill-screen:#0a1512; --ao-ill-star:#e9edf5;
+  --ao-ill-amber-text:#f0a44a; --ao-ill-code:#5de2a4;
+  --ao-ill-glow:drop-shadow(0 0 4px currentColor);
   color-scheme:dark;
 }
 /* Light: the old palette of the main site's light mode - cyan as the accent,
@@ -45,6 +50,10 @@ html[data-scheme="light"]{
   --ink:#0b0f15; --muted:#434e5f;
   --brand:#0b7285; --brand-deep:#0c5f6e; --on-brand:#ffffff; --amber:#9a5308; --mint:#18794e;
   --track:#e2e8ef;
+  --ao-ill-cyan:#0b7285; --ao-ill-mint:#18794e; --ao-ill-amber:#b8660f; --ao-ill-edge:#aab8c7;
+  --ao-ill-body:#ffffff; --ao-ill-screen:#e9f5f0; --ao-ill-star:#0b1320;
+  --ao-ill-amber-text:#9a5308; --ao-ill-code:#18794e;
+  --ao-ill-glow:none;
   color-scheme:light;
   background:#f3f6f9;
 }

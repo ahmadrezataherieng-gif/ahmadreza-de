@@ -18,7 +18,15 @@ One commit per step, lint, tests and build green before each, nothing deployed.
 
 - [x] 7. Coming-soon light glow fixed (the amber pool was cut at the viewport height by `background-attachment: fixed`; now it fades with the page). Coming-soon page **deployed** (Worker silent-lake-8ae2, version d7a0982d-8278-4b2e-99a2-f2bb1126eede); `live-soon.mjs` all passed, `soon.mjs --base https://ahmadreza.de/` 208/208. BR-08 done. The main site is still not deployed.
 
-**What the owner chooses next (BR-08):** (1) light mode yes or no - if yes, merge `proposal/light-old-palette`; (2) one font per role (a, b, c) - the chosen ones get installed, licensed in `public/fonts/` and checked; (3) then rebuild and redeploy the coming-soon page (`npm run build:soon`, `npx wrangler deploy` in `soon/`, then `live-soon.mjs` and `soon.mjs --base https://ahmadreza.de/`) - until then the live page still shows the K6 look.
+## BR-09 illustrations (2026-09-25, owner; DECISIONS 75)
+
+Keep the final design, add illustrations, icons and small learning snippets in one system (`src/components/illustrations/`). One commit per step, lint, tests and build green, nothing deployed.
+
+- [x] 1. Coming-soon page: the e365de3 scene in the new style beside the intro (below it on phones), star field and galaxy band behind the page, `ahmadreza@amonel:~$ status` terminal header with window dots and a green-to-amber bar, top line «Amonel · v1.0 im Aufbau», four chips, an icon on each card and progress area, three snippets (CR-1103, CR-1104). `soon.mjs` 208/208, axe clean (de/en/fa, dark/light, 1440/390). Not deployed (redeploy needed to show it live).
+- [ ] 2. Landing, About, 404 (legal pages unchanged).
+- [ ] 3. Checks and screenshots in `Claude outputs/br09/`.
+
+**What the owner chose before (BR-08):** (1) light mode yes or no - if yes, merge `proposal/light-old-palette`; (2) one font per role (a, b, c) - the chosen ones get installed, licensed in `public/fonts/` and checked; (3) then rebuild and redeploy the coming-soon page (`npm run build:soon`, `npx wrangler deploy` in `soon/`, then `live-soon.mjs` and `soon.mjs --base https://ahmadreza.de/`) - until then the live page still shows the K6 look.
 
 ## Work queue (started 2026-09-24; resume with "continue the work queue")
 

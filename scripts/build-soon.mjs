@@ -27,6 +27,8 @@ const { LEGAL_CONTACT } = await import('../src/content/legal.ts');
 
 const root = new URL('../', import.meta.url);
 const TOKENS = readFileSync(new URL('soon/tokens.css', root), 'utf8').trim();
+// The illustration system shared with the main site (BR-09): only the coming-soon page itself uses it, never the legal pages.
+const ILLUSTRATIONS = readFileSync(new URL('src/components/illustrations/illustrations.css', root), 'utf8').trim();
 const dist = new URL('soon/dist/', root);
 const locales = LOCALES;
 const kinds = [
@@ -139,7 +141,7 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 // The progress figures come from ROADMAP.md at build time, never typed by hand.
 const values = progressValues();
-const filled = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS), values);
+const filled = fillPlaceholders(readFileSync(new URL('soon/index.html', root), 'utf8').replace('/*@tokens*/', () => TOKENS).replace('/*@illustrations*/', () => ILLUSTRATIONS), values);
 // One real page per language (SEO-15): / in German, /en/ and /fa/, each rendered from the same template and copy table.
 for (const locale of locales) {
   const folder = new URL(locale.prefix, dist);
