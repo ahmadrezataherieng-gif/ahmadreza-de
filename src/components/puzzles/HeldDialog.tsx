@@ -3,6 +3,7 @@
 import { useEffect, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
+import { eras } from '@/content/eras';
 import { holdScroll, releaseScroll } from '@/lib/lenis-controller';
 import { JOURNEY_SCENES_ID, registerPuzzleRelease } from '@/components/puzzles/hold';
 
@@ -148,10 +149,15 @@ export function HeldDialog({ label, eraId, onRequestClose, children }: HeldDialo
     }
   };
 
+  // Portalled to <body>, outside every era's scope, and the journey no longer
+  // writes its theme on <html> (PERF-03): the dialog carries its era's own.
+  const scope = eras.find((era) => era.id === eraId)?.themeId;
+
   return createPortal(
     <div
       className="fixed inset-0 z-[var(--ao-z-taskbar)] overflow-y-auto overscroll-contain"
       data-lenis-prevent=""
+      data-theme-scope={scope}
     >
       <div className="ao-puzzle-dialog-scrim fixed inset-0" aria-hidden="true" />
       {/* Room at the top for the fixed mode switch and Skip to Desktop, and at

@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
-| `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
-| `launch` | 12 | 2 | 12 | 44.5 / 97 | 46 % |
-| **all** | 72 | 8 | 28 | 306.3 / 418 | **73 %** |
+| `seo` | 20 | 3 | 4 | 67.1 / 84 | 80 % |
+| `launch` | 12 | 2 | 13 | 44.5 / 105 | 42 % |
+| **all** | 73 | 8 | 28 | 310.7 / 426 | **73 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 1 | 12 | 22 |
-| P1 | 11 | 6 | 39 | 56 |
-| P2 | 8 | 1 | 21 | 30 |
-| **total** | **28** | **8** | **72** | **108** |
+| P1 | 12 | 6 | 39 | 57 |
+| P2 | 7 | 1 | 22 | 30 |
+| **total** | **28** | **8** | **73** | **109** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -151,8 +151,8 @@ PROJECT_STATE.md and DECISIONS.md.
 | ID | Description | Status | Priority | Owner | Depends on | Effort | Area |
 |---|---|---|---|---|---|---|---|
 | PERF-01 | **Real devices**: iPhone, Android phone, iPad, a touchscreen laptop; Safari and Firefox. Everything so far ran in headless Chrome. | missing | P1 | Ahmadreza + Claude Code | - | M | seo |
-| PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone: lighter era visuals, narrower `--era-progress` readers. Partly done 2026-09-24 (DECISIONS.md 67): a forced layout on every scroll event removed (resolver writes deferred out of native scroll events) - phone profile 35.6 → 38.7 fps, long tasks 113 → 75, script time in slow frames 28 s → 0.8 s; `perf.mjs --profile` added. Left: style/layout and paint in the guided puzzle segments; needs the real-phone re-test (PERF-01) to judge. | partial | P1 | Claude Code | PERF-01 to re-test | L 40% | seo |
-| PERF-03 | **Theme switch cost** (~40 ms restyle at each crossing midpoint). Measured 2026-09-24: the restyle itself is under 1 ms in a plain page, so the cost is what follows it; options recorded in TODO.md, nothing changed (one option would change the engine's contract - waiting for the owner's go). | missing | P2 | Claude Code | - | S | seo |
+| PERF-02 | **Scene elements move badly during scroll on a real phone** (owner's report) and long tasks on a 4x-throttled phone. Round 1 2026-09-24 (DECISIONS.md 67): forced layout per scroll event removed. Round 2 2026-09-25 (owner tested on Android/Firefox: every era crossing froze the image 130-390 ms; DECISIONS.md 77): glyph-by-glyph CSS animations replaced by one scheduler (`lib/print-controller.ts`), `--arrival` written only on its four readers, native touch scroll (no Lenis on coarse pointers). 4x-throttled phone, crossings: worst frame 283/317/283/200/217/233 ms -> 67/67/67/50/50/50 ms, long tasks 50 -> 2. Left: real-phone re-test (PERF-01), Firefox on a phone (no Playwright Firefox here), dvh heights follow the browser toolbar (a refresh per toolbar move). | partial | P1 | Claude Code | PERF-01 to re-test | L 70% | seo |
+| PERF-03 | **Theme switch cost.** Done 2026-09-25 with the owner's go to change the engine's contract (DECISIONS.md 77): any custom property changing on `<html>` restyles all ~2,800 elements of the journey (250 ms at 4x throttle), whatever reads it. While the journey is mounted the theme goes to its chrome and effects layer only (`scopeThemeTo` in `apply-theme.ts`), the eras keep their scopes, portalled dialogs carry their era's scope. | done | P2 | Claude Code | - | S | seo |
 | PERF-04 | **Accessibility pass**: axe/Lighthouse on every view, keyboard-only walk, contrast in all eight themes, focus order, RTL. Done 2026-09-24 (DECISIONS.md 65): `scripts/verify/a11y.mjs` runs axe-core (WCAG 2.2 A/AA) over every view, every app and the desktop in all eight themes, in `matrix.mjs` (de, fa, phone en): 30/30 each; `contrast.test.mjs` pins every theme's token contrast. Fixed: five palette values (1946, 1984, 1995), About's double-faded placeholder, two scroll panes not reachable by keyboard. Keyboard and RTL paths stay covered by `desktop.mjs`, `apps.mjs` and `journey.mjs`. A manual screen-reader walk is PERF-08. | done | P1 | Claude Code | - | L | seo |
 | PERF-05 | **Lighthouse / Core Web Vitals** on the export, budgets recorded in PROJECT_STATE.md. Done 2026-09-24 (DECISIONS.md 66): `scripts/verify/vitals.mjs` (FCP, LCP, CLS, TBT in the page, slow-4G phone and desktop profiles); `serve.mjs` now gzips like Cloudflare. Desktop: every view LCP under 0.9 s, TBT 0. Phone: landing and About LCP 1.0 s; two budgets still over and tracked - journey TBT (PERF-02), desktop LCP 2.59 s (PERF-09). | done | P1 | Claude Code | - | M | seo |
 | PERF-06 | Phone keyboard handling (Terminal, Assistant) and touch/pen in the bonus apps on real devices; the Morse tone actually audible. | missing | P2 | Ahmadreza | PERF-01 | S | seo |
@@ -186,6 +186,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-07 | **Revert the K6 look** (owner, 2026-09-25, DECISIONS.md 73): the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) and the coming-soon page get their old look back - navy-teal page with the green and amber glows, blue-tinted cards, cyan and mint accents, the old heading and name fonts, dark only. Kept: all content, the app, SEO and performance work, the 301s, the tests, Vazirmatn for Persian everywhere, no letter-spacing in Persian, and the phone/RTL layout fixes of BR-06. Unused font files removed, `public/fonts/LICENSES.md` matches what ships. | done | P1 | Claude Code | BR-06 | M | launch |
 | BR-08 | **Owner choices applied (DECISIONS 74):** fonts and light mode done; left: redeploy the coming-soon page (BR-03). | done | P1 | Ahmadreza + Claude Code | BR-07 | S | launch |
 | BR-09 | **Illustrations and small learning details in one system** (owner, 2026-09-25, DECISIONS.md 75): the final design stays (navy palette, glows, Space Grotesk / Inter / JetBrains Mono / Vazirmatn, dark default with the sun/moon toggle); pages get inline-SVG illustrations, a 24 px icon set and at most three translated "Wussten Sie schon?" snippets each, all from `src/components/illustrations/` (icons.ts, illustrations.css, React components; the coming-soon build injects the same CSS and icons). Done 2026-09-25 in three steps: the coming-soon page (the e365de3 scene upgraded, star field, `ahmadreza@amonel:~$ status` terminal header, chips, icons, three snippets); landing, About and 404 (legal pages stay sober); axe clean (de, fa, dark, light, 1440 and 390) and screenshots in `Claude outputs/br09/`. Not deployed: the coming-soon page needs a redeploy (BR-03) to show it. | done | P2 | Claude Code | BR-08 | M | launch |
+| BR-10 | **Crossing animations** (owner, 2026-09-25, DECISIONS.md 77): every crossing between two eras shows, scrubbed by scroll in both directions, the technologies between them in year order (1946-56 transistor, core memory, UNIVAC I; 1956-71 integrated circuit, System/360, ARPANET; 1971-81 Intel 4004, floppy disk, Ethernet, Altair 8800, Apple II; 1981-84 mouse and Xerox Alto, Lisa; 1984-95 CD-ROM, World Wide Web, Linux, dial-up modem; 1995-today web search, Wi-Fi, cloud computing, smartphone, AI). Inline SVG/CSS, transform and opacity only, generic drawings (no logos), short labels with the year in de/en/fa, a still version under reduced motion. Labels are PLACEHOLDER (CONTENT_REVIEW). | missing | P1 | Claude Code | PERF-02 | L | launch |
 
 ## Owner tasks - assets and accounts
 

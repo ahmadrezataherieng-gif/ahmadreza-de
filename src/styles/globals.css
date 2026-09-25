@@ -526,36 +526,23 @@ html[data-tier='light'] .ao-lamp {
 
 /* --- shared: mechanical printing ------------------------------------------ */
 
-@keyframes ao-strike {
-  from {
-    opacity: 0;
-    transform: translate(var(--strike-jitter, 0), -0.12em);
-  }
-  to {
-    opacity: var(--strike-ink, 1);
-    transform: translate(var(--strike-jitter, 0), 0);
-  }
-}
-
 /* Each glyph (a character, or a whole word for scripts that join) is its own
-   span with a staggered delay. Uneven ink and horizontal jitter are per-glyph
-   custom properties - that is what stops it reading as a smooth modern typing
-   animation. Stepped timing makes each strike land rather than fade.
-
-   `jump-none`, not `end`: a finished animation's progress can round to
-   0.9999999999999953 for some delays, and steps(2, end) maps that to the second
-   step - leaving the glyph frozen at half opacity forever. jump-none makes the
-   final state one of the steps, so rounding cannot fall short of it. */
+   span with a delay. Uneven ink and horizontal jitter are per-glyph custom
+   properties - that is what stops it reading as a smooth modern typing
+   animation. Each strike lands rather than fades: lib/print-controller.ts sets
+   data-struck on a glyph when its turn comes. A CSS animation per glyph did the
+   same, but 275-390 of them starting at once froze a phone (PERF-02). */
 .ao-type > span {
   display: inline-block;
   white-space: pre;
   opacity: 0;
-  animation: ao-strike 80ms steps(2, jump-none) var(--strike-delay, 0s) both;
-  animation-play-state: paused;
 }
 
-[data-started='true'] .ao-type > span {
-  animation-play-state: running;
+@media (prefers-reduced-motion: no-preference) {
+  .ao-type > span[data-struck] {
+    opacity: var(--strike-ink, 1);
+    transform: translate(var(--strike-jitter, 0), 0);
+  }
 }
 
 .ao-type > span[data-overstruck='true'] {
@@ -777,7 +764,6 @@ html[data-tier='light'] .ao-lamp {
   .ao-type > span {
     opacity: var(--strike-ink, 1);
     transform: none;
-    animation: none;
   }
 
   .ao-type > span[data-overstruck='true']::after {
@@ -2289,11 +2275,12 @@ body:has([data-era-dialog='eniac']) .ao-puzzle-dialog-scrim {
   initial-value: 0;
 }
 
-/* A number, so while it rests at 0 or 1 the scene's descendants see no change
-   and are not restyled. */
+/* The era's own arrival, written by the resolver on the four kinds of element
+   that read it. Inherited from the scene it restyled every element of the era on
+   each frame of the crossing's last stretch. */
 @property --arrival {
   syntax: '<number>';
-  inherits: true;
+  inherits: false;
   initial-value: 1;
 }
 
@@ -2339,9 +2326,6 @@ html[data-tier='light'] .ao-conv-section {
 .ao-conv-scene {
   position: relative;
   min-height: 100dvh;
-  /* The resolver writes --boundary-in here, on the scene (not the section),
-     so the arrival is defined where it is read. */
-  --arrival: clamp(0, calc((var(--scene-in) - 0.7) / 0.3), 1);
 }
 
 /* Clipped here rather than on the stage: the stage owns the perspective, and an

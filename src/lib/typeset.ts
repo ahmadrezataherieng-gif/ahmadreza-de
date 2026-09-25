@@ -7,9 +7,8 @@
  * render have to agree or React throws a hydration mismatch, and a visitor who
  * scrolls back up should see the same page they just left.
  *
- * The glyphs carry timing and imperfection only. All the motion happens in CSS
- * (see `.ao-type` in globals.css), so printing a screen of text costs zero JS
- * timers and zero per-frame work.
+ * The glyphs carry timing and imperfection only; lib/print-controller.ts strikes
+ * them on schedule and `.ao-type` in globals.css styles the result.
  */
 
 export interface Glyph {

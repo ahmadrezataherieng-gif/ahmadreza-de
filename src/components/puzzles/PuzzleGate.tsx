@@ -52,6 +52,7 @@ function GateCue() {
   return createPortal(
     <div
       data-scroll-limit-ignore=""
+      data-theme-scope={era?.themeId}
       role="region"
       aria-label={t('label')}
       className="ao-gate-cue absolute inset-x-0 z-[var(--ao-z-windows)] flex items-end justify-center px-4 pb-[4.5rem] md:pb-4"

@@ -44,17 +44,46 @@ export function themeToCssVars(theme: Theme): Record<string, string> {
 }
 
 /**
+ * Where the theme's tokens are written instead of the document root, while a
+ * page owns its own scopes (the journey, PERF-03).
+ *
+ * Any change to a custom property on <html> restyles every element on the page,
+ * whatever reads it: about 250 ms on a 4x-throttled phone for the journey's
+ * 2,800 elements, once at every crossing. The journey's eras all carry their
+ * own palette through `data-theme-scope`, so only its chrome and the effects
+ * layer still follow the document theme; those are the only targets.
+ */
+let scopedTargets: readonly HTMLElement[] | null = null;
+
+export function scopeThemeTo(targets: readonly HTMLElement[] | null): void {
+  scopedTargets = targets;
+}
+
+/**
  * Write a theme onto the document root.
  *
  * `data-theme`, `data-cursor` and `data-sound` are set alongside the variables
  * so stylesheets and the audio layer can branch on the era where a single
  * numeric token is not expressive enough (bevels, cursor bitmaps, sound sets).
+ *
+ * Under `scopeThemeTo` the variables go to the scoped targets only, and the
+ * cursor attribute is left alone: its selectors reach the whole page and it
+ * only means anything on the desktop.
  */
 export function applyThemeToDocument(theme: Theme): void {
   if (typeof document === 'undefined') return;
 
   const root = document.documentElement;
   const vars = themeToCssVars(theme);
+
+  if (scopedTargets) {
+    for (const target of scopedTargets) {
+      for (const [name, value] of Object.entries(vars)) target.style.setProperty(name, value);
+    }
+    root.dataset.theme = theme.id;
+    root.dataset.sound = theme.sound;
+    return;
+  }
 
   for (const [name, value] of Object.entries(vars)) {
     root.style.setProperty(name, value);

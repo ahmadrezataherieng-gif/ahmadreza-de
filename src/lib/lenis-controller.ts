@@ -73,11 +73,13 @@ export function setScrollLimit(container: HTMLElement, bottom: number | null): v
 
 /**
  * Go to a document position. With Lenis, glide (or jump when `immediate`).
- * Without Lenis the visitor asked for reduced motion: always jump.
+ * Without Lenis - reduced motion, or a touch device that scrolls natively - the
+ * browser glides, except under reduced motion, which always jumps.
  */
 function scrollToY(y: number, immediate: boolean): void {
   if (!activeLenis) {
-    window.scrollTo({ top: y, behavior: 'auto' });
+    const glide = !immediate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: y, behavior: glide ? 'smooth' : 'auto' });
     return;
   }
   // force: a held page has Lenis stopped, and restoring position must still work.

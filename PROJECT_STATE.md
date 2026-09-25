@@ -4,6 +4,10 @@ Last updated: 2026-09-25
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+## Smooth crossings, PERF-02 and PERF-03 (2026-09-25, owner tested on Android/Firefox; DECISIONS 77)
+
+Step 1 done (step 2, the crossing animations BR-10, and step 3, the checks and the preview, follow). Before/after on the 390 px touch profile at 4x CPU throttle (`perf.mjs --width 390 --height 844 --cpu 4 --mode open`, worst frame gap inside each crossing): 1956 283 -> 67 ms, 1971 317 -> 67, 1981 283 -> 67, 1984 200 -> 50, 1995 217 -> 50, today 233 -> 50; long tasks 50 -> 2; watch mode (puzzles playing) 116 ms worst. Causes: the theme write on <html> (whole-page restyle, 250 ms), 275-390 per-glyph animations starting and ticking, an inherited `--arrival`. Fixes: theme scoped to the chrome and effects layer, one print scheduler, `--arrival` on its four readers, native scroll on touch. Look unchanged. Chromium only (no Playwright Firefox here).
+
 ## Phone preview of the main site, PERF-01 (2026-09-25)
 
 Vitals after BR-09 (`vitals.mjs`, median of 3; budgets phone LCP 2.5 s, CLS 0.1, TBT 200 ms; desktop LCP 1.5 s, CLS 0.1, TBT 100 ms): phone landing FCP/LCP 0.74 s, CLS 0, TBT 80 ms; phone journey LCP 1.70 s, CLS 0.019, **TBT 659 ms (over, known PERF-02; BR-09 did not touch the journey, run-to-run spread, 503 ms on 09-24)**; phone desktop LCP 2.50 s, TBT 0; phone About LCP 0.74 s, CLS 0.025, TBT 79 ms; desktop landing 120 ms, journey 252 ms, desktop 820 ms, About 92 ms, all CLS <= 0.033 and TBT 0. `a11y.mjs`: 32/32 at 1280 de and 32/32 at 380 fa touch. No BR-09 regression found, nothing changed.

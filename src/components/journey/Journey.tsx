@@ -14,7 +14,8 @@ import { useUnlockStore } from '@/store/unlock-store';
 import { usePuzzleProgressStore } from '@/store/puzzle-progress-store';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { scrollToEra, setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
-import { themeToCssVars } from '@/lib/apply-theme';
+import { applyThemeToDocument, scopeThemeTo, themeToCssVars } from '@/lib/apply-theme';
+import { startPrinting } from '@/lib/print-controller';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
 import { EraSection } from '@/components/journey/EraSection';
@@ -35,6 +36,9 @@ import { count } from '@/lib/count';
 import { JOURNEY_COMPLETED } from '@/lib/counters';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Everything in the eras that scrubs on `--arrival` (globals.css). */
+const ARRIVAL_READERS = '.ao-crt-beam, .ao-crt-screen, .ao-mac-lights, .ao-mac-screen';
 
 const sectionId = (eraIndex: number) => `era-${eraIndex}`;
 
@@ -91,6 +95,7 @@ const SCOPED_THEMES_CSS = [...eras.map((era) => era.themeId), 'modern' as const]
  */
 export function Journey() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const chromeRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
 
   const t = useTranslations('journey');
@@ -107,6 +112,11 @@ export function Journey() {
   /* --- smooth scrolling ------------------------------------------------- */
   useEffect(() => {
     if (reducedMotion) return;
+    // A phone scrolls natively: the browser's own touch scrolling runs off the
+    // main thread, and Lenis on a touch device only adds a per-frame loop and
+    // class toggles on <html> (PERF-02). ScrollTrigger and the resolver listen
+    // to the native scroll event, exactly as under reduced motion.
+    if (window.matchMedia('(pointer: coarse)').matches) return;
 
     // allowNestedScroll: a puzzle card that overflows scrolls natively while it
     // can, then hands the wheel back to the page. Marking the card's container
@@ -134,6 +144,21 @@ export function Journey() {
       setActiveLenis(null);
     };
   }, [reducedMotion]);
+
+  /* --- the document theme lives on the chrome, not on <html> --------------- */
+  // PERF-03: a custom property changing on <html> restyles the whole page, so
+  // each crossing's theme hand-over froze a phone for 250-350 ms. The eras carry
+  // their own palettes, so only the chrome and the effects layer follow it.
+  useEffect(() => {
+    const chrome = chromeRef.current;
+    if (!chrome) return;
+    scopeThemeTo([chrome, ...document.querySelectorAll<HTMLElement>('.ao-fx-layer')]);
+    applyThemeToDocument(useThemeStore.getState().theme());
+    return () => {
+      scopeThemeTo(null);
+      applyThemeToDocument(useThemeStore.getState().theme());
+    };
+  }, []);
 
   /* --- era detection and theme switching -------------------------------- */
   useEffect(() => {
@@ -176,6 +201,8 @@ export function Journey() {
         backdrop: HTMLElement | null;
         bridge: HTMLElement | null;
         layer: HTMLElement | null;
+        /** The few elements that read `--arrival`, which is written on them alone. */
+        arrivals: HTMLElement[];
       };
       top: number;
       height: number;
@@ -203,6 +230,7 @@ export function Journey() {
         puzzle: number;
         boundaryIn: number;
         boundaryOut: number;
+        arrival: number;
         published: number;
         /** Whether the puzzle layer was last marked as visible (null: never written). */
         live: boolean | null;
@@ -293,6 +321,7 @@ export function Journey() {
           backdrop: section.querySelector<HTMLElement>('.ao-era-backdrop'),
           bridge: bandElement,
           layer: layerElement,
+          arrivals: Array.from(section.querySelectorAll<HTMLElement>(ARRIVAL_READERS)),
         },
         top,
         height,
@@ -320,6 +349,7 @@ export function Journey() {
           puzzle: Number.NaN,
           boundaryIn: Number.NaN,
           boundaryOut: Number.NaN,
+          arrival: Number.NaN,
           published: Number.NaN,
           live: null,
           crossing: null,
@@ -487,6 +517,15 @@ export function Journey() {
         ]);
         // Inherited through the puzzle layer only.
         write('puzzle', [['--puzzle-progress', layer]]);
+        // The era's own arrival (a CRT warming up, lights coming on): the last
+        // stretch of the crossing, written on the four kinds of element that
+        // read it. Inherited from the scene it restyled every element of the
+        // era - 300 to 460 - on each frame of that stretch (PERF-02).
+        const arrival = Math.round(clamp01((values.boundaryIn - 0.7) / 0.3) * 1000) / 1000;
+        if (arrival !== entry.last.arrival) {
+          entry.last.arrival = arrival;
+          for (const element of entry.targets.arrivals) element.style.setProperty('--arrival', String(arrival));
+        }
 
         // Pinned, the puzzle layer lies over the whole stage for the entire
         // era, invisible until its segment. While invisible it must not take
@@ -530,6 +569,7 @@ export function Journey() {
           entry.section.dataset.started !== 'true'
         ) {
           entry.section.dataset.started = 'true';
+          startPrinting(entry.section);
         }
 
         // Reaching the empty desktop is finishing the journey, exactly as the
@@ -701,6 +741,7 @@ export function Journey() {
       <style>{SCOPED_THEMES_CSS}</style>
       {/* Phones: the switcher sits at the bottom so "Skip to Desktop" - the one
           control a recruiter must always find - never shares its row. */}
+      <div ref={chromeRef} className="contents">
       <header className="ao-journey-chrome ao-themed ao-chrome-backdrop fixed start-4 bottom-4 z-[var(--ao-z-modal)] flex items-center gap-1 rounded-control border border-edge p-1 md:top-4 md:bottom-auto">
         <Link
           href={viewHref(locale, 'landing')}
@@ -727,6 +768,7 @@ export function Journey() {
         <JourneyProgress sectionId={sectionId} />
       </div>
       <PuzzleGate />
+      </div>
 
       {/* The scenes, separate from the chrome above: while a puzzle holds the
           page, this container is made inert, and the chrome - Skip to Desktop

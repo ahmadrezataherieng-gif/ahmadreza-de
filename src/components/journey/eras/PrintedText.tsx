@@ -10,11 +10,10 @@ interface PrintedLineProps {
 /**
  * One line of mechanically printed text.
  *
- * The spans carry nothing but timing and imperfection as custom properties; all
- * motion lives in `.ao-type` in globals.css and stays paused until the era
- * section is marked `data-started`. That keeps a screenful of text at zero JS
- * cost and lets the reduced-motion query resolve it to its finished state in
- * one rule.
+ * The spans carry nothing but timing and imperfection as custom properties;
+ * lib/print-controller.ts strikes them when the era section is marked
+ * `data-started`, and `.ao-type` in globals.css says what a struck glyph looks
+ * like. The reduced-motion query resolves it to its finished state in one rule.
  *
  * The inline styles are per-glyph animation timings, not theme values, so they
  * are within the "no inline styles for anything themeable" convention.

@@ -179,6 +179,23 @@ const result = await b.evaluate(`(() => {
       }
       return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([k, v]) => v + ' ' + k);
     })(),
+    // The longest frame gap inside each era's crossing in, era and puzzle
+    // segment: what a visitor sees as a freeze (PERF-02, PERF-03).
+    worstByPlace: (() => {
+      const places = [];
+      for (const s of document.querySelectorAll('#journey-scenes > section')) {
+        const top = s.getBoundingClientRect().top + scrollY;
+        const at = (n) => { const m = s.querySelector('[data-mark="' + n + '"]'); return m ? m.getBoundingClientRect().top + scrollY : top; };
+        places.push([s.id + ' crossing', top, at('visual')], [s.id + ' era', at('visual'), at('puzzle')], [s.id + ' puzzle', at('puzzle'), at('out')]);
+      }
+      const worst = {};
+      for (let i = 1; i < f.length; i++) {
+        const y = window.__perf.ys[i];
+        const place = places.filter((p) => y >= p[1] && y < p[2]).map((p) => p[0]).pop() ?? 'other';
+        worst[place] = Math.max(worst[place] ?? 0, Math.round(f[i] - f[i - 1]));
+      }
+      return worst;
+    })(),
     reachedEnd: Math.round(scrollY) >= Math.round(document.documentElement.scrollHeight - innerHeight * 2.5) - 4,
     scrolledPx: Math.round(scrollY),
   };
