@@ -50,8 +50,8 @@ html[data-scheme="light"]{
 }
 html[data-scheme="light"] body{
   background:
-    radial-gradient(ellipse 50% 45% at 22% 18%,color-mix(in srgb,#5de2a4 28%,transparent),transparent 70%) fixed,
-    radial-gradient(ellipse 50% 45% at 78% 88%,color-mix(in srgb,#f0a44a 22%,transparent),transparent 70%) fixed,
+    radial-gradient(ellipse 50% 45% at 22% 18%,color-mix(in srgb,#5de2a4 28%,transparent),transparent 70%),
+    radial-gradient(ellipse 50% 45% at 78% 88%,color-mix(in srgb,#f0a44a 22%,transparent),transparent 70%),
     var(--bg);
 }
 
