@@ -35,9 +35,9 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             lang={locale}
             aria-current={isActive ? 'true' : undefined}
             className={cn(
-              'ao-themed rounded-control border px-2 py-1 transition-colors duration-150',
+              'ao-themed rounded-control border px-2 py-1 transition-colors duration-150 in-data-[style=k6]:rounded-full in-data-[style=k6]:px-3 in-data-[style=k6]:font-semibold',
               isActive
-                ? 'border-accent text-accent'
+                ? 'border-accent text-accent in-data-[style=k6]:bg-accent in-data-[style=k6]:text-background'
                 : 'border-transparent text-muted hover:border-edge hover:text-ink',
             )}
           >
