@@ -1,6 +1,7 @@
-// The coming-soon pages' approved style (ROADMAP BR-04, owner 2026-09-24): the
-// design tokens keep WCAG contrast, the dark mode stays near-black and neutral,
-// and every font file is licensed, used and served from the domain itself.
+// The coming-soon pages' look: the original style of 03300d5, restored by the
+// owner on 2026-09-25 (ROADMAP BR-07, DECISIONS.md 73). The design tokens keep
+// WCAG contrast, the page is dark-only, Persian is set in Vazirmatn, and every
+// font file is licensed, used and served from the domain itself.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -9,15 +10,11 @@ import { test } from 'node:test';
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const css = read('soon/tokens.css');
 
-/** The custom properties of `:root` (dark) and of the light-scheme override. */
+/** The custom properties of `:root` - the only colour block: the page is dark-only. */
 function tokens() {
-  const props = (block) => Object.fromEntries([...block.matchAll(/--([a-z-]+):\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
-  const light = css.match(/@media \(prefers-color-scheme:light\)\{\s*:root\{([^}]*)\}/)?.[1];
-  assert.ok(light, 'a light-scheme block');
   const root = css.match(/\n:root\{([^}]*)\}/)?.[1];
   assert.ok(root, 'a :root block');
-  const dark = props(root);
-  return { dark, light: { ...dark, ...props(light) } };
+  return Object.fromEntries([...root.matchAll(/--([a-z-]+):\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
 }
 
 const luminance = (hex) => {
@@ -29,42 +26,37 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-test('soon style: body text 7:1, the green 4.5:1, non-text 3:1 - dark and light', () => {
-  const { dark, light } = tokens();
+test('soon style: body text 7:1, the mint 4.5:1, non-text 3:1', () => {
+  const palette = tokens();
   const pairs = [
     ['ink', 'bg', 7], ['ink', 'surface', 7], ['muted', 'bg', 7], ['muted', 'surface', 7],
     ['brand', 'bg', 4.5], ['brand', 'surface', 4.5], ['on-brand', 'brand', 4.5], ['on-brand', 'brand-deep', 4.5],
     ['amber', 'bg', 3], ['amber', 'surface', 3], ['brand', 'track', 3], ['brand-deep', 'track', 3],
   ];
-  for (const [scheme, palette] of [['dark', dark], ['light', light]]) {
-    for (const [fg, bg, minimum] of pairs) {
-      const value = contrast(palette[fg], palette[bg]);
-      assert.ok(value >= minimum, `${scheme}: ${fg} on ${bg} is ${value.toFixed(2)}, needs ${minimum}`);
-    }
+  for (const [fg, bg, minimum] of pairs) {
+    const value = contrast(palette[fg], palette[bg]);
+    assert.ok(value >= minimum, `${fg} on ${bg} is ${value.toFixed(2)}, needs ${minimum}`);
   }
 });
 
-test('soon style: the dark mode is near-black and neutral - green is only the accent', () => {
-  const { dark } = tokens();
-  assert.equal(dark.bg, '#07090a');
-  assert.equal(dark.surface, '#0d1110');
-  const spread = (hex) => Math.max(...[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))) - Math.min(...[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)));
-  for (const name of ['bg', 'surface', 'edge', 'track']) assert.ok(spread(dark[name]) <= 6, `${name} ${dark[name]} carries a colour tint`);
-  assert.ok(luminance(dark.bg) < 0.005 && luminance(dark.surface) < 0.008);
-  assert.ok(luminance(dark.edge) < 0.02 && luminance(dark.track) < 0.02, 'borders and tracks stay dark and low-contrast');
-  const alpha = Number(dark.glow.match(/,\s*([.\d]+)\)$/)?.[1]);
-  assert.ok(alpha <= 0.05, `the glow is ${alpha}`);
+test('soon style: the old look - navy page, blue-grey cards, mint accent - and dark only', () => {
+  const palette = tokens();
+  assert.equal(palette.bg, '#0b0f15');
+  assert.equal(palette.surface, '#111722');
+  assert.equal(palette.brand, '#5de2a4');
+  assert.doesNotMatch(css, /prefers-color-scheme/, 'no light mode');
+  assert.match(css, /color-scheme:dark/);
+  const page = read('soon/index.html');
+  assert.match(page, /<meta name="color-scheme" content="dark">/);
+  assert.doesNotMatch(page, /prefers-color-scheme/);
 });
 
-test('soon style: extra word spacing for Latin only; the terminal line is Departure Mono at 2x its grid', () => {
+test('soon style: Persian in Vazirmatn ahead of the system faces; no letter-spacing in Persian headings', () => {
+  const palette = tokens();
+  assert.equal(palette['font-fa'], '"Vazirmatn"');
+  for (const stack of ['stack-head', 'stack-body', 'font-mono']) assert.match(palette[stack], /^var\(--font-fa\),/, `${stack} starts with Vazirmatn`);
   const page = read('soon/index.html');
-  assert.match(page, /h1,h2,h3,\.big\{word-spacing:\.08em\}/);
   assert.match(page, /html\[lang="fa"\] h2,html\[lang="fa"\] h3,[^{]*\{letter-spacing:0;word-spacing:normal\}/);
-  assert.match(page, /h2 bdi,h3 bdi\{word-spacing:\.08em\}/);
-  assert.match(page, /\.os\{[^}]*font-family:var\(--font-pixel\)[^}]*font-size:22px/);
-  assert.match(css, /--font-pixel:"Departure Mono"/);
-  // Only the terminal line uses the pixel face.
-  assert.equal([...page.matchAll(/var\(--font-pixel\)/g)].length, 1);
   // Latin terms in Persian strings are isolated with <bdi>.
   // (Rendered at build time by scripts/soon-pages.mjs since SEO-15; behaviour is checked in soon-pages.test.mjs.)
   const renderer = read('scripts/soon-pages.mjs');
@@ -74,9 +66,7 @@ test('soon style: extra word spacing for Latin only; the terminal line is Depart
 
 test('soon fonts: every file is licensed, used, and served from the domain - no candidates committed', () => {
   const files = readdirSync(new URL('../../soon/fonts/', import.meta.url)).sort();
-  assert.deepEqual(files, [
-    'departure-mono-regular.woff2', 'geist-latin-wght.woff2', 'geist-mono-latin-wght.woff2', 'martian-grotesk-vf.woff2', 'vazirmatn-arabic-wght.woff2',
-  ]);
+  assert.deepEqual(files, ['vazirmatn-arabic-wght.woff2']);
   const index = read('public/fonts/LICENSES.md');
   const sources = [...css.matchAll(/url\(([^)]+)\)/g)].map((match) => match[1]);
   for (const file of files) {
@@ -84,7 +74,7 @@ test('soon fonts: every file is licensed, used, and served from the domain - no 
     assert.ok(sources.includes(`/fonts/${file}`), `${file} is never used by soon/tokens.css`);
   }
   for (const source of sources) assert.ok(source.startsWith('/fonts/') && files.includes(source.slice(7)), `${source} is not a local, committed font`);
-  for (const licence of ['martian-grotesk', 'geist', 'geist-mono', 'departure-mono', 'vazirmatn']) {
+  for (const licence of ['vazirmatn']) {
     const path = `public/fonts/licenses/${licence}-OFL.txt`;
     assert.ok(existsSync(new URL(`../../${path}`, import.meta.url)), path);
     assert.match(read(path), /SIL OPEN FONT LICENSE Version 1\.1/i, `${path} is not the OFL`);

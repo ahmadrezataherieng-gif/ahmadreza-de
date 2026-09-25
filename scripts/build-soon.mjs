@@ -78,7 +78,7 @@ header nav{display:flex;gap:6px}
 header nav a{color:var(--muted);border:1px solid var(--edge);border-radius:999px;padding:6px 12px;text-decoration:none}
 header nav a[aria-current]{color:var(--on-brand);background:var(--brand);border-color:var(--brand);font-weight:700}
 a{color:var(--brand);text-underline-offset:3px}a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-h1{font:var(--head-weight) clamp(1.9rem,6vw,2.6rem)/1.15 var(--stack-head);letter-spacing:var(--head-tracking);word-spacing:.08em;margin:36px 0 4px;text-wrap:balance}
+h1{font:var(--head-weight) clamp(1.9rem,6vw,2.6rem)/1.15 var(--stack-head);letter-spacing:var(--head-tracking);margin:36px 0 4px;text-wrap:balance}
 h2{font:600 1.1rem/1.3 var(--stack-head);margin:32px 0 8px;text-wrap:balance}
 html[lang="fa"] h1,html[lang="fa"] h2{letter-spacing:0;word-spacing:normal}
 p,li{text-wrap:pretty}
@@ -111,8 +111,7 @@ function page(locale, kind, copy, labels) {
 <meta name="description" content="${escape(document.description)}">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://ahmadreza.de/${locale.prefix}${kind.slug}/">
-<meta name="theme-color" content="#07090a" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f5f4ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0f15">
 <style>${TOKENS}${STYLE}</style>
 </head>
 <body>

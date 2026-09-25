@@ -1,43 +1,29 @@
-/* The coming-soon pages' design tokens (ROADMAP BR-04, approved by the owner
-   2026-09-24): style "K6" - Martian Grotesk headings, Geist body, Geist Mono,
-   Vazirmatn for Persian, Departure Mono only for the "~$ amonel os" line.
-   build-soon.mjs injects this file into index.html and into the legal pages, so
-   all of them share one look. Every font is self-hosted from /fonts/ (SIL OFL,
-   licences in /fonts/licenses/): no request ever leaves the domain. */
+/* The coming-soon pages' design tokens: the original look of 03300d5, restored
+   by the owner on 2026-09-25 after comparing it with the K6 style (ROADMAP
+   BR-07, DECISIONS.md 73). Navy page, blue-grey cards, mint accent, amber
+   cursor; the system's own sans and mono faces for Latin text; dark only.
+   Persian is set in Vazirmatn, self-hosted from /fonts/ (SIL OFL, licence in
+   /fonts/licenses/): no request ever leaves the domain. build-soon.mjs injects
+   this file into index.html and into the legal pages, so all of them share
+   one look. */
 
-@font-face{font-family:"Martian Grotesk";src:url(/fonts/martian-grotesk-vf.woff2) format("woff2");font-weight:100 800;font-display:swap}
-@font-face{font-family:"Geist";src:url(/fonts/geist-latin-wght.woff2) format("woff2");font-weight:100 900;font-display:swap}
-@font-face{font-family:"Geist Mono";src:url(/fonts/geist-mono-latin-wght.woff2) format("woff2");font-weight:100 900;font-display:swap}
-/* The Persian face only holds Arabic-script glyphs, so it answers for those alone. */
+/* The Persian face only holds Arabic-script glyphs, so it answers for those alone
+   and can sit first in every stack: Latin text falls through to the system face. */
 @font-face{font-family:"Vazirmatn";src:url(/fonts/vazirmatn-arabic-wght.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC}
-@font-face{font-family:"Departure Mono";src:url(/fonts/departure-mono-regular.woff2) format("woff2");font-weight:400;font-display:swap}
 
 :root{
-  /* Dark is the default look: near-black and neutral, green only as the accent. */
-  --bg:#07090a; --surface:#0d1110; --edge:#1e2322;
-  --ink:#edf0ee; --muted:#b3bab7;
-  --brand:#4be3a3; --brand-deep:#25b87c; --on-brand:#04160e; --amber:#d8b46a;
-  --track:#1c2120;
-  --glow:rgba(75,227,163,.03);
-  /* Latin face, then the Persian face, then the generic fallback. */
-  --font-head:"Martian Grotesk";
-  --font-body:"Geist";
-  --font-mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --bg:#0b0f15; --surface:#111722; --edge:#222c3a;
+  --ink:#e9edf5; --muted:#a3aec0;
+  --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
+  --track:#1a2230;
   --font-fa:"Vazirmatn";
-  --font-fallback:system-ui,sans-serif;
-  --font-pixel:"Departure Mono",var(--font-mono);
-  --stack-head:var(--font-head),var(--font-fa),var(--font-fallback);
-  --stack-body:var(--font-body),var(--font-fa),var(--font-fallback);
-  --head-weight:700; --head-tracking:-.025em;
+  --font-head:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-body:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:var(--font-fa),ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  /* Vazirmatn first: Segoe UI has Arabic glyphs of its own and would win otherwise. */
+  --stack-head:var(--font-fa),var(--font-head);
+  --stack-body:var(--font-fa),var(--font-body);
+  --head-weight:700; --head-tracking:-.03em;
   --radius:14px;
-}
-@media (prefers-color-scheme:light){
-  :root{
-    /* Forest Luxe on paper: soft cream and a deep forest green. */
-    --bg:#f5f4ee; --surface:#fffefa; --edge:#e0ddd0;
-    --ink:#0b1a14; --muted:#44524b;
-    --brand:#0d6b45; --brand-deep:#0a5536; --on-brand:#ffffff; --amber:#80590c;
-    --track:#e8e5da;
-    --glow:rgba(13,107,69,.07);
-  }
+  color-scheme:dark;
 }

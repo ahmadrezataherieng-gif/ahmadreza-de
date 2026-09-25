@@ -17,11 +17,8 @@
 <link rel="canonical" href="https://ahmadreza.de/">
 <!--@alternates-->
 <meta name="robots" content="index,follow">
-<meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#07090a" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f5f4ee" media="(prefers-color-scheme: light)">
-<link rel="preload" href="/fonts/martian-grotesk-vf.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0f15">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Amonel">
 <meta property="og:locale" content="de_DE">
@@ -41,12 +38,12 @@
 <meta name="twitter:image" content="https://ahmadreza.de/og/ahmadreza-taheri-de.png">
 <meta name="twitter:image:alt" content="Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung, Trier – Portfolio Amonel">
 <!--@jsonld-->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307090a'/%3E%3Cg fill='none' stroke='%234be3a3' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M16 7v9'/%3E%3Cpath d='M10.3 10.5a8 8 0 1 0 11.4 0'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f15'/%3E%3Cg fill='none' stroke='%235de2a4' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M16 7v9'/%3E%3Cpath d='M10.3 10.5a8 8 0 1 0 11.4 0'/%3E%3C/g%3E%3C/svg%3E">
 <style>
   /*@tokens*/
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:radial-gradient(70rem 36rem at 85% -12rem,var(--glow),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
   h1,h2,h3,.role,.overall-label{text-wrap:balance}
   p,li{text-wrap:pretty}
@@ -55,11 +52,8 @@
 
   /* Header: the main logo (design 6, the "o" is a power symbol) and the languages. */
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .logo{display:inline-block;font:600 28px/1 var(--stack-head);letter-spacing:-.02em;color:var(--ink);text-decoration:none;direction:ltr;white-space:nowrap}
-  /* The power "o" is drawn in font units (100 = 1em): a ring as tall as the
-     x-height, a stem up to the cap height, the stroke of a semibold stem. Its
-     bottom edge sits on the baseline, like the letters around it. */
-  .logo svg{display:inline-block;width:.56em;height:.72em;margin:0 .015em;vertical-align:baseline;color:var(--brand);overflow:visible}
+  .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--stack-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
+  .logo svg{width:.74em;height:.74em;margin:0 .03em;transform:translateY(.06em);color:var(--brand);overflow:visible}
   .langs{display:flex;gap:6px}
   .langs a{display:inline-block;text-decoration:none;font:600 12px/1 var(--font-mono);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
   .langs a:hover{color:var(--ink)}
@@ -86,12 +80,8 @@
   html[dir="rtl"] .alt p[dir="ltr"]{text-align:right}
   .alt [lang="fa"]{font-size:1.12em;line-height:1.75;color:var(--ink)}
   html[lang="fa"] body{font-size:17.5px;line-height:1.8}
-  /* The extra word space is for Latin text only. Persian headings keep their own
-     spacing (and no letter-spacing, which breaks the joins); a Latin term inside a
-     Persian heading sits in a <bdi> and gets the Latin spacing back. */
-  h1,h2,h3,.big{word-spacing:.08em}
+  /* Persian headings never get letter-spacing, which breaks the joins. */
   html[lang="fa"] h2,html[lang="fa"] h3,html[lang="fa"] .overall-label,.fa-name{letter-spacing:0;word-spacing:normal}
-  h2 bdi,h3 bdi{word-spacing:.08em}
   .intro{margin:22px 0 0;font-size:1.08rem;max-width:58ch}
   .cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:24px}
   .button{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--on-brand);background:var(--brand);border-radius:10px;padding:12px 18px;text-decoration:none}
@@ -110,11 +100,10 @@
   .card .num{display:block;font:600 12px/1 var(--font-mono);color:var(--brand);margin-bottom:10px}
 
   /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
-  .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 80px -40px var(--glow)}
+  .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden}
   .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
-  /* Departure Mono is drawn on an 11 px grid; 22 px is exactly 2x, so its pixels stay sharp. */
-  .os{direction:ltr;font-family:var(--font-pixel);font-size:22px;line-height:1;font-weight:400;font-synthesis:none;letter-spacing:0;color:var(--brand)}
-  .os .p{color:var(--muted)}
+  .os{direction:ltr;font-weight:700;color:var(--brand)}
+  .os .p{color:var(--muted);font-weight:400}
   .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
   .panel-body{padding:22px 18px 24px}
@@ -153,7 +142,7 @@
 <body>
 <div class="wrap">
   <header>
-    <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 56 72" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"><path d="M28 4.5V38"/><path d="M41.8 29.5A21.5 21.5 0 1 1 14.2 29.5"/></svg>nel</a>
+    <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.2a8 8 0 1 0 10.8 0"/></svg>nel</a>
     <nav class="langs" aria-label="Sprache" data-t-label="language">
       <a href="/" hreflang="de" lang="de" aria-current="page">DE</a>
       <a href="/en/" hreflang="en" lang="en">EN</a>

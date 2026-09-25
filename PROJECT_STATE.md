@@ -9,7 +9,7 @@ Content review pending: see CONTENT_REVIEW.md (starts after the site is complete
 One commit per step, lint, tests and build green before each, nothing deployed.
 
 - [x] 1. Main site: old look back on landing, About, Impressum, Datenschutz, 404 and the UI chrome (reference ad0a7cd); `[data-style=k6]`, its light mode, the K6 fonts in `public/fonts/` and `k6-style.test.mjs` removed; dark only. Kept: content, app/SEO/PERF work, 301s, Vazirmatn for Persian (also for the switcher's "فارسی" on de/en pages), no Persian letter-spacing (`.ao-site-page`), the a9bcd3c phone/RTL fixes.
-- [ ] 2. Coming-soon page: old look (reference 03300d5), dark only, current content, Vazirmatn
+- [x] 2. Coming-soon page: old look of 03300d5 (navy #0b0f15, blue-grey cards, mint mark, system heading face, bold system-mono terminal line), dark only; content, 72 %, SEO tags, JSON-LD, DE/EN/FA pages kept; Vazirmatn the only shipped font (Martian, Geist, Geist Mono, Departure Mono and their licences removed); legal pages share the tokens. `soon.mjs` 208/208 locally. **Not deployed**: the live page still shows K6 until the owner redeploys (BR-08).
 - [ ] 3. QA pass: screenshots, overflow, glyphs, RTL, axe, spelling
 - [ ] 4. Light-mode proposal in the old palette on `proposal/light-old-palette` (not merged)
 - [ ] 5. Font candidates per role (screenshots only)

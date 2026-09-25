@@ -57,7 +57,8 @@ for (const viewport of VIEWPORTS) {
           lang: root.lang, dir: root.dir,
           fontsLoaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')),
           heading: getComputedStyle(document.querySelector('h1')).fontFamily,
-          os: (() => { const os = getComputedStyle(document.querySelector('.os')); return { size: os.fontSize, family: os.fontFamily }; })(),
+          os: (() => { const os = getComputedStyle(document.querySelector('.os')); return { weight: os.fontWeight, family: os.fontFamily }; })(),
+          bg: getComputedStyle(document.body).backgroundColor,
           // A text node that mixes Persian letters with unwrapped Latin ones: the bidi algorithm would misplace the punctuation.
           bidiMixed: (() => {
             const bad = [];
@@ -162,10 +163,11 @@ for (const viewport of VIEWPORTS) {
       );
       check(`${label}: no line ends in a single orphaned word`, state.orphans.length === 0, state.orphans.join(' | '));
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
-      const wanted = ['Martian Grotesk', 'Geist', 'Geist Mono', 'Departure Mono', 'Vazirmatn'];
-      check(`${label}: the five self-hosted fonts are loaded`, wanted.every((name) => state.fontsLoaded.includes(name)), `loaded: ${state.fontsLoaded.join(', ')}`);
-      check(`${label}: the headings use Martian Grotesk`, state.heading.startsWith('"Martian Grotesk"'), state.heading);
-      check(`${label}: the terminal line is Departure Mono at 22 px (2x its grid)`, state.os.size === '22px' && state.os.family.startsWith('"Departure Mono"'), `${state.os.size} ${state.os.family}`);
+      // The old look (BR-07): system faces for Latin, the self-hosted Vazirmatn for Persian (every page shows a Persian line), dark in either scheme.
+      check(`${label}: the self-hosted Vazirmatn is loaded`, state.fontsLoaded.includes('Vazirmatn'), `loaded: ${state.fontsLoaded.join(', ')}`);
+      check(`${label}: the headings use Vazirmatn for Persian, then Segoe UI and the system face`, /^"?Vazirmatn"?, "Segoe UI", system-ui/.test(state.heading), state.heading);
+      check(`${label}: the terminal line is the bold system mono`, state.os.weight === '700' && /ui-monospace/.test(state.os.family), `${state.os.weight} ${state.os.family}`);
+      check(`${label}: the page is navy even when the system asks for light`, state.bg === 'rgb(11, 15, 21)', state.bg);
       check(`${label}: every Latin term in Persian text is isolated in a <bdi>`, state.bidiMixed.length === 0, state.bidiMixed.join(' | '));
       check(`${label}: punctuation after a Latin term in Persian text lands on the correct side`, state.bidiPunctuation.length === 0, state.bidiPunctuation.join(' | '));
       check(
@@ -193,7 +195,7 @@ for (const viewport of VIEWPORTS) {
         h1: getComputedStyle(document.querySelector('h1')).fontFamily, bg: getComputedStyle(document.body).backgroundColor,
         loaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')) };
     })()`);
-    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, near-black, Martian Grotesk headings`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(7, 9, 10)' && info.h1.startsWith('"Martian Grotesk"') && info.loaded.includes('Martian Grotesk'), JSON.stringify(info));
+    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, navy, the old heading face`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(11, 15, 21)' && /"Segoe UI", system-ui/.test(info.h1) && (!legal.startsWith('fa/') || info.loaded.includes('Vazirmatn')), JSON.stringify(info));
   }
   const external = [...new Set(requests.filter((url) => !url.startsWith(origin) && !url.startsWith('data:')))];
   check(`${viewport.name}: no request leaves the domain (${requests.length} requests, all to ${origin})`, external.length === 0, external.join(' | '));
