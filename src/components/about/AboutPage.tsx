@@ -21,7 +21,7 @@ export async function AboutPage({ locale }: { locale: Locale }) {
   const link = 'ao-themed rounded-control border border-edge px-3 py-2 font-mono text-sm text-ink hover:border-accent hover:text-accent';
 
   return (
-    <div className="min-h-dvh bg-background text-ink">
+    <div data-style="k6" className="min-h-dvh bg-background text-ink">
       <UseTheme id="modern" />
       <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
         <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
