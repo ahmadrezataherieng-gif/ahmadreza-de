@@ -96,7 +96,6 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
             {languages.map((language) => (
               <li
                 key={language.id}
-                lang={language.id}
                 className="ao-themed rounded-control border border-edge px-3 py-1.5 font-body text-sm text-ink"
               >
                 {t(`languages.names.${language.id}`)}

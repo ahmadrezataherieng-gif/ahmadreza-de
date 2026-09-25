@@ -3207,7 +3207,10 @@ html:not([data-tier='full']) .ao-depth-extra {
 }
 
 /* Persian tagged inside a German or English page (the language switcher's
-   "فارسی") would otherwise take the mono stack's system fallback. */
-.ao-site-page [lang^='fa'] {
+   "فارسی", the Persian part of the 404 page) would otherwise take the mono
+   stack's system fallback, which draws the letters unjoined. The children too:
+   their font-mono and font-display classes would win over inheritance. */
+.ao-site-page [lang^='fa'],
+.ao-site-page [lang^='fa'] * {
   font-family: var(--ao-font-vazirmatn);
 }

@@ -5,7 +5,7 @@
   "intro": [
     "I'm Ahmadreza Taheri, and I work in IT in Germany. I'm currently training as an IT specialist for systems integration in Trier.",
     "I'm interested in what happens beneath the surface: why a computer gets no address, which way a data packet takes through the network, what exactly is broken when someone says \"the internet isn't working\". My focus is on networks and Linux.",
-    "This website is my own project. It tells 80 years of computing history and explains along the way how computers still work today - and it shows how I approach technology: understand it first, then explain it."
+    "This website is my own project. It tells 80 years of computing history and explains along the way how computers still work today – and it shows how I approach technology: understand it first, then explain it."
   ],
   "actions": {
     "label": "Contact and résumé",
@@ -34,7 +34,7 @@
   "now": {
     "title": "What I do today",
     "text": [
-      "At work and at vocational school I'm learning to plan, set up and keep IT systems running - and to find the fault when they don't.",
+      "At work and at vocational school I'm learning to plan, set up and keep IT systems running – and to find the fault when they don't.",
       "Alongside that I work on this website. The programs on this desktop show how I work: the terminal, the ticket system with real diagnosis paths, and traceroute, which makes a packet's journey visible."
     ]
   },

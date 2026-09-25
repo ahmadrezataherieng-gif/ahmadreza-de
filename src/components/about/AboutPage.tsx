@@ -22,27 +22,33 @@ export async function AboutPage({ locale }: { locale: Locale }) {
 
   return (
     <div className="ao-site-page min-h-dvh bg-background text-ink">
-      <UseTheme id="modern" />
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
-        <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
-          <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
-        </a>
-        <LanguageSwitcher />
-      </header>
-
-      <main className="mx-auto w-full max-w-3xl pb-8 sm:px-4">
-        <AboutContent appId="about" page />
-        <nav aria-label={tNav('home')} className="flex flex-wrap gap-2 px-4 sm:px-6">
-          <a href={viewHref(locale, 'journey')} className={link}>
-            {tNav('journey')}
+      {/* One container for header, text, buttons and footer, padded like the article inside it, so they all share its left edge. */}
+      <div className="@container mx-auto w-full max-w-3xl">
+        <UseTheme id="modern" />
+        <header className="flex items-center justify-between gap-3 px-4 pt-5 @min-[480px]:px-6 @min-[720px]:px-8">
+          <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
+            <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
           </a>
-          <a href={viewHref(locale, 'desktop')} className={link}>
-            {tNav('skipToDesktop')}
-          </a>
-        </nav>
-      </main>
+          <LanguageSwitcher />
+        </header>
 
-      <SiteFooter className="mx-auto w-full max-w-3xl border-t border-edge px-5 py-5 sm:px-8" />
+        <main className="pb-8">
+          <AboutContent appId="about" page />
+          <nav aria-label={tNav('home')} className="flex flex-wrap gap-2 px-4 @min-[480px]:px-6 @min-[720px]:px-8">
+            <a href={viewHref(locale, 'journey')} className={link}>
+              {tNav('journey')}
+            </a>
+            <a href={viewHref(locale, 'desktop')} className={link}>
+              {tNav('skipToDesktop')}
+            </a>
+          </nav>
+        </main>
+
+        <div className="px-4 @min-[480px]:px-6 @min-[720px]:px-8">
+          {/* The first link's own padding would push its text off the edge. */}
+          <SiteFooter className="border-t border-edge py-5 [&>a:first-child]:-ms-1" />
+        </div>
+      </div>
     </div>
   );
 }
