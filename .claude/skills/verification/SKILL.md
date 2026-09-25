@@ -9,6 +9,7 @@ description: "Read before running or writing checks in scripts/verify, before de
 node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch] [--tier light]
 node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
 node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4] [--mode open] [--touch] [--profile]   # worstByPlace: the longest frame in each crossing (PERF-02); --touch: a tablet profile above 768 px
+node scripts/verify/load-tasks.mjs [--path /amonel/] [--width 380] [--cpu 4] [--slow]   # long tasks after FCP, long animation frames and a CPU profile of a view's load (the journey's TBT, PERF-02)
 node scripts/verify/toolbar.mjs [--width 390 --height 844 --delta 64] [--tablet: --width 768 --height 1024 --delta 80]   # a phone toolbar's height change mid-scroll: layouts, long tasks, document height must not move (PERF-02, exits 1 on failure)
 node scripts/verify/crossing-frames.mjs [--width 390] [--locale fa] [--frames 0,25,50,75,100] [--only 1946] [--reduce] [--out dir]   # screenshots of each crossing (BR-10)
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]

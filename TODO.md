@@ -343,6 +343,11 @@ Timeboxed audit (25 minutes) of the built `out/` (private-preview rules: nothing
 
 - **The prompt ends in the middle of item 6** ("... fa «میزکا") and items 7-11 (including item 11, the only one allowed to deploy) are missing. Default taken: items 1-6 are copied into PROJECT_STATE.md as received (item 6's remainder read as the "Doubtful wording" list of K6 revert step 3), 7-11 are a marked placeholder row, and **no deploy happens** until the owner resends item 11.
 
+## Queue 2 (2026-09-26): what is left of the journey's load cost
+
+- **Phone journey TBT is 280 ms by `vitals.mjs` (budget 200 ms), noisy 120-470 ms by `load-tasks.mjs`.** What is left in the trace: the first full layout of the 3,400-element journey (about 500 ms at 4x, before FCP), four to five relayouts while fonts arrive one by one (34-104 ms each), a 119 ms style recalculation around 2.4 s, and gsap/ScrollTrigger setup (about 70 ms). Ideas, none taken because they risk the look or the resolver maths: `content-visibility: auto` on the era sections (skips off-screen layout; the resolver reads their markers), fewer font files on the journey (the eras use JetBrains Mono, Inter, VT323, Press Start 2P), splitting the era visuals into lazy chunks per era. Default taken: none of them.
+- **Real-phone checks the headless runs cannot make (PERF-01):** the journey's stages are lvh-tall now, so with the toolbar visible their bottom edge sits under it until the first downward scroll; the pixel hand-over Convergence -> desktop is exact only with the toolbar hidden. Default taken: lvh, the classic 100vh behaviour.
+
 ## Empty work queue (2026-09-25)
 
 - **The prompt "run the work queue below" arrived without a queue** (the message ended after that sentence). The only queue on record, PROJECT_STATE.md "Work queue (started 2026-09-24)", is fully done (items 1-7 checked). Default taken: no code, content or deploy change; nothing invented. To continue, send the queue again; the open P1/P2 audit findings above are the natural next candidates (P2 XS: sitemap `lastmod`, dead `Panel.tsx` and `.ao-dither`).

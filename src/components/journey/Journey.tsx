@@ -16,7 +16,7 @@ import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { scrollToEra, setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
 import { applyThemeToDocument, scopeThemeTo, themeToCssVars } from '@/lib/apply-theme';
 import { startPrinting } from '@/lib/print-controller';
-import { holdViewportHeight } from '@/lib/stable-viewport';
+import { watchViewportHeight } from '@/lib/stable-viewport';
 import { TECH_FROM, TECH_TO } from '@/components/journey/crossing-timing';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
@@ -61,10 +61,25 @@ let tickerDepth = 0;
  * Act 1's very first paint would be the cyan desktop, cross-fading to 1946 only
  * after hydration. Values come from themes.ts, so nothing is hardcoded here;
  * once the theme store writes inline properties on <html>, those win.
+ *
+ * The three font stacks stay the `modern` ones: the store's first write to
+ * <html> used to make them so after hydration, and the chrome's line boxes
+ * (the wrapper around Skip to Desktop) take their height from that ambient font.
+ * That write is skipped now (ThemeProvider, PERF-02), so they are set here and
+ * the chrome looks the same from the first paint on. The same goes for the page
+ * and scrollbar-gutter background (`html, body`): the modern one, as after that
+ * write, but from the first paint - a change made after hydration made every
+ * themed element transition (about 150 ms of blocking on a slow phone).
  */
-const FIRST_ERA_CSS = `:root{${Object.entries(themeToCssVars(getTheme(eras[0].themeId)))
+const FIRST_ERA_VARS: Record<string, string> = {
+  ...themeToCssVars(getTheme(eras[0].themeId)),
+  ...Object.fromEntries(
+    Object.entries(themeToCssVars(getTheme('modern'))).filter(([name]) => name.startsWith('--ao-font-')),
+  ),
+};
+const FIRST_ERA_CSS = `:root{${Object.entries(FIRST_ERA_VARS)
   .map(([name, value]) => `${name}:${value}`)
-  .join(';')}}`;
+  .join(';')}}html,body{background-color:${themeToCssVars(getTheme('modern'))['--ao-color-background']}}`;
 
 /**
  * Every era's palette, and the modern one, as scoped blocks.
@@ -163,12 +178,10 @@ export function Journey() {
   }, []);
 
   /* --- a viewport height the toolbar does not move ------------------------ */
-  // Before the resolver's first measure: every stage and scene is sized in this
-  // unit, and each toolbar move used to resize and re-measure all of them.
-  useEffect(() => {
-    const container = containerRef.current;
-    return container ? holdViewportHeight(container) : undefined;
-  }, []);
+  // Every stage and scene is sized in `--ao-vh`, and each toolbar move used to
+  // resize and re-measure all of them. The first pin is the <head> script's (a
+  // write here restyled the hydrated page); this only follows a rotation.
+  useEffect(() => watchViewportHeight(), []);
 
   /* --- era detection and theme switching -------------------------------- */
   useEffect(() => {
@@ -255,6 +268,17 @@ export function Journey() {
       };
     }
 
+    /**
+     * The number the resolver last wrote to an element, or the property's
+     * registered initial value when it has written none. Reads the inline
+     * style only: no layout.
+     */
+    const writtenValue = (element: HTMLElement | null, name: string, initial: number) => {
+      if (!element) return Number.NaN;
+      const raw = element.style.getPropertyValue(name);
+      return raw === '' ? initial : Number(raw);
+    };
+
     let bounds: EraBounds[] = [];
     let activeKey: string | null = null;
     let journeyCompleted = false;
@@ -326,19 +350,21 @@ export function Journey() {
           ? top + (marks.visual > 0 ? marks.visual * 0.5 : 0)
           : top - viewport * 0.5;
 
+      const targets = {
+        scene: section.querySelector<HTMLElement>('[data-era-scene]'),
+        camera: section.querySelector<HTMLElement>('.ao-camera'),
+        backdrop: section.querySelector<HTMLElement>('.ao-era-backdrop'),
+        bridge: bandElement,
+        layer: layerElement,
+        arrivals: Array.from(section.querySelectorAll<HTMLElement>(ARRIVAL_READERS)),
+      };
+
       return {
         key,
         eraId,
         themeId,
         section,
-        targets: {
-          scene: section.querySelector<HTMLElement>('[data-era-scene]'),
-          camera: section.querySelector<HTMLElement>('.ao-camera'),
-          backdrop: section.querySelector<HTMLElement>('.ao-era-backdrop'),
-          bridge: bandElement,
-          layer: layerElement,
-          arrivals: Array.from(section.querySelectorAll<HTMLElement>(ARRIVAL_READERS)),
-        },
+        targets,
         top,
         height,
         shots: Number(bandElement?.dataset.shots ?? 0),
@@ -361,17 +387,25 @@ export function Journey() {
                 stickyHeight: layerSticky?.offsetHeight ?? viewport,
               }
             : null,
+        // What the DOM already holds: a value the resolver has not written yet is
+        // the property's registered initial value (globals.css), so a section
+        // that starts there is not written at all. The first resolve wrote every
+        // section's values, restyling all ~3,400 elements of the journey in one
+        // task (PERF-02). Read from the inline style, so a re-measure after a
+        // refresh keeps what was written.
         last: {
-          era: Number.NaN,
-          puzzle: Number.NaN,
-          boundaryIn: Number.NaN,
-          boundaryOut: Number.NaN,
+          era: writtenValue(targets.scene, '--era-progress', 0),
+          puzzle: writtenValue(layerElement, '--puzzle-progress', 0),
+          boundaryIn: bandElement
+            ? writtenValue(bandElement, '--boundary-in', 1)
+            : writtenValue(targets.scene, '--scene-in', 1),
+          boundaryOut: writtenValue(targets.camera, '--boundary-out', 0),
           arrival: Number.NaN,
           published: Number.NaN,
           live: null,
           shot: Number.NaN,
           crossing: null,
-          offScreen: null,
+          offScreen: section.hasAttribute('data-off-screen'),
         },
       };
     };

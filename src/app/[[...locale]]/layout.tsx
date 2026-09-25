@@ -13,6 +13,7 @@ import { returningRedirectScript } from '@/lib/returning';
 import { loadLegalCopy } from '@/components/legal/LegalPage';
 import { serialiseJsonLd, structuredData } from '@/lib/structured-data';
 import { SCHEME_SCRIPT } from '@/lib/scheme';
+import { VIEWPORT_PIN_SCRIPT } from '@/lib/stable-viewport';
 
 type LayoutParams = { locale?: string[] };
 
@@ -276,6 +277,9 @@ export default async function LocaleLayout({
               }}
             />
             <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
+            {/* The journey's viewport unit, pinned on touch devices before the
+                body exists, so a toolbar move never relayouts it (PERF-02). */}
+            <script dangerouslySetInnerHTML={{ __html: VIEWPORT_PIN_SCRIPT }} />
           </>
         ) : null}
         {/* The desktop's apps animate by the same tiers (Traceroute's packet). */}

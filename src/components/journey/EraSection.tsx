@@ -68,6 +68,9 @@ export function EraSection({ era, sectionId, nextSectionId, previous }: EraSecti
       data-start-at={staging.startAt}
       data-theme-scope={era.themeId}
       data-follows={previous ? '' : undefined}
+      // Every era but the first starts below the fold: marked here so the resolver's
+      // first pass writes nothing (each toggle restyled the whole section, PERF-02).
+      data-off-screen={previous ? '' : undefined}
       aria-labelledby={headingId}
       className="ao-era-section ao-themed w-full"
       style={

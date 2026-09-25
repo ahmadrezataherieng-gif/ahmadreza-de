@@ -73,6 +73,7 @@ export function Convergence() {
       aria-labelledby={`${CONVERGENCE_ID}-heading`}
       data-theme-scope="modern"
       data-follows=""
+      data-off-screen=""
       className="ao-conv-section ao-themed w-full"
       style={
         {

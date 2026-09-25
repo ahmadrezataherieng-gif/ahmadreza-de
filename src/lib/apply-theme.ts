@@ -70,11 +70,22 @@ export function scopeThemeTo(targets: readonly HTMLElement[] | null): void {
  * cursor attribute is left alone: its selectors reach the whole page and it
  * only means anything on the desktop.
  */
-export function applyThemeToDocument(theme: Theme): void {
+export function applyThemeToDocument(theme: Theme, options?: { bootstrap?: boolean }): void {
   if (typeof document === 'undefined') return;
 
   const root = document.documentElement;
   const vars = themeToCssVars(theme);
+
+  // The first write of the default theme: `:root` already declares exactly these
+  // values (pinned by scripts/test/bootstrap-tokens.test.mjs), and writing them
+  // again restyled the whole page on every view's first mount - about 100 ms on
+  // a 4x-throttled phone (PERF-02). Only the attributes are set.
+  if (options?.bootstrap && !scopedTargets) {
+    root.dataset.theme = theme.id;
+    root.dataset.cursor = theme.cursor;
+    root.dataset.sound = theme.sound;
+    return;
+  }
 
   if (scopedTargets) {
     for (const target of scopedTargets) {
