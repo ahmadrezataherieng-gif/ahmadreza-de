@@ -7,7 +7,7 @@ request to a third party and sets no cookie.
 All of them are licensed under the **SIL Open Font License, Version 1.1**
 (https://openfontlicense.org). The full licence text with each font's
 copyright notice is in `licenses/`, next to this file. The fonts are used
-unmodified, as published.
+unmodified, as published, with one exception: a subset of Vazirmatn (below).
 
 | Font | Used for | Copyright | Licence | Source | Licence file |
 |---|---|---|---|---|---|
@@ -17,6 +17,12 @@ unmodified, as published.
 | Vazirmatn | Persian text (the main site and the coming-soon page) | Copyright 2015 The Vazirmatn Project Authors | SIL OFL 1.1 | https://github.com/rastikerdar/vazirmatn (via `@fontsource-variable/vazirmatn`) | [licenses/vazirmatn-OFL.txt](licenses/vazirmatn-OFL.txt) |
 | Press Start 2P | pixel text in the era themes | Copyright 2012 The Press Start 2P Project Authors, Reserved Font Name "Press Start 2P" | SIL OFL 1.1 | the `@fontsource/press-start-2p` package (npm) | [licenses/press-start-2p-OFL.txt](licenses/press-start-2p-OFL.txt) |
 | VT323 | terminal text in the era themes | Copyright 2011 The VT323 Project Authors | SIL OFL 1.1 | the `@fontsource/vt323` package (npm) | [licenses/vt323-OFL.txt](licenses/vt323-OFL.txt) |
+
+## A subset made from a licensed font (`src/styles/fonts/`)
+
+| File | Made from | What it is |
+|---|---|---|
+| `vazirmatn-label-400.woff2` | Vazirmatn (`@fontsource-variable/vazirmatn`, Arabic-script file) | the five letters of the language switcher's "فارسی" (U+0627, U+0631, U+0633, U+0641, U+06CC) at weight 400, 2 kB instead of 46 kB; the outlines and shaping tables are those of the original. Regenerate with `scripts/vazirmatn-label.mjs`. The SIL OFL permits modified versions; the licence (`licenses/vazirmatn-OFL.txt`) covers this file too and the font declares no Reserved Font Name. |
 
 ## Files served by the coming-soon page (`soon/fonts/`, copied to `/fonts/`)
 

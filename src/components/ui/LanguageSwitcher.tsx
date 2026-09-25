@@ -23,6 +23,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <nav
       aria-label={tNav('language')}
+      data-language-switcher=""
       className={cn('ao-themed flex items-center gap-1 font-mono text-xs', className)}
     >
       {locales.map((locale) => {

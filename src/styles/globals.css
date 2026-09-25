@@ -3290,6 +3290,24 @@ html:not([data-tier='full']) .ao-depth-extra {
   font-family: var(--ao-font-vazirmatn);
 }
 
+/* The switcher's "فارسی" alone (five letters) uses a 2 kB cut of the same
+   Vazirmatn at weight 400 instead of the 46 kB Arabic-script file, which a
+   German or English page would otherwise download for that one word
+   (scripts/vazirmatn-label.mjs). The full font stays behind it as a fallback
+   and is fetched only if a glyph is missing. */
+@font-face {
+  font-family: 'Vazirmatn Label';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/vazirmatn-label-400.woff2') format('woff2');
+  unicode-range: U+0020, U+0627, U+0631, U+0633, U+0641, U+06CC;
+}
+
+html:not([lang^='fa']) .ao-site-page [data-language-switcher] [lang^='fa'] {
+  font-family: 'Vazirmatn Label', var(--ao-font-vazirmatn);
+}
+
 /* ==========================================================================
    Light mode for the site's own pages in the old palette (owner decision
    2026-09-25, DECISIONS 74). Dark is the default always and the OS setting is
