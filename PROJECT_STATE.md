@@ -4,6 +4,12 @@ Last updated: 2026-09-25
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
 
+## Phone preview of the main site, PERF-01 (2026-09-25)
+
+Vitals after BR-09 (`vitals.mjs`, median of 3; budgets phone LCP 2.5 s, CLS 0.1, TBT 200 ms; desktop LCP 1.5 s, CLS 0.1, TBT 100 ms): phone landing FCP/LCP 0.74 s, CLS 0, TBT 80 ms; phone journey LCP 1.70 s, CLS 0.019, **TBT 659 ms (over, known PERF-02; BR-09 did not touch the journey, run-to-run spread, 503 ms on 09-24)**; phone desktop LCP 2.50 s, TBT 0; phone About LCP 0.74 s, CLS 0.025, TBT 79 ms; desktop landing 120 ms, journey 252 ms, desktop 820 ms, About 92 ms, all CLS <= 0.033 and TBT 0. `a11y.mjs`: 32/32 at 1280 de and 32/32 at 380 fa touch. No BR-09 regression found, nothing changed.
+
+**Private preview:** https://amonel-preview.ahmadrezataherieng.workers.dev (Worker `amonel-preview`, workers.dev only, no route or DNS on ahmadreza.de; the coming-soon Worker is untouched). Built with `AMONEL_PREVIEW_BUILD=1` (dummy address "Musterstraße 1", the real one is not in `out/`), then `out/robots.txt` = `Disallow: /`, no sitemap, and `X-Robots-Tag: noindex, nofollow` appended to `out/_headers`; checked on `/`, `/amonel/`, `/impressum/`, `/robots.txt` (200 plus the header). No `/api/*` Worker in the preview, so the counters stay hidden. Deployed with a throwaway wrangler config outside the repo (name `amonel-preview`, `workers_dev: true`, assets from `out/`). Delete it later: `npx wrangler delete amonel-preview`. Rebuild the real site before any real deploy (`out/` now holds the preview build).
+
 ## Coming-soon page deployed, BR-09 design (2026-09-25)
 
 Owner approved the BR-09 design. Fix before deploy: the star field shows only outside the content column (mask on `.sky`), and the English and Persian lines under the name wrap balanced. Deployed from `soon/` (Worker `silent-lake-8ae2`, version c2e5dc63-f66d-4131-962d-8892d067658a); `scripts/verify/live-soon.mjs` all checks passed. Lint, 242 tests, build, `soon.mjs` 208/208 green. The main site is not deployed.
