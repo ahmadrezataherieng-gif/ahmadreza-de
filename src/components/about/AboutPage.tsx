@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
 import { AboutContent } from '@/components/apps/about/AboutApp';
+import { Tip } from '@/components/illustrations/Icon';
+import { RouteScene } from '@/components/illustrations/scenes';
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
@@ -16,9 +18,14 @@ import type { Locale } from '@/lib/i18n-config';
  * very same component on the server - the text is in the HTML - with the
  * name as the h1, then offers the two ways into the site.
  */
+// Machine text, the same in every language. 203.0.113.0/24 is reserved for documentation (RFC 5737), so the example address belongs to no one.
+const DNS_CODE = 'ahmadreza.de  →  203.0.113.10';
+const CHMOD_CODE = 'chmod 755 backup.sh  →  rwxr-xr-x';
+
 export async function AboutPage({ locale }: { locale: Locale }) {
   const tSite = await getTranslations('site');
   const tNav = await getTranslations('nav');
+  const tLearn = await getTranslations('learn');
   const link =
     'ao-themed rounded-control border border-edge px-3 py-2 font-mono text-sm text-ink hover:border-accent hover:text-accent';
 
@@ -43,7 +50,17 @@ export async function AboutPage({ locale }: { locale: Locale }) {
         </header>
 
         <main className="pb-8">
-          <AboutContent appId="about" page />
+          {/* The way from Tehran to Trier beside the header, where the text leaves room (BR-09). */}
+          <AboutContent
+            appId="about"
+            page
+            art={<RouteScene className="absolute end-0 top-2 hidden w-48 @min-[640px]:block" />}
+          />
+          {/* CONTENT-TODO CR-1106: two learning snippets between the text and the ways on. */}
+          <div className="grid gap-3 px-4 pb-7 @min-[480px]:px-6 @min-[640px]:grid-cols-2 @min-[720px]:px-8">
+            <Tip label={tLearn('label')} code={DNS_CODE} text={tLearn('dns')} />
+            <Tip label={tLearn('label')} code={CHMOD_CODE} text={tLearn('chmod')} />
+          </div>
           <nav aria-label={tNav('home')} className="flex flex-wrap gap-2 px-4 @min-[480px]:px-6 @min-[720px]:px-8">
             <a href={viewHref(locale, 'journey')} className={link}>
               {tNav('journey')}

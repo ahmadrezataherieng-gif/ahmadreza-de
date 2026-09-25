@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { Icon } from '@/components/illustrations/Icon';
 import { useUnlockStore, type JourneyMode } from '@/store/unlock-store';
 import { cn } from '@/lib/cn';
 import { count } from '@/lib/count';
@@ -68,7 +69,8 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
                 </span>
                 <span className="font-display text-xl font-bold text-ink">{option.title}</span>
               </span>
-              <ModeGlyph mode={option.mode} />
+              {/* Watch it happen, or do it yourself: the icon set's play and pointer (BR-09). */}
+              <Icon name={option.mode === 'guided' ? 'play' : 'pointer'} className="h-6 w-6 text-accent" />
             </span>
             <span className="font-body text-sm leading-snug text-muted">{option.text}</span>
             <span className="mt-auto flex items-center justify-between gap-2 pt-2 font-mono text-[11px] tracking-wide text-accent uppercase">
@@ -87,19 +89,5 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-function ModeGlyph({ mode }: { mode: JourneyMode }) {
-  return (
-    <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 text-accent" aria-hidden="true">
-      {mode === 'guided' ? (
-        // Play: watch it happen.
-        <path d="M6 4l10 6-10 6z" fill="currentColor" />
-      ) : (
-        // Pointer: do it yourself.
-        <path d="M4 2l11 7-5 1 3 6-2 1-3-6-4 3z" fill="currentColor" />
-      )}
-    </svg>
   );
 }

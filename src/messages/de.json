@@ -773,6 +773,13 @@
     "text": "Diese Adresse gibt es auf ahmadreza.de nicht oder nicht mehr. Einer dieser Wege führt weiter:",
     "home": "Zur Startseite",
     "journey": "Die Reise",
-    "desktop": "Zum Desktop"
+    "desktop": "Zum Desktop",
+    "trace": "In einem Traceroute bedeutet * * *: Von diesem Abschnitt kam in der Wartezeit keine Antwort. Das Paket kann verloren sein – oder der Router antwortet einfach nicht."
+  },
+  "learn": {
+    "label": "Wussten Sie schon?",
+    "localhost": "Diese Adresse führt immer zum eigenen Rechner zurück: Wer sie aufruft, spricht mit sich selbst. Ihr Name ist localhost.",
+    "dns": "DNS ist das Telefonbuch des Internets: Es übersetzt einen Namen wie diesen in die IP-Adresse, unter der ein Server erreichbar ist. Die Adresse hier ist ein Beispiel.",
+    "chmod": "Unter Linux regeln drei Ziffern, wer eine Datei lesen, schreiben und ausführen darf: 7 für den Besitzer (alles), 5 für die Gruppe und für alle anderen (lesen und ausführen)."
   }
 }

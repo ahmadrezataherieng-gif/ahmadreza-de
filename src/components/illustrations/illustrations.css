@@ -101,7 +101,8 @@
   border: 1px dashed color-mix(in srgb, var(--ao-ill-amber) 45%, transparent);
   border-radius: 12px;
   padding: 12px 14px;
-  background: color-mix(in srgb, var(--ao-ill-amber) 5%, transparent);
+  /* Opaque, so no line of a drawing ever runs through the text. */
+  background: color-mix(in srgb, var(--ao-ill-amber) 6%, var(--ao-ill-body));
 }
 .ill-tip-label {
   display: flex;

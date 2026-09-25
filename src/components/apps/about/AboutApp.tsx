@@ -4,6 +4,8 @@ import { useId, useRef, type HTMLAttributes, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
+import { IconTile } from '@/components/illustrations/Icon';
+import type { IconName } from '@/components/illustrations/icons';
 import { VisitorStats } from '@/components/apps/about/VisitorStats';
 import type { AppProps } from '@/components/apps/types';
 import { careerStations, languages, skillAreas, type CareerStation } from '@/content/about';
@@ -33,7 +35,10 @@ export function AboutApp(props: AppProps) {
  * and without the visitor numbers - one component, so the app and the page
  * can never drift apart.
  */
-export function AboutContent({ appId, page = false }: AppProps & { page?: boolean }) {
+// The static page's section and skill icons (BR-09); the window in the desktop stays as it was.
+const SKILL_ICONS: Record<(typeof skillAreas)[number]['id'], IconName> = { network: 'network', systems: 'terminal', support: 'support' };
+
+export function AboutContent({ appId, page = false, art }: AppProps & { page?: boolean; art?: ReactNode }) {
   const t = useTranslations('about');
   const headingId = useId();
   const lastRef = useRef<HTMLUListElement>(null);
@@ -41,7 +46,8 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
   return (
     <article aria-labelledby={headingId} data-app-content={appId} className="@container min-h-full">
       <div className="mx-auto flex max-w-3xl flex-col gap-7 p-4 @min-[480px]:p-6 @min-[720px]:p-8">
-        <header className="flex flex-col gap-3">
+        <header className={cn('flex flex-col gap-3', art && 'relative @min-[640px]:pe-52')}>
+          {art}
           <p className="font-mono text-[11px] tracking-[0.25em] text-accent uppercase">{t('eyebrow')}</p>
           <Heading level={page ? 1 : 2} id={headingId} className="font-display text-2xl leading-tight font-bold text-ink @min-[480px]:text-3xl">
             {t('name')}
@@ -55,7 +61,7 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
           <Actions />
         </header>
 
-        <Section page={page} title={t('path.title')}>
+        <Section page={page} icon="route" title={t('path.title')}>
           <ol className="flex flex-col gap-4 border-s border-edge ps-4">
             {careerStations.map((station) => (
               <Station key={station.id} station={station} page={page} />
@@ -63,7 +69,7 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
           </ol>
         </Section>
 
-        <Section page={page} title={t('now.title')}>
+        <Section page={page} icon="pin" title={t('now.title')}>
           <div className="flex flex-col gap-3 font-body leading-relaxed text-ink">
             {asStringList(t.raw('now.text')).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -71,11 +77,12 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
           </div>
         </Section>
 
-        <Section page={page} title={t('skills.title')}>
+        <Section page={page} icon="chip" title={t('skills.title')}>
           <div className="grid gap-4 @min-[640px]:grid-cols-3">
             {skillAreas.map((area) => (
               <section key={area.id} className="ao-themed rounded-control border border-edge bg-elevated/50 p-3">
-                <Heading level={page ? 3 : 4} className="mb-2 font-mono text-xs tracking-wide text-accent uppercase">
+                <Heading level={page ? 3 : 4} className="mb-2 flex items-center gap-2 font-mono text-xs tracking-wide text-accent uppercase">
+                  {page ? <IconTile name={SKILL_ICONS[area.id]} className="h-7 w-7 rounded-control" /> : null}
                   {t(`skills.areas.${area.id}.title`)}
                 </Heading>
                 <ul className="flex flex-col gap-1.5 font-body text-sm text-ink">
@@ -91,7 +98,7 @@ export function AboutContent({ appId, page = false }: AppProps & { page?: boolea
           </div>
         </Section>
 
-        <Section page={page} title={t('languages.title')}>
+        <Section page={page} icon="languages" title={t('languages.title')}>
           <ul ref={lastRef} className="flex flex-wrap gap-2">
             {languages.map((language) => (
               <li
@@ -118,11 +125,12 @@ function Heading({ level, ...props }: { level: 1 | 2 | 3 | 4 } & HTMLAttributes<
   return <Tag {...props} />;
 }
 
-function Section({ title, page, children }: { title: string; page: boolean; children: ReactNode }) {
+function Section({ title, page, icon, children }: { title: string; page: boolean; icon: IconName; children: ReactNode }) {
   const id = useId();
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <Heading level={page ? 2 : 3} id={id} className="font-display text-lg font-bold text-ink">
+      <Heading level={page ? 2 : 3} id={id} className="flex items-center gap-3 font-display text-lg font-bold text-ink">
+        {page ? <IconTile name={icon} /> : null}
         {title}
       </Heading>
       {children}

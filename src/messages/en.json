@@ -772,6 +772,13 @@
     "text": "This address does not exist on ahmadreza.de, or no longer does. One of these ways leads on:",
     "home": "Home",
     "journey": "The journey",
-    "desktop": "To the desktop"
+    "desktop": "To the desktop",
+    "trace": "In a traceroute, * * * means that no answer came back from that hop in time. The packet may be lost – or the router simply does not reply."
+  },
+  "learn": {
+    "label": "Did you know?",
+    "localhost": "This address always leads back to your own computer: whoever calls it is talking to itself. Its name is localhost.",
+    "dns": "DNS is the phone book of the internet: it turns a name like this one into the IP address where a server can be reached. The address here is an example.",
+    "chmod": "On Linux, three digits decide who may read, write and run a file: 7 for the owner (everything), 5 for the group and for everyone else (read and run)."
   }
 }

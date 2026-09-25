@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* The illustration system of the site's own pages and the coming-soon page (BR-09). */
+@import '../components/illustrations/illustrations.css';
 
 /* --------------------------------------------------------------------------
    Registered custom properties.
@@ -3320,6 +3322,16 @@ html[data-scheme='light'] .ao-site-page {
   --ao-brand-green: #1d8a5c;
   --ao-brand-green-deep: #146b47;
   --ao-brand-amber: #b8660f;
+  --ao-ill-cyan: #0b7285;
+  --ao-ill-mint: #18794e;
+  --ao-ill-amber: #b8660f;
+  --ao-ill-edge: #aab8c7;
+  --ao-ill-body: #ffffff;
+  --ao-ill-screen: #e9f5f0;
+  --ao-ill-star: #0b1320;
+  --ao-ill-amber-text: #9a5308;
+  --ao-ill-code: #18794e;
+  --ao-ill-glow: none;
   background-color: var(--ao-color-background);
   color: var(--ao-color-text);
   color-scheme: light;
@@ -3354,6 +3366,19 @@ html[data-scheme='light'] .ao-site-page .ao-landing-grain {
    gets the mono face's wide space. The era themes of the journey and desktop
    keep their own faces; this scope is only the landing, About, legal and 404. */
 .ao-site-page {
+  /* The illustration tokens (BR-09, DECISIONS 75), read by
+     components/illustrations/illustrations.css; the coming-soon page defines the
+     same names in soon/tokens.css. Light values below, with the light mode. */
+  --ao-ill-cyan: #22d3ee;
+  --ao-ill-mint: #5de2a4;
+  --ao-ill-amber: #f0a44a;
+  --ao-ill-edge: #34404f;
+  --ao-ill-body: #111722;
+  --ao-ill-screen: #0a1512;
+  --ao-ill-star: #e9edf5;
+  --ao-ill-amber-text: #f0a44a;
+  --ao-ill-code: #5de2a4;
+  --ao-ill-glow: drop-shadow(0 0 4px currentColor);
   --ao-font-display: var(--ao-font-space);
   --ao-font-body: var(--ao-font-inter);
   --ao-font-mono: var(--ao-font-inter);

@@ -7,6 +7,8 @@ import { locales, type Locale } from '@/lib/i18n-config';
 import { viewHref } from '@/lib/routing';
 import { SCHEME_SCRIPT } from '@/lib/scheme';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
+import { Tip } from '@/components/illustrations/Icon';
+import { PacketLostScene } from '@/components/illustrations/scenes';
 
 /**
  * The one 404 page (`out/404.html`), which Cloudflare serves with a real 404
@@ -15,13 +17,29 @@ import { SchemeToggle } from '@/components/ui/SchemeToggle';
  * and Persian, each with its own links home, into the journey and to the
  * desktop. The root layout is a pass-through, so this renders its own
  * <html>. No client code: plain anchors and static text.
- * CONTENT-TODO CR-1031
+ * CONTENT-TODO CR-1031, CR-1107 (the traceroute snippets)
  */
+
+// A made-up traceroute that ends in silence (BR-09). Machine text, the same in
+// every language; both hops are private addresses (RFC 1918) and belong to no one.
+const TRACE = ['$ traceroute ahmadreza.de', ' 1  192.168.0.1    1.2 ms', ' 2  10.20.0.1      8.4 ms', ' 3  * * *'].join('\n');
+
+// The code line of each language's snippet: the three stars it explains.
+const STARS = '3  * * *';
 
 const COPY: Record<Locale, typeof de.notFound> = {
   de: de.notFound,
   en: en.notFound,
   fa: fa.notFound,
+};
+
+// Each language's ways on get their own name, so the three navigations stay distinguishable.
+const NAV_LABEL: Record<Locale, string> = { de: de.nav.home, en: en.nav.home, fa: fa.nav.home };
+
+const LEARN: Record<Locale, typeof de.learn> = {
+  de: de.learn,
+  en: en.learn,
+  fa: fa.learn,
 };
 
 export const metadata: Metadata = {
@@ -52,6 +70,13 @@ export default function NotFound() {
               }}
             />
           </div>
+          {/* The lost packet and the traceroute that never arrives: decoration, explained in words in every language below. */}
+          <figure className="-mt-4 grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" aria-hidden="true">
+            <PacketLostScene className="w-full max-w-sm" />
+            <pre className="ao-tech overflow-x-auto rounded-window border border-edge bg-surface px-4 py-3 font-mono text-xs leading-relaxed text-muted" dir="ltr">
+              {TRACE}
+            </pre>
+          </figure>
           {locales.map((locale, index) => {
             const copy = COPY[locale];
             const Heading = index === 0 ? 'h1' : 'h2';
@@ -66,7 +91,7 @@ export default function NotFound() {
                   {copy.title}
                 </Heading>
                 <p className="font-body text-muted">{copy.text}</p>
-                <nav className="flex flex-wrap gap-2">
+                <nav aria-label={NAV_LABEL[locale]} className="flex flex-wrap gap-2">
                   <a href={viewHref(locale, 'landing')} className={link}>
                     {copy.home}
                   </a>
@@ -77,6 +102,7 @@ export default function NotFound() {
                     {copy.desktop}
                   </a>
                 </nav>
+                <Tip label={LEARN[locale].label} code={STARS} text={copy.trace} className="mt-2 max-w-xl" />
               </section>
             );
           })}
