@@ -16,6 +16,8 @@ One commit per step, lint, tests and build green before each, nothing deployed.
 
 - [x] 6. Owner decisions applied (2026-09-25, DECISIONS 74): fonts per role (Space Grotesk headings/name, Inter body, JetBrains Mono technical only, Vazirmatn Persian; also on the coming-soon page), light mode merged (`proposal/light-old-palette` deleted) with dark as the fixed default and a sun/moon toggle (localStorage `ao-scheme` after a click only), Datenschutz sentence + row (CR-1102), coming-soon light recoloured to cyan/mint/amber, Persian word gaps and the right-edge strip fixed. axe clean on landing and coming-soon (de, fa, both modes) plus About fa light; `soon.mjs` 208/208; screenshots in `Claude outputs/final-review/`. Not deployed; the coming-soon page still needs the BR-08 redeploy.
 
+- [x] 7. Coming-soon light glow fixed (the amber pool was cut at the viewport height by `background-attachment: fixed`; now it fades with the page). Coming-soon page **deployed** (Worker silent-lake-8ae2, version d7a0982d-8278-4b2e-99a2-f2bb1126eede); `live-soon.mjs` all passed, `soon.mjs --base https://ahmadreza.de/` 208/208. BR-08 done. The main site is still not deployed.
+
 **What the owner chooses next (BR-08):** (1) light mode yes or no - if yes, merge `proposal/light-old-palette`; (2) one font per role (a, b, c) - the chosen ones get installed, licensed in `public/fonts/` and checked; (3) then rebuild and redeploy the coming-soon page (`npm run build:soon`, `npx wrangler deploy` in `soon/`, then `live-soon.mjs` and `soon.mjs --base https://ahmadreza.de/`) - until then the live page still shows the K6 look.
 
 ## Work queue (started 2026-09-24; resume with "continue the work queue")
