@@ -376,6 +376,87 @@
     "welcome": "Willkommen bei Amonel OS",
     "desktopLabel": "Leerer Amonel-OS-Desktop"
   },
+  "crossings": {
+    "between": "Dazwischen: die Technik zwischen zwei Epochen",
+    "when": {
+      "nineties": "1990er",
+      "today": "Heute"
+    },
+    "techs": {
+      "transistor": {
+        "name": "Transistor"
+      },
+      "univac": {
+        "name": "UNIVAC I"
+      },
+      "coreMemory": {
+        "name": "Magnetkernspeicher"
+      },
+      "integratedCircuit": {
+        "name": "Integrierter Schaltkreis"
+      },
+      "system360": {
+        "name": "IBM System/360"
+      },
+      "arpanet": {
+        "name": "ARPANET"
+      },
+      "intel4004": {
+        "name": "Intel 4004",
+        "note": "Mikroprozessor"
+      },
+      "floppy": {
+        "name": "8-Zoll-Diskette"
+      },
+      "ethernet": {
+        "name": "Ethernet"
+      },
+      "altair": {
+        "name": "Altair 8800"
+      },
+      "appleII": {
+        "name": "Apple II"
+      },
+      "mouse": {
+        "name": "Maus",
+        "note": "Vorführung"
+      },
+      "alto": {
+        "name": "Xerox Alto",
+        "note": "erste grafische Oberfläche"
+      },
+      "lisa": {
+        "name": "Apple Lisa"
+      },
+      "cdrom": {
+        "name": "CD-ROM"
+      },
+      "web": {
+        "name": "World Wide Web"
+      },
+      "linux": {
+        "name": "Linux"
+      },
+      "modem": {
+        "name": "Einwahl-Modem"
+      },
+      "search": {
+        "name": "Websuche"
+      },
+      "wifi": {
+        "name": "WLAN (Wi-Fi)"
+      },
+      "cloud": {
+        "name": "Cloud-Computing"
+      },
+      "smartphone": {
+        "name": "Smartphone"
+      },
+      "ai": {
+        "name": "KI"
+      }
+    }
+  },
   "landing": {
     "eyebrow": "Portfolio",
     "firstName": "Ahmadreza",

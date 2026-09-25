@@ -41,3 +41,7 @@ Switching a theme manually:
 import { useThemeStore } from '@/store/theme-store';
 useThemeStore.getState().setTheme('era1984');
 ```
+
+## The journey does not write the theme on <html> (PERF-03)
+
+While the journey is mounted `scopeThemeTo([chrome, effects layer])` redirects `applyThemeToDocument` to those two elements (and skips `data-cursor`); `<html>` keeps the first era's tokens. Leaving the journey re-applies the store's theme to `<html>`. Elements outside the eras that need a theme during the journey - portals - carry `data-theme-scope`. Anything new that reads the document theme inside the journey must sit under the chrome wrapper or carry a scope.

@@ -8,8 +8,10 @@ import { EraBridge } from '@/components/journey/EraBridge';
 import { eraStaging } from '@/components/journey/eras/registry';
 import { PuzzleSlot } from '@/components/puzzles/PuzzleSlot';
 
-/** Scroll distance of one crossing, in viewport heights (DECISIONS.md 45). */
-export const BOUNDARY_LENGTH = 1.4;
+import { BOUNDARY_LENGTH, crossingLength } from '@/components/journey/crossing-timing';
+import { techCount } from '@/content/crossings';
+
+export { BOUNDARY_LENGTH };
 
 interface EraSectionProps {
   era: Era;
@@ -53,9 +55,10 @@ export function EraSection({ era, sectionId, nextSectionId, previous }: EraSecti
 
   // Scroll distance, in viewport heights: the crossing in, the visual's own
   // travel, the puzzle segment, then the crossing out into the next era.
-  const inLength = previous ? BOUNDARY_LENGTH : 0;
+  // Each crossing has its own length: a card per technology (BR-10).
+  const inLength = previous ? crossingLength(techCount(previous.id)) : 0;
   const visualLength = staging.length - 1;
-  const total = inLength + staging.length + staging.puzzleLength + BOUNDARY_LENGTH;
+  const total = inLength + staging.length + staging.puzzleLength + crossingLength(techCount(era.id));
 
   return (
     <section
@@ -71,7 +74,7 @@ export function EraSection({ era, sectionId, nextSectionId, previous }: EraSecti
         {
           '--era-length': total,
           '--puzzle-length': staging.puzzleLength,
-          '--boundary-length': BOUNDARY_LENGTH,
+          '--boundary-length': inLength || BOUNDARY_LENGTH,
         } as CSSProperties
       }
     >

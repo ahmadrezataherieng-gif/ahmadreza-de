@@ -58,7 +58,7 @@ export function generateStaticParams(): LayoutParams[] {
  */
 const VIEW_NAMESPACES: Record<View, readonly string[]> = {
   landing: ['site', 'nav', 'languages', 'landing', 'mode'],
-  journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'mode'],
+  journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'crossings', 'mode'],
   // No era, journey or puzzle copy: the desktop loads none of that code either.
   desktop: ['site', 'nav', 'languages', 'os'],
   // The About app's own copy (messages/apps/about/) is merged in below.

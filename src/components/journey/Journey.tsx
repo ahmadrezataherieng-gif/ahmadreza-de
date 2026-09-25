@@ -16,6 +16,7 @@ import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { scrollToEra, setActiveLenis, setLayoutChangeHandler } from '@/lib/lenis-controller';
 import { applyThemeToDocument, scopeThemeTo, themeToCssVars } from '@/lib/apply-theme';
 import { startPrinting } from '@/lib/print-controller';
+import { TECH_FROM, TECH_TO } from '@/components/journey/crossing-timing';
 import { getTheme, type ThemeId } from '@/lib/themes';
 
 import { EraSection } from '@/components/journey/EraSection';
@@ -206,6 +207,8 @@ export function Journey() {
       };
       top: number;
       height: number;
+      /** How many technology cards the crossing into this era shows (0: none). */
+      shots: number;
       /** Whether the stage is sticky at this viewport size (CSS decides). */
       pinned: boolean;
       startAt: number;
@@ -234,6 +237,8 @@ export function Journey() {
         published: number;
         /** Whether the puzzle layer was last marked as visible (null: never written). */
         live: boolean | null;
+        /** The technology card last marked as current on the crossing. */
+        shot: number;
         /** Whether the crossing into this section was last marked as under way. */
         crossing: boolean | null;
         /** Whether the section was last marked as off screen. */
@@ -292,7 +297,9 @@ export function Journey() {
       const bandInFlow =
         bandElement !== null &&
         bandElement.getClientRects().length > 0 &&
-        getComputedStyle(bandElement).position !== 'absolute';
+        // Relative: a band in flow. Absolute is the pinned overlay; static is
+        // reduced motion, where the technologies are laid out as a list (BR-10).
+        getComputedStyle(bandElement).position === 'relative';
       const bandPanel = bandElement?.querySelector<HTMLElement>('.ao-bridge-panel');
       const band =
         bandElement && bandInFlow
@@ -325,6 +332,7 @@ export function Journey() {
         },
         top,
         height,
+        shots: Number(bandElement?.dataset.shots ?? 0),
         pinned,
         startAt: Number(section.dataset.startAt ?? '0'),
         stageTop: stage ? stage.getBoundingClientRect().top + scrollY : top,
@@ -352,6 +360,7 @@ export function Journey() {
           arrival: Number.NaN,
           published: Number.NaN,
           live: null,
+          shot: Number.NaN,
           crossing: null,
           offScreen: null,
         },
@@ -517,6 +526,17 @@ export function Journey() {
         ]);
         // Inherited through the puzzle layer only.
         write('puzzle', [['--puzzle-progress', layer]]);
+        // Which technology card is current on this crossing, so CSS shows it and
+        // its neighbours and nothing else: -1 before the first, the count after
+        // the last (BR-10). Written on change, never per frame.
+        if (entry.shots > 0 && bridge) {
+          const slot = (TECH_TO - TECH_FROM) / entry.shots;
+          const shot = Math.max(-1, Math.min(entry.shots, Math.floor((values.boundaryIn - TECH_FROM) / slot)));
+          if (shot !== entry.last.shot) {
+            entry.last.shot = shot;
+            bridge.dataset.shot = String(shot);
+          }
+        }
         // The era's own arrival (a CRT warming up, lights coming on): the last
         // stretch of the crossing, written on the four kinds of element that
         // read it. Inherited from the scene it restyled every element of the

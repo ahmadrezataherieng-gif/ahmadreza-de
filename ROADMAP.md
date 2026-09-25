@@ -43,16 +43,16 @@ build time).
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
 | `seo` | 20 | 3 | 4 | 67.1 / 84 | 80 % |
-| `launch` | 12 | 2 | 13 | 44.5 / 105 | 42 % |
-| **all** | 73 | 8 | 28 | 310.7 / 426 | **73 %** |
+| `launch` | 13 | 2 | 12 | 52.5 / 105 | 50 % |
+| **all** | 74 | 8 | 27 | 318.7 / 426 | **75 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 1 | 12 | 22 |
-| P1 | 12 | 6 | 39 | 57 |
+| P1 | 11 | 6 | 40 | 57 |
 | P2 | 7 | 1 | 22 | 30 |
-| **total** | **28** | **8** | **73** | **109** |
+| **total** | **27** | **8** | **74** | **109** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -186,7 +186,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-07 | **Revert the K6 look** (owner, 2026-09-25, DECISIONS.md 73): the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) and the coming-soon page get their old look back - navy-teal page with the green and amber glows, blue-tinted cards, cyan and mint accents, the old heading and name fonts, dark only. Kept: all content, the app, SEO and performance work, the 301s, the tests, Vazirmatn for Persian everywhere, no letter-spacing in Persian, and the phone/RTL layout fixes of BR-06. Unused font files removed, `public/fonts/LICENSES.md` matches what ships. | done | P1 | Claude Code | BR-06 | M | launch |
 | BR-08 | **Owner choices applied (DECISIONS 74):** fonts and light mode done; left: redeploy the coming-soon page (BR-03). | done | P1 | Ahmadreza + Claude Code | BR-07 | S | launch |
 | BR-09 | **Illustrations and small learning details in one system** (owner, 2026-09-25, DECISIONS.md 75): the final design stays (navy palette, glows, Space Grotesk / Inter / JetBrains Mono / Vazirmatn, dark default with the sun/moon toggle); pages get inline-SVG illustrations, a 24 px icon set and at most three translated "Wussten Sie schon?" snippets each, all from `src/components/illustrations/` (icons.ts, illustrations.css, React components; the coming-soon build injects the same CSS and icons). Done 2026-09-25 in three steps: the coming-soon page (the e365de3 scene upgraded, star field, `ahmadreza@amonel:~$ status` terminal header, chips, icons, three snippets); landing, About and 404 (legal pages stay sober); axe clean (de, fa, dark, light, 1440 and 390) and screenshots in `Claude outputs/br09/`. Not deployed: the coming-soon page needs a redeploy (BR-03) to show it. | done | P2 | Claude Code | BR-08 | M | launch |
-| BR-10 | **Crossing animations** (owner, 2026-09-25, DECISIONS.md 77): every crossing between two eras shows, scrubbed by scroll in both directions, the technologies between them in year order (1946-56 transistor, core memory, UNIVAC I; 1956-71 integrated circuit, System/360, ARPANET; 1971-81 Intel 4004, floppy disk, Ethernet, Altair 8800, Apple II; 1981-84 mouse and Xerox Alto, Lisa; 1984-95 CD-ROM, World Wide Web, Linux, dial-up modem; 1995-today web search, Wi-Fi, cloud computing, smartphone, AI). Inline SVG/CSS, transform and opacity only, generic drawings (no logos), short labels with the year in de/en/fa, a still version under reduced motion. Labels are PLACEHOLDER (CONTENT_REVIEW). | missing | P1 | Claude Code | PERF-02 | L | launch |
+| BR-10 | **Crossing animations** (owner, 2026-09-25, DECISIONS.md 77): every crossing between two eras shows, scrubbed by scroll in both directions, the technologies between them in year order (1946-56 transistor, core memory, UNIVAC I; 1956-71 integrated circuit, System/360, ARPANET; 1971-81 Intel 4004, floppy disk, Ethernet, Altair 8800, Apple II; 1981-84 mouse and Xerox Alto, Lisa; 1984-95 CD-ROM, World Wide Web, Linux, dial-up modem; 1995-today web search, Wi-Fi, cloud computing, smartphone, AI). Inline SVG/CSS, transform and opacity only, generic drawings (no logos), short labels with the year in de/en/fa, a still version under reduced motion. Labels are PLACEHOLDER (CONTENT_REVIEW). Done 2026-09-25: `content/crossings.ts` (23 cards), `journey/tech/` (drawings and layer), `crossing-timing.ts`, a `data-shot` written by the resolver, the CSS block at the end of `globals.css`; crossing lengths 2.1 / 2.4 / 2.7 viewports for 3 / 4 / 5 cards; reduced motion lays the cards out as a still row; checks `crossings.test.mjs`, `crossing-frames.mjs`, `crossing-a11y.mjs`; screenshots in `Claude outputs/br10/`. Wording is PLACEHOLDER (CONTENT_REVIEW 37). | done | P1 | Claude Code | PERF-02 | L | launch |
 
 ## Owner tasks - assets and accounts
 

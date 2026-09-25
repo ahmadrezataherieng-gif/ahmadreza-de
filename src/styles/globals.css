@@ -3380,3 +3380,477 @@ html[data-scheme='light'] .ao-site-page .ao-landing-grain {
 html:has(.ao-site-page) {
   scrollbar-gutter: auto;
 }
+
+/* ==========================================================================
+   Crossings with cards (BR-10, DECISIONS.md 77)
+
+   Between two eras the journey shows the technologies that made the second
+   one possible, one card each, in year order. Everything here is a function of
+   --boundary-in, like the rest of the crossing, and only transform and opacity
+   move:
+
+     0.14-0.24  the old machine fades out; the era being left has receded
+     0.24-0.74  the cards, one slot each, and the background changing hands
+                behind them (the travelling edge crosses at 0.5)
+     0.78-0.86  the new machine fades back in as the overlay lifts
+
+   The resolver marks the bridge with the card that is current (data-shot); only
+   that card and its neighbours are displayed, so a crossing restyles a handful
+   of elements per frame, not all 23 drawings. Reduced motion lays the cards
+   out as a still row, complete and tidy.
+   ========================================================================== */
+
+/* One card's own progress, 0..1, over its slot and a lead on either side. */
+@property --t {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+/* How far the cards have taken the stage from the old and new machines. */
+@property --tech-cover {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.ao-bridge-tech {
+  display: none;
+}
+
+/* Only the still layout has room for it. */
+.ao-tech-caption {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ao-bridge[data-shots] .ao-bridge-panel {
+    --tech-cover: calc(
+      clamp(0, (var(--boundary-in) - (var(--tech-from) - 0.1)) / 0.1, 1) *
+        (1 - clamp(0, (var(--boundary-in) - var(--tech-to) - 0.04) / 0.08, 1))
+    );
+  }
+
+  /* The machines step aside for the cards: the earlier rule for these two,
+     multiplied by what the cards have taken. */
+  .ao-bridge[data-shots] .ao-bridge-art,
+  .ao-bridge[data-shots] .ao-bridge-wide {
+    opacity: calc(
+      (
+        1 - var(--bridge-overlay) *
+          (1 - clamp(0, var(--boundary-in) / 0.08, 1) * (1 - clamp(0, (var(--boundary-in) - 0.86) / 0.12, 1)))
+      ) * (1 - var(--tech-cover))
+    );
+  }
+
+  /* The era being left has receded before the first card arrives, not after. */
+  .ao-bridge[data-shots] .ao-bridge-veil--from {
+    --recede: calc(
+      clamp(0, (var(--boundary-in) - 0.04) / 0.18, 1) * (1 - clamp(0, (var(--boundary-in) - 0.7) / 0.02, 1))
+    );
+  }
+
+  .ao-bridge-tech {
+    display: block;
+    position: absolute;
+    inset: 0;
+    container-type: size;
+    pointer-events: none;
+  }
+
+  .ao-shot {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    perspective: 900px;
+    perspective-origin: 50% 46%;
+    z-index: calc(var(--i) + 1);
+
+    --slot: calc((var(--tech-to) - var(--tech-from)) / var(--tech-n));
+    --lead: calc(var(--slot) * 0.25);
+    --t: clamp(
+      0,
+      calc(
+        (var(--boundary-in) - var(--tech-from) - var(--i) * var(--slot) + var(--lead)) / (var(--slot) + 2 * var(--lead))
+      ),
+      1
+    );
+    --enter: clamp(0, calc(var(--t) / 0.24), 1);
+    --leave: clamp(0, calc((var(--t) - 0.76) / 0.24), 1);
+  }
+
+  /* The card that is current and its neighbours; data-shot is -1 before the
+     first slot and the count after the last. */
+  .ao-bridge[data-shot='-1'] .ao-shot[data-i='0'],
+  .ao-bridge[data-shot='0'] .ao-shot:is([data-i='0'], [data-i='1']),
+  .ao-bridge[data-shot='1'] .ao-shot:is([data-i='0'], [data-i='1'], [data-i='2']),
+  .ao-bridge[data-shot='2'] .ao-shot:is([data-i='1'], [data-i='2'], [data-i='3']),
+  .ao-bridge[data-shot='3'] .ao-shot:is([data-i='2'], [data-i='3'], [data-i='4']),
+  .ao-bridge[data-shot='4'] .ao-shot:is([data-i='3'], [data-i='4'], [data-i='5']),
+  .ao-bridge[data-shot='5'] .ao-shot:is([data-i='4'], [data-i='5']) {
+    display: flex;
+  }
+
+  /* A card arrives from the inline-end side out of the depth, rests with a
+     slow drift, and leaves toward the inline-start side past the camera. */
+  .ao-shot-card {
+    transform: translate3d(
+        calc(var(--flip) * ((1 - var(--enter)) - var(--leave)) * 44cqw),
+        calc(((1 - var(--enter)) - var(--leave)) * 7cqh),
+        calc((1 - var(--enter)) * -380px + var(--leave) * 220px + (var(--t) - 0.5) * 36px)
+      )
+      rotateY(calc(var(--flip) * ((1 - var(--enter)) * -26deg + var(--leave) * 20deg + (0.5 - var(--t)) * 5deg)));
+    opacity: calc(clamp(0, (var(--enter) - 0.2) * 1.9, 1) * (1 - clamp(0, var(--leave) * 1.9, 1)));
+  }
+
+  [data-crossing] .ao-shot-card,
+  [data-crossing] .ao-shot-ghost {
+    will-change: transform, opacity;
+  }
+
+  /* The year, very large and faint, behind the card: it moves against it. */
+  .ao-shot-ghost {
+    transform: translate3d(calc(var(--flip) * (0.5 - var(--t)) * 26cqw), 0, -200px);
+    opacity: calc(0.1 * clamp(0, sin((var(--t) - 0.18) * 265deg), 1));
+  }
+
+  /* --- where the crossing is ------------------------------------------ */
+  .ao-tech-rule {
+    opacity: var(--tech-cover);
+  }
+
+  .ao-tech-fill {
+    transform: translateY(-50%)
+      scaleX(clamp(0, (var(--boundary-in) - var(--tech-from)) / (var(--tech-to) - var(--tech-from)), 1));
+  }
+
+  .ao-tech-dot::after {
+    opacity: clamp(
+      0,
+      (var(--boundary-in) - var(--tech-from) - var(--i) * (var(--tech-to) - var(--tech-from)) / var(--tech-n)) / 0.02,
+      1
+    );
+  }
+}
+
+/* --- the card ---------------------------------------------------------------- */
+
+.ao-shot-card {
+  width: min(76cqw, 62cqh, 30rem);
+  padding: clamp(10px, 3cqmin, 20px);
+  text-align: center;
+  color: var(--ao-color-text);
+  background: var(--ao-color-surface);
+  border: 1px solid var(--ao-color-border);
+  border-radius: var(--ao-radius-window);
+  box-shadow:
+    var(--ao-shadow-window),
+    0 0 56px color-mix(in srgb, var(--ao-color-glow) 24%, transparent);
+}
+
+@container (orientation: portrait) {
+  .ao-shot-card {
+    width: min(80cqw, 30rem);
+  }
+
+  .ao-shot-art {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.ao-shot-art {
+  aspect-ratio: 4 / 3;
+  background: radial-gradient(
+    circle at 50% 44%,
+    color-mix(in srgb, var(--ao-color-glow) 16%, transparent),
+    transparent 72%
+  );
+}
+
+.ao-shot-year {
+  margin: 0.7em 0 0;
+  font-family: var(--ao-font-jetbrains);
+  font-size: clamp(11px, 3.1cqmin, 14px);
+  letter-spacing: 0.16em;
+  color: var(--ao-color-accent);
+}
+
+.ao-shot-name {
+  margin: 0.2em 0 0;
+  font-size: clamp(16px, 4.6cqmin, 24px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ao-shot-note {
+  display: block;
+  margin-top: 0.25em;
+  font-size: 0.68em;
+  font-weight: 400;
+  color: var(--ao-color-text-muted);
+}
+
+.ao-shot-ghost {
+  position: absolute;
+  inset-inline: 0;
+  top: 6%;
+  text-align: center;
+  font-family: var(--ao-font-jetbrains);
+  font-size: min(30cqw, 26cqh);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ao-color-text);
+}
+
+/* The ruler: two eras and a mark for each card. Its own neutral plate, because
+   it sits over the background as it changes hands. */
+.ao-tech-rule {
+  position: absolute;
+  inset-inline: 0;
+  bottom: max(11cqh, 96px);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: min(78cqw, 26rem);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: #10151c;
+  border: 1px solid #2b3540;
+  color: #dfe6ee;
+  font-family: var(--ao-font-jetbrains);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.ao-tech-track {
+  position: relative;
+  flex: 1;
+  height: 14px;
+}
+
+.ao-tech-line,
+.ao-tech-fill {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 2px;
+  background: #33404d;
+}
+
+.ao-tech-line {
+  transform: translateY(-50%);
+}
+
+/* Its transform is the scroll-driven one above; reduced motion hides the ruler. */
+.ao-tech-fill {
+  background: #7dd3fc;
+  transform-origin: left center;
+}
+
+:dir(rtl) .ao-tech-fill {
+  transform-origin: right center;
+}
+
+.ao-tech-dot {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: calc((var(--i) + 0.5) / var(--tech-n) * 100%);
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  margin-inline-start: -4.5px;
+  border-radius: 50%;
+  background: #33404d;
+}
+
+.ao-tech-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #7dd3fc;
+  box-shadow: 0 0 8px #7dd3fc;
+}
+
+/* --- the drawings -------------------------------------------------------------- */
+
+.tt-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.tt-ln,
+.tt-body,
+.tt-dim,
+.tt-accl,
+.tt-lens {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tt-ln {
+  fill: none;
+  stroke: var(--ao-color-text);
+  stroke-width: 2;
+}
+
+.tt-body {
+  fill: var(--ao-color-surface-elevated);
+  stroke: var(--ao-color-text);
+  stroke-width: 2;
+}
+
+.tt-dim {
+  fill: none;
+  stroke: var(--ao-color-text-muted);
+  stroke-width: 1.4;
+}
+
+.tt-faint {
+  opacity: 0.5;
+}
+
+.tt-mute {
+  fill: var(--ao-color-text-muted);
+}
+
+.tt-acc {
+  fill: var(--ao-color-accent);
+}
+
+.tt-accl {
+  fill: none;
+  stroke: var(--ao-color-accent);
+  stroke-width: 2;
+}
+
+.tt-wood {
+  fill: #b98a4e;
+  stroke: var(--ao-color-text);
+  stroke-width: 2;
+}
+
+.tt-sheen {
+  fill: var(--ao-color-accent);
+  opacity: 0.16;
+}
+
+.tt-lens {
+  fill: color-mix(in srgb, var(--ao-color-accent) 16%, transparent);
+  stroke: var(--ao-color-text);
+  stroke-width: 2.4;
+}
+
+/* Last, so a shape that is both filled and outlined keeps its fill. */
+.tt-fill {
+  fill: var(--ao-color-background);
+}
+
+/* Motion: every drawing moves by its shot's own progress, transform and opacity
+   only. Elements turn about their own centre. */
+.tt-m {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.tt-spin {
+  transform: rotate(calc(var(--t) * var(--turn, 300deg)));
+}
+
+.tt-blink {
+  opacity: calc(0.35 + 0.65 * (0.5 + 0.5 * sin(calc(var(--t) * var(--rate, 720deg) + var(--ph, 0deg)))));
+}
+
+.tt-slide {
+  transform: translate(
+    calc(var(--dx, 0px) * clamp(0, (var(--t) - var(--a, 0.2)) / var(--b, 0.5), 1)),
+    calc(var(--dy, 0px) * clamp(0, (var(--t) - var(--a, 0.2)) / var(--b, 0.5), 1))
+  );
+}
+
+.tt-in {
+  opacity: clamp(0, calc((var(--t) - var(--a, 0.1)) / var(--b, 0.3)), 1);
+}
+
+/* 1947: the tube shrinks away and the transistor takes its place. */
+.tt-tube-out {
+  opacity: calc(1 - clamp(0, (var(--t) - 0.08) / 0.26, 1));
+  transform: scale(calc(1.15 - clamp(0, (var(--t) - 0.08) / 0.26, 1) * 0.6));
+}
+
+.tt-trans-in {
+  opacity: clamp(0, calc((var(--t) - 0.12) / 0.26), 1);
+  transform: scale(calc(0.5 + clamp(0, (var(--t) - 0.12) / 0.3, 1) * 0.5));
+}
+
+/* 1958: nine transistors gather into one chip. */
+.tt-gather {
+  transform: translate(
+    calc(var(--dx) * (1 - clamp(0, (var(--t) - 0.05) / 0.4, 1))),
+    calc(var(--dy) * (1 - clamp(0, (var(--t) - 0.05) / 0.4, 1)))
+  );
+  opacity: calc(1 - clamp(0, (var(--t) - 0.36) / 0.1, 1));
+}
+
+.tt-chip-in {
+  opacity: clamp(0, calc((var(--t) - 0.34) / 0.14), 1);
+  transform: scale(calc(0.8 + clamp(0, (var(--t) - 0.34) / 0.2, 1) * 0.2));
+}
+
+.tt-spark {
+  transform: scale(calc(0.7 + 0.5 * sin(calc(var(--t) * 360deg))));
+}
+
+/* Reduced motion: the cards as a still row, at their resting moment. */
+@media (prefers-reduced-motion: reduce) {
+  .ao-bridge[data-shots] {
+    display: block;
+    padding-block: clamp(1.5rem, 5vw, 3rem);
+    background: var(--ao-color-background);
+  }
+
+  .ao-bridge[data-shots] .ao-bridge-veil,
+  .ao-bridge[data-shots] .ao-bridge-art,
+  .ao-bridge[data-shots] .ao-bridge-wide,
+  .ao-bridge[data-shots] .ao-tech-rule,
+  .ao-bridge[data-shots] .ao-shot-ghost {
+    display: none;
+  }
+
+  .ao-bridge[data-shots] .ao-bridge-tech {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1rem;
+    max-width: 62rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  .ao-bridge[data-shots] .ao-tech-caption {
+    display: block;
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: center;
+    font-family: var(--ao-font-jetbrains);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    /* On the era's page colour, where only the primary text token is allowed. */
+    color: var(--ao-color-text);
+  }
+
+  .ao-bridge[data-shots] .ao-shot {
+    display: block;
+    position: static;
+    --t: 0.5;
+  }
+
+  .ao-bridge[data-shots] .ao-shot-card {
+    width: auto;
+  }
+}

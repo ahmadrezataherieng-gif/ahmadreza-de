@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import type { EraId } from '@/content/eras';
 import type { ThemeId } from '@/lib/themes';
 import { bitmapPath, bitmapWidth, POINTER } from '@/lib/pixel-art';
+import { CrossingTechLayer, TechList, techStyle } from '@/components/journey/tech/CrossingTech';
+import { crossingTech } from '@/content/crossings';
 
 /** The seven crossings, each named by the era it leaves. */
 export type BridgeKind = EraId;
@@ -41,8 +43,18 @@ export function EraBridge({ kind, fromTheme, toTheme }: EraBridgeProps) {
   const from = (node: ReactNode) => <div data-theme-scope={fromTheme} className="contents">{node}</div>;
   const to = (node: ReactNode) => <div data-theme-scope={toTheme} className="contents">{node}</div>;
 
+  const shots = crossingTech[kind]?.length;
+
   return (
-    <div className="ao-bridge" data-bridge-band="" data-bridge={kind} aria-hidden="true">
+    <>
+    <div
+      className="ao-bridge"
+      data-bridge-band=""
+      data-bridge={kind}
+      data-shots={shots}
+      style={techStyle(kind)}
+      aria-hidden="true"
+    >
       <div className="ao-bridge-panel">
         <div data-theme-scope={fromTheme} className="ao-bridge-veil ao-bridge-veil--from" />
         <div data-theme-scope={toTheme} className="ao-bridge-veil ao-bridge-veil--to" />
@@ -51,8 +63,11 @@ export function EraBridge({ kind, fromTheme, toTheme }: EraBridgeProps) {
             set of per-cent coordinates holds at any aspect ratio. */}
         <div className="ao-bridge-wide">{WIDE[kind]?.(from, to)}</div>
         <div className="ao-bridge-art">{ART[kind](from, to)}</div>
+        <CrossingTechLayer kind={kind} fromTheme={fromTheme} toTheme={toTheme} />
       </div>
     </div>
+    <TechList kind={kind} />
+    </>
   );
 }
 

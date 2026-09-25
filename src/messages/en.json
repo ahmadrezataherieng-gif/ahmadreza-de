@@ -375,6 +375,87 @@
     "welcome": "Welcome to Amonel OS",
     "desktopLabel": "Empty Amonel OS desktop"
   },
+  "crossings": {
+    "between": "In between: the technology between two eras",
+    "when": {
+      "nineties": "1990s",
+      "today": "Today"
+    },
+    "techs": {
+      "transistor": {
+        "name": "Transistor"
+      },
+      "univac": {
+        "name": "UNIVAC I"
+      },
+      "coreMemory": {
+        "name": "Magnetic-core memory"
+      },
+      "integratedCircuit": {
+        "name": "Integrated circuit"
+      },
+      "system360": {
+        "name": "IBM System/360"
+      },
+      "arpanet": {
+        "name": "ARPANET"
+      },
+      "intel4004": {
+        "name": "Intel 4004",
+        "note": "microprocessor"
+      },
+      "floppy": {
+        "name": "8-inch floppy disk"
+      },
+      "ethernet": {
+        "name": "Ethernet"
+      },
+      "altair": {
+        "name": "Altair 8800"
+      },
+      "appleII": {
+        "name": "Apple II"
+      },
+      "mouse": {
+        "name": "Mouse",
+        "note": "demo"
+      },
+      "alto": {
+        "name": "Xerox Alto",
+        "note": "first graphical interface"
+      },
+      "lisa": {
+        "name": "Apple Lisa"
+      },
+      "cdrom": {
+        "name": "CD-ROM"
+      },
+      "web": {
+        "name": "World Wide Web"
+      },
+      "linux": {
+        "name": "Linux"
+      },
+      "modem": {
+        "name": "Dial-up modem"
+      },
+      "search": {
+        "name": "Web search"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      },
+      "cloud": {
+        "name": "Cloud computing"
+      },
+      "smartphone": {
+        "name": "Smartphone"
+      },
+      "ai": {
+        "name": "AI"
+      }
+    }
+  },
   "landing": {
     "eyebrow": "Portfolio",
     "firstName": "Ahmadreza",

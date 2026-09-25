@@ -8,7 +8,8 @@ description: "Read before running or writing checks in scripts/verify, before de
 ```bash
 node scripts/verify/journey.mjs --mode play|watch [--width 380] [--locale fa] [--reduce] [--touch] [--tier light]
 node scripts/verify/boundaries.mjs [--width 380] [--locale fa] [--tier light] [--steps 4]
-node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4]
+node scripts/verify/perf.mjs [--width 380] [--tier light] [--cpu 4] [--mode open] [--profile]   # worstByPlace: the longest frame in each crossing (PERF-02)
+node scripts/verify/crossing-frames.mjs [--width 390] [--locale fa] [--frames 0,25,50,75,100] [--only 1946] [--reduce] [--out dir]   # screenshots of each crossing (BR-10)
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/apps.mjs [--width 380] [--locale fa] [--reduce] [--touch]

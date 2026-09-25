@@ -376,6 +376,87 @@
     "welcome": "به Amonel OS خوش آمدید",
     "desktopLabel": "میزکار خالی Amonel OS"
   },
+  "crossings": {
+    "between": "در این میان: فناوری‌های میان دو دوره",
+    "when": {
+      "nineties": "دههٔ ۱۹۹۰",
+      "today": "امروز"
+    },
+    "techs": {
+      "transistor": {
+        "name": "ترانزیستور"
+      },
+      "univac": {
+        "name": "UNIVAC I"
+      },
+      "coreMemory": {
+        "name": "حافظهٔ هسته‌ای مغناطیسی"
+      },
+      "integratedCircuit": {
+        "name": "مدار مجتمع"
+      },
+      "system360": {
+        "name": "IBM System/360"
+      },
+      "arpanet": {
+        "name": "ARPANET"
+      },
+      "intel4004": {
+        "name": "Intel 4004",
+        "note": "ریزپردازنده"
+      },
+      "floppy": {
+        "name": "فلاپی ۸ اینچی"
+      },
+      "ethernet": {
+        "name": "Ethernet"
+      },
+      "altair": {
+        "name": "Altair 8800"
+      },
+      "appleII": {
+        "name": "Apple II"
+      },
+      "mouse": {
+        "name": "ماوس",
+        "note": "نمایش"
+      },
+      "alto": {
+        "name": "Xerox Alto",
+        "note": "نخستین رابط گرافیکی"
+      },
+      "lisa": {
+        "name": "Apple Lisa"
+      },
+      "cdrom": {
+        "name": "CD-ROM"
+      },
+      "web": {
+        "name": "World Wide Web"
+      },
+      "linux": {
+        "name": "Linux"
+      },
+      "modem": {
+        "name": "مودم تلفنی"
+      },
+      "search": {
+        "name": "جست‌وجوی وب"
+      },
+      "wifi": {
+        "name": "وای‌فای (Wi-Fi)"
+      },
+      "cloud": {
+        "name": "رایانش ابری"
+      },
+      "smartphone": {
+        "name": "گوشی هوشمند"
+      },
+      "ai": {
+        "name": "هوش مصنوعی"
+      }
+    }
+  },
   "landing": {
     "eyebrow": "نمونه‌کار",
     "firstName": "احمدرضا",

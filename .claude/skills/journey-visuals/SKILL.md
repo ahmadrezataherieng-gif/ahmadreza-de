@@ -180,3 +180,21 @@ Read DECISIONS.md 45 and 46 before touching any of this.
 - **The Convergence** is not an era: the resolver gives it the `modern` theme,
   keeps the rail on era 7, and when it reaches the empty desktop or the page end
   calls `completeJourney()` and hands over to `/desktop/` (DECISIONS.md 49).
+
+### Crossing cards (BR-10, DECISIONS.md 77)
+
+- The crossing out of an era with technologies in `content/crossings.ts` (all but the last) shows one card per technology between the old machine and the new one. `crossing-timing.ts`: `TECH_FROM`/`TECH_TO` (0.24-0.74 of the crossing), `crossingLength(count)` (1.2 + 0.3 per card, in viewports; `EraSection` sums each era's in and out lengths, `--boundary-length` is the crossing in).
+- The existing morph (`b1-b7` parts, veils) is unchanged and runs underneath; the parts fade out at 0.14-0.24 and back at 0.74-0.82 (`--tech-cover`), the era being left recedes early (`--recede`), and the background hands over behind the cards.
+- **Cards are pre-built and hidden.** The resolver writes `data-shot` on the bridge when the current card changes; CSS displays that card and its neighbours only. A card's own progress is `--t` (registered, computed per card from `--boundary-in`); enter, rest and leave are `--enter`/`--leave` derived from it. Only transform and opacity, no JS per frame, no library.
+- **Drawings** (`journey/tech/TechArt.tsx`): inline SVG on 160 x 120, generic (no logo, no trademark), coloured only through the `tt-*` classes, moved only through `--t` (`tt-spin`, `tt-blink`, `tt-slide`, `tt-in` and the few bespoke morphs). Each is complete and tidy at t = 0.5, which is what reduced motion shows.
+- Each card carries the palette of the era it is nearest to (`data-theme-scope`), so light and type change hands as the background does; the ruler is a fixed neutral plate.
+- **Reduced motion:** the bridge is not hidden for these crossings; its cards lie in a still grid with a caption. A `.ao-sr-only` list (`TechList`) carries the same names for assistive tech and search engines in every mode.
+- The resolver's band test is `position === 'relative'` (a band in flow); static (reduced motion) and absolute (pinned) are not bands.
+
+### Performance rules for the journey (PERF-02, PERF-03, DECISIONS.md 77)
+
+- **Never write a custom property on `<html>` while the journey is mounted:** it restyles every element (about 250 ms at 4x throttle). The journey calls `scopeThemeTo` (`lib/apply-theme.ts`): the theme's tokens go to the chrome wrapper and the effects layer only. Anything portalled out of the eras (held dialog, gate cue) carries its era's `data-theme-scope`.
+- **Printed text is struck by `lib/print-controller.ts`** (`data-struck` on each glyph, one rAF loop), not by a CSS animation per glyph (275-390 at once froze phones).
+- **`--arrival` is written on its four readers** (`.ao-crt-beam`, `.ao-crt-screen`, `.ao-mac-lights`, `.ao-mac-screen`), not inherited from the scene. A new reader joins `ARRIVAL_READERS` in `Journey.tsx`.
+- **A coarse pointer scrolls natively** (no Lenis); `scrollToEra` then uses the browser's smooth scroll.
+- Check with `perf.mjs --width 390 --cpu 4 [--mode open]` (worst frame per crossing in `worstByPlace`) and `crossing-frames.mjs` (screenshots at chosen points of each crossing).
