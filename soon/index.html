@@ -80,6 +80,8 @@
   html[data-scheme="light"] .sky i{opacity:0}
   @media (prefers-reduced-motion:no-preference){.sky::after{animation:twinkle 7s ease-in-out infinite}}
   @keyframes twinkle{50%{opacity:.15}}
+  /* No star sits on or beside text: the sky shows only outside the content column (the scene draws its own stars). */
+  .sky{--gx:min(50%,520px);-webkit-mask-image:linear-gradient(90deg,#000 calc(50% - var(--gx)),transparent calc(50% - var(--gx)),transparent calc(50% + var(--gx)),#000 calc(50% + var(--gx)));mask-image:linear-gradient(90deg,#000 calc(50% - var(--gx)),transparent calc(50% - var(--gx)),transparent calc(50% + var(--gx)),#000 calc(50% + var(--gx)))}
   .wrap{position:relative;z-index:1}
 
   /* Who and what, readable in ten seconds; the scene beside it on wide screens, below it on phones. */
@@ -105,7 +107,7 @@
   .role{margin:14px 0 0;font-size:clamp(1.1rem,2.6vw,1.35rem);line-height:1.45;font-weight:600}
   .background{margin:6px 0 0;font-size:clamp(1rem,2.3vw,1.15rem);line-height:1.45;color:var(--muted)}
   .alt{margin:8px 0 0;font-size:.95rem;color:var(--muted)}
-  .alt p{margin:2px 0}
+  .alt p{margin:2px 0;text-wrap:balance}
   /* A line in the other direction keeps the column's edge: in a German or
      English page the Persian line starts at the left edge like the lines above
      it (and vice versa in Persian). Persian script runs small next to Latin,
