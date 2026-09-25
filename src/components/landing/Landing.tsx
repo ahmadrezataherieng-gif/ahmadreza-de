@@ -36,7 +36,7 @@ export async function Landing() {
   const desktopHref = viewHref(locale, 'desktop');
 
   return (
-    <main className="ao-landing relative isolate min-h-dvh overflow-hidden bg-background text-ink">
+    <main data-style="k6" className="ao-landing relative isolate min-h-dvh overflow-hidden bg-background text-ink">
       <UseTheme id="modern" />
       <div className="ao-landing-glow pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
       <div className="ao-landing-grain pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />

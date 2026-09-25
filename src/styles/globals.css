@@ -3279,3 +3279,15 @@ html:not([data-tier='full']) .ao-depth-extra {
 [data-style='k6'] :is(p, li) {
   text-wrap: pretty;
 }
+
+/* The landing page in K6 (BR-06): the neutral near-black page with a barely-there glow, the name in plain ink, no film grain. */
+[data-style='k6'] .ao-landing-glow {
+  background: radial-gradient(70rem 36rem at 85% -12rem, var(--ao-color-glow), transparent 70%);
+}
+[data-style='k6'] .ao-landing-grain {
+  display: none;
+}
+[data-style='k6'] .ao-landing-name {
+  background: none;
+  color: var(--ao-color-text);
+}
