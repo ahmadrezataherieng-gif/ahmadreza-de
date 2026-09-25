@@ -93,8 +93,9 @@
   @media (min-width:900px){.scene{max-width:440px}}
   .scene svg{display:block;width:100%;height:auto}
   .side .ill-tip{width:100%;max-width:400px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+  .chips{display:grid;grid-template-columns:repeat(2,max-content);gap:8px;justify-content:start;margin:18px 0 0;padding:0;list-style:none}
   .chips li{display:inline-flex;align-items:center;gap:6px;font:600 .82rem/1.2 var(--stack-body);color:var(--muted);border:1px solid var(--edge);border-radius:8px;padding:7px 11px;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+  @media (min-width:1000px){.top{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}.chips{display:flex;flex-wrap:nowrap;gap:6px}.chips li{padding:6px 8px;font-size:.76rem;white-space:nowrap;gap:5px}.chips .ill-icon{width:.9rem;height:.9rem}}
   .chips .ill-icon{width:1rem;height:1rem;color:var(--ao-ill-cyan)}
   .chips li[dir="ltr"]{font-family:var(--font-mono);font-weight:400}
   .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--stack-body);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}

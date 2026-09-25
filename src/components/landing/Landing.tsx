@@ -8,7 +8,6 @@ import { Portrait } from '@/components/landing/Portrait';
 import { ResumeLink } from '@/components/landing/ResumeLink';
 import { Icon, Tip } from '@/components/illustrations/Icon';
 import type { IconName } from '@/components/illustrations/icons';
-import { OrbitScene } from '@/components/illustrations/scenes';
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
@@ -100,20 +99,16 @@ export async function Landing() {
         </div>
 
         <div className="flex flex-col items-center gap-10 [grid-area:portrait]">
-          {/* The galaxy (BR-09) sits behind the frame, sized from it, so it scales with the portrait on every width; mirrored in Persian so the planet and the computer stay on the outer side. */}
-          <div className="relative isolate mx-auto w-full max-w-[11rem] sm:max-w-[16rem] md:max-w-none">
-            <OrbitScene className="pointer-events-none absolute -start-[28.125%] -top-[20%] z-[var(--ao-z-backdrop)] h-[140%] w-[156.25%] max-w-none rtl:-scale-x-100" />
-            <Portrait
-              alt={t('portraitAlt')}
-              placeholder={t('photoPlaceholder')}
-              dimensions={t('photoDimensions', {
-                width: PORTRAIT.width,
-                height: PORTRAIT.height,
-              })}
-            />
-          </div>
-          {/* CONTENT-TODO CR-1105: a learning snippet in the free space under the portrait; wide screens only, where that space exists. */}
-          <Tip label={tLearn('label')} code={LOCALHOST_CODE} text={tLearn('localhost')} className="hidden w-full max-w-sm md:block" />
+          <Portrait
+            alt={t('portraitAlt')}
+            placeholder={t('photoPlaceholder')}
+            dimensions={t('photoDimensions', {
+              width: PORTRAIT.width,
+              height: PORTRAIT.height,
+            })}
+          />
+          {/* CONTENT-TODO CR-1105: a learning snippet under the portrait, exactly its width; wide screens only. */}
+          <Tip label={tLearn('label')} code={LOCALHOST_CODE} text={tLearn('localhost')} className="hidden w-full md:block" />
         </div>
 
         <div className="flex min-w-0 flex-col gap-8 [grid-area:details] md:self-start">
