@@ -131,7 +131,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
   const tSite = await getTranslations('site');
 
   return (
-    <div className="min-h-dvh bg-background text-ink">
+    <div data-style="k6" className="min-h-dvh bg-background text-ink">
       <UseTheme id="modern" />
       <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
         <a href={viewHref(locale, 'landing')} aria-label={copy.backHome} className="rounded-control">
