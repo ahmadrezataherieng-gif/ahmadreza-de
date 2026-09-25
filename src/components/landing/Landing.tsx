@@ -36,7 +36,7 @@ export async function Landing() {
   const desktopHref = viewHref(locale, 'desktop');
 
   return (
-    <main data-style="k6" className="ao-landing relative isolate min-h-dvh overflow-hidden bg-background text-ink">
+    <main className="ao-landing ao-site-page relative isolate min-h-dvh overflow-hidden bg-background text-ink">
       <UseTheme id="modern" />
       <div className="ao-landing-glow pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
       <div className="ao-landing-grain pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
@@ -60,9 +60,8 @@ export async function Landing() {
       <div className="mx-auto grid w-full max-w-6xl items-center gap-x-14 gap-y-8 px-5 pt-8 pb-28 [grid-template-areas:'identity'_'portrait'_'details'] sm:px-8 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:pt-14 md:[grid-template-areas:'portrait_identity'_'portrait_details'] lg:gap-x-20">
         <div className="flex min-w-0 flex-col gap-4 [grid-area:identity] md:self-end">
           <p className="font-mono text-[11px] tracking-[0.3em] text-accent uppercase sm:hidden">{t('eyebrow')}</p>
-          {/* The heading is a size container: the name is sized from its column (about 6.5 em wide, so 14.5cqi always fits), not from the viewport, which overran the column at 1440px. */}
-          <h1 className="flex flex-col font-display leading-[0.92] tracking-tight [container-type:inline-size]">
-            <span className="ao-landing-name text-[clamp(2.5rem,14.5cqi,6.25rem)] font-bold">{t('firstName')}</span>
+          <h1 className="flex flex-col font-display leading-[0.92] tracking-tight">
+            <span className="ao-landing-name text-[clamp(3rem,8.5vw,6.25rem)] font-bold">{t('firstName')}</span>
             {/* A real space, so the heading's text is "Ahmadreza Taheri" for
                 search engines and screen readers; flex layout hides it. */}{' '}
             <span className="mt-2 text-[clamp(1.4rem,4vw,2.4rem)] font-normal text-muted">{t('lastName')}</span>

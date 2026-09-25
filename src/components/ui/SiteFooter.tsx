@@ -23,7 +23,7 @@ export function LegalLinks({ className, linkClassName }: { className?: string; l
 
   return (
     // CONTENT-TODO CR-1052
-    <nav aria-label={t('legal')} className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-mono in-data-[style=k6]:font-body', className)}>
+    <nav aria-label={t('legal')} className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-mono', className)}>
       <a href={viewHref(locale, 'imprint')} className={link} data-action="imprint">
         {t('imprint')}
       </a>
@@ -42,7 +42,7 @@ export function SiteFooter({ className }: { className?: string }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('nav');
   return (
-    <footer className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs in-data-[style=k6]:font-body in-data-[style=k6]:text-sm', className)}>
+    <footer className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs', className)}>
       <a
         href={viewHref(locale, 'about')}
         className="ao-themed rounded-control px-1 py-0.5 text-muted underline-offset-4 hover:text-ink hover:underline"

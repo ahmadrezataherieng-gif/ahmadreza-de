@@ -42,8 +42,6 @@ export function Button({
       className={cn(
         'ao-themed inline-flex cursor-pointer items-center justify-center gap-2',
         'rounded-control font-mono tracking-wide uppercase',
-        // The K6 look of the main site's own pages: Geist, semibold, sentence case.
-        'in-data-[style=k6]:font-body in-data-[style=k6]:font-semibold in-data-[style=k6]:tracking-normal in-data-[style=k6]:normal-case',
         'transition-colors duration-150 ease-ao',
         'disabled:cursor-not-allowed disabled:opacity-40',
         VARIANTS[variant],

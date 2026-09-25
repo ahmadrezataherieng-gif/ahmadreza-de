@@ -90,9 +90,8 @@ test('soon fonts: every file is licensed, used, and served from the domain - no 
     assert.match(read(path), /SIL OPEN FONT LICENSE Version 1\.1/i, `${path} is not the OFL`);
     assert.ok(index.includes(`licenses/${licence}-OFL.txt`), `${licence} has no row in LICENSES.md`);
   }
-  // Font files live in soon/fonts/ - and, since BR-06, the same five files in public/fonts/ for the main site's K6 style, byte for byte.
+  // Font files live in soon/fonts/ and nowhere else in the repository.
   const tracked = execFileSync('git', ['ls-files'], { cwd: new URL('../../', import.meta.url), encoding: 'utf8' }).split('\n');
-  const stray = tracked.filter((file) => /\.(woff2?|ttf|otf|eot)$/i.test(file) && !file.startsWith('soon/fonts/') && !(file.startsWith('public/fonts/') && files.includes(file.slice(13))));
+  const stray = tracked.filter((file) => /\.(woff2?|ttf|otf|eot)$/i.test(file) && !file.startsWith('soon/fonts/'));
   assert.deepEqual(stray, []);
-  for (const file of files) assert.ok(readFileSync(new URL(`../../soon/fonts/${file}`, import.meta.url)).equals(readFileSync(new URL(`../../public/fonts/${file}`, import.meta.url))), `public/fonts/${file} differs from soon/fonts/${file}`);
 });

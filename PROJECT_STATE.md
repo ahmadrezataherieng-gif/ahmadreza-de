@@ -1,8 +1,18 @@
 # Project state
 
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 Content review pending: see CONTENT_REVIEW.md (starts after the site is complete).
+
+## K6 revert (2026-09-25; owner chose the old design after comparing both)
+
+One commit per step, lint, tests and build green before each, nothing deployed.
+
+- [x] 1. Main site: old look back on landing, About, Impressum, Datenschutz, 404 and the UI chrome (reference ad0a7cd); `[data-style=k6]`, its light mode, the K6 fonts in `public/fonts/` and `k6-style.test.mjs` removed; dark only. Kept: content, app/SEO/PERF work, 301s, Vazirmatn for Persian (also for the switcher's "فارسی" on de/en pages), no Persian letter-spacing (`.ao-site-page`), the a9bcd3c phone/RTL fixes.
+- [ ] 2. Coming-soon page: old look (reference 03300d5), dark only, current content, Vazirmatn
+- [ ] 3. QA pass: screenshots, overflow, glyphs, RTL, axe, spelling
+- [ ] 4. Light-mode proposal in the old palette on `proposal/light-old-palette` (not merged)
+- [ ] 5. Font candidates per role (screenshots only)
 
 ## Work queue (started 2026-09-24; resume with "continue the work queue")
 
@@ -33,7 +43,7 @@ Rules: strictly in order; after each item run `npm test` and `npm run lint` (plu
   for the terminal line, near-black dark mode; tokens in `soon/tokens.css`,
   fonts in `soon/fonts/` with licences in `public/fonts/` (LEG-15). It is the
   design system for the main site's own pages, not the journey eras (BR-05);
-  applying it there is BR-06, done 2026-09-25 for the landing, About, legal and 404 pages (DECISIONS.md 72). Search layer (Part 4): title and
+  applying it there was BR-06 (DECISIONS.md 72); **both looks were reverted by the owner on 2026-09-25** (BR-07, DECISIONS.md 73). Search layer (Part 4): title and
   description, Open Graph and Twitter tags, Person JSON-LD (`scripts/soon-seo.mjs`),
   `robots.txt`, `sitemap.xml`; checked by `soon-seo.test.mjs`, `soon-style.test.mjs`
   and `scripts/verify/soon.mjs` (196 checks: fonts, bidi, orphans, word spacing,
