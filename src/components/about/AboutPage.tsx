@@ -22,17 +22,19 @@ export async function AboutPage({ locale }: { locale: Locale }) {
 
   return (
     <div data-style="k6" className="min-h-dvh bg-background text-ink">
+      {/* One container for header, text, buttons and footer: they share the article's own inset, so every left edge is the text's. */}
+      <div className="@container mx-auto w-full max-w-3xl sm:px-4">
       <UseTheme id="modern" />
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
+      <header className="flex items-center justify-between gap-3 pt-5 px-4 @min-[480px]:px-6 @min-[720px]:px-8">
         <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
           <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
         </a>
         <LanguageSwitcher />
       </header>
 
-      <main className="mx-auto w-full max-w-3xl pb-8 sm:px-4">
+      <main className="pb-8">
         <AboutContent appId="about" page />
-        <nav aria-label={tNav('home')} className="flex flex-wrap gap-2 px-4 sm:px-6">
+        <nav aria-label={tNav('home')} className="flex flex-wrap gap-2 px-4 @min-[480px]:px-6 @min-[720px]:px-8">
           <a href={viewHref(locale, 'journey')} className={link}>
             {tNav('journey')}
           </a>
@@ -42,7 +44,10 @@ export async function AboutPage({ locale }: { locale: Locale }) {
         </nav>
       </main>
 
-      <SiteFooter className="mx-auto w-full max-w-3xl border-t border-edge px-5 py-5 sm:px-8" />
+      <div className="px-4 @min-[480px]:px-6 @min-[720px]:px-8">
+        <SiteFooter className="border-t border-edge py-5 [&>a:first-child]:-ms-1" />
+      </div>
+      </div>
     </div>
   );
 }

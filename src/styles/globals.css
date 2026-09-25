@@ -3267,7 +3267,22 @@ html:not([data-tier='full']) .ao-depth-extra {
     --ao-color-chrome-text: #0b1a14;
     /* The logo's wordmark is drawn in the near-white brand ink for dark pages; on cream it vanished. */
     --ao-brand-ink: #0b1a14;
+    /* The logo's mark is one deep forest green on cream, not the light-to-mid gradient made for dark pages. */
+    --ao-brand-green-light: #0d6b45;
+    --ao-brand-green: #0d6b45;
+    --ao-brand-green-deep: #0d6b45;
     color-scheme: light;
+  }
+  /* The scrollbar gutter (html { scrollbar-gutter: stable }) paints the root, not the page: on a K6 page it must be cream too, or a dark strip runs down the right edge. */
+  html:has([data-style='k6']) {
+    background-color: #f5f4ee;
+    color-scheme: light;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  html:has([data-style='k6']) {
+    background-color: #07090a;
+    color-scheme: dark;
   }
 }
 
