@@ -348,10 +348,12 @@ await js(`(() => { const body = document.querySelector('${frame('time-machine')}
 await sleep(120);
 await clickOn('[data-action="time-year"]');
 check('time machine: 1990 lands in the Macintosh era', await until(`document.documentElement.dataset.theme === 'era1984'`, 4000), await htmlTheme());
+check('time machine: the Macintosh era brings its own pointer (APP-17)', (await js(`getComputedStyle(document.querySelector('[data-shell]')).cursor`)).startsWith('url('));
 await js(`document.querySelector('${frame('time-machine')} [data-window-body]').scrollTop = 0; true`);
 await sleep(120);
 await clickOn('[data-action="time-home"]');
 check('time machine: back to the present', await until(`document.documentElement.dataset.theme === 'modern'`, 4000), await htmlTheme());
+check('time machine: the present has the ordinary pointer again', !(await js(`getComputedStyle(document.querySelector('[data-shell]')).cursor`)).startsWith('url('));
 check('storage: the present removes the key', !(await js(`localStorage.getItem('amonel.theme.v1')`)));
 await close('time-machine');
 

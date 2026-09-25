@@ -9,6 +9,7 @@ import { destinationForYear, writeStoredTheme, yearStops, type Destination } fro
 import { themeToCssVars } from '@/lib/apply-theme';
 import { cn } from '@/lib/cn';
 import { getTheme, themeIds, type ThemeEffects, type ThemeId } from '@/lib/themes';
+import { playSound } from '@/lib/sound-engine';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { useThemeStore } from '@/store/theme-store';
 
@@ -69,6 +70,8 @@ function TimeMachine({ appId }: AppProps) {
   const arrive = (to: ThemeId) => {
     const { setTheme, lockTheme } = useThemeStore.getState();
     setTheme(to, { force: true });
+    // The era's own sound, when the visitor has turned sound on (APP-17).
+    playSound('arrive');
     lockTheme(to !== 'modern');
     writeStoredTheme(window.localStorage, to);
     setJump(null);

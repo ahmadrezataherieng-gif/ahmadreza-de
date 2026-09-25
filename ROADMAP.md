@@ -38,21 +38,21 @@ build time).
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
-| `desktop` | 12 | 0 | 1 | 64 / 66 | 97 % |
+| `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 0 | 6 | 29 / 45 | 64 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
 | `launch` | 8 | 2 | 13 | 24.5 / 85 | 29 % |
-| **all** | 67 | 7 | 31 | 282.3 / 406 | **70 %** |
+| **all** | 68 | 7 | 30 | 284.3 / 406 | **70 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 10 | 0 | 12 | 22 |
 | P1 | 12 | 6 | 36 | 54 |
-| P2 | 9 | 1 | 19 | 29 |
-| **total** | **31** | **7** | **67** | **105** |
+| P2 | 8 | 1 | 20 | 29 |
+| **total** | **30** | **7** | **68** | **105** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -100,7 +100,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-14 | Locked-app notice covers the lowest desktop icon on a 768 px tall screen; move it. Done 2026-09-24: on the window manager the notice sits at the inline-end, clear of the icon columns (`.ao-notice-slot`); `bonus.mjs` now checks that no icon lies under it, on every layout. | done | P2 | Claude Code | - | XS | desktop |
 | APP-15 | **Network tools easter eggs** (new idea 2026-09-24): `ping 127.0.0.1` answers with "there's no place like 127.0.0.1"; a 169.254.x.x address explains APIPA (the address Windows 98 gave itself when no DHCP server answered); port 31337 tells its hacker-culture story; a hidden TXT record on `amonel.example` greets the curious. Built with APP-04. | done | P2 | Claude Code | APP-04 | S | puzzles |
 | APP-16 | **Cross-app links** (new idea 2026-09-24): Ports links to the 'today' era's firewall puzzle (`/amonel/#era-7`) - built. Done 2026-09-24: Ping and DNS offer "trace this host" (once the ping has a target / the lookup found something); the host goes through `lib/app-handoff.ts` (the mechanism of APP-13) to the Traceroute app, in a window or on the phone; `bonus.mjs` checks both; CR-1094. | done | P2 | Claude Code | APP-04 | S | desktop |
-| APP-17 | **Time Machine extras** (new idea 2026-09-24): the era's sound profile as a short sample on arrival (with APP-12, only after a click), and each era's cursor style on the desktop (`data-cursor` is already set). | missing | P2 | Claude Code | APP-12 | S | desktop |
+| APP-17 | **Time Machine extras** (new idea 2026-09-24): the era's sound profile as a short sample on arrival (with APP-12, only after a click), and each era's cursor style on the desktop (`data-cursor` is already set). Done 2026-09-25: arriving plays the era's `arrive` sound when sound is on (nothing otherwise), and `[data-cursor]` now changes the desktop: a 1-bit arrow for the Macintosh and Windows 95 eras (inline SVG, CSP allows data: images), a block or underscore text caret for the terminal eras; `bonus.mjs` checks the pointer. | done | P2 | Claude Code | APP-12 | S | desktop |
 
 ## Phase 10 - SEO layer
 
