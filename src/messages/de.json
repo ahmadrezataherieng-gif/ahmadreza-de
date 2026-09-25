@@ -33,6 +33,8 @@
     "privacy": "Datenschutz",
     "legal": "Rechtliches",
     "language": "Sprache",
+    "schemeToLight": "Zum hellen Design wechseln",
+    "schemeToDark": "Zum dunklen Design wechseln",
     "skipToDesktop": "Zum Desktop",
     "skipToContent": "Zum Inhalt springen",
     "home": "Startseite"

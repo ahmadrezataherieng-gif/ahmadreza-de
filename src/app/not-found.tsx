@@ -5,6 +5,8 @@ import en from '@/messages/en.json';
 import fa from '@/messages/fa.json';
 import { locales, type Locale } from '@/lib/i18n-config';
 import { viewHref } from '@/lib/routing';
+import { SCHEME_SCRIPT } from '@/lib/scheme';
+import { SchemeToggle } from '@/components/ui/SchemeToggle';
 
 /**
  * The one 404 page (`out/404.html`), which Cloudflare serves with a real 404
@@ -16,7 +18,11 @@ import { viewHref } from '@/lib/routing';
  * CONTENT-TODO CR-1031
  */
 
-const COPY: Record<Locale, typeof de.notFound> = { de: de.notFound, en: en.notFound, fa: fa.notFound };
+const COPY: Record<Locale, typeof de.notFound> = {
+  de: de.notFound,
+  en: en.notFound,
+  fa: fa.notFound,
+};
 
 export const metadata: Metadata = {
   // CONTENT-TODO CR-1031
@@ -24,16 +30,28 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-const link = 'rounded-control border border-edge px-3 py-1.5 font-mono text-sm text-ink hover:border-accent hover:text-accent';
+const link =
+  'rounded-control border border-edge px-3 py-1.5 font-mono text-sm text-ink hover:border-accent hover:text-accent';
 
 export default function NotFound() {
   return (
-    <html lang="de-DE" dir="ltr">
+    <html lang="de-DE" dir="ltr" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCHEME_SCRIPT }} />
+      </head>
       <body className="ao-site-page antialiased">
         <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col justify-center gap-10 bg-background px-5 py-16 text-ink sm:px-8">
-          <p className="font-mono text-6xl font-bold tracking-tight text-accent sm:text-7xl" aria-hidden="true">
-            404
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <p className="font-display text-6xl font-bold tracking-tight text-accent sm:text-7xl" aria-hidden="true">
+              404
+            </p>
+            <SchemeToggle
+              labels={{
+                toLight: de.nav.schemeToLight,
+                toDark: de.nav.schemeToDark,
+              }}
+            />
+          </div>
           {locales.map((locale, index) => {
             const copy = COPY[locale];
             const Heading = index === 0 ? 'h1' : 'h2';

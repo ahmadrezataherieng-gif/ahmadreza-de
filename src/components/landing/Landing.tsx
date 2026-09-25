@@ -8,6 +8,7 @@ import { Portrait } from '@/components/landing/Portrait';
 import { ResumeLink } from '@/components/landing/ResumeLink';
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { PORTRAIT } from '@/content/profile';
@@ -31,6 +32,7 @@ export async function Landing() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations('landing');
   const tSite = await getTranslations('site');
+  const tNav = await getTranslations('nav');
   const facts = asStatList(t.raw('facts'));
   const journeyHref = viewHref(locale, 'journey');
   const desktopHref = viewHref(locale, 'desktop');
@@ -38,8 +40,14 @@ export async function Landing() {
   return (
     <main className="ao-landing ao-site-page relative isolate min-h-dvh overflow-hidden bg-background text-ink">
       <UseTheme id="modern" />
-      <div className="ao-landing-glow pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
-      <div className="ao-landing-grain pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]" aria-hidden="true" />
+      <div
+        className="ao-landing-glow pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]"
+        aria-hidden="true"
+      />
+      <div
+        className="ao-landing-grain pointer-events-none absolute inset-0 z-[var(--ao-z-backdrop)]"
+        aria-hidden="true"
+      />
 
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
         {/* The brand leads the header; the name leads the page (the h1 below). */}
@@ -51,6 +59,12 @@ export async function Landing() {
         <div className="flex items-center gap-1 sm:gap-3">
           <ResumeLink variant="header" />
           <LanguageSwitcher />
+          <SchemeToggle
+            labels={{
+              toLight: tNav('schemeToLight'),
+              toDark: tNav('schemeToDark'),
+            }}
+          />
         </div>
       </header>
 
@@ -79,15 +93,23 @@ export async function Landing() {
           <Portrait
             alt={t('portraitAlt')}
             placeholder={t('photoPlaceholder')}
-            dimensions={t('photoDimensions', { width: PORTRAIT.width, height: PORTRAIT.height })}
+            dimensions={t('photoDimensions', {
+              width: PORTRAIT.width,
+              height: PORTRAIT.height,
+            })}
           />
         </div>
 
         <div className="flex min-w-0 flex-col gap-8 [grid-area:details] md:self-start">
-          <dl aria-label={t('factsLabel')} className="grid grid-cols-2 gap-px overflow-hidden rounded-window border border-edge bg-edge">
+          <dl
+            aria-label={t('factsLabel')}
+            className="grid grid-cols-2 gap-px overflow-hidden rounded-window border border-edge bg-edge"
+          >
             {facts.map((fact) => (
               <div key={fact.label} className="flex min-w-0 flex-col-reverse gap-1 bg-surface px-4 py-3.5">
-                <dt className="font-mono text-[10px] tracking-wide text-muted uppercase sm:text-[11px]">{fact.label}</dt>
+                <dt className="font-mono text-[10px] tracking-wide text-muted uppercase sm:text-[11px]">
+                  {fact.label}
+                </dt>
                 {/* Long German compounds hyphenate instead of breaking mid-word. */}
                 <dd className="font-body text-[0.95rem] leading-tight font-bold break-words hyphens-auto text-ink sm:text-lg">
                   {fact.value}

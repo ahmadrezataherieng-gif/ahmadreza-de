@@ -12,6 +12,7 @@ import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
 import { loadLegalCopy } from '@/components/legal/LegalPage';
 import { serialiseJsonLd, structuredData } from '@/lib/structured-data';
+import { SCHEME_SCRIPT } from '@/lib/scheme';
 
 type LayoutParams = { locale?: string[] };
 
@@ -69,7 +70,16 @@ const VIEW_NAMESPACES: Record<View, readonly string[]> = {
 };
 
 /** `site` keys used only by metadata and JSON-LD, never by a client component. */
-const SERVER_ONLY_SITE_KEYS: readonly string[] = ['ogAlt', 'journeyDescription', 'desktopDescription', 'aboutDescription', 'persianName', 'jobTitle', 'knowsAbout', 'landingTitle'];
+const SERVER_ONLY_SITE_KEYS: readonly string[] = [
+  'ogAlt',
+  'journeyDescription',
+  'desktopDescription',
+  'aboutDescription',
+  'persianName',
+  'jobTitle',
+  'knowsAbout',
+  'landingTitle',
+];
 
 /**
  * Page title per view, the name always ahead of the brand (the `seo` skill):
@@ -110,11 +120,7 @@ export async function generateViewport({ params }: { params: Promise<LayoutParam
   };
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<LayoutParams>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<LayoutParams> }): Promise<Metadata> {
   const { locale: segments } = await params;
   const match = matchSegments(segments);
   if (!match) return {};
@@ -172,7 +178,15 @@ export async function generateMetadata({
       url: viewHref(locale, view),
       // One share image per language (scripts/og-image.mjs, ROADMAP SEO-05).
       // CONTENT-TODO CR-1050
-      images: [{ url: `/og/ahmadreza-taheri-${locale}.png`, width: 1200, height: 630, alt: t('ogAlt'), type: 'image/png' }],
+      images: [
+        {
+          url: `/og/ahmadreza-taheri-${locale}.png`,
+          width: 1200,
+          height: 630,
+          alt: t('ogAlt'),
+          type: 'image/png',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -206,7 +220,10 @@ export default async function LocaleLayout({
       // landing page's HTML).
       .map(([namespace, value]) =>
         namespace === 'site' && typeof value === 'object'
-          ? [namespace, Object.fromEntries(Object.entries(value).filter(([key]) => !SERVER_ONLY_SITE_KEYS.includes(key)))]
+          ? [
+              namespace,
+              Object.fromEntries(Object.entries(value).filter(([key]) => !SERVER_ONLY_SITE_KEYS.includes(key))),
+            ]
           : [namespace, value],
       ),
   );
@@ -228,7 +245,12 @@ export default async function LocaleLayout({
             knowsAbout: tSite.raw('knowsAbout') as string[],
             inLanguage: htmlLang[locale],
             siteName: tSite('brand'),
-            image: { url: `${SITE_URL}/og/ahmadreza-taheri-${locale}.png`, width: 1200, height: 630, alt: tSite('ogAlt') },
+            image: {
+              url: `${SITE_URL}/og/ahmadreza-taheri-${locale}.png`,
+              width: 1200,
+              height: 630,
+              alt: tSite('ogAlt'),
+            },
             description: tSite('description'),
             pageUrl: `${SITE_URL}${viewHref(locale, view)}`,
             isProfilePage: view === 'landing',
@@ -238,6 +260,8 @@ export default async function LocaleLayout({
   return (
     <html lang={htmlLang[locale]} dir={dirForLocale(locale)} suppressHydrationWarning>
       <head>
+        {/* The light/dark choice of the site's own pages, before the first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: SCHEME_SCRIPT }} />
         {jsonLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} /> : null}
         {/* The journey's motion tier, decided before the first paint so nothing
             shifts afterwards. Inline and tiny on purpose: it has to run before
@@ -246,7 +270,11 @@ export default async function LocaleLayout({
           <>
             {/* A returning visitor goes straight to the desktop, before the
                 journey paints (DECISIONS.md 49). First, so nothing else runs. */}
-            <script dangerouslySetInnerHTML={{ __html: returningRedirectScript(viewHref(locale, 'desktop')) }} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: returningRedirectScript(viewHref(locale, 'desktop')),
+              }}
+            />
             <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
           </>
         ) : null}
@@ -264,4 +292,3 @@ export default async function LocaleLayout({
     </html>
   );
 }
-

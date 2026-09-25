@@ -17,6 +17,7 @@ import { ensureLegalAddress } from './legal-address.mjs';
 import { AREAS } from './roadmap.mjs';
 import { fillPlaceholders, progressValues } from './soon-progress.mjs';
 import { renderLanding } from './soon-pages.mjs';
+import { SCHEME_CLICK, SCHEME_HEAD, schemeButton } from './soon-scheme.mjs';
 import { LOCALES, OG_IMAGES, sitemapXml } from './soon-seo.mjs';
 import { bidiParts, linkify, sectionsFor } from '../src/lib/legal-doc.ts';
 
@@ -73,8 +74,8 @@ function block(item, copy, localeId) {
 const STYLE = `*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 html[lang="fa"] body{font-size:17.5px;line-height:1.8}
 .wrap{max-width:760px;margin:0 auto;padding:22px 20px 48px}
-header{display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--font-mono);font-size:13px}
-header nav{display:flex;gap:6px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--stack-body);font-size:13px}
+.tools{display:flex;align-items:center;gap:10px}header nav{display:flex;gap:6px}
 header nav a{color:var(--muted);border:1px solid var(--edge);border-radius:999px;padding:6px 12px;text-decoration:none}
 header nav a[aria-current]{color:var(--on-brand);background:var(--brand);border-color:var(--brand);font-weight:700}
 a{color:var(--brand);text-underline-offset:3px}a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
@@ -82,10 +83,10 @@ h1{font:var(--head-weight) clamp(1.9rem,6vw,2.6rem)/1.15 var(--stack-head);lette
 h2{font:600 1.1rem/1.3 var(--stack-head);margin:32px 0 8px;text-wrap:balance}
 html[lang="fa"] h1,html[lang="fa"] h2{letter-spacing:0;word-spacing:normal}
 p,li{text-wrap:pretty}
-.meta{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin:0}
+.meta{font-size:12px;color:var(--muted);margin:0}
 .note{border:1px solid var(--edge);background:var(--surface);border-radius:10px;padding:12px 14px;margin-top:16px}
 address{font-style:normal}ul{padding-inline-start:20px}table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border-bottom:1px solid var(--edge);padding:8px;text-align:start;vertical-align:top}th{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+th,td{border-bottom:1px solid var(--edge);padding:8px;text-align:start;vertical-align:top}th{font-size:12px;color:var(--muted)}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:16px;font-size:13px}
 footer a{color:var(--ink)}`;
 function page(locale, kind, copy, labels) {
@@ -111,13 +112,14 @@ function page(locale, kind, copy, labels) {
 <meta name="description" content="${escape(document.description)}">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://ahmadreza.de/${locale.prefix}${kind.slug}/">
-<meta name="theme-color" content="#0b0f15" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f3f6f9" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0f15">
+${SCHEME_HEAD}
 <style>${TOKENS}${STYLE}</style>
 </head>
 <body>
 <div class="wrap">
-<header><a href="${home}">ahmadreza.de</a><nav aria-label="${escape(labels.language)}">${switcher}</nav></header>
+<header><a href="${home}">ahmadreza.de</a><div class="tools"><nav aria-label="${escape(labels.language)}">${switcher}</nav>${schemeButton(labels)}</div></header>
 <main>
 <h1>${iso(document.title, locale.id)}</h1>
 <p class="meta">${iso(copy.updated, locale.id)}</p>
@@ -127,6 +129,7 @@ ${sections}
 </main>
 <footer><a href="/${locale.prefix}impressum/">${escape(labels.imprint)}</a><a href="/${locale.prefix}datenschutz/">${escape(labels.privacy)}</a></footer>
 </div>
+${SCHEME_CLICK}
 </body>
 </html>
 `;
@@ -148,7 +151,7 @@ console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area
 for (const locale of locales) {
   const copy = JSON.parse(readFileSync(new URL(`src/messages/legal/${locale.id}.json`, root), 'utf8'));
   const nav = JSON.parse(readFileSync(new URL(`src/messages/${locale.id}.json`, root), 'utf8')).nav;
-  const labels = { imprint: nav.imprint, privacy: nav.privacy, language: nav.language };
+  const labels = { imprint: nav.imprint, privacy: nav.privacy, language: nav.language, schemeToLight: nav.schemeToLight, schemeToDark: nav.schemeToDark };
   for (const kind of kinds) {
     const folder = new URL(`${locale.prefix}${kind.slug}/`, dist);
     mkdirSync(folder, { recursive: true });

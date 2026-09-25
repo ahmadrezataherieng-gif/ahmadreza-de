@@ -40,10 +40,8 @@ const check = (name, ok, detail) => {
 };
 
 const b = await launch({ width: WIDTH, height: HEIGHT, touch: TOUCH, tag: TAG });
-// `--scheme light` (or dark) emulates that colour scheme for the audit; the default is the browser's own.
-if (args.scheme) {
-  await b.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: String(args.scheme) }, { name: 'prefers-reduced-motion', value: 'no-preference' }] });
-}
+// `--scheme light` audits the site's own pages in the light mode the toggle sets (data-scheme; dark is the default and the OS setting is never read). Applied on every navigation below.
+const SCHEME = args.scheme === 'light';
 const js = (code) => b.evaluate(code);
 const until = async (expression, ms = 6000) => {
   const end = Date.now() + ms;
@@ -90,6 +88,7 @@ await b.goto(`${BASE}${PREFIX}/`, 2500);
 await js(`localStorage.clear(); sessionStorage.setItem('amonel.replay', '1'); true`);
 for (const [name, path] of views) {
   await b.goto(`${BASE}${path}`, name === 'journey' ? 5000 : 2500);
+  if (SCHEME) await js(`document.documentElement.dataset.scheme = 'light'; true`);
   const violations = await audit();
   check(`${name}: no WCAG A/AA violation`, violations.length === 0, violations);
 }

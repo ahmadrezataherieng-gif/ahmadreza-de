@@ -6,6 +6,8 @@
 // legal address that build needs.
 
 import { ALT, FA_NAME, SEO, T } from '../soon/copy.mjs';
+import { readFileSync } from 'node:fs';
+import { SCHEME_CLICK, SCHEME_HEAD, schemeButton } from './soon-scheme.mjs';
 import { alternateLinks, jsonLdScript, LOCALES, OG_IMAGES, pageUrl } from './soon-seo.mjs';
 
 const escape = (text) =>
@@ -103,6 +105,9 @@ export function renderLanding(filled, localeId, year = new Date().getFullYear())
   html = html.replace(/(<nav class="langs"[^>]*>)[\s\S]*?(<\/nav>)/, (whole, open, close) => `${open}\n      ${links}\n    ${close}`);
   html = html.replace(/href="\/(impressum|datenschutz)\/"/g, (whole, slug) => `href="/${locale.prefix}${slug}/"`);
   html = html.replace(/<span id="y">\d+<\/span>/, `<span id="y">${year}</span>`);
+  // The light/dark toggle: script before the first paint, button in the header, script after the body.
+  const nav = JSON.parse(readFileSync(new URL(`../src/messages/${localeId}.json`, import.meta.url), 'utf8')).nav;
+  html = html.replace('<!--@scheme-head-->', () => SCHEME_HEAD).replace('<!--@scheme-button-->', () => schemeButton(nav)).replace('<!--@scheme-click-->', () => SCHEME_CLICK);
   // The logo goes to this language's home.
   html = html.replace('<a class="logo" href="/"', `<a class="logo" href="/${locale.prefix}"`);
   return html;

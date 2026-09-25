@@ -43,16 +43,16 @@ build time).
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 12 | 1 | 5 | 31 / 45 | 69 % |
 | `seo` | 19 | 3 | 5 | 62.7 / 84 | 75 % |
-| `launch` | 10 | 2 | 13 | 37.5 / 92 | 41 % |
-| **all** | 70 | 8 | 29 | 299.3 / 413 | **72 %** |
+| `launch` | 10 | 3 | 12 | 39.1 / 92 | 43 % |
+| **all** | 70 | 9 | 28 | 300.9 / 413 | **73 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 1 | 12 | 22 |
-| P1 | 12 | 6 | 38 | 56 |
+| P1 | 11 | 7 | 38 | 56 |
 | P2 | 8 | 1 | 20 | 29 |
-| **total** | **29** | **8** | **70** | **107** |
+| **total** | **28** | **9** | **70** | **107** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -184,7 +184,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | BR-05 | **Should the approved style become the main site's design system?** Decided by the owner 2026-09-24: **yes**, for the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) - **not** for the journey eras, which keep their historical styles (DECISIONS.md 70). Applying it is BR-06. | done | P2 | Ahmadreza | BR-04 | S | launch |
 | BR-06 | **Apply the K6 style to the main site's own pages** (new 2026-09-24, owner decision in BR-05; not started, do not begin without his go): the landing page, the About page, Impressum, Datenschutz, the 404 page and the UI chrome (`components/ui/`, `SiteFooter`, the language switcher, buttons); the tokens and fonts of `soon/tokens.css` become the site's tokens, fonts self-hosted through `@fontsource` or `public/`, the licences already in `public/fonts/`. The journey eras (Act 1) keep their era styles and themes; open question for the owner: the desktop shell (Act 3) and its `modern` theme. Legal, SEO and copy rules stay; every new or changed text gets CONTENT_REVIEW entries. Done 2026-09-25 (owner's queue, DECISIONS.md 72): the tokens and self-hosted fonts as the scoped `[data-style=k6]` layer, then the UI chrome, the landing page, About, Impressum and Datenschutz and the 404 page, one commit each, each checked with axe (de, fa) and the journey/vitals scripts. The desktop shell is not included - open question in TODO.md. **Visual part reverted by the owner 2026-09-25** after comparing old and new side by side (DECISIONS.md 73, BR-07): the old look is back; the non-colour fixes stay. | done | P1 | Claude Code | BR-05 | L | launch |
 | BR-07 | **Revert the K6 look** (owner, 2026-09-25, DECISIONS.md 73): the main site's own pages (landing, About, Impressum, Datenschutz, 404, UI chrome) and the coming-soon page get their old look back - navy-teal page with the green and amber glows, blue-tinted cards, cyan and mint accents, the old heading and name fonts, dark only. Kept: all content, the app, SEO and performance work, the 301s, the tests, Vazirmatn for Persian everywhere, no letter-spacing in Persian, and the phone/RTL layout fixes of BR-06. Unused font files removed, `public/fonts/LICENSES.md` matches what ships. | done | P1 | Claude Code | BR-06 | M | launch |
-| BR-08 | **Owner's choices after the revert** (waiting for owner): (1) light mode yes or no - a proposal in the old palette is on the unmerged branch `proposal/light-old-palette`; (2) one font per role (name and headings, Latin body, terminal/mono) from the candidate screenshots in `Claude outputs/font-candidates/`; then (3) apply the choices and redeploy the coming-soon page (BR-03). | missing | P1 | Ahmadreza + Claude Code | BR-07 | S | launch |
+| BR-08 | **Owner choices applied (DECISIONS 74):** fonts and light mode done; left: redeploy the coming-soon page (BR-03). | partial | P1 | Ahmadreza + Claude Code | BR-07 | S 80% | launch |
 
 ## Owner tasks - assets and accounts
 

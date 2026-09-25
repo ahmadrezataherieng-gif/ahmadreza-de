@@ -19,7 +19,7 @@ export async function EmailLink() {
       </svg>
       <span>{t('email')}</span>
       <span className="sr-only">: </span>
-      <span dir="ltr" className="min-w-0 wrap-anywhere normal-case">
+      <span dir="ltr" className="ao-tech min-w-0 wrap-anywhere normal-case">
         {EMAIL.address}
       </span>
     </a>

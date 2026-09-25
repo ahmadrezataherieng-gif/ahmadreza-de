@@ -31,7 +31,7 @@ test('legal bidi: the built Persian legal pages have no loose Latin text', (cont
   if (!existsSync(new URL('../../soon/dist/fa/impressum/index.html', import.meta.url))) return context.skip('run npm run build:soon first');
   for (const slug of ['impressum', 'datenschutz']) {
     const html = read(`soon/dist/fa/${slug}/index.html`)
-      .replace(/<style[\s\S]*?<\/style>|<title>[\s\S]*?<\/title>|<head>[\s\S]*?<\/head>|<bdi>[^<]*<\/bdi>|<a [^>]*>[^<]*<\/a>|<span dir="ltr">[^<]*<\/span>|<header>[\s\S]*?<\/header>|<footer>[\s\S]*?<\/footer>/g, '');
+      .replace(/<style[\s\S]*?<\/style>|<script>[\s\S]*?<\/script>|<title>[\s\S]*?<\/title>|<head>[\s\S]*?<\/head>|<bdi>[^<]*<\/bdi>|<a [^>]*>[^<]*<\/a>|<span dir="ltr">[^<]*<\/span>|<header>[\s\S]*?<\/header>|<footer>[\s\S]*?<\/footer>/g, '');
     const loose = [...html.matchAll(/>([^<]*\p{Script=Latin}[^<]*)</gu)].map((match) => match[1].trim());
     assert.deepEqual(loose, [], `${slug}: Latin text outside <bdi>`);
     assert.match(read(`soon/dist/fa/${slug}/index.html`), /<bdi>/);

@@ -1,25 +1,35 @@
 /* The coming-soon pages' design tokens: the original look of 03300d5, restored
-   by the owner on 2026-09-25 after comparing it with the K6 style (ROADMAP
-   BR-07, DECISIONS.md 73). Navy page, blue-grey cards, mint accent, amber
-   cursor; the system's own sans and mono faces for Latin text; dark only.
-   Persian is set in Vazirmatn, self-hosted from /fonts/ (SIL OFL, licence in
-   /fonts/licenses/): no request ever leaves the domain. build-soon.mjs injects
-   this file into index.html and into the legal pages, so all of them share
-   one look. */
+   by the owner on 2026-09-25 (ROADMAP BR-07, DECISIONS.md 73), with the fonts
+   and the light mode he chose the same day (DECISIONS.md 74). Navy page,
+   blue-grey cards, mint accent, amber cursor. Space Grotesk for the name and
+   the headings, Inter for text, buttons and labels, JetBrains Mono only for
+   technical text (the terminal line, the e-mail address); Persian in Vazirmatn.
+   Every font is self-hosted from /fonts/ (SIL OFL, licences in
+   /fonts/licenses/): no request ever leaves the domain. Dark is the default
+   always; light applies only after the visitor clicked the sun/moon toggle
+   (data-scheme on <html>, stored in localStorage, never the OS setting).
+   build-soon.mjs injects this file into index.html and into the legal pages,
+   so all of them share one look. */
 
 /* The Persian face only holds Arabic-script glyphs, so it answers for those alone
-   and can sit first in every stack: Latin text falls through to the system face. */
+   and can sit first in every stack: Latin text falls through to the Latin faces. */
 @font-face{font-family:"Vazirmatn";src:url(/fonts/vazirmatn-arabic-wght.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC}
+@font-face{font-family:"Space Grotesk";src:url(/fonts/space-grotesk-latin-500.woff2) format("woff2");font-weight:500;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Space Grotesk";src:url(/fonts/space-grotesk-latin-700.woff2) format("woff2");font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";src:url(/fonts/inter-latin-400.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";src:url(/fonts/inter-latin-700.woff2) format("woff2");font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"JetBrains Mono";src:url(/fonts/jetbrains-mono-latin-400.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"JetBrains Mono";src:url(/fonts/jetbrains-mono-latin-700.woff2) format("woff2");font-weight:700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 :root{
   --bg:#0b0f15; --surface:#111722; --edge:#222c3a;
   --ink:#e9edf5; --muted:#a3aec0;
-  --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a;
+  --brand:#5de2a4; --brand-deep:#2aa874; --on-brand:#06120c; --amber:#f0a44a; --mint:#5de2a4;
   --track:#1a2230;
   --font-fa:"Vazirmatn";
-  --font-head:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-  --font-body:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-  --font-mono:var(--font-fa),ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --font-head:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:var(--font-fa),"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
   /* Vazirmatn first: Segoe UI has Arabic glyphs of its own and would win otherwise. */
   --stack-head:var(--font-fa),var(--font-head);
   --stack-body:var(--font-fa),var(--font-body);
@@ -27,14 +37,29 @@
   --radius:14px;
   color-scheme:dark;
 }
-/* PROPOSAL (branch proposal/light-old-palette, not merged): light follows the
-   system, dark stays the default. The old mint and amber, deepened for AA. */
-@media (prefers-color-scheme:light){
-  :root{
-    --bg:#f3f6f9; --surface:#ffffff; --edge:#d3dce6;
-    --ink:#0b0f15; --muted:#434e5f;
-    --brand:#16794f; --brand-deep:#0f5c3b; --on-brand:#ffffff; --amber:#9a5308;
-    --track:#e2e8ef;
-    color-scheme:light;
-  }
+/* Light: the old palette of the main site's light mode - cyan as the accent,
+   mint and amber as soft glows on the page - each deepened just enough for AA
+   on the cool grey ground. */
+html[data-scheme="light"]{
+  --bg:#f3f6f9; --surface:#ffffff; --edge:#d3dce6;
+  --ink:#0b0f15; --muted:#434e5f;
+  --brand:#0b7285; --brand-deep:#0c5f6e; --on-brand:#ffffff; --amber:#9a5308; --mint:#18794e;
+  --track:#e2e8ef;
+  color-scheme:light;
+  background:#f3f6f9;
 }
+html[data-scheme="light"] body{
+  background:
+    radial-gradient(ellipse 50% 45% at 22% 18%,color-mix(in srgb,#5de2a4 28%,transparent),transparent 70%) fixed,
+    radial-gradient(ellipse 50% 45% at 78% 88%,color-mix(in srgb,#f0a44a 22%,transparent),transparent 70%) fixed,
+    var(--bg);
+}
+
+/* The sun/moon toggle beside the language links; invisible until the page's script
+   runs (html.js), because without it the button would do nothing. */
+.scheme{position:relative;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;cursor:pointer;opacity:0;pointer-events:none}
+.js .scheme{opacity:1;pointer-events:auto}
+.scheme:hover{color:var(--ink)}
+.scheme svg{position:absolute;width:16px;height:16px}
+.scheme .moon,html[data-scheme="light"] .scheme .sun{opacity:0}
+html[data-scheme="light"] .scheme .moon{opacity:1}

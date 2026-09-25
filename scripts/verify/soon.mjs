@@ -44,10 +44,12 @@ for (const viewport of VIEWPORTS) {
   page.on('Network.requestWillBeSent', (message) => requests.push(message.params.request.url));
   await page.goto(BASE, 2500);
   for (const scheme of ['dark', 'light']) {
-    await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
+    await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
     for (const locale of ['de', 'en', 'fa']) {
       // Each language is its own page (SEO-15): /, /en/, /fa/ - no button to press.
       await page.goto(new URL(locale === 'de' ? '/' : `/${locale}/`, BASE).href, 800);
+      // The visitor's choice, not the OS: dark is the default, light is the toggle's data-scheme (DECISIONS 74). The OS stays on "light" above, to prove it is never followed.
+      await page.evaluate(scheme === 'light' ? "document.documentElement.dataset.scheme = 'light'" : "delete document.documentElement.dataset.scheme");
       await sleep(300);
       const state = await page.evaluate(`(async () => {
         await document.fonts.ready;
@@ -164,11 +166,10 @@ for (const viewport of VIEWPORTS) {
       check(`${label}: no line ends in a single orphaned word`, state.orphans.length === 0, state.orphans.join(' | '));
       check(`${label}: seven areas`, state.areas === 7, String(state.areas));
       // The old look (BR-07): system faces for Latin, the self-hosted Vazirmatn for Persian (every page shows a Persian line), dark in either scheme.
-      check(`${label}: the self-hosted Vazirmatn is loaded`, state.fontsLoaded.includes('Vazirmatn'), `loaded: ${state.fontsLoaded.join(', ')}`);
-      check(`${label}: the headings use Vazirmatn for Persian, then Segoe UI and the system face`, /^"?Vazirmatn"?, "Segoe UI", system-ui/.test(state.heading), state.heading);
-      check(`${label}: the terminal line is the bold system mono`, state.os.weight === '700' && /ui-monospace/.test(state.os.family), `${state.os.weight} ${state.os.family}`);
-      // Light-mode proposal (branch proposal/light-old-palette): light follows the system.
-      check(`${label}: the page follows the colour scheme`, state.bg === (scheme === 'light' ? 'rgb(243, 246, 249)' : 'rgb(11, 15, 21)'), state.bg);
+      check(`${label}: the self-hosted Vazirmatn, Space Grotesk and Inter are loaded`, ['Vazirmatn', 'Space Grotesk', 'Inter'].every((face) => state.fontsLoaded.includes(face)), `loaded: ${state.fontsLoaded.join(', ')}`);
+      check(`${label}: the headings use Vazirmatn for Persian, then Space Grotesk`, /^"?Vazirmatn"?, "Space Grotesk"/.test(state.heading), state.heading);
+      check(`${label}: the terminal line is the bold JetBrains Mono`, state.os.weight === '700' && /JetBrains Mono/.test(state.os.family), `${state.os.weight} ${state.os.family}`);
+      check(`${label}: the page follows the toggle, never the OS`, state.bg === (scheme === 'light' ? 'rgb(243, 246, 249)' : 'rgb(11, 15, 21)'), state.bg);
       check(`${label}: every Latin term in Persian text is isolated in a <bdi>`, state.bidiMixed.length === 0, state.bidiMixed.join(' | '));
       check(`${label}: punctuation after a Latin term in Persian text lands on the correct side`, state.bidiPunctuation.length === 0, state.bidiPunctuation.join(' | '));
       check(
@@ -188,7 +189,6 @@ for (const viewport of VIEWPORTS) {
   // The legal pages: same look, no horizontal scroll, the same fonts, still noindex.
   const origin = new URL(BASE).origin;
   for (const legal of ['impressum', 'en/impressum', 'fa/impressum', 'datenschutz', 'en/datenschutz', 'fa/datenschutz']) {
-    await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] });
     await page.goto(`${origin}/${legal}/`, 1500);
     const info = await page.evaluate(`(async () => {
       await document.fonts.ready;
@@ -196,7 +196,7 @@ for (const viewport of VIEWPORTS) {
         h1: getComputedStyle(document.querySelector('h1')).fontFamily, bg: getComputedStyle(document.body).backgroundColor,
         loaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')) };
     })()`);
-    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, navy, the old heading face`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(11, 15, 21)' && /"Segoe UI", system-ui/.test(info.h1) && (!legal.startsWith('fa/') || info.loaded.includes('Vazirmatn')), JSON.stringify(info));
+    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, navy, the old heading face`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(11, 15, 21)' && /"Space Grotesk"/.test(info.h1) && (!legal.startsWith('fa/') || info.loaded.includes('Vazirmatn')), JSON.stringify(info));
   }
   const external = [...new Set(requests.filter((url) => !url.startsWith(origin) && !url.startsWith('data:')))];
   check(`${viewport.name}: no request leaves the domain (${requests.length} requests, all to ${origin})`, external.length === 0, external.join(' | '));

@@ -18,7 +18,10 @@ export function Portrait({ alt, placeholder, dimensions }: PortraitProps) {
   return (
     <figure className="relative mx-auto w-full max-w-[11rem] sm:max-w-[16rem] md:max-w-none">
       {/* Offset outline behind the frame: a quiet, expensive-looking edge. */}
-      <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-window border border-accent/40 rtl:-translate-x-3" aria-hidden="true" />
+      <div
+        className="absolute inset-0 translate-x-3 translate-y-3 rounded-window border border-accent/40 rtl:-translate-x-3"
+        aria-hidden="true"
+      />
 
       <div
         className="relative overflow-hidden rounded-window border border-edge bg-surface shadow-window"
@@ -43,7 +46,7 @@ export function Portrait({ alt, placeholder, dimensions }: PortraitProps) {
               A
             </span>
             <span className="font-mono text-xs tracking-wide text-muted uppercase">{placeholder}</span>
-            <span className="font-mono text-[11px] text-muted" dir="ltr">
+            <span className="ao-tech font-mono text-[11px] text-muted" dir="ltr">
               {dimensions}
             </span>
           </div>

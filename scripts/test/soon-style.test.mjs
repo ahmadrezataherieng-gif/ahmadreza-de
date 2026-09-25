@@ -18,7 +18,7 @@ function tokens() {
   return props(root);
 }
 function lightTokens() {
-  const light = css.match(/@media \(prefers-color-scheme:light\)\{\s*:root\{([^}]*)\}/)?.[1];
+  const light = css.match(/html\[data-scheme="light"\]\{([^}]*)\}/)?.[1];
   assert.ok(light, 'a light-scheme block');
   return { ...tokens(), ...props(light) };
 }
@@ -46,14 +46,15 @@ test('soon style: body text 7:1, the mint 4.5:1, non-text 3:1 - dark and light',
   }
 });
 
-test('soon style: the old look - navy page, blue-grey cards, mint accent - dark by default, light proposal follows the system', () => {
+test('soon style: the old look - navy page, blue-grey cards, mint accent - dark by default always (the OS setting is never read), light only after the toggle', () => {
   const palette = tokens();
   assert.equal(palette.bg, '#0b0f15');
   assert.equal(palette.surface, '#111722');
   assert.equal(palette.brand, '#5de2a4');
   assert.match(css, /color-scheme:dark/);
   const page = read('soon/index.html');
-  assert.match(page, /<meta name="color-scheme" content="dark light">/);
+  assert.match(page, /<meta name="color-scheme" content="dark">/);
+  assert.doesNotMatch(css + page, /prefers-color-scheme/);
 });
 
 test('soon style: Persian in Vazirmatn ahead of the system faces; no letter-spacing in Persian headings', () => {
@@ -71,7 +72,15 @@ test('soon style: Persian in Vazirmatn ahead of the system faces; no letter-spac
 
 test('soon fonts: every file is licensed, used, and served from the domain - no candidates committed', () => {
   const files = readdirSync(new URL('../../soon/fonts/', import.meta.url)).sort();
-  assert.deepEqual(files, ['vazirmatn-arabic-wght.woff2']);
+  assert.deepEqual(files, [
+    'inter-latin-400.woff2',
+    'inter-latin-700.woff2',
+    'jetbrains-mono-latin-400.woff2',
+    'jetbrains-mono-latin-700.woff2',
+    'space-grotesk-latin-500.woff2',
+    'space-grotesk-latin-700.woff2',
+    'vazirmatn-arabic-wght.woff2',
+  ]);
   const index = read('public/fonts/LICENSES.md');
   const sources = [...css.matchAll(/url\(([^)]+)\)/g)].map((match) => match[1]);
   for (const file of files) {
@@ -79,7 +88,7 @@ test('soon fonts: every file is licensed, used, and served from the domain - no 
     assert.ok(sources.includes(`/fonts/${file}`), `${file} is never used by soon/tokens.css`);
   }
   for (const source of sources) assert.ok(source.startsWith('/fonts/') && files.includes(source.slice(7)), `${source} is not a local, committed font`);
-  for (const licence of ['vazirmatn']) {
+  for (const licence of ['vazirmatn', 'inter', 'jetbrains-mono', 'space-grotesk']) {
     const path = `public/fonts/licenses/${licence}-OFL.txt`;
     assert.ok(existsSync(new URL(`../../${path}`, import.meta.url)), path);
     assert.match(read(path), /SIL OPEN FONT LICENSE Version 1\.1/i, `${path} is not the OFL`);

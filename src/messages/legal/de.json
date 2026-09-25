@@ -180,12 +180,21 @@
                 "amonel.theme.v1",
                 "localStorage",
                 "Die Epoche, in die Sie den Desktop mit der Zeitmaschine versetzt haben (z. B. 1984); wird erst geschrieben, wenn Sie reisen, und gelöscht, wenn Sie in die Gegenwart zurückkehren."
+              ],
+              [
+                "ao-scheme",
+                "localStorage",
+                "Ihre Wahl zwischen hellem und dunklem Design: light oder dark; wird erst geschrieben, wenn Sie die Schaltfläche anklicken."
               ]
             ]
           },
           {
             "type": "p",
             "text": "Das Speichern und Auslesen dieser Einträge ist unbedingt erforderlich, damit die von Ihnen ausdrücklich genutzte Funktion so arbeitet, wie Sie es erwarten (§ 25 Abs. 2 Nr. 2 TDDDG). Eine Einwilligung ist dafür nicht nötig. Soweit überhaupt personenbezogene Daten betroffen sind, ist die Rechtsgrundlage Art. 6 Abs. 1 lit. f DSGVO."
+          },
+          {
+            "type": "p",
+            "text": "Die Wahl zwischen hellem und dunklem Design (Eintrag „ao-scheme“, localStorage) wird erst nach Ihrem Klick auf die Sonne-Mond-Schaltfläche in Ihrem eigenen Browser gespeichert, nie an den Server übertragen und lässt sich in den Browser-Einstellungen löschen (§ 25 Abs. 2 Nr. 2 TDDDG)."
           },
           {
             "type": "p",
@@ -200,6 +209,10 @@
           {
             "type": "p",
             "text": "Diese Seite merkt sich die von Ihnen gewählte Sprache im Speicher Ihres Browsers (localStorage, Eintrag „ao-lang“, Inhalt: de, en oder fa). Der Eintrag bleibt auf Ihrem Gerät und wird nie übertragen. Er ist unbedingt erforderlich, damit die von Ihnen gewählte Sprache beim nächsten Besuch erhalten bleibt (§ 25 Abs. 2 Nr. 2 TDDDG); eine Einwilligung ist dafür nicht nötig. Sie können ihn jederzeit löschen, indem Sie die Website-Daten für diese Domain in Ihrem Browser entfernen."
+          },
+          {
+            "type": "p",
+            "text": "Die Wahl zwischen hellem und dunklem Design (Eintrag „ao-scheme“, localStorage) wird erst nach Ihrem Klick auf die Sonne-Mond-Schaltfläche in Ihrem eigenen Browser gespeichert, nie an den Server übertragen und lässt sich in den Browser-Einstellungen löschen (§ 25 Abs. 2 Nr. 2 TDDDG)."
           }
         ]
       },

@@ -83,7 +83,9 @@ test('soon pages: the language links are real URLs, the current one marked; the 
     assert.deepEqual([...nav.matchAll(/<a href="([^"]*)" hreflang="(\w+)"/g)].map((match) => [match[2], match[1]]), [['de', '/'], ['en', '/en/'], ['fa', '/fa/']]);
     assert.equal(nav.match(/aria-current="page"/g)?.length, 1);
     assert.ok(new RegExp(`hreflang="${locale.id}" lang="${locale.id}" aria-current="page"`).test(nav), `${locale.id} is the current link`);
-    assert.doesNotMatch(html, /<button/);
+    // The only button is the sun/moon toggle (DECISIONS 74), and it labels its action in the page language.
+    assert.deepEqual([...html.matchAll(/<button [^>]*class="scheme"/g)].length, 1);
+    assert.equal(html.match(/<button/g)?.length, 1);
     assert.ok(html.includes(`<a href="/${locale.prefix}impressum/"`) && html.includes(`<a href="/${locale.prefix}datenschutz/"`));
     assert.ok(html.includes(`<a class="logo" href="/${locale.prefix}"`));
   }

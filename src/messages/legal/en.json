@@ -180,12 +180,21 @@
                 "amonel.theme.v1",
                 "localStorage",
                 "The era you sent the desktop to with the Time Machine (e.g. 1984); written only when you travel, deleted when you return to the present."
+              ],
+              [
+                "ao-scheme",
+                "localStorage",
+                "Your choice between the light and the dark design: light or dark; written only when you click the button."
               ]
             ]
           },
           {
             "type": "p",
             "text": "Storing and reading these entries is strictly necessary for the feature you explicitly use to work as you expect (§ 25(2) no. 2 TDDDG, the German Telecommunications Digital Services Data Protection Act). No consent is required. Where personal data is involved at all, the legal basis is Art. 6(1)(f) GDPR."
+          },
+          {
+            "type": "p",
+            "text": "Your choice between the light and the dark design (entry “ao-scheme”, localStorage) is stored in your own browser only after you click the sun/moon button, is never sent to the server, and can be deleted in your browser settings (§ 25 (2) no. 2 TDDDG)."
           },
           {
             "type": "p",
@@ -200,6 +209,10 @@
           {
             "type": "p",
             "text": "This page remembers the language you chose in your browser's storage (localStorage, entry \"ao-lang\", content: de, en or fa). The entry stays on your device and is never transmitted. It is strictly necessary to keep the language you chose on your next visit (§ 25(2) no. 2 TDDDG); no consent is required. You can delete it at any time by clearing this domain's site data in your browser."
+          },
+          {
+            "type": "p",
+            "text": "Your choice between the light and the dark design (entry “ao-scheme”, localStorage) is stored in your own browser only after you click the sun/moon button, is never sent to the server, and can be deleted in your browser settings (§ 25 (2) no. 2 TDDDG)."
           }
         ]
       },

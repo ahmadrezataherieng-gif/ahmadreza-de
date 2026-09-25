@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { LEGAL_CONTACT } from '@/content/legal';
@@ -17,9 +18,7 @@ export async function loadLegalCopy(locale: Locale): Promise<LegalCopy> {
 /** Plain text; in Persian its Latin terms sit in <bdi> (LEG-16). */
 function Iso({ text, locale }: { text: string; locale: Locale }) {
   return (
-    <>
-      {bidiParts(text, locale).map((part, index) => (part.latin ? <bdi key={index}>{part.text}</bdi> : part.text))}
-    </>
+    <>{bidiParts(text, locale).map((part, index) => (part.latin ? <bdi key={index}>{part.text}</bdi> : part.text))}</>
   );
 }
 
@@ -28,7 +27,13 @@ function Text({ text, locale }: { text: string; locale: Locale }) {
     <>
       {linkify(text).map((part, index) =>
         part.href ? (
-          <a key={index} href={part.href} rel="noopener noreferrer" dir="ltr" className="break-all text-accent underline underline-offset-2">
+          <a
+            key={index}
+            href={part.href}
+            rel="noopener noreferrer"
+            dir="ltr"
+            className="break-all text-accent underline underline-offset-2"
+          >
             {part.text}
           </a>
         ) : (
@@ -62,12 +67,19 @@ function Block({ block, copy, locale }: { block: LegalBlock; copy: LegalCopy; lo
     case 'table':
       return (
         // Focusable, so a keyboard can scroll a table wider than a phone (WCAG 2.1.1).
-        <div tabIndex={0} className="overflow-x-auto rounded-control border border-edge focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none">
+        <div
+          tabIndex={0}
+          className="overflow-x-auto rounded-control border border-edge focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+        >
           <table className="w-full border-collapse text-start text-sm">
             <thead className="bg-surface">
               <tr>
                 {block.head.map((cell) => (
-                  <th key={cell} scope="col" className="border-b border-edge px-3 py-2 text-start font-mono text-xs text-muted">
+                  <th
+                    key={cell}
+                    scope="col"
+                    className="border-b border-edge px-3 py-2 text-start font-mono text-xs text-muted"
+                  >
                     <Iso text={cell} locale={locale} />
                   </th>
                 ))}
@@ -79,7 +91,7 @@ function Block({ block, copy, locale }: { block: LegalBlock; copy: LegalCopy; lo
                   {row.map((cell, index) => (
                     <td key={index} className="border-b border-edge px-3 py-2">
                       {index < 2 ? (
-                        <code dir="ltr" className="font-mono text-xs whitespace-nowrap">
+                        <code dir="ltr" className="ao-tech font-mono text-xs whitespace-nowrap">
                           {cell}
                         </code>
                       ) : (
@@ -129,6 +141,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
   const copy = await loadLegalCopy(locale);
   const document = copy[kind];
   const tSite = await getTranslations('site');
+  const tNav = await getTranslations('nav');
 
   return (
     <div className="ao-site-page min-h-dvh bg-background text-ink">
@@ -137,7 +150,15 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
         <a href={viewHref(locale, 'landing')} aria-label={copy.backHome} className="rounded-control">
           <AmonelLogo uid={`ao-legal-logo-${kind}`} label={tSite('brand')} className="h-7 w-auto" />
         </a>
-        <LanguageSwitcher />
+        <div className="flex items-center gap-1">
+          <LanguageSwitcher />
+          <SchemeToggle
+            labels={{
+              toLight: tNav('schemeToLight'),
+              toDark: tNav('schemeToDark'),
+            }}
+          />
+        </div>
       </header>
 
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 pt-10 pb-12 font-body text-[0.95rem] leading-relaxed sm:px-8">
@@ -149,7 +170,12 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
           {copy.bindingNote ? (
             <p className="rounded-control border border-edge bg-surface px-4 py-3 text-sm">
               <Iso text={copy.bindingNote} locale={locale} />{' '}
-              <a href={viewHref('de', kind)} hrefLang="de" lang="de" className="text-accent underline underline-offset-2">
+              <a
+                href={viewHref('de', kind)}
+                hrefLang="de"
+                lang="de"
+                className="text-accent underline underline-offset-2"
+              >
                 {copy.bindingLink}
               </a>
             </p>

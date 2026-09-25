@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { AboutContent } from '@/components/apps/about/AboutApp';
 import { AmonelLogo } from '@/components/ui/Brand';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
 import { viewHref } from '@/lib/routing';
@@ -18,7 +19,8 @@ import type { Locale } from '@/lib/i18n-config';
 export async function AboutPage({ locale }: { locale: Locale }) {
   const tSite = await getTranslations('site');
   const tNav = await getTranslations('nav');
-  const link = 'ao-themed rounded-control border border-edge px-3 py-2 font-mono text-sm text-ink hover:border-accent hover:text-accent';
+  const link =
+    'ao-themed rounded-control border border-edge px-3 py-2 font-mono text-sm text-ink hover:border-accent hover:text-accent';
 
   return (
     <div className="ao-site-page min-h-dvh bg-background text-ink">
@@ -29,7 +31,15 @@ export async function AboutPage({ locale }: { locale: Locale }) {
           <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
             <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
           </a>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-1">
+            <LanguageSwitcher />
+            <SchemeToggle
+              labels={{
+                toLight: tNav('schemeToLight'),
+                toDark: tNav('schemeToDark'),
+              }}
+            />
+          </div>
         </header>
 
         <main className="pb-8">

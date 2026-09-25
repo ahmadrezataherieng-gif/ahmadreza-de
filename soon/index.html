@@ -17,9 +17,9 @@
 <link rel="canonical" href="https://ahmadreza.de/">
 <!--@alternates-->
 <meta name="robots" content="index,follow">
-<meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#0b0f15" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f3f6f9" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0f15">
+<!--@scheme-head-->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Amonel">
 <meta property="og:locale" content="de_DE">
@@ -46,7 +46,9 @@
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--stack-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit}
-  h1,h2,h3,.role,.overall-label{text-wrap:balance}
+  h1,h2,h3,.role,.background,.overall-label{text-wrap:balance}
+  /* Space Grotesk's word space is narrow, and the heading tracking narrows it more. */
+  h1,h2,h3,.big,bdi{word-spacing:.08em}
   p,li{text-wrap:pretty}
   .wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
   @media (min-width:720px){.wrap{padding:28px 32px 64px}}
@@ -55,8 +57,9 @@
   header{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .logo{display:inline-flex;align-items:center;font:600 26px/1 var(--stack-head);letter-spacing:-.025em;color:var(--ink);text-decoration:none;direction:ltr}
   .logo svg{width:.74em;height:.74em;margin:0 .03em;transform:translateY(.06em);color:var(--brand);overflow:visible}
+  .hdr-tools{display:flex;align-items:center;gap:10px}
   .langs{display:flex;gap:6px}
-  .langs a{display:inline-block;text-decoration:none;font:600 12px/1 var(--font-mono);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
+  .langs a{display:inline-block;text-decoration:none;font:600 12px/1 var(--stack-body);color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:8px 12px;cursor:pointer}
   .langs a:hover{color:var(--ink)}
   .langs a[aria-current="page"]{color:var(--on-brand);background:var(--brand);border-color:var(--brand)}
   button:focus-visible,a:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
@@ -64,7 +67,7 @@
   /* Who and what, readable in ten seconds. */
   .hero{padding:48px 0 8px;max-width:760px}
   @media (min-width:720px){.hero{padding-top:72px}}
-  .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}
+  .pill{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--stack-body);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);border:1px solid var(--edge);border-radius:999px;padding:8px 12px}
   .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);animation:pulse 1.8s infinite}
   @keyframes pulse{50%{opacity:.35}}
   h1{margin:18px 0 0;font:var(--head-weight) clamp(2.6rem,9vw,4.6rem)/1.02 var(--stack-head);letter-spacing:var(--head-tracking)}
@@ -98,12 +101,12 @@
   .card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);padding:18px 20px}
   .card h3{margin:0;font:600 1.08rem/1.3 var(--stack-head)}
   .card p{margin:6px 0 0;color:var(--muted)}
-  .card .num{display:block;font:600 12px/1 var(--font-mono);color:var(--brand);margin-bottom:10px}
+  .card .num{display:block;font:600 12px/1 var(--stack-body);color:var(--brand);margin-bottom:10px}
 
   /* The progress panel is a terminal: the only place for the OS lockup (design 1). */
   .panel{margin-top:24px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);overflow:hidden}
   .panel-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--edge);font:13px/1 var(--font-mono);color:var(--muted)}
-  .os{direction:ltr;font-weight:700;color:var(--brand)}
+  .os{direction:ltr;font-weight:700;color:var(--mint)}
   .os .p{color:var(--muted);font-weight:400}
   .cursor{display:inline-block;width:.55em;height:1.05em;margin-inline-start:2px;background:var(--amber);vertical-align:-.18em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
@@ -113,20 +116,20 @@
   .big{font:var(--head-weight) clamp(3rem,10vw,4.4rem)/1 var(--stack-head);letter-spacing:var(--head-tracking);color:var(--brand)}
   .overall-label{font-size:1.1rem;font-weight:600}
   .meter{position:relative;height:10px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:14px}
-  .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--brand-deep),var(--brand));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
-  html[dir="rtl"] .meter span{background:linear-gradient(270deg,var(--brand-deep),var(--brand))}
+  .meter span{position:absolute;inset-block:0;inset-inline-start:0;width:calc(var(--p) * 1%);border-radius:inherit;background:linear-gradient(90deg,var(--brand-deep),var(--mint));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}
+  html[dir="rtl"] .meter span{background:linear-gradient(270deg,var(--brand-deep),var(--mint))}
   @keyframes grow{from{width:0}}
   .note{margin:12px 0 0;font-size:.9rem;color:var(--muted)}
   .areas{display:grid;gap:22px 32px;margin:28px 0 0;padding:0;list-style:none}
   @media (min-width:720px){.areas{grid-template-columns:1fr 1fr}}
   .area-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
   .area h3{margin:0;font:600 1rem/1.35 var(--stack-head)}
-  .area .pct{font:700 .95rem/1 var(--font-mono);color:var(--ink);white-space:nowrap}
+  .area .pct{font:700 .95rem/1 var(--stack-body);color:var(--ink);white-space:nowrap}
   .area .meter{height:6px;margin-top:8px}
   .area p{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
-  .area .counts{font-size:.82rem;font-family:var(--font-mono)}
+  .area .counts{font-size:.82rem}
   html[dir="rtl"] .area .counts,html[dir="rtl"] .area .pct{font-family:inherit}
-  .stamp{margin:24px 0 0;font:12px/1.4 var(--font-mono);color:var(--muted)}
+  .stamp{margin:24px 0 0;font:12px/1.4 var(--stack-body);color:var(--muted)}
   html[dir="rtl"] .stamp,html[dir="rtl"] .pill{font-family:inherit;letter-spacing:0}
   .alt .fa-name{font-size:1.65rem;font-weight:700;line-height:1.5;color:var(--ink)}
 
@@ -144,11 +147,14 @@
 <div class="wrap">
   <header>
     <a class="logo" href="/" aria-label="Amonel">Am<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.2a8 8 0 1 0 10.8 0"/></svg>nel</a>
+    <div class="hdr-tools">
     <nav class="langs" aria-label="Sprache" data-t-label="language">
       <a href="/" hreflang="de" lang="de" aria-current="page">DE</a>
       <a href="/en/" hreflang="en" lang="en">EN</a>
       <a href="/fa/" hreflang="fa" lang="fa">FA</a>
     </nav>
+    <!--@scheme-button-->
+    </div>
   </header>
 
   <main>
@@ -232,5 +238,6 @@
     if(location.pathname==='/'&&(saved==='en'||saved==='fa')) location.replace('/'+saved+'/');
   }catch(e){}
 </script>
+<!--@scheme-click-->
 </body>
 </html>

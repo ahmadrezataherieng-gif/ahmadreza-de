@@ -67,7 +67,9 @@ test('legal: the three languages have the same structure; only German is binding
 
 test('legal: the privacy policy lists exactly the storage keys the code uses', () => {
   const constants = read('src/lib/constants.ts');
+  // The light/dark choice lives in src/lib/scheme.ts (it is read before React, in the head).
   const keys = [...constants.matchAll(/'(amonel\.[a-z.0-9]+)'/g)].map((match) => match[1]);
+  keys.push(read('src/lib/scheme.ts').match(/SCHEME_KEY = '(ao-scheme)'/)[1]);
   for (const locale of ['de', 'en', 'fa']) {
     const table = sectionsFor(copy[locale].privacy, 'site').flatMap((section) => section.blocks).find((block) => block.type === 'table');
     assert.deepEqual(table.rows.map((row) => row[0]).sort(), [...keys].sort(), locale);

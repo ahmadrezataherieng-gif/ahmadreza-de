@@ -33,6 +33,8 @@
     "privacy": "Privacy",
     "legal": "Legal",
     "language": "Language",
+    "schemeToLight": "Switch to light theme",
+    "schemeToDark": "Switch to dark theme",
     "skipToDesktop": "To the desktop",
     "skipToContent": "Skip to content",
     "home": "Home"
