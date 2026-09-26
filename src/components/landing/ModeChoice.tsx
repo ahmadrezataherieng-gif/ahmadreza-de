@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { Icon } from '@/components/illustrations/Icon';
@@ -23,8 +22,16 @@ import { useIntentPrefetch } from '@/lib/intent-prefetch';
  * card's copy must describe the gates honestly: an era opens once its puzzle is
  * solved or its solution shown.
  */
-export function ModeChoice({ journeyHref }: { journeyHref: string }) {
-  const t = useTranslations('landing');
+export function ModeChoice({
+  journeyHref,
+  options,
+  lastChosen: lastChosenLabel,
+}: {
+  journeyHref: string;
+  options: Array<{ mode: JourneyMode; title: string; text: string; time: string }>;
+  /** "Last chosen", next to the card the visitor took before. */
+  lastChosen: string;
+}) {
   const intent = useIntentPrefetch(journeyHref);
   const storedMode = useUnlockStore((state) => state.mode);
   const setMode = useUnlockStore((state) => state.setMode);
@@ -34,11 +41,6 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
   const lastChosen = hydrated ? storedMode : null;
-
-  const options: Array<{ mode: JourneyMode; title: string; text: string; time: string }> = [
-    { mode: 'guided', title: t('guidedTitle'), text: t('guidedText'), time: t('guidedTime') },
-    { mode: 'interactive', title: t('interactiveTitle'), text: t('interactiveText'), time: t('interactiveTime') },
-  ];
 
   return (
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -78,7 +80,7 @@ export function ModeChoice({ journeyHref }: { journeyHref: string }) {
             <span className="font-body text-sm leading-snug text-muted">{option.text}</span>
             <span className="mt-auto flex items-center justify-between gap-2 pt-2 font-mono text-[11px] tracking-wide text-accent uppercase">
               {option.time}
-              {lastChosen === option.mode && <span className="text-muted normal-case">{t('lastChosen')}</span>}
+              {lastChosen === option.mode && <span className="text-muted normal-case">{lastChosenLabel}</span>}
             </span>
             <span
               className="absolute end-4 bottom-4 translate-x-0 text-accent opacity-0 transition-all group-hover:opacity-100 rtl:-scale-x-100"

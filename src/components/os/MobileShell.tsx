@@ -44,6 +44,7 @@ function appInState(state: unknown): AppId | null {
  */
 export function MobileShell() {
   const t = useTranslations('os');
+  const tNav = useTranslations('nav');
   const locale = useLocale() as Locale;
   const homeIntent = useIntentPrefetch(viewHref(locale, 'landing'));
   const [openId, setOpenId] = useState<AppId | null>(null);
@@ -108,7 +109,7 @@ export function MobileShell() {
           </Link>
           <SoundToggle />
           <LanguageSwitcher />
-          <LegalLinks className="justify-center" />
+          <LegalLinks locale={locale} t={tNav} className="justify-center" />
         </div>
       </div>
 

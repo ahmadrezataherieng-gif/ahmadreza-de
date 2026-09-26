@@ -156,7 +156,7 @@ Rules of thumb:
   `301 /de/ → /` lives in `public/_redirects`.
 - `canonical` and `hreflang` (including `x-default`) are emitted per view.
 - **Tone:** German addresses the visitor as **"Sie"** - natural, not stiff - in every string, including puzzles and chrome; Persian uses the polite **"شما"** throughout; English stays neutral. Never write "du" or "تو".
-- **Each view gets only its message namespaces** (`VIEW_NAMESPACES` in the layout); everything handed to the client provider is serialised into the HTML, so add a namespace there when a view starts using it — and never add `puzzles`, which loads with the puzzle chunk.
+- **Only the journey and the desktop have a client message provider**, inside their own lazy chunks (`JourneyRoot`, `ShellRoot`), with `viewMessages()` in `lib/view-messages.ts` choosing their namespaces; everything handed to it is serialised into the HTML, so add a namespace there when the view starts using it — and never add `puzzles`, which loads with the puzzle chunk. **The static pages (landing, About, legal, 404) have no provider:** a client component there takes its words as props from a server component (`getTranslations`), and no module in the server graph may import `next-intl` itself (only `next-intl/server`) - the barrel pulls the provider, and the message formatter behind it (15 kB gzip), into every page's scripts (DECISIONS 80).
 
 ## Coding conventions — enforce these
 

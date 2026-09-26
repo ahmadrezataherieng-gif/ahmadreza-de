@@ -65,11 +65,13 @@ const load = async (base, path, setup) => {
   await b.evaluate(`document.getAnimations().forEach((a) => { try { a.finish(); } catch {} }); true`);
   await sleep(300);
   const snapshot = JSON.parse(await b.evaluate(SNAPSHOT));
+  // The words too: a page that lost or changed a string would still have the same styles.
+  const text = await b.evaluate(`document.body.innerText + '|' + document.title + '|' + [...document.querySelectorAll('a[href]')].map((a) => a.getAttribute('href') + '>' + (a.getAttribute('hreflang') || '') + (a.getAttribute('lang') || '')).join(',')`);
   const sheets = await b.evaluate(`[...document.styleSheets].map((s) => (s.href || 'inline').split('/').pop()).join(',')`);
   const errors = b.errors.slice(0, 2);
   b.close();
   await sleep(600);
-  return { snapshot, sheets, errors };
+  return { snapshot, sheets, errors, text };
 };
 
 let failed = 0;
@@ -101,6 +103,7 @@ for (const setup of SETUPS) {
           if (x[prop] !== y[prop] && !noisy.has(key + '|' + prop)) diffs.push(key + ' ' + prop + ': ' + String(x[prop]).slice(0, 30) + ' vs ' + String(y[prop]).slice(0, 30));
         }
       }
+      if (a.text !== b.text) diffs.push('TEXT or links differ: ' + [...a.text].findIndex((c, i) => c !== b.text[i]) + ' ' + JSON.stringify(a.text.slice(0, 0)));
       const ok = diffs.length === 0 && b.errors.length === 0;
       if (!ok) failed += 1;
       console.log(`${ok ? 'ok  ' : 'FAIL'} ${setup.name.padEnd(18)} ${path.padEnd(16)} ${Object.keys(a.snapshot).length} nodes (${noisy.size} noisy props), sheets ${b.sheets}${ok ? '' : ` | ${diffs.length} differ: ${diffs.slice(0, 6).join(' ; ')} ${b.errors.join(' ')}`}`);

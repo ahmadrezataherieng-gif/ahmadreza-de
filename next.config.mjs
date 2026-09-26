@@ -16,6 +16,23 @@ const nextConfig = {
   // Emit `/amonel/index.html` style folders; wrangler's `auto-trailing-slash` matches.
   trailingSlash: true,
   reactStrictMode: true,
+  // The message formatter (next-intl, use-intl, formatjs: 15 kB gzip) in a chunk
+  // of its own. Left to the default splitting it was merged with next/link, which
+  // every page needs, so the static pages downloaded and evaluated it for nothing.
+  // Only the journey and the desktop shell use it (queue 3c).
+  webpack(config, { isServer }) {
+    const groups = config.optimization?.splitChunks?.cacheGroups;
+    if (!isServer && groups) {
+      groups.intl = {
+        test: /[\\/]node_modules[\\/](next-intl|use-intl|intl-messageformat|@formatjs)[\\/]/,
+        name: 'intl',
+        chunks: 'all',
+        priority: 60,
+        enforce: true,
+      };
+    }
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);

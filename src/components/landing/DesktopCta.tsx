@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/cn';
@@ -17,8 +16,13 @@ import { selectHasCompletedJourney, useUnlockStore } from '@/store/unlock-store'
  * same slot, and the mode cards step back (DECISIONS.md 49). The slot's height
  * never changes, so the switch after hydration moves nothing.
  */
-export function DesktopCta({ desktopHref }: { desktopHref: string }) {
-  const t = useTranslations('landing');
+export function DesktopCta({
+  desktopHref,
+  labels,
+}: {
+  desktopHref: string;
+  labels: { welcomeBack: string; desktopCta: string; desktopShortcutLead: string; desktopShortcut: string };
+}) {
   const intent = useIntentPrefetch(desktopHref);
   const completed = useUnlockStore(selectHasCompletedJourney);
   // The persisted store only exists after hydration; until then render the
@@ -36,20 +40,20 @@ export function DesktopCta({ desktopHref }: { desktopHref: string }) {
     <div className="ao-desktop-cta flex h-16 items-center" data-returning-cta={returning ? '' : undefined}>
       {returning ? (
         <div className="flex w-full items-center justify-between gap-4 rounded-window border border-accent bg-elevated px-4 py-2.5">
-          <span className="font-body text-sm text-muted sm:text-base">{t('welcomeBack')}</span>
+          <span className="font-body text-sm text-muted sm:text-base">{labels.welcomeBack}</span>
           <Link
             href={desktopHref}
             {...intent}
             data-action="landing-desktop"
             className="ao-themed inline-flex shrink-0 items-center gap-2 rounded-control border border-accent bg-accent px-4 py-2 font-mono text-sm tracking-wide text-background uppercase hover:bg-accent-muted focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
           >
-            {t('desktopCta')}
+            {labels.desktopCta}
             <Arrow />
           </Link>
         </div>
       ) : (
         <p className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-window border border-edge px-4 py-2.5 font-body text-sm text-muted">
-          <span>{t('desktopShortcutLead')}</span>
+          <span>{labels.desktopShortcutLead}</span>
           <Link
             href={desktopHref}
             {...intent}
@@ -59,7 +63,7 @@ export function DesktopCta({ desktopHref }: { desktopHref: string }) {
               'hover:text-accent focus-visible:text-accent',
             )}
           >
-            {t('desktopShortcut')}
+            {labels.desktopShortcut}
             <Arrow />
           </Link>
         </p>

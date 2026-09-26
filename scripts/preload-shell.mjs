@@ -25,7 +25,12 @@ if (!existsSync(CHUNKS)) fail('out/ has no chunks folder');
 const matches = readdirSync(CHUNKS).filter((name) => name.endsWith('.js') && readFileSync(new URL(name, CHUNKS), 'utf8').includes(MARKER));
 if (matches.length !== 1) fail(`expected one chunk containing "${MARKER}", found ${matches.length}`);
 const href = `/_next/static/chunks/${matches[0]}`;
-const tag = `<link rel="preload" as="script" href="${href}"/>`;
+// The shell's message provider and the formatter behind it are the chunk named
+// `intl` (next.config.mjs, queue 3c): the shell cannot start without it, so it
+// is preloaded with it, as it was in the page's own script list before.
+const intl = readdirSync(CHUNKS).filter((name) => /^intl[.-].*.js$/.test(name));
+const intlTag = intl.length === 1 ? `<link rel="preload" as="script" href="/_next/static/chunks/${intl[0]}"/>` : '';
+const tag = `<link rel="preload" as="script" href="${href}"/>${intlTag}`;
 
 for (const page of PAGES) {
   const file = new URL(page, OUT);

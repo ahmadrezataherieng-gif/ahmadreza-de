@@ -9,6 +9,7 @@ import { Desktop } from '@/components/os/Desktop';
 import { eras } from '@/content/eras';
 import { asStatList } from '@/lib/message-shapes';
 import { matchSegments, viewHref } from '@/lib/routing';
+import { viewMessages } from '@/lib/view-messages';
 
 type PageParams = { locale?: string[] };
 
@@ -74,7 +75,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
         </section>
       </div>
 
-      <JourneyLoader />
+      <JourneyLoader locale={locale} messages={await viewMessages(locale, 'journey')} />
     </main>
   );
 }

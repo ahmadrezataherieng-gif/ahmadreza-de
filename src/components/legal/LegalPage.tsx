@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { AmonelLogo } from '@/components/ui/Brand';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { StaticLanguageSwitcher } from '@/components/ui/StaticLanguageSwitcher';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
@@ -151,7 +151,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
           <AmonelLogo uid={`ao-legal-logo-${kind}`} label={tSite('brand')} className="h-7 w-auto" />
         </a>
         <div className="flex items-center gap-1">
-          <LanguageSwitcher />
+          <StaticLanguageSwitcher locale={locale} view={kind} />
           <SchemeToggle
             labels={{
               toLight: tNav('schemeToLight'),
@@ -200,7 +200,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
         </p>
       </main>
 
-      <SiteFooter className="mx-auto w-full max-w-3xl border-t border-edge px-5 py-5 sm:px-8" />
+      <SiteFooter locale={locale} t={tNav} className="mx-auto w-full max-w-3xl border-t border-edge px-5 py-5 sm:px-8" />
     </div>
   );
 }

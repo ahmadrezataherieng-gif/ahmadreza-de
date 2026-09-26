@@ -73,7 +73,7 @@ export function DesktopShell() {
           >
             {t('replay')}
           </button>
-          <LegalLinks className="gap-x-4" linkClassName="p-0 hover:no-underline focus-visible:text-ink" />
+          <LegalLinks locale={locale} t={tNav} className="gap-x-4" linkClassName="p-0 hover:no-underline focus-visible:text-ink" />
         </span>
       </div>
 

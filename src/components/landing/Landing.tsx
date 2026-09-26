@@ -9,7 +9,7 @@ import { ResumeLink } from '@/components/landing/ResumeLink';
 import { Icon, Tip } from '@/components/illustrations/Icon';
 import type { IconName } from '@/components/illustrations/icons';
 import { AmonelLogo } from '@/components/ui/Brand';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { StaticLanguageSwitcher } from '@/components/ui/StaticLanguageSwitcher';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
@@ -30,7 +30,8 @@ const LOCALHOST_CODE = '127.0.0.1  →  localhost';
  * It is the page a recruiter judges in three seconds and the page Google reads
  * first, so it is a server component with real HTML text and almost no
  * JavaScript: the only client islands are the language switcher, the desktop
- * call to action and the two mode cards. The journey's code - GSAP, Lenis, every era - is never loaded
+ * call to action and the two mode cards (their words come in as props, so the
+ * page ships no message provider). The journey's code - GSAP, Lenis, every era - is never loaded
  * here.
  *
  * Reading order, on every width: name, role, the ways to reach him, the key
@@ -67,7 +68,7 @@ export async function Landing() {
         </p>
         <div className="flex items-center gap-1 sm:gap-3">
           <ResumeLink variant="header" />
-          <LanguageSwitcher />
+          <StaticLanguageSwitcher locale={locale} view="landing" />
           <SchemeToggle
             labels={{
               toLight: tNav('schemeToLight'),
@@ -133,7 +134,15 @@ export async function Landing() {
 
           {/* Fixed height: a returning visitor's "Zum Desktop" replaces the
               shortcut here without moving anything below it. */}
-          <DesktopCta desktopHref={desktopHref} />
+          <DesktopCta
+            desktopHref={desktopHref}
+            labels={{
+              welcomeBack: t('welcomeBack'),
+              desktopCta: t('desktopCta'),
+              desktopShortcutLead: t('desktopShortcutLead'),
+              desktopShortcut: t('desktopShortcut'),
+            }}
+          />
 
           <section aria-labelledby="choose-mode" className="ao-mode-section flex flex-col gap-4">
             <div>
@@ -142,14 +151,21 @@ export async function Landing() {
               </h2>
               <p className="mt-1 font-body text-sm text-muted sm:text-base">{t('chooseLead')}</p>
             </div>
-            <ModeChoice journeyHref={journeyHref} />
+            <ModeChoice
+              journeyHref={journeyHref}
+              lastChosen={t('lastChosen')}
+              options={[
+                { mode: 'guided', title: t('guidedTitle'), text: t('guidedText'), time: t('guidedTime') },
+                { mode: 'interactive', title: t('interactiveTitle'), text: t('interactiveText'), time: t('interactiveTime') },
+              ]}
+            />
           </section>
         </div>
       </div>
 
       {/* The hint sits just above the footer, whose legal links close every page. */}
       <JourneyHint label={t('hint')} className="bottom-10" />
-      <SiteFooter className="mx-auto flex w-full max-w-6xl justify-center px-5 pb-4 sm:justify-end sm:px-8" />
+      <SiteFooter locale={locale} t={tNav} className="mx-auto flex w-full max-w-6xl justify-center px-5 pb-4 sm:justify-end sm:px-8" />
     </main>
   );
 }

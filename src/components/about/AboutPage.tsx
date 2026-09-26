@@ -1,10 +1,10 @@
 import { getTranslations } from 'next-intl/server';
 
-import { AboutContent } from '@/components/apps/about/AboutApp';
+import { AboutContent, type AboutText } from '@/components/apps/about/AboutContent';
 import { Tip } from '@/components/illustrations/Icon';
 import { RouteScene } from '@/components/illustrations/scenes';
 import { AmonelLogo } from '@/components/ui/Brand';
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { StaticLanguageSwitcher } from '@/components/ui/StaticLanguageSwitcher';
 import { SchemeToggle } from '@/components/ui/SchemeToggle';
 import { SiteFooter } from '@/components/ui/SiteFooter';
 import { UseTheme } from '@/components/theme/UseTheme';
@@ -26,6 +26,7 @@ export async function AboutPage({ locale }: { locale: Locale }) {
   const tSite = await getTranslations('site');
   const tNav = await getTranslations('nav');
   const tLearn = await getTranslations('learn');
+  const tAbout = (await getTranslations('about')) as unknown as AboutText;
   const link =
     'ao-themed rounded-control border border-edge px-3 py-2 font-mono text-sm text-ink hover:border-accent hover:text-accent';
 
@@ -39,7 +40,7 @@ export async function AboutPage({ locale }: { locale: Locale }) {
             <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
           </a>
           <div className="flex items-center gap-1">
-            <LanguageSwitcher />
+            <StaticLanguageSwitcher locale={locale} view="about" />
             <SchemeToggle
               labels={{
                 toLight: tNav('schemeToLight'),
@@ -54,6 +55,8 @@ export async function AboutPage({ locale }: { locale: Locale }) {
           <AboutContent
             appId="about"
             page
+            t={tAbout}
+            locale={locale}
             art={<RouteScene className="absolute end-0 top-2 hidden w-48 @min-[640px]:block" />}
           />
           {/* CONTENT-TODO CR-1106: two learning snippets between the text and the ways on. */}
@@ -73,7 +76,7 @@ export async function AboutPage({ locale }: { locale: Locale }) {
 
         <div className="px-4 @min-[480px]:px-6 @min-[720px]:px-8">
           {/* The first link's own padding would push its text off the edge. */}
-          <SiteFooter className="border-t border-edge py-5 [&>a:first-child]:-ms-1" />
+          <SiteFooter locale={locale} t={tNav} className="border-t border-edge py-5 [&>a:first-child]:-ms-1" />
         </div>
       </div>
     </div>

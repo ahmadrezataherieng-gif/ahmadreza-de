@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
@@ -50,37 +49,6 @@ export const dynamicParams = false;
 export function generateStaticParams(): LayoutParams[] {
   return allRouteSegments().map((segments) => ({ locale: segments }));
 }
-
-/**
- * Message namespaces each view actually renders. Everything handed to the
- * client provider is serialised into the page's HTML, so the landing page does
- * not carry the journey's copy, and neither carries the puzzles' - those load
- * with the puzzle chunk when a puzzle opens.
- */
-const VIEW_NAMESPACES: Record<View, readonly string[]> = {
-  landing: ['site', 'nav', 'languages', 'landing', 'mode'],
-  journey: ['site', 'nav', 'languages', 'journey', 'eras', 'convergence', 'crossings', 'mode'],
-  // No era, journey or puzzle copy: the desktop loads none of that code either.
-  desktop: ['site', 'nav', 'languages', 'os'],
-  // The About app's own copy (messages/apps/about/) is merged in below.
-  about: ['site', 'nav', 'languages'],
-  // The legal text itself is server-rendered from messages/legal/ and never
-  // handed to the client; only the language switcher needs messages there.
-  imprint: ['site', 'nav', 'languages'],
-  privacy: ['site', 'nav', 'languages'],
-};
-
-/** `site` keys used only by metadata and JSON-LD, never by a client component. */
-const SERVER_ONLY_SITE_KEYS: readonly string[] = [
-  'ogAlt',
-  'journeyDescription',
-  'desktopDescription',
-  'aboutDescription',
-  'persianName',
-  'jobTitle',
-  'knowsAbout',
-  'landingTitle',
-];
 
 /**
  * Page title per view, the name always ahead of the brand (the `seo` skill):
@@ -211,29 +179,6 @@ export default async function LocaleLayout({
 
   const { locale, view } = match;
   setRequestLocale(locale);
-  const allMessages = await getMessages({ locale });
-  const messages = Object.fromEntries(
-    Object.entries(allMessages)
-      .filter(([namespace]) => VIEW_NAMESPACES[view].includes(namespace))
-      // The SEO-only `site` keys feed metadata and JSON-LD on the server; no
-      // client component reads them, so they stay out of the page payload
-      // (the desktop's description would otherwise put the quiz into the
-      // landing page's HTML).
-      .map(([namespace, value]) =>
-        namespace === 'site' && typeof value === 'object'
-          ? [
-              namespace,
-              Object.fromEntries(Object.entries(value).filter(([key]) => !SERVER_ONLY_SITE_KEYS.includes(key))),
-            ]
-          : [namespace, value],
-      ),
-  );
-  // The static About page renders the About app's component on the server,
-  // so its copy - normally loaded with the app - comes in here.
-  if (view === 'about') {
-    messages.about = (await import(`@/messages/apps/about/${locale}.json`)).default;
-  }
-
   // Structured data on every indexed page; the noindex legal pages carry none.
   const tSite = await getTranslations({ locale, namespace: 'site' });
   const jsonLd =
@@ -257,6 +202,13 @@ export default async function LocaleLayout({
             isProfilePage: view === 'landing',
           }),
         );
+
+  const page = (
+    <ThemeProvider>
+      {children}
+      {view === 'journey' && <EraEffectsLayer />}
+    </ThemeProvider>
+  );
 
   return (
     <html lang={htmlLang[locale]} dir={dirForLocale(locale)} suppressHydrationWarning>
@@ -286,12 +238,7 @@ export default async function LocaleLayout({
         {view === 'desktop' ? <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} /> : null}
       </head>
       <body className="antialiased">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider>
-            {children}
-            {view === 'journey' && <EraEffectsLayer />}
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        {page}
       </body>
     </html>
   );
