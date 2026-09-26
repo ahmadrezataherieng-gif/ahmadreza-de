@@ -97,9 +97,13 @@ test('built out/: og:locale, hreflang, no fa-IR, legal pages without hreflang, d
     for (const id of BASE_APPS) assert.ok(desktop.includes(`${messages[locale].os.apps[id].title}: `), `${locale} desktop text names ${id}`);
     assert.ok(desktop.includes(seo.heading), `${locale} desktop text is in the HTML`);
   }
-  const lastmod = html('sitemap.xml').match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
   const modified = html('index.html').match(/"dateModified":"([^"]+)"/)?.[1];
-  assert.ok(lastmod && modified === lastmod, `ProfilePage dateModified ${modified} = sitemap lastmod ${lastmod}`);
+  assert.match(modified ?? '', /^\d{4}-\d{2}-\d{2}T/, 'the ProfilePage carries a dateModified');
+  // The private preview's export has no sitemap on purpose (PROJECT_STATE "Private preview").
+  if (exists('out/sitemap.xml')) {
+    const lastmod = html('sitemap.xml').match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+    assert.equal(modified, lastmod, `ProfilePage dateModified ${modified} = sitemap lastmod ${lastmod}`);
+  }
 });
 
 test('built soon/dist/: Persian as fa and a dateModified on every ProfilePage', (context) => {
