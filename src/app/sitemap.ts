@@ -1,8 +1,8 @@
-import { execFileSync } from 'node:child_process';
 import type { MetadataRoute } from 'next';
 
 import { SITE_URL } from '@/lib/constants';
 import { htmlLang, locales } from '@/lib/i18n-config';
+import { lastChange } from '@/lib/last-change';
 import { views, viewHref, type View } from '@/lib/routing';
 
 // A static file in the export: `out/sitemap.xml`.
@@ -13,22 +13,6 @@ export const dynamic = 'force-static';
  * so never listed here.
  */
 const INDEXED: readonly View[] = views.filter((view) => view !== 'imprint' && view !== 'privacy');
-
-/**
- * When the site's own content last changed: the date of the last commit that
- * touched the source or the public files - a real signal, unlike a build date
- * that moves on every deploy. Without git (a build from a plain archive) there
- * is no date and no `lastmod`.
- */
-function lastChange(): Date | undefined {
-  try {
-    const iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', 'src', 'public'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-    const date = new Date(iso);
-    return Number.isNaN(date.getTime()) ? undefined : date;
-  } catch {
-    return undefined;
-  }
-}
 
 /**
  * Every indexed page in every locale, each with its hreflang alternates and

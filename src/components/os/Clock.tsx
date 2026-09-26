@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 
 /**
  * Hours and minutes in the visitor's language - Persian digits in Persian, as
- * `fa-IR` formats them. Ticks on the minute, not every second.
+ * `fa` formats them. Ticks on the minute, not every second.
  */
 export function Clock({ className }: { className?: string }) {
   const locale = useLocale() as Locale;

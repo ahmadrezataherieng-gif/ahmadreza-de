@@ -20,7 +20,7 @@ export interface PersonCopy {
   name: string;
   jobTitle: string;
   knowsAbout: readonly string[];
-  /** The page's own language tag, e.g. `de-DE`. */
+  /** The page's own language tag, e.g. `de-DE` or `fa`. */
   inLanguage: string;
   /** The brand, Amonel: its own work, never part of the person. */
   siteName: string;
@@ -30,6 +30,8 @@ export interface PersonCopy {
   /** Absolute URL of the page carrying the graph. */
   pageUrl: string;
   isProfilePage: boolean;
+  /** When the page last really changed (ISO 8601), for the ProfilePage; left out when unknown, never invented. */
+  dateModified?: string;
 }
 
 const PERSON_ID = `${SITE_URL}/#person`;
@@ -65,7 +67,7 @@ export function structuredData(copy: PersonCopy): JsonLd {
     '@id': WEBSITE_ID,
     name: copy.name,
     url: `${SITE_URL}/`,
-    inLanguage: ['de-DE', 'en', 'fa-IR'],
+    inLanguage: ['de-DE', 'en', 'fa'],
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
   };
@@ -98,6 +100,7 @@ export function structuredData(copy: PersonCopy): JsonLd {
       isPartOf: { '@id': WEBSITE_ID },
       primaryImageOfPage: { '@id': imageId },
       mainEntity: { '@id': PERSON_ID },
+      ...(copy.dateModified ? { dateModified: copy.dateModified } : {}),
     });
   }
   return { '@context': 'https://schema.org', '@graph': graph };

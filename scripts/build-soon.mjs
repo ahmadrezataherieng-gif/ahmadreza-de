@@ -146,7 +146,8 @@ const filled = fillPlaceholders(readFileSync(new URL('soon/index.html', root), '
 for (const locale of locales) {
   const folder = new URL(locale.prefix, dist);
   mkdirSync(folder, { recursive: true });
-  writeFileSync(new URL('index.html', folder), renderLanding(filled, locale.id));
+  // The page changes with every build (the progress and its date), so the build date is its real dateModified.
+  writeFileSync(new URL('index.html', folder), renderLanding(filled, locale.id, undefined, values.DATE));
 }
 console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area} ${values[`${area}.percent`]} %`).join(', ')})`);
 

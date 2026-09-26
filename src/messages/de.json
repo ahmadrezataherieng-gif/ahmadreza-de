@@ -6,7 +6,7 @@
     "tagline": "80 Jahre Computergeschichte in 90 Sekunden",
     "description": "Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier, mit Hintergrund in Computer- und Handyreparatur. Portfolio als Betriebssystem.",
     "journeyDescription": "80 Jahre Computergeschichte in sieben Epochen, von ENIAC bis zur Cloud, jede mit einem kleinen Rätsel. Ein interaktives Portfolio von Ahmadreza Taheri.",
-    "desktopDescription": "Amonel OS, der Desktop von Ahmadreza Taheri im Browser: Über mich, Terminal, Helpdesk-Tickets, Traceroute und Computer-Quiz.",
+    "desktopDescription": "Amonel OS, der Desktop von Ahmadreza Taheri im Browser: Über mich, Lebenslauf, Terminal, Helpdesk-Tickets, Traceroute, Computer-Quiz und freischaltbare Apps.",
     "aboutDescription": "Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker für Systemintegration in Trier, Werdegang, Schwerpunkte Netzwerke und Linux, Sprachen und Kontakt.",
     "author": "Ahmadreza Taheri",
     "persianName": "احمدرضا طاهری",
@@ -731,7 +731,6 @@
   },
   "os": {
     "brand": "Amonel OS",
-    "pageName": "Desktop",
     "heading": "Amonel OS – der Desktop von Ahmadreza Taheri",
     "noscript": "Der Desktop braucht JavaScript. Alles Wichtige finden Sie auch auf der Startseite.",
     "home": "Zur Startseite",
@@ -862,5 +861,24 @@
     "localhost": "Diese Adresse führt immer zum eigenen Rechner zurück: Wer sie aufruft, spricht mit sich selbst. Ihr Name ist localhost.",
     "dns": "DNS ist das Telefonbuch des Internets: Es übersetzt einen Namen wie diesen in die IP-Adresse, unter der ein Server erreichbar ist. Die Adresse hier ist ein Beispiel.",
     "chmod": "Unter Linux regeln drei Ziffern, wer eine Datei lesen, schreiben und ausführen darf: 7 für den Besitzer (alles), 5 für die Gruppe und für alle anderen (lesen und ausführen)."
+  },
+  "desktopSeo": {
+    "pageName": "Portfolio-Desktop im Browser",
+    "heading": "Was ist Amonel OS?",
+    "intro": "Amonel OS ist ein kleines Betriebssystem im Browser und das Ende der Reise durch 80 Jahre Computergeschichte. Es ist das Portfolio von Ahmadreza Taheri, Fachinformatiker für Systemintegration in Ausbildung in Trier: Jeder Teil des Portfolios ist ein Programm. Auf großen Bildschirmen öffnen sich die Programme in Fenstern, die Sie verschieben und in der Größe ändern können; auf dem Handy öffnen sie sich bildschirmfüllend.",
+    "baseHeading": "Die Programme",
+    "base": {
+      "about": "wer Ahmadreza Taheri ist, sein Weg und seine Fähigkeiten",
+      "terminal": "eine kleine Shell mit ls, cd und cat über ein Dateisystem im Speicher",
+      "tickets": "Helpdesk-Fälle mit Diagnose, Lösung und dem, was man daraus lernt",
+      "traceroute": "eine gekennzeichnete Simulation, wie ein Datenpaket seinen Weg durchs Netz findet",
+      "assistant": "eine lokale Suche über die Inhalte dieser Website, ohne externen Dienst",
+      "contact": "E-Mail, Lebenslauf und die rechtlichen Seiten",
+      "timeline": "die sieben Epochen der Reise und die heutige Station",
+      "cv": "der Lebenslauf",
+      "quiz": "zehn Fragen zur Computergeschichte, jede mit einer Erklärung"
+    },
+    "bonusHeading": "Freischaltbare Programme",
+    "bonusIntro": "Jedes Rätsel der Reise schaltet ein weiteres Programm frei; wer die Reise beendet, bekommt alle sieben:"
   }
 }

@@ -27,14 +27,16 @@ export const LOCALES = [
 export const pageUrl = (locale) => `${SITE_URL}/${locale.prefix}`;
 
 /** The whole schema.org graph (Person, WebSite, Amonel, image, ProfilePage) for one coming-soon page: the main site's own builder, so the two never drift. */
-export function graphJsonLd(localeId = 'de') {
+export function graphJsonLd(localeId = 'de', dateModified = undefined) {
   const site = messages(localeId);
   const locale = LOCALES.find((entry) => entry.id === localeId);
   return structuredData({
     name: site.author,
     jobTitle: site.jobTitle,
     knowsAbout: [...site.knowsAbout],
-    inLanguage: { de: 'de-DE', en: 'en', fa: 'fa-IR' }[localeId],
+    // Persian for every Persian speaker, not only those in Iran (queue 7b): `fa`, as the main site.
+    inLanguage: { de: 'de-DE', en: 'en', fa: 'fa' }[localeId],
+    dateModified,
     siteName: site.brand,
     image: { url: `${SITE_URL}/og/ahmadreza-taheri-${localeId}.png`, width: 1200, height: 630, alt: site.ogAlt },
     description: site.description,
@@ -47,8 +49,8 @@ export function graphJsonLd(localeId = 'de') {
 export const personJsonLd = (localeId = 'de') => ({ '@context': 'https://schema.org', ...graphJsonLd(localeId)['@graph'][0] });
 
 /** The `<script>` element that goes into a page's head. */
-export function jsonLdScript(localeId = 'de') {
-  return `<script type="application/ld+json">${serialiseJsonLd(graphJsonLd(localeId))}</script>`;
+export function jsonLdScript(localeId = 'de', dateModified = undefined) {
+  return `<script type="application/ld+json">${serialiseJsonLd(graphJsonLd(localeId, dateModified))}</script>`;
 }
 
 /** hreflang alternates for the head (every language, itself included, and x-default = German). */

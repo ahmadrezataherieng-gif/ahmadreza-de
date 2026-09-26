@@ -5,7 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
-import { dirForLocale, htmlLang, type Locale } from '@/lib/i18n-config';
+import { dirForLocale, htmlLang, locales, ogLocale, type Locale } from '@/lib/i18n-config';
+import { lastChange } from '@/lib/last-change';
 import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
 import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
@@ -69,7 +70,8 @@ async function viewTitle(locale: Locale, view: View): Promise<string> {
   const page =
     view === 'journey'
       ? (await getTranslations({ locale, namespace: 'landing' }))('journeyTitle')
-      : (await getTranslations({ locale, namespace: 'os' }))('pageName');
+      : // German and English no longer share one desktop title (queue 7e). CONTENT-TODO CR-1120
+        (await getTranslations({ locale, namespace: 'desktopSeo' }))('pageName');
   return `${page} – ${t('author')} | ${t('brand')}`;
 }
 
@@ -98,7 +100,7 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
   const title = await viewTitle(locale, view);
   const legal = view === 'imprint' || view === 'privacy' ? (await loadLegalCopy(locale))[view] : null;
   // Each view its own description, so no two pages share a search snippet.
-  // CONTENT-TODO CR-1051
+  // CONTENT-TODO CR-1051 (the desktop's: CR-1121)
   const description = legal
     ? legal.description
     : view === 'journey'
@@ -117,14 +119,18 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
     // The legal pages carry the home address: kept out of search results for
     // the name, while their links are still followed (DECISIONS.md 58).
     ...(legal ? { robots: { index: false, follow: true } } : {}),
+    // The noindex legal pages keep their canonical but carry no hreflang: a set
+    // that points at pages kept out of the index is ignored anyway (queue 7d).
     alternates: {
       canonical: viewHref(locale, view),
-      languages: {
-        'de-DE': viewHref('de', view),
-        en: viewHref('en', view),
-        'fa-IR': viewHref('fa', view),
-        'x-default': viewHref('de', view),
-      },
+      ...(legal
+        ? {}
+        : {
+            languages: {
+              ...Object.fromEntries(locales.map((code) => [htmlLang[code], viewHref(code, view)])),
+              'x-default': viewHref('de', view),
+            },
+          }),
     },
     // The Amonel icon set (Phase 9A), all files in public/, none fetched from
     // elsewhere. Browsers that read SVG favicons take it; the .ico is for the
@@ -140,7 +146,7 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
     manifest: locale === 'de' ? '/manifest.webmanifest' : `/manifest.${locale}.webmanifest`,
     openGraph: {
       type: view === 'landing' ? 'profile' : 'website',
-      locale: htmlLang[locale],
+      locale: ogLocale[locale],
       title,
       description,
       siteName: t('brand'),
@@ -200,6 +206,8 @@ export default async function LocaleLayout({
             description: tSite('description'),
             pageUrl: `${SITE_URL}${viewHref(locale, view)}`,
             isProfilePage: view === 'landing',
+            // The same real date as the sitemap's lastmod (queue 7c).
+            dateModified: lastChange()?.toISOString(),
           }),
         );
 

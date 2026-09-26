@@ -48,7 +48,7 @@ function setContent(html, head, value) {
  * The finished page of one language. `filled` is the template after the
  * roadmap figures were put in (`fillPlaceholders`).
  */
-export function renderLanding(filled, localeId, year = new Date().getFullYear()) {
+export function renderLanding(filled, localeId, year = new Date().getFullYear(), dateModified = undefined) {
   const locale = LOCALES.find((entry) => entry.id === localeId);
   const t = T[localeId];
   const seo = SEO[localeId];
@@ -60,7 +60,7 @@ export function renderLanding(filled, localeId, year = new Date().getFullYear())
   html = setContent(html, 'meta name="description"', seo.description);
   html = html.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${pageUrl(locale)}">`);
   html = html.replace('<!--@alternates-->', () => alternateLinks());
-  html = html.replace('<!--@jsonld-->', () => jsonLdScript(localeId));
+  html = html.replace('<!--@jsonld-->', () => jsonLdScript(localeId, dateModified));
 
   // Open Graph and Twitter: this language's own texts and share image.
   html = setContent(html, 'meta property="og:title"', t.title);
