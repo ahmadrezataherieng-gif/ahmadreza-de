@@ -320,6 +320,42 @@ Method: code search over `src/` and `worker/`, the built `out/`, `public/`, the 
 - OPEN (LEG-10): check "Amonel" in the DPMA and EUIPO registers before any commercial use.
 
 **Summary for the owner:** nothing found that needs a consent banner, no third-party request, storage table complete. Still open before launch, as listed: LEG-07 (your read of the texts), LEG-09 (portrait rights), LEG-10 (name check), LEG-11 (Cloudflare cookie features at deploy), LEG-17/18 (GitHub purge), the counters' go-live steps, and the one licence-index wording above.
+### LEG-05 audit refresh (Claude Code, 2026-09-26, queue 9) - findings only, nothing legal was changed
+
+Everything added since the preliminary audit of 2026-09-25 above: the K6 revert and the old look (BR-07), the light mode and the sun/moon toggle with `ao-scheme` (BR-08, DECISIONS 74), the illustrations (BR-09), the crossing cards (BR-10), the Vazirmatn label subset (queue 3a), the pruned static stylesheet and the intent-only prefetch (queue 3b), the static pages without a message formatter (queue 3c), `drop-woff` (queue 3d), the desktop's hidden text (queue 7), the `ext-*` skills (SEO-18), `playwright-core` as a devDependency (queue 4) and the private preview Worker. Method: code search over `src/`, `soon/`, `scripts/`, `public/`; the built `out/` and `soon/dist/` (every HTML, CSS, JS, TXT, XML and manifest file); the privacy copy in `src/messages/legal/{de,en,fa}.json`; `public/fonts/LICENSES.md` against the font files that ship. Not legal advice. OK = nothing to do, CHECK = someone should look, OPEN = a task exists.
+
+**External requests (TDDDG, DSGVO Art. 44 ff.)**
+- OK: no element in any built page loads anything from another origin: no `<script>`, `<link>`, `<img>`, `<iframe>`, `<source>`, `<video>` or `<audio>` with a foreign URL, no `url(http...)` in any stylesheet, no `fetch` or dynamic `import` of a foreign URL in any script (search over `out/` and `soon/dist/`). The CSP in `public/_headers` is unchanged (`default-src 'self'`, `connect-src 'self'`, `font-src 'self'`).
+- OK: the foreign URLs that do appear in the build are text or links a visitor clicks: `datenschutz.rlp.de` (the supervisory authority) and `policies.google.com` (the e-mail provider) in the privacy text, `github.com` (the repository link, the font sources in the licence index), `scripts.sil.org` in the font licence comments, `schema.org` and `w3.org` as identifiers, and `nextjs.org` / `react.dev` / `tailwindcss.com` / `gsap.com` inside error strings and licence comments of the libraries. None is fetched.
+- OK: `cross-browser.mjs` (queue 4) confirmed it in a browser: WebKit through every page, both journey modes and all base apps, "nothing requested from another origin" (66/66).
+- OK: the intent-only prefetch (queue 3b) and the pruned stylesheet request same-origin files only.
+- OK: `playwright-core` is a devDependency (Apache-2.0): it never ships (no trace of it in `out/` or `soon/dist/`); the WebKit engine it downloads comes from Playwright's CDN to the developer's machine only, when a check is run by hand.
+
+**Cookies and consent (TDDDG § 25)**
+- OK: still no cookie anywhere (`document.cookie` and `Set-Cookie` appear nowhere in `src/`, `soon/`, `worker/` or `public/_headers`); `scheme.mjs` (queue 5c) proves the sun/moon toggle sets none.
+- OPEN (LEG-11, unchanged): Cloudflare's cookie-setting features stay off at launch.
+
+**Browser storage vs the Datenschutz table**
+- OK: the main site's code uses exactly seven keys: `amonel.unlocks.v1`, `amonel.quiz.v1`, `amonel.snake.v1`, `amonel.paint.v1`, `amonel.theme.v1`, `ao-scheme` (localStorage) and `amonel.replay` (sessionStorage). The table in the privacy text (`privacy.sections[4]`, rows 0-6) lists exactly these seven in German, English and Persian - none missing, none extra.
+- OK: `ao-scheme` is written only after a click on the sun/moon button, and the text in all three languages says so (`privacy.sections[4].blocks[3]`); a first visit writes nothing (`scheme.mjs`, 75/75).
+- OK: the coming-soon page uses `ao-lang` (after a click on a language link) and `ao-scheme` (after a click on its toggle, `scripts/soon-scheme.mjs`); its own section of the privacy text (`privacy.sections[5]`) names both, in all three languages.
+- OK: nothing new since the first audit writes storage: the illustrations, crossing cards, desktop text, font subset and prefetch are static; the sound switch is in memory.
+
+**Fonts: licences vs what ships**
+- OK: the main site ships Inter (400 in latin, latin-ext, cyrillic, cyrillic-ext, greek, greek-ext, vietnamese - each file loads only when its characters appear - and latin 700), JetBrains Mono 400/700, Space Grotesk 500/700, Press Start 2P 400, VT323 400, Vazirmatn (variable: arabic, latin, latin-ext) and the Vazirmatn label subset; the coming-soon page ships Inter, JetBrains Mono, Space Grotesk and Vazirmatn arabic. Every family has its row in `public/fonts/LICENSES.md` and its licence file in `licenses/` (also copied to `out/fonts/` and `soon/dist/fonts/`); all SIL OFL 1.1; `fonts.test.mjs` passes. No font from the K6 period is left (removed by BR-07).
+- OK: the label subset (queue 3a) is a modified version, which the OFL allows; Vazirmatn declares no Reserved Font Name, the licence covers the file, and the index has its own row. Press Start 2P, which does have a Reserved Font Name, is shipped unmodified.
+- OK: `drop-woff` only removes unused `.woff` twins; the licence files stay.
+
+**Images, drawings and names (copyright, trademarks)**
+- OK: the illustrations (BR-09) and the crossing drawings (BR-10) are the project's own inline SVG shapes; no logo, no photo, no third-party artwork. The Convergence and era scenes are unchanged.
+- CHECK (as before, now a longer list): product and technology names on the crossing cards (UNIVAC I, IBM System/360, ARPANET, Intel 4004, Altair 8800, Apple II, Xerox Alto, Apple Lisa, CD-ROM, World Wide Web, Linux, Wi-Fi) are used descriptively for history, next to a generic drawing and never as a logo - nominative use as far as we can see. Worth one look in the content review (CR-1108); "Wi-Fi" is a registered mark of the Wi-Fi Alliance, which the de label writes as «WLAN (Wi-Fi)».
+- OK: the `ext-*` skills (SEO-18) are MIT; each folder keeps the `LICENSE` with the copyright notice and a `SOURCE.md`, which is what MIT asks. They are repository files for Claude Code, never served.
+
+**The private preview Worker (`amonel-preview`)**
+- OK: noindex everywhere (`X-Robots-Tag`, robots `Disallow: /`, no sitemap), the real address never in it (checked after each deploy), no `/api/*`, the same `'self'` CSP.
+- CHECK: it is publicly reachable at a `workers.dev` URL, and its Impressum shows the dummy address «Musterstraße 1». Nobody finds it through a search engine and it is linked from nowhere, but anyone with the URL sees a site under the owner's name with a false postal address. If the Impressum duty (DDG § 5) applies to the site, a wrong address on a public copy is worse than none. Options: put the preview behind Cloudflare Access (free for a few users; a dashboard setting, the owner's call), or delete it once the review is over (`npx wrangler delete amonel-preview`, PROJECT_STATE). Default kept: as it is, because queue item 13 updates it on the owner's instruction.
+
+**Summary for the owner:** no new third-party request, no cookie, the storage table matches the code in all three languages, every shipped font is licensed and indexed. Two CHECK points: the public preview with a dummy address (decide Access or delete after the review) and the longer list of product names on the crossing cards (content review). Open as before: LEG-07, LEG-09, LEG-10, LEG-11, LEG-17/18, the counters' go-live.
 <!-- queue-notes:end -->
 
 ## Audit 2026-09-26
