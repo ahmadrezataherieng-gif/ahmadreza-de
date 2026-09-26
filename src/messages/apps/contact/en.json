@@ -1,12 +1,12 @@
 {
   "title": "Contact",
-  "intro": "The best way to reach me is by e-mail – in German, English or Persian.",
+  "intro": "The best way to reach me is by email – in German, English or Persian.",
   "email": {
-    "label": "E-mail",
-    "write": "Write an e-mail",
+    "label": "Email",
+    "write": "Write an email",
     "copy": "Copy address",
     "copied": "Copied",
-    "pending": "The e-mail address will be added shortly."
+    "pending": "The email address will be added shortly."
   },
   "resume": {
     "label": "Résumé",

@@ -7,10 +7,10 @@
     "description": "Ahmadreza Taheri, IT specialist for system integration in training in Trier, with a background in computer and mobile phone repair.",
     "journeyDescription": "80 years of computing in seven eras, from ENIAC to the cloud, each with a small puzzle. An interactive portfolio by Ahmadreza Taheri.",
     "desktopDescription": "Amonel OS, Ahmadreza Taheri’s desktop in the browser: about him, a terminal, helpdesk tickets, traceroute and a computer quiz.",
-    "aboutDescription": "About Ahmadreza Taheri: IT specialist for systems integration in training in Trier, his path, his focus on networks and Linux, languages and contact.",
+    "aboutDescription": "About Ahmadreza Taheri: IT specialist for system integration in training in Trier, his path, his focus on networks and Linux, languages and contact.",
     "author": "Ahmadreza Taheri",
     "persianName": "احمدرضا طاهری",
-    "jobTitle": "IT Specialist for Systems Integration (apprentice)",
+    "jobTitle": "IT Specialist for System Integration (apprentice)",
     "knowsAbout": [
       "IT support",
       "System integration",
@@ -20,7 +20,7 @@
       "Mobile phone repair",
       "Endpoint management"
     ],
-    "ogAlt": "Ahmadreza Taheri, IT specialist for systems integration in training, Trier – Amonel portfolio"
+    "ogAlt": "Ahmadreza Taheri, IT specialist for system integration in training, Trier – Amonel portfolio"
   },
   "nav": {
     "journey": "The Journey",
@@ -465,7 +465,7 @@
     "factsLabel": "At a glance",
     "facts": [
       {
-        "value": "Systems integration",
+        "value": "System integration",
         "label": "Apprenticeship as IT specialist"
       },
       {

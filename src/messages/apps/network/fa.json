@@ -204,7 +204,7 @@
       "imaps": "IMAP روی TLS",
       "pop3s": "POP3 روی TLS",
       "mysql": "پایگاه دادهٔ MySQL",
-      "rdp": "RDP: دسکتاپ از راه دور Windows",
+      "rdp": "RDP: میزکار از راه دور Windows",
       "postgresql": "پایگاه دادهٔ PostgreSQL",
       "httpAlt": "HTTP جایگزین: اغلب سرورهای آزمایشی و پراکسی‌ها"
     },

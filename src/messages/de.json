@@ -64,7 +64,7 @@
             "label": "Additionen pro Sekunde"
           }
         ],
-        "body": "Programmieren hieß, die Maschine von Hand neu zu verkabeln. Kein Bildschirm, keine Tastatur: Eingaben kamen als Löcher in Lochkarten, Ergebnisse als Lampen. Loch oder kein Loch, an oder aus — jede Zahl und jeder Buchstabe war nur ein Muster daraus.",
+        "body": "Programmieren hieß, die Maschine von Hand neu zu verkabeln. Kein Bildschirm, keine Tastatur: Eingaben kamen als Löcher in Lochkarten, Ergebnisse als Lampen. Loch oder kein Loch, an oder aus – jede Zahl und jeder Buchstabe war nur ein Muster daraus.",
         "panelLabel": "Anzeigetafel mit Röhrenlampen",
         "cardLabel": "IBM-Lochkarte, 80 Spalten",
         "cardCaption": "Gestanzt: {text}"
@@ -96,7 +96,7 @@
           "Betriebssystem ueberhaupt."
         ]
       },
-      "insider": "Die IBM 704 hatte Sense Switches: Kippschalter an der Konsole, die ein laufendes Programm abfragen konnte. In FORTRAN hieß das IF (SENSE SWITCH 3) — so steuerte der Operator ein Programm, ohne es anzuhalten."
+      "insider": "Die IBM 704 hatte Sense Switches: Kippschalter an der Konsole, die ein laufendes Programm abfragen konnte. In FORTRAN hieß das IF (SENSE SWITCH 3) – so steuerte der Operator ein Programm, ohne es anzuhalten."
     },
     "unix": {
       "name": "UNIX",
@@ -191,7 +191,7 @@
           }
         ],
         "dirFooter": "8 Datei(en)      942.080 Bytes",
-        "body": "Computer kommen auf die Schreibtische. Ein Programm zur Zeit, ein Bildschirm, alles getippt. 640 Kilobyte Arbeitsspeicher — von denen, entgegen dem berühmten Zitat, das niemand wirklich belegen kann, jeder wusste, dass sie nicht lange reichen würden."
+        "body": "Computer kommen auf die Schreibtische. Ein Programm zur Zeit, ein Bildschirm, alles getippt. 640 Kilobyte Arbeitsspeicher – von denen, entgegen dem berühmten Zitat, das niemand wirklich belegen kann, jeder wusste, dass sie nicht lange reichen würden."
       },
       "insider": "F3 holte in MS-DOS die zuletzt getippte Befehlszeile zurück. Wer das wusste, tippte einen langen Befehl nie zweimal."
     },
@@ -199,7 +199,7 @@
       "name": "Macintosh",
       "description": "Zeigen ist leichter als Erinnern. Auf dieser Idee beruht jede Oberfläche seither.",
       "visual": {
-        "body": "1984, der Apple Macintosh. Der erste Massencomputer mit Maus und grafischer Oberfläche. Statt Befehle auswendig zu lernen, konnte man etwas sehen und darauf zeigen. Fenster, Symbole, Menüs, Zeiger — das Vokabular, das jede Oberfläche bis heute spricht.",
+        "body": "1984, der Apple Macintosh. Der erste Massencomputer mit Maus und grafischer Oberfläche. Statt Befehle auswendig zu lernen, konnte man etwas sehen und darauf zeigen. Fenster, Symbole, Menüs, Zeiger – das Vokabular, das jede Oberfläche bis heute spricht.",
         "screenLabel": "Bildschirm eines Macintosh mit Menüleiste, Fenster und Mauszeiger",
         "menu": [
           "Ablage",
@@ -229,7 +229,7 @@
       "name": "Windows 95 und Einwahl",
       "description": "Ein Netzwerk braucht Adressen. Ohne sie findet eine Maschine keine andere.",
       "visual": {
-        "body": "1995, Windows 95 und das Modem. Taskleiste und Startmenü — ein Ort für alles auf dem Rechner. Und das Internet kommt in die Wohnungen: 56 Kilobit pro Sekunde, die Telefonleitung besetzt. Damit sich zwei Rechner finden, braucht jeder eine Adresse. Der Computer war keine einsame Maschine mehr, sondern ein Knoten in einem Netz.",
+        "body": "1995, Windows 95 und das Modem. Taskleiste und Startmenü – ein Ort für alles auf dem Rechner. Und das Internet kommt in die Wohnungen: 56 Kilobit pro Sekunde, die Telefonleitung besetzt. Damit sich zwei Rechner finden, braucht jeder eine Adresse. Der Computer war keine einsame Maschine mehr, sondern ein Knoten in einem Netz.",
         "screenLabel": "Windows-95-Desktop, der sich per Modem mit dem Internet verbindet",
         "infoTitle": "Info.txt - Editor",
         "start": "Start",
@@ -275,7 +275,7 @@
       "name": "Cloud, Container und KI",
       "description": "Programme laufen voneinander isoliert, an vielen Orten zugleich.",
       "visual": {
-        "body": "Heute. Der Computer ist keine einzelne Maschine mehr. Code läuft in Containern, voneinander abgeschottet, auf Servern, die niemand je sieht — in vielen Rechenzentren zugleich. Und zum ersten Mal lässt sich ein Problem in gewöhnlicher Sprache beschreiben und beantworten. Achtzig Jahre vom Umstecken von Kabeln bis hierher.",
+        "body": "Heute. Der Computer ist keine einzelne Maschine mehr. Code läuft in Containern, voneinander abgeschottet, auf Servern, die niemand je sieht – in vielen Rechenzentren zugleich. Und zum ersten Mal lässt sich ein Problem in gewöhnlicher Sprache beschreiben und beantworten. Achtzig Jahre vom Umstecken von Kabeln bis hierher.",
         "dashboardLabel": "Dashboard einer verteilten Anwendung mit Containern, Deployment, Metriken und Regionen",
         "containersTitle": "Container",
         "containers": [
@@ -483,7 +483,7 @@
       }
     ],
     "chooseTitle": "Wie möchten Sie die Reise erleben?",
-    "chooseLead": "80 Jahre Computergeschichte — und dabei, wie Computer bis heute funktionieren.",
+    "chooseLead": "80 Jahre Computergeschichte – und dabei, wie Computer bis heute funktionieren.",
     "guidedTitle": "Zuschauen",
     "guidedText": "Sie scrollen, und jedes Rätsel löst sich vor Ihren Augen.",
     "guidedTime": "etwa 2 Minuten",
@@ -769,8 +769,8 @@
     },
     "sound": {
       "label": "Ton",
-      "on": "Ton ist an - zum Ausschalten klicken",
-      "off": "Ton ist aus - zum Einschalten klicken",
+      "on": "Ton ist an – zum Ausschalten klicken",
+      "off": "Ton ist aus – zum Einschalten klicken",
       "unavailable": "Dieser Browser kann keinen Ton ausgeben."
     },
     "locked": {
