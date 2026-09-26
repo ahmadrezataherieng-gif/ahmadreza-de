@@ -98,6 +98,9 @@ here, in `STORAGE_KEYS` (`src/lib/constants.ts`), in the same change:
 | `amonel.quiz.v1` | localStorage | the Computer-Quiz's best score, one number | Phase 9B |
 | `amonel.snake.v1` | localStorage | Snake's best score, one number | Phase 9D-1 |
 | `amonel.paint.v1` | localStorage | Pixel Paint's current picture (size, palette, pixels), at most 16 KB, written only after the visitor draws | Phase 9D-1 |
+| `ao-scheme` | localStorage | `light` or `dark`, written only after a click on the sun/moon toggle of the site's own pages (and of the coming-soon page); a first visit writes nothing and is dark | BR-08, DECISIONS.md 74 |
+
+The coming-soon page also keeps `ao-lang` (localStorage, the language chosen from its links), in its own section of the privacy text.
 
 The anonymous counters add **no** key: "once per page load" is kept in memory.
 A test pins `STORAGE_KEYS` (`scripts/test/counters.test.mjs`).
