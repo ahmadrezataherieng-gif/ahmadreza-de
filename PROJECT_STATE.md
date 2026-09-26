@@ -1,10 +1,10 @@
 # Project state
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ## Work queue 2026-09-26 (resume with "continue the work queue")
 
-**The prompt was cut off in item 6 ("fa «میزکا") and items 7-11 never arrived; item 11 is the only one that may deploy. Recorded in TODO.md. Items 7-11 are added here when the owner resends them.**
+**Items 1-6 are done (2026-09-26). The prompt was cut off in item 6 and items 7-11 never arrived; item 11 is the only one that may deploy, and nothing was deployed. Recorded in TODO.md. Resend items 7-11 and say "continue the work queue".**
 
 Rules: strictly in order. After every item: `npm test`, `npm run lint` (plus `npm run build` if `src/` changed), tick the box, `node scripts/roadmap.mjs --write`, update this file, one commit, push. Hard rules: the look, content wording, legal texts, fonts, palette and every feature stay as they are (faster, smoother, cleaner; no redesign). Never deploy the main site to ahmadreza.de, never change Cloudflare dashboard settings, never create the D1 database; the only deploys allowed are in item 11. Never commit anything from `Photo/`, never commit the real address (`legal.local.ts` stays untracked). Do not reword personal content (FIN-01 is the owner's); every new or changed visible string gets a CONTENT_REVIEW.md entry (PLACEHOLDER). Performance work: before/after screenshots of the affected pages or frames (de and fa, dark and light, 1440 and 390), looked at by Claude; if a change alters the look or breaks an interactive part, revert it and record it in TODO.md. DECISIONS 76: nothing drawn on, behind or around the portrait. Windows: single-line shell commands, no heredocs, edit files only with Edit/Write. Screenshots in the git-ignored `Claude outputs/<item>/`, few of them. Timebox: if an item grows far beyond its size, commit what is safe, write the rest to TODO.md, move on.
 
