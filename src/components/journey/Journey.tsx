@@ -190,6 +190,27 @@ export function Journey() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Set up after the browser's next frame, not in the hydration commit
+    // (queue B item 3). The commit leaves the journey's layout dirty, so the
+    // first geometry read here - ours, ScrollTrigger's - paid a full layout of
+    // ~3,400 elements inside React's task: one 120-130 ms block on the phone
+    // profile. A frame lays the page out anyway; a task after it reads clean
+    // boxes. Until then the page shows its server-rendered state, as it did
+    // for the whole second before hydration.
+    let tearDown: (() => void) | undefined;
+    let setUpTimer = 0;
+    const setUpFrame = requestAnimationFrame(() => {
+      setUpTimer = window.setTimeout(() => {
+        tearDown = setUp(container);
+      }, 0);
+    });
+    return () => {
+      cancelAnimationFrame(setUpFrame);
+      window.clearTimeout(setUpTimer);
+      tearDown?.();
+    };
+
+    function setUp(container: HTMLDivElement): () => void {
     const activate = (entry: EraBounds) => {
       setTheme(entry.themeId);
       // The Convergence is not an era: the rail stays on the last one.
@@ -676,6 +697,31 @@ export function Journey() {
       });
     };
 
+    // Measure once the first frame has settled, so era heights are final. The
+    // layout is clean here, so this costs little.
+    measure();
+    resolve();
+
+    // Connect the trigger and the observers one frame later. resolve() has
+    // just written the first progress values; ScrollTrigger's first init reads
+    // a computed style, which would force the restyle of the whole journey
+    // into this task (about 70 ms on the phone profile). After a frame the
+    // browser has done that restyle in its own rendering step.
+    let disconnect: (() => void) | undefined;
+    let connectTimer = 0;
+    const connectFrame = requestAnimationFrame(() => {
+      connectTimer = window.setTimeout(() => {
+        disconnect = connect();
+      }, 0);
+    });
+    return () => {
+      cancelAnimationFrame(connectFrame);
+      window.clearTimeout(connectTimer);
+      cancelAnimationFrame(resolveFrame);
+      disconnect?.();
+    };
+
+    function connect(): () => void {
     const context = gsap.context(() => {
       ScrollTrigger.create({
         trigger: container,
@@ -692,9 +738,6 @@ export function Journey() {
       });
     }, container);
 
-    // Measure once the first frame has settled, so era heights are final.
-    measure();
-    resolve();
     const refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
 
     // Web fonts swap in after first paint and change line heights - the teletype
@@ -749,6 +792,8 @@ export function Journey() {
       cancelAnimationFrame(limitFrame);
       context.revert();
     };
+    }
+    }
   }, [finishJourney, desktopHref, markEraVisited, setActiveEra, setProgress, setPuzzleProgress, setTheme]);
 
   /* --- the pointer tilts the camera, on the full tier only --------------- */
