@@ -10,7 +10,7 @@
  * already sets, so the Time Machine changes the sound with the era for free.
  */
 
-import { MASTER_VOLUME, isSoundProfile, recipe, type SoundEvent } from './sound.ts';
+import { MASTER_VOLUME, isSoundProfile, recipe, type SoundEvent, type Tone } from './sound.ts';
 
 type AudioContextClass = typeof AudioContext;
 
@@ -66,14 +66,16 @@ export function setSoundEnabled(on: boolean): boolean {
   return enabled;
 }
 
-/** Play an event's sound for the theme on screen. Silent when sound is off. */
-export function playSound(event: SoundEvent): void {
-  if (!enabled || !context || !master || context.state === 'closed') return;
-  const tones = recipe(currentProfile(), event);
-  const start = context.currentTime + 0.01;
+/**
+ * Schedule tones on any audio context, live or offline. `playSound` uses it,
+ * and so does `scripts/verify/sound.mjs`, which renders every profile and event
+ * through an OfflineAudioContext to check they are audible, never near
+ * clipping and short (queue 5b) - the same code the visitor hears.
+ */
+export function scheduleTones(audio: BaseAudioContext, destination: AudioNode, tones: readonly Tone[], start: number): void {
   for (const spec of tones) {
-    const oscillator = context.createOscillator();
-    const envelope = context.createGain();
+    const oscillator = audio.createOscillator();
+    const envelope = audio.createGain();
     oscillator.type = spec.wave;
     oscillator.frequency.setValueAtTime(spec.hz, start + spec.at);
     if (spec.to) oscillator.frequency.linearRampToValueAtTime(spec.to, start + spec.at + spec.length);
@@ -84,8 +86,14 @@ export function playSound(event: SoundEvent): void {
     envelope.gain.setValueAtTime(spec.gain, start + spec.at + spec.length - edge);
     envelope.gain.linearRampToValueAtTime(0, start + spec.at + spec.length);
     oscillator.connect(envelope);
-    envelope.connect(master);
+    envelope.connect(destination);
     oscillator.start(start + spec.at);
     oscillator.stop(start + spec.at + spec.length + 0.02);
   }
+}
+
+/** Play an event's sound for the theme on screen. Silent when sound is off. */
+export function playSound(event: SoundEvent): void {
+  if (!enabled || !context || !master || context.state === 'closed') return;
+  scheduleTones(context, master, recipe(currentProfile(), event), context.currentTime + 0.01);
 }

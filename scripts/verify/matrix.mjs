@@ -78,6 +78,9 @@ const MATRIX = [
   ['a11y', []],
   ['a11y', fa],
   ['a11y', [...en, '--width', '380', '--touch']],
+  // Queue 5: every sound rendered offline; the sun/moon toggle's storage promise.
+  ['sound', []],
+  ['scheme', []],
 ];
 
 try {

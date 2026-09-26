@@ -8,6 +8,7 @@
 // closed. On the home screen each opens fullscreen, is used, and closes with
 // Back. Every state is checked for horizontal overflow and screenshotted.
 import { launch, sleep } from './cdp.mjs';
+import { eras } from '../../src/content/eras.ts';
 import { BELOW_THRESHOLD, posted, shownPattern, STUB_COUNTS, wellFormed } from './api-stub.mjs';
 
 const args = Object.fromEntries(
@@ -598,6 +599,38 @@ check('cv: the PDF control says it is coming, and is no link', await js(`(() => 
 check('cv: the e-mail address is a mailto link', await js(`document.querySelector('${content('cv')} [data-action="email"]')?.getAttribute('href')?.startsWith('mailto:') ?? false`));
 check('cv: no horizontal overflow', await noOverflow('cv'));
 await close('cv');
+// APP-11 (queue 5a): the quiz result's "to the era" buttons are clicked, not only present - each lands on the
+// journey at the right section. Two rounds, the first and the last missed era; the desktop is left for good,
+// so this runs after everything else.
+for (const pick of ['first', 'last']) {
+  await b.goto(`${BASE}${PREFIX}/desktop/`, 4000);
+  const QQ = (selector) => `${content('quiz')} ${selector}`;
+  await js(`localStorage.removeItem('amonel.quiz.v1'); true`);
+  check(`quiz era links (${pick}): the quiz opens`, await openFromIcon('quiz'));
+  await reveal(QQ('[data-action="quiz-start"]'), 'quiz');
+  await clickOn(QQ('[data-action="quiz-start"]'));
+  for (let i = 0; i < 10; i++) {
+    await until(`!!document.querySelector('${QQ('[data-quiz-option]')}')`, 2000);
+    await js(`(() => { document.querySelector('${QQ('[data-quiz-option]')}').click(); return true; })()`);
+    await sleep(80);
+    await js(`(() => { document.querySelector('${QQ('[data-action="quiz-next"]')}').click(); return true; })()`);
+    await sleep(80);
+  }
+  check(`quiz era links (${pick}): the round ends in the result`, await until(`!!document.querySelector('${QQ('[data-quiz-result]')}')`, 2500));
+  const missedNow = await js(`[...document.querySelectorAll('${QQ('[data-quiz-missed] li')}')].map((li) => li.dataset.era)`);
+  check(`quiz era links (${pick}): at least one era was missed to click`, missedNow.length > 0, missedNow);
+  if (missedNow.length === 0) continue;
+  const era = pick === 'first' ? missedNow[0] : missedNow[missedNow.length - 1];
+  const expectedHash = `#era-${eras.find((entry) => entry.id === era)?.index}`;
+  const button = QQ(`[data-quiz-missed] li[data-era="${era}"] [data-action="quiz-to-era"]`);
+  await reveal(button, 'quiz');
+  check(`quiz era links (${pick}): the button for ${era} carries ${expectedHash}`, (await js(`document.querySelector('${button}')?.dataset.eraHash`)) === expectedHash);
+  await clickOn(button);
+  check(`quiz era links (${pick}): the click leaves the desktop for the journey at ${expectedHash}`, await until(`location.pathname === '${PREFIX}/amonel/' && location.hash === '${expectedHash}'`, 6000), await js('location.pathname + location.hash'));
+  await sleep(2500);
+  const landed = await js(`(() => { const mark = document.querySelector('${expectedHash} [data-mark="visual"]'); return mark ? Math.round(mark.getBoundingClientRect().top) : null; })()`);
+  check(`quiz era links (${pick}): the journey scrolled to ${expectedHash} (its first frame at ${landed} px of ${HEIGHT})`, landed !== null && landed > -HEIGHT * 0.5 && landed < HEIGHT * 0.6, landed);
+}
 check('no console errors', b.errors.length === 0, b.errors.slice(0, 3));
 const passed = log.filter((entry) => entry.ok).length;
 console.log(`${QUIET ? '' : '\n'}${TAG}: ${passed}/${log.length} passed`);
