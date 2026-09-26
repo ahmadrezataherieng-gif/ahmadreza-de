@@ -25,6 +25,9 @@ All user-facing content is placeholder until the final content review with the o
 - `deployment-legal` - Cloudflare Workers deploy, `_headers`, `_redirects`, the Assistant's local search, self-hosted fonts and the pixel-font check, GDPR.
 - `seo` - names, canonical host, robots.txt bot policy, page fundamentals, structured data, images, the pending brand rename.
 - `verification` - running `scripts/verify`, the setups, `--quiet`, `matrix.mjs`.
+- `ext-seo-audit`, `ext-schema` - external checklists (MIT, coreyhaines31/marketingskills, pinned at 5b2c000, see each `SOURCE.md`); read-only, see below.
+
+**External skills (`ext-*`) are reference checklists only.** Use them to look for gaps in a read-only check; they never decide anything. CLAUDE.md, the project skills (`seo`, `deployment-legal`), DECISIONS.md and the owner's decisions always win. Never add from them: third-party requests, tracking, FAQ/review/rating schema without real content, `llms-full.txt` or other "AI SEO" files, new pages, or reworded personal copy. They stay plain Markdown and pinned: no updates without the owner's review.
 
 ## Who this is for
 

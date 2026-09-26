@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
 | `legal` | 13 | 1 | 5 | 32 / 46 | 70 % |
-| `seo` | 20 | 3 | 4 | 67.1 / 84 | 80 % |
+| `seo` | 21 | 3 | 5 | 68.1 / 86 | 79 % |
 | `launch` | 13 | 2 | 12 | 52.5 / 105 | 50 % |
-| **all** | 75 | 8 | 27 | 319.7 / 427 | **75 %** |
+| **all** | 76 | 8 | 28 | 320.7 / 429 | **75 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 9 | 1 | 13 | 23 |
 | P1 | 11 | 6 | 40 | 57 |
-| P2 | 7 | 1 | 22 | 30 |
-| **total** | **27** | **8** | **75** | **110** |
+| P2 | 8 | 1 | 23 | 32 |
+| **total** | **28** | **8** | **76** | **112** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -122,6 +122,8 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-17 | **Cloudflare AI bot policies** (owner, 2026-09-24): Search, Agent and Training all set to Allow, so ClaudeBot and anthropic-ai no longer get a 403. | done | P1 | Ahmadreza | - | XS | seo |
 | SEO-13 | Web manifest per language. Done 2026-09-24: `manifest.webmanifest` (de), `manifest.en.webmanifest`, `manifest.fa.webmanifest` (own `lang`, `dir`, start URL and scope), chosen by the layout; CR-1090. | done | P2 | Claude Code | - | XS | seo |
 | SEO-14 | Landing titles ran over 60 characters (de 68, en 66, fa 74). Drafted 2026-09-24 as `site.landingTitle` (de 55, en 58, fa 44, name first and whole, in the style of the coming-soon titles), pinned by `seo.test.mjs`; CR-1095. The wording is **waiting for owner** (FIN-01). | partial | P2 | Claude Code + Ahmadreza | FIN-01 | XS 50% | seo |
+| SEO-18 | **External SEO checklists** (2026-09-26): `ext-seo-audit` and `ext-schema` from coreyhaines31/marketingskills at 5b2c000 (MIT), added under `.claude/skills/` as pinned, read-only Markdown checklists (scanned: no code, no installs); one read-only check of the built `out/` written to TODO.md "External SEO check 2026-09-26". Rules in CLAUDE.md; nothing fixed, no `src/` change. | done | P2 | Claude Code | - | XS | seo |
+| SEO-19 | **Apply the "fits our rules" findings of the external SEO check** (TODO.md "External SEO check 2026-09-26"): `og:locale` as `de_DE`/`en_US`/`fa_IR`, `dateModified` on the ProfilePage from the real last-commit date, optionally drop hreflang from the noindex legal pages; the owner decides the thin desktop pages and any wording (CONTENT_REVIEW entries). Person `image` and `sameAs` stay with OWN-03. **Waiting for owner** (which findings to apply). | missing | P2 | Claude Code + Ahmadreza | SEO-18 | XS | seo |
 | SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal

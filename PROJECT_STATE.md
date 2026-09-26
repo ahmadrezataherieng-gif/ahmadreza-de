@@ -2,6 +2,8 @@
 
 Last updated: 2026-09-26
 
+**External SEO checklists (2026-09-26, ROADMAP SEO-18/19):** `.claude/skills/ext-seo-audit/` and `ext-schema/` (coreyhaines31/marketingskills at 5b2c000, MIT, plain Markdown, read-only, pinned; CLAUDE.md says they never override our rules); one read-only check of `out/` is in TODO.md "External SEO check 2026-09-26" (1 P1 waiting for the owner's portrait and profiles, 8 P2 fits, the rest skipped as conflicts); nothing fixed, no `src/` change, nothing deployed.
+
 ## Work queue 2026-09-26 (resume with "continue the work queue")
 
 **Items 1-6 are done (2026-09-26). The prompt was cut off in item 6 and items 7-11 never arrived; item 11 is the only one that may deploy, and nothing was deployed. Recorded in TODO.md. Resend items 7-11 and say "continue the work queue".**
