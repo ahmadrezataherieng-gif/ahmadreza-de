@@ -113,7 +113,7 @@ src/
     layout.tsx              pass-through root layout (no <html> here)
     [[...locale]]/          the real root layout + routes; German at /, en at /en, fa at /fa
   components/
-    ui/                     generic primitives (Button, Panel, LanguageSwitcher)
+    ui/                     generic primitives (Button, LanguageSwitcher, StaticLanguageSwitcher)
     os/                     Act 3 shell: Desktop, DesktopFrame, Shell, windows, taskbar, launcher, home screen
     landing/                the landing page (server-rendered; client islands only)
     journey/                Act 1 era sections and scroll machinery; Convergence.tsx (Act 2)

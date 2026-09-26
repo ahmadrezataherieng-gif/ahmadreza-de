@@ -899,16 +899,6 @@ html[data-tier='light'] .ao-lamp {
     6px 6px 0 0 var(--ao-color-border);
 }
 
-.ao-dither {
-  background-image: conic-gradient(
-    var(--ao-color-border) 25%,
-    transparent 0 50%,
-    var(--ao-color-border) 0 75%,
-    transparent 0
-  );
-  background-size: 2px 2px;
-}
-
 /* Lights on: the screen starts black - where 1981 left off - and the black
    drains away as the crossing hands over (--arrival), so the era begins in the
    grey room the bridge ends in. */
