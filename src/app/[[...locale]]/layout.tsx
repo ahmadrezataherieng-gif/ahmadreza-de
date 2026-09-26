@@ -208,6 +208,8 @@ export default async function LocaleLayout({
             isProfilePage: view === 'landing',
             // The same real date as the sitemap's lastmod (queue 7c).
             dateModified: lastChange()?.toISOString(),
+            // The Person's image, marked as AI-made (DECISIONS 82).
+            portrait: { caption: (await getTranslations({ locale, namespace: 'landing' }))('portraitAlt') },
           }),
         );
 

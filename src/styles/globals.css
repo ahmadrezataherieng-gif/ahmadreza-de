@@ -1810,6 +1810,18 @@ html[data-returning] .ao-mode-section h2 {
   background-position: -1px -1px;
 }
 
+/* The AI disclosure inside the portrait's bottom corner (EU AI Act Art. 50(4),
+   DECISIONS 82). Fixed values, not theme tokens: it sits on the photo, which
+   is the same in dark and light, so the label is too. The veil keeps the text
+   at 4.5:1 or more on any pixel beneath it, even pure white
+   (#e8eef4 on #000 at 68 % over #fff = #525252: 6.4:1). */
+.ao-portrait-ai {
+  color: #e8eef4;
+  background: rgb(0 0 0 / 0.68);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
 /* ==========================================================================
    Puzzle segment (Phase 5)
 

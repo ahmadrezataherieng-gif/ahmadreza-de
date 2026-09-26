@@ -4,12 +4,13 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 
 ## Assets Ahmadreza owes
 
-- **Portrait photo.** Portrait orientation, **4:5, exactly 1200 × 1500 px**
-  (2x the largest display size, 600 × 750 CSS px). Progressive JPEG, ideally
-  under 250 kB, face in the upper third, plain or softly blurred background.
-  Put it at `public/images/portrait.jpg`, then set `PORTRAIT.available = true` in
-  `src/content/profile.ts`. The layout reserves exactly this box, so nothing
-  shifts when it arrives.
+- ~~**Portrait photo.**~~ Done 2026-09-26 (queue B item 1, DECISIONS 82): the
+  owner's chosen AI-generated image, with the AI label in every frame. To
+  replace it later, run `node scripts/portrait.mjs "<new source>"`; with a real
+  photo, remove the label and the AI markings (see the `deployment-legal`
+  skill). **Open choice (SEO, small):** the file names are `portrait*.jpg` as
+  asked; the `seo` skill prefers the name in them (`ahmadreza-taheri-*.jpg`),
+  a slight help for image search. Default taken: `portrait.jpg`.
 - **Résumé PDF.** Put it at `public/files/ahmadreza-taheri-lebenslauf.pdf`, then
   set `RESUME.available = true` in `src/content/profile.ts`. Until then the
   controls (header corner and under the role) show "Lebenslauf folgt in Kürze"
@@ -407,7 +408,7 @@ Read-only check of the built `out/` (build of HEAD d85c75e plus the two new skil
 
 - **`perf.mjs --mode open`: frames over 33 ms rose at every profile between item 1 and item 12** (1280: 44 -> 69-72; 768 touch: 60 -> 69-84; 1024 touch: 63 -> 97-105; 390 4x: 150 -> 198-254), with fps 0.6-1.5 lower and long tasks unchanged (0 above phone size). Not the ruler translate of item 8 (A/B on the same build, PROJECT_STATE item 12). Candidates in between: 2b (`data-off-screen`, the resolver start values), 3b/3c (the journey now loads the `intl` chunk lazily; the stylesheet is the same file), 5 (`scheduleTones` extracted). Next step: `perf.mjs` twice on the export of b8462f4 and of HEAD on the same machine state, then bisect the queue commits (`git worktree`, build each, one `perf.mjs --width 1280 --mode open`). Default taken: nothing changed, since the look and every check are green and the noise on this machine is large.
 
-## Portrait: AI-generated images (queue 11, 2026-09-26)
+## Portrait: AI-generated images (queue 11, 2026-09-26) - [answered 2026-09-26: the owner chose one AI image and wants the disclosure as a small label in the frame; built in queue B item 1, DECISIONS 82]
 
 - **Every image in `Photo/` is AI-generated** (file names "ChatGPT-Bild", "Codex-Bild", "Generated Image"; five carry the prompt as a caption). The preview (`Claude outputs/portrait-preview/contact-sheet.png`) shows all eleven in the landing box. Before one goes online (OWN-01, LEG-09), three points - not legal advice: (1) the EU AI Act's transparency duty for deployers of AI systems that generate a realistic image of an existing person (Art. 50(4), "deep fake", applicable since 2 August 2026) may apply to a portrait used on a professional site; a short note such as «Porträt KI-bearbeitet» near the image, or a real photo, avoids the question; (2) the photographer's-rights task LEG-09 becomes "the terms of the tool that made it" (OpenAI and the others grant the output to the user; German copyright gives an AI output little protection of its own); (3) recruiters meet the person: the portrait should look like him on the day of the interview. Default taken: nothing chosen, nothing committed, `PORTRAIT.available` stays false.
 

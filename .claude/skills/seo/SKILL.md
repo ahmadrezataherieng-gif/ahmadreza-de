@@ -75,8 +75,10 @@ never sees it.
 
 ### Images
 
-- The portrait file name carries the name, e.g.
-  `ahmadreza-taheri-trier.webp`, with a full descriptive `alt` text.
+- The portrait file name should carry the name, e.g.
+  `ahmadreza-taheri-trier.webp`, with a full descriptive `alt` text. The owner
+  asked for `public/images/portrait.jpg` (queue B item 1), so that is the name
+  for now; renaming the files is an open owner choice in TODO.md.
 - The Open Graph image is **one** PNG or JPG at exactly **1200 × 630**. This,
   the portrait (see `landing-page` skill) and the brand icons are the only
   raster exceptions in the project - link previews in LinkedIn, WhatsApp and
@@ -90,8 +92,9 @@ never sees it.
 
 - **Person:** `name`, `alternateName` (`NAME_VARIANTS`: spellings of the name only, e.g. Ahmadreza, Taheri, Ahmad Reza Taheri and the Persian forms - never the
   legal name, never a skill or Amonel), `jobTitle`, address `addressLocality: "Trier"` (never a street),
-  `knowsAbout`, `knowsLanguage`, `email`; add `image` with the portrait and
-  `sameAs` once the owner's profiles are ready.
+  `knowsAbout`, `knowsLanguage`, `email`, `image` (the portrait's ImageObject
+  `#portrait`, marked `digitalSourceType` trainedAlgorithmicMedia, main site
+  only, DECISIONS 82); add `sameAs` once the owner's profiles are ready.
 - **WebSite** (name = the person, not Amonel) on every indexed page, **Amonel** as its own `CreativeWork` with `creator` = the Person, an **ImageObject** (the share image) as the ProfilePage's `primaryImageOfPage`, **ProfilePage** on the landing page, all
   linked by `@id`. The legal pages carry none. Rendered in the locale layout's
   `<head>`; pinned by `scripts/test/seo.test.mjs`.

@@ -4,7 +4,8 @@ import { IconTile } from '@/components/illustrations/Icon';
 import type { IconName } from '@/components/illustrations/icons';
 import type { AppProps } from '@/components/apps/types';
 import { careerStations, languages, skillAreas, type CareerStation } from '@/content/about';
-import { EMAIL, RESUME } from '@/content/profile';
+import { PortraitImage } from '@/components/ui/PortraitImage';
+import { EMAIL, PORTRAIT, RESUME } from '@/content/profile';
 import { htmlLang, type Locale } from '@/lib/i18n-config';
 import { asStringList } from '@/lib/message-shapes';
 import { cn } from '@/lib/cn';
@@ -59,11 +60,25 @@ export function AboutContent({
       <div className="mx-auto flex max-w-3xl flex-col gap-7 p-4 @min-[480px]:p-6 @min-[720px]:p-8">
         <header className={cn('flex flex-col gap-3', art && 'relative @min-[640px]:pe-52')}>
           {art}
-          <p className="font-mono text-[11px] tracking-[0.25em] text-accent uppercase">{t('eyebrow')}</p>
-          <Heading level={page ? 1 : 2} id={headingId} className="font-display text-2xl leading-tight font-bold text-ink @min-[480px]:text-3xl">
-            {t('name')}
-          </Heading>
-          <p className="font-body text-base text-muted">{t('role')}</p>
+          {/* The portrait beside the name, in the window and on the page alike; its box is fixed, so nothing moves when it decodes. */}
+          <div className="flex items-center gap-4 @min-[480px]:gap-5">
+            {PORTRAIT.available ? (
+              <div
+                className="relative w-28 shrink-0 overflow-hidden rounded-window border border-edge bg-surface @min-[480px]:w-32"
+                style={{ aspectRatio: `${PORTRAIT.width} / ${PORTRAIT.height}` }}
+              >
+                {/* CONTENT-TODO CR-1123 (alt), CR-1122 (AI label) */}
+                <PortraitImage alt={t('portraitAlt')} aiLabel={t('portraitAi')} sizes="(min-width: 480px) 8rem, 7rem" />
+              </div>
+            ) : null}
+            <div className="flex min-w-0 flex-col gap-3">
+              <p className="font-mono text-[11px] tracking-[0.25em] text-accent uppercase">{t('eyebrow')}</p>
+              <Heading level={page ? 1 : 2} id={headingId} className="font-display text-2xl leading-tight font-bold text-ink @min-[480px]:text-3xl">
+                {t('name')}
+              </Heading>
+              <p className="font-body text-base text-muted">{t('role')}</p>
+            </div>
+          </div>
           <div className="flex flex-col gap-3 font-body leading-relaxed text-ink">
             {asStringList(t.raw('intro')).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>

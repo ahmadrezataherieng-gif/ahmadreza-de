@@ -196,9 +196,14 @@ photos, no internal information. The Tickets app must stay fictional (see the
 
 ### The portrait
 
-The photographer must grant **written usage rights** before the photo goes
-online. Do not publish the portrait (see the `landing-page` skill) without
-that confirmation from Ahmadreza.
+Since 2026-09-26 the portrait is an **AI-generated image** the owner chose
+(DECISIONS 82, LEG-09 done): no photographer, so no usage-rights letter; the
+tool's terms give the output to the user. EU AI Act Art. 50(4): wherever it is
+shown, `PortraitImage` draws the small «KI-Porträt» label inside the frame, the
+alt text says it, the files carry IPTC `trainedAlgorithmicMedia` in their XMP
+and the JSON-LD a `digitalSourceType`. Never show the picture without the
+label. If a real photo replaces it, the photographer's written usage rights
+come first again, and the label and markings go.
 
 ### Launch blocker: email must really work
 

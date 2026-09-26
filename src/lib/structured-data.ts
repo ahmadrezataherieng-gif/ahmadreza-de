@@ -11,7 +11,7 @@
  * CONTENT-TODO CR-1046
  */
 
-import { EMAIL } from '../content/profile.ts';
+import { EMAIL, PORTRAIT } from '../content/profile.ts';
 import { PROFILES } from '../content/profiles.ts';
 import { SITE_URL } from './constants.ts';
 
@@ -32,11 +32,18 @@ export interface PersonCopy {
   isProfilePage: boolean;
   /** When the page last really changed (ISO 8601), for the ProfilePage; left out when unknown, never invented. */
   dateModified?: string;
+  /**
+   * The portrait's caption in the page's language. Given only where the site
+   * serves the portrait (the main site, not the coming-soon pages): then the
+   * Person gets `image` and the graph an ImageObject marked as AI-made.
+   */
+  portrait?: { caption: string };
 }
 
 const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 const BRAND_ID = `${SITE_URL}/#amonel`;
+const PORTRAIT_ID = `${SITE_URL}/#portrait`;
 
 /**
  * Spellings of the name only - skills and activities belong in knowsAbout.
@@ -48,6 +55,7 @@ type JsonLd = Record<string, unknown>;
 
 export function structuredData(copy: PersonCopy): JsonLd {
   const sameAs = PROFILES.flatMap((profile) => (profile.url ? [profile.url] : []));
+  const portrait = copy.portrait && PORTRAIT.available ? copy.portrait : null;
   const person: JsonLd = {
     '@type': 'Person',
     '@id': PERSON_ID,
@@ -61,6 +69,7 @@ export function structuredData(copy: PersonCopy): JsonLd {
     ...(EMAIL.available ? { email: `mailto:${EMAIL.address}` } : {}),
     // The owner's profiles, as soon as `content/profiles.ts` has their URLs.
     ...(sameAs.length > 0 ? { sameAs } : {}),
+    ...(portrait ? { image: { '@id': PORTRAIT_ID } } : {}),
   };
   const website: JsonLd = {
     '@type': 'WebSite',
@@ -79,6 +88,22 @@ export function structuredData(copy: PersonCopy): JsonLd {
     creator: { '@id': PERSON_ID },
   };
   const graph: JsonLd[] = [person, website, brand];
+  if (portrait) {
+    // AI-generated (DECISIONS 82): IPTC's term, as schema.org's
+    // digitalSourceType expects it, next to the visible label on the page.
+    const url = `${SITE_URL}${PORTRAIT.src}`;
+    graph.push({
+      '@type': 'ImageObject',
+      '@id': PORTRAIT_ID,
+      url,
+      contentUrl: url,
+      encodingFormat: 'image/jpeg',
+      width: PORTRAIT.width,
+      height: PORTRAIT.height,
+      caption: portrait.caption,
+      digitalSourceType: PORTRAIT.digitalSourceType,
+    });
+  }
   if (copy.isProfilePage) {
     const imageId = `${copy.pageUrl}#primaryimage`;
     graph.push({

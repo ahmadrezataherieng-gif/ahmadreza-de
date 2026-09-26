@@ -100,8 +100,10 @@ export async function Landing() {
         </div>
 
         <div className="flex flex-col items-center gap-10 [grid-area:portrait]">
+          {/* CONTENT-TODO CR-1123 (alt), CR-1122 (AI label) */}
           <Portrait
             alt={t('portraitAlt')}
+            aiLabel={t('portraitAi')}
             placeholder={t('photoPlaceholder')}
             dimensions={t('photoDimensions', {
               width: PORTRAIT.width,

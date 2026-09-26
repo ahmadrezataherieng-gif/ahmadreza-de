@@ -1,7 +1,10 @@
+import { PortraitImage } from '@/components/ui/PortraitImage';
 import { PORTRAIT } from '@/content/profile';
 
 interface PortraitProps {
   alt: string;
+  /** The AI disclosure shown inside the frame (DECISIONS 82). */
+  aiLabel: string;
   placeholder: string;
   /** The pixel size to supply, already formatted by the caller. */
   dimensions: string;
@@ -14,7 +17,7 @@ interface PortraitProps {
  * depend on the image having loaded, so swapping the placeholder for the real
  * photo cannot shift the layout.
  */
-export function Portrait({ alt, placeholder, dimensions }: PortraitProps) {
+export function Portrait({ alt, aiLabel, placeholder, dimensions }: PortraitProps) {
   return (
     <figure className="relative mx-auto w-full max-w-[11rem] sm:max-w-[16rem] md:max-w-none">
       {/* Offset outline behind the frame: a quiet, expensive-looking edge. */}
@@ -28,17 +31,13 @@ export function Portrait({ alt, placeholder, dimensions }: PortraitProps) {
         style={{ aspectRatio: `${PORTRAIT.width} / ${PORTRAIT.height}` }}
       >
         {PORTRAIT.available ? (
-          // A plain img, not next/image: the export is unoptimised anyway, and
-          // explicit width/height keep the box stable before decode.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={PORTRAIT.src}
-            width={PORTRAIT.width}
-            height={PORTRAIT.height}
+          // The frame's widths: 11rem on phones, 16rem from sm, then 5/12 of
+          // the grid (about 36vw, at most 27rem once the grid stops growing).
+          <PortraitImage
             alt={alt}
-            fetchPriority="high"
-            decoding="async"
-            className="h-full w-full object-cover"
+            aiLabel={aiLabel}
+            priority
+            sizes="(min-width: 1152px) 27rem, (min-width: 768px) 36vw, (min-width: 640px) 16rem, 11rem"
           />
         ) : (
           <div className="ao-portrait-placeholder flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">

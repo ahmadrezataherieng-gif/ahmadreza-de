@@ -9,15 +9,35 @@
 
 // CONTENT-TODO CR-045
 /**
- * The landing-page portrait. The one raster asset the project allows.
- * 4:5 portrait orientation; supply at 1200 x 1500 px (2x of the largest size it
- * is displayed at, 600 x 750 CSS px), as a progressive JPEG under ~250 kB.
+ * The portrait: the landing page, the About page and the About window. The one
+ * raster asset the project allows. 4:5; 1200 x 1500 px (2x of the largest size
+ * it is displayed at, 600 x 750 CSS px), progressive JPEG, plus smaller
+ * widths and AVIF copies of the same picture for srcset. The owner's choice of 2026-09-26 is
+ * an AI-generated image (OWN-01, DECISIONS 82): every place that shows it also
+ * shows the AI label (`PortraitImage`), and the JSON-LD says so. The files are
+ * made by `node scripts/portrait.mjs <source>`; the source is never committed.
  */
 export const PORTRAIT = {
   src: '/images/portrait.jpg',
   width: 1200,
   height: 1500,
-  available: false,
+  /** Every file by format, smallest first; the `<picture>` offers AVIF and falls back to JPEG. */
+  sources: {
+    avif: [
+      { src: '/images/portrait-240.avif', width: 240 },
+      { src: '/images/portrait-480.avif', width: 480 },
+      { src: '/images/portrait-800.avif', width: 800 },
+      { src: '/images/portrait-1200.avif', width: 1200 },
+    ],
+    jpeg: [
+      { src: '/images/portrait-480.jpg', width: 480 },
+      { src: '/images/portrait-800.jpg', width: 800 },
+      { src: '/images/portrait.jpg', width: 1200 },
+    ],
+  },
+  /** IPTC: made by a trained model (schema.org `digitalSourceType`, also in the files' XMP). */
+  digitalSourceType: 'https://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia',
+  available: true,
 } as const;
 
 /** The résumé download. Until the PDF exists the control renders disabled. */

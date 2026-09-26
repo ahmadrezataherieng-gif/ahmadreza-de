@@ -40,19 +40,19 @@ build time).
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
 | `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
-| `about` | 2 | 2 | 5 | 15.1 / 26 | 58 % |
-| `legal` | 13 | 1 | 5 | 32 / 46 | 70 % |
-| `seo` | 22 | 3 | 4 | 70.1 / 87 | 81 % |
+| `about` | 3 | 2 | 4 | 17.1 / 26 | 66 % |
+| `legal` | 14 | 1 | 4 | 34 / 46 | 74 % |
+| `seo` | 22 | 3 | 4 | 70.6 / 87 | 81 % |
 | `launch` | 13 | 2 | 12 | 52.5 / 105 | 50 % |
-| **all** | 77 | 8 | 27 | 322.7 / 430 | **75 %** |
+| **all** | 79 | 8 | 25 | 327.2 / 430 | **76 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
-| P0 | 9 | 1 | 13 | 23 |
-| P1 | 11 | 6 | 40 | 57 |
+| P0 | 8 | 1 | 14 | 23 |
+| P1 | 10 | 6 | 41 | 57 |
 | P2 | 7 | 1 | 24 | 32 |
-| **total** | **27** | **8** | **77** | **112** |
+| **total** | **25** | **8** | **79** | **112** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -108,7 +108,7 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | SEO-01 | **robots.txt** allowing all crawlers, explicitly including the AI bots (OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, CCBot, Google-Extended, meta-externalagent), plus the sitemap line. Built 2026-09-23: `public/robots.txt`, pinned by `scripts/test/seo.test.mjs`. | done | P1 | Claude Code | - | XS | seo |
 | SEO-02 | **sitemap.xml** with every generated URL and its hreflang alternates (`xhtml:link`), generated at build time from `allRouteSegments()`. Built 2026-09-23: `src/app/sitemap.ts` → `out/sitemap.xml`, nine URLs, legal pages left out. | done | P1 | Claude Code | - | S | seo |
-| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" (never the legal name, owner 2026-09-23), `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. Built 2026-09-23 (`src/lib/structured-data.ts`, in every indexed page's head); `image` and `sameAs` **waiting for owner** (OWN-01, OWN-03). `sameAs` now fills itself from `content/profiles.ts` once the URLs are there. | partial | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) | M 80% | seo |
+| SEO-03 | **JSON-LD**: Person (`name`, `alternateName` = "احمدرضا طاهری" (never the legal name, owner 2026-09-23), `jobTitle`, `address` Trier, `knowsAbout`, `knowsLanguage`, `image` once OWN-01, `sameAs` once OWN-03), WebSite, ProfilePage. Built 2026-09-23 (`src/lib/structured-data.ts`, in every indexed page's head); `image` done 2026-09-26 (an ImageObject marked AI-made, DECISIONS 82); `sameAs` **waiting for owner** (OWN-03). `sameAs` now fills itself from `content/profiles.ts` once the URLs are there. | partial | P1 | Claude Code | OWN-01, OWN-03 (can ship without, then extend) | M 90% | seo |
 | SEO-04 | **llms.txt**: a plain-text summary of the person and the site for AI crawlers. Built 2026-09-23: `public/llms.txt`, facts the site already states, both spellings of the name. | done | P1 | Claude Code | - | XS | seo |
 | SEO-05 | **Open Graph share image**: one 1200 x 630 PNG per language (or one shared), `og:image`, `og:image:alt`, `twitter:card`. Built 2026-09-23: `scripts/og-image.mjs` renders one PNG per language (about 47 kB each) in headless Chrome with the self-hosted fonts; og:image with alt, twitter summary_large_image. Regenerate for the final logo (BR-01). | done | P1 | Claude Code | BR-01 for the final version | S | seo |
 | SEO-06 | **Per-page meta descriptions**: the journey and the desktop reuse `site.description`; each view (and each new page) needs its own. Done 2026-09-23: `site.journeyDescription`, `site.desktopDescription`; legal pages have their own; drafts run 140-190 characters (CR-1051). | done | P1 | Claude Code | - | S | seo |
@@ -138,7 +138,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-06 | **Content-Security-Policy** in `public/_headers` (the comment there still mentions the removed Gemini proxy); `connect-src 'self'`, no third-party origins. Done 2026-09-23: every fetch type locked to 'self' (scripts/styles also 'unsafe-inline', no nonces in a static export); pinned by `legal.test.mjs`; `serve.mjs --headers` runs the checks under it (apps, bonus, desktop pass). | done | P1 | Claude Code | - | S | legal |
 | LEG-07 | **Owner verifies the legal texts** (CONTENT_REVIEW.md status "LEGAL – owner must verify"); ideally a lawyer or the Verbraucherzentrale reads them once. | missing | P0 | Ahmadreza | LEG-01, LEG-02 | M | legal |
 | LEG-08 | **Employer name removed everywhere; may only be added with the employer's written permission.** Done 2026-09-24 (owner): gone from the coming-soon page (text, title, description), the landing role and facts, the meta descriptions, About, llms.txt and the docs; the role line is now "Fachinformatiker für Systemintegration in Ausbildung · Trier" (CR-1079). `scripts/test/employer.test.mjs` fails if the name is in any tracked file or in `out/` / `soon/dist/`. The name remains in the git history. | done | P0 | Ahmadreza | - | XS | legal |
-| LEG-09 | **Written usage rights for the portrait** from the photographer before it goes online. | missing | P0 | Ahmadreza | OWN-01 | S | legal |
+| LEG-09 | **Rights and disclosure for the portrait.** No photographer: the owner chose an AI-generated image (2026-09-26, DECISIONS 82), so the rights are the tool's terms (the output belongs to the user) and his own consent to show his likeness. AI disclosure done (EU AI Act Art. 50(4)): a small label inside every portrait frame (de/en/fa), the alt text, IPTC `trainedAlgorithmicMedia` in the files' XMP and the JSON-LD `digitalSourceType`. | done | P0 | Ahmadreza | OWN-01 | S | legal |
 | LEG-10 | **Check "Amonel"** in the DPMA and EUIPO registers before any commercial use. | missing | P1 | Ahmadreza | - | S | legal |
 | LEG-11 | **Cloudflare features that set cookies stay off** (Bot Fight Mode, challenges, Waiting Room, Always Online); rate limit only by IP with Block. Check at deploy. | missing | P0 | Ahmadreza | DEP-06 | XS | legal |
 | LEG-12 | **Home address out of GitHub** (owner, 2026-09-24): the address moved to the git-ignored `src/content/legal.local.ts` (template `legal.example.ts`), `scripts/legal-address.mjs` stops every build without it; the whole git history rewritten with `git filter-repo` and force-pushed, backup bundle outside the repo (DECISIONS.md 60). | done | P0 | Claude Code | - | S | legal |
@@ -195,7 +195,7 @@ PROJECT_STATE.md and DECISIONS.md.
 
 | ID | Description | Status | Priority | Owner | Depends on | Effort | Area |
 |---|---|---|---|---|---|---|---|
-| OWN-01 | **Portrait photo**, 1200 x 1500 px, 4:5, `public/images/portrait.jpg` (details in TODO.md). | missing | P1 | Ahmadreza | LEG-09 | S | about |
+| OWN-01 | **Portrait photo**, 1200 x 1500 px, 4:5, `public/images/portrait.jpg`. Done 2026-09-26 (queue B item 1): the owner's chosen AI-generated image, on the landing page, the About page and the About window, with srcset widths 480/800/1200 and the AI label (DECISIONS 82). | done | P1 | Ahmadreza | LEG-09 | S | about |
 | OWN-02 | **Résumé PDF**, `public/files/ahmadreza-taheri-lebenslauf.pdf`; one German PDF or one per language. | missing | P1 | Ahmadreza | - | S | about |
 | OWN-03 | **Tidy LinkedIn, GitHub and XING** and send the profile URLs (for Contact, JSON-LD `sameAs`, the footer). | missing | P1 | Ahmadreza | - | S | about |
 | OWN-04 | **German proofreading by a native speaker** (and Persian); all copy is a draft. | missing | P1 | Ahmadreza | FIN-01 | L | launch |

@@ -22,9 +22,15 @@ a recruiter judges in three seconds and Google reads first.
   gates), the résumé control twice (header corner and under the role), an email
   link, the language switcher, and a restrained timeline hint that does not
   reveal any era.
+- **The portrait** (since 2026-09-26, DECISIONS 82): the owner's AI-generated
+  image, `public/images/portrait.jpg` (4:5, 1200 × 1500) plus smaller JPEG and
+  AVIF widths from `node scripts/portrait.mjs <source>` - the one allowed raster
+  asset. Always rendered through `components/ui/PortraitImage.tsx` (landing
+  frame, About header), which draws the AI label inside the frame; nothing
+  else on or around it (DECISIONS 76). It is the landing page's LCP: keep it
+  `priority` there and keep `sizes` true to the frame.
 - **Assets still owed** are declared in `src/content/profile.ts` with an
-  `available` flag: the portrait (4:5, 1200 × 1500 px, `public/images/portrait.jpg`
-  — the one allowed raster asset) and the résumé PDF
+  `available` flag: the résumé PDF
   (`public/files/ahmadreza-taheri-lebenslauf.pdf`). While `available` is false
   the page renders a same-size placeholder and a disabled résumé control, never
   a broken link. Flip the flag when the file lands. `EMAIL` works the same way:
