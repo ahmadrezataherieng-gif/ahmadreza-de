@@ -15,6 +15,8 @@ node scripts/verify/cross-browser.mjs [--engines webkit] [--setups desktop,table
 node scripts/verify/sound.mjs [--volume 8 = a control run that must fail]   # every sound profile and event rendered offline through the engine's scheduleTones: audible, below clipping, short, faded end (queue 5b)
 node scripts/verify/scheme.mjs   # the sun/moon toggle: dark first visit whatever the OS says, no ao-scheme key before a click, kept across a reload, no cookie (queue 5c)
 node scripts/verify/toolbar.mjs [--width 390 --height 844 --delta 64] [--tablet: --width 768 --height 1024 --delta 80]   # a phone toolbar's height change mid-scroll: layouts, long tasks, document height must not move (PERF-02, exits 1 on failure)
+node scripts/verify/toolbar-band.mjs [--locale de|fa] [--mode play|watch] [--shots]   # with a phone toolbar shown (390 x 844 loaded, 780 visible): no text or control in a stuck layer under the toolbar or under the bottom chrome it pushes up; Play opens every gate by "show the solution"; about 8 min per run, not in matrix.mjs (queue 8)
+node scripts/verify/toolbar-shots.mjs --at 3900,35880 [--locale fa] [--name before]   # the same frames shot with the toolbar shown and hidden (queue 8)
 node scripts/verify/crossing-frames.mjs [--width 390] [--locale fa] [--frames 0,25,50,75,100] [--only 1946] [--reduce] [--out dir]   # screenshots of each crossing (BR-10)
 node scripts/verify/desktop.mjs [--width 380] [--locale fa] [--reduce] [--touch]
 node scripts/verify/navigation.mjs [--width 380] [--locale fa] [--reduce] [--touch]

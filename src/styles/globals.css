@@ -3544,6 +3544,12 @@ html:has(.ao-site-page) {
   /* --- where the crossing is ------------------------------------------ */
   .ao-tech-rule {
     opacity: var(--tech-cover);
+    /* The panel is as tall as the screen without the toolbar (`--ao-vh`, pinned
+       to the large viewport on touch devices); while a phone's toolbar shows,
+       the bottom chrome sits that much higher and would cover the ruler. Lifted
+       by exactly the toolbar's height - 0 without one - as a composited
+       translate, so a toolbar move relayouts nothing (queue 8). */
+    translate: 0 min(0px, calc(100dvh - 100 * var(--ao-vh)));
   }
 
   .ao-tech-fill {
