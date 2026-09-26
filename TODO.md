@@ -403,6 +403,10 @@ Read-only check of the built `out/` (build of HEAD d85c75e plus the two new skil
 
 - **The prompt ends in the middle of item 6** ("... fa «میزکا") and items 7-11 (including item 11, the only one allowed to deploy) are missing. Default taken: items 1-6 are copied into PROJECT_STATE.md as received (item 6's remainder read as the "Doubtful wording" list of K6 revert step 3), 7-11 are a marked placeholder row, and **no deploy happens** until the owner resends item 11. **[answered 2026-09-26: the owner resent the rest as items 7-13; item 13 is the deploy item]**
 
+## Portrait: AI-generated images (queue 11, 2026-09-26)
+
+- **Every image in `Photo/` is AI-generated** (file names "ChatGPT-Bild", "Codex-Bild", "Generated Image"; five carry the prompt as a caption). The preview (`Claude outputs/portrait-preview/contact-sheet.png`) shows all eleven in the landing box. Before one goes online (OWN-01, LEG-09), three points - not legal advice: (1) the EU AI Act's transparency duty for deployers of AI systems that generate a realistic image of an existing person (Art. 50(4), "deep fake", applicable since 2 August 2026) may apply to a portrait used on a professional site; a short note such as «Porträt KI-bearbeitet» near the image, or a real photo, avoids the question; (2) the photographer's-rights task LEG-09 becomes "the terms of the tool that made it" (OpenAI and the others grant the output to the user; German copyright gives an AI output little protection of its own); (3) recruiters meet the person: the portrait should look like him on the day of the interview. Default taken: nothing chosen, nothing committed, `PORTRAIT.available` stays false.
+
 ## Queue 6 (2026-09-26): doubtful wording left for the owner (consistency and typography were fixed, see CR-1116..1118)
 
 - **Wording, not typography - not changed:** the German About line «Die Programme auf diesem Desktop» reads oddly on the static About page; English «Earlier stations» (a Germanism), «which way a data packet takes» (better «which route»); Persian «زمینه‌های اصلی من … است» (plural subject, singular verb: acceptable, check).
