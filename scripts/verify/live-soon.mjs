@@ -26,7 +26,7 @@ const html = home.body ?? '';
 check('title has the name, the role and the city', html.includes('<title>Ahmadreza Taheri – Fachinformatiker (Ausbildung), Trier</title>'));
 check('meta description names Amonel', /<meta name="description" content="[^"]*Trier[^"]*Amonel[^"]*">/.test(html));
 check('canonical is https://ahmadreza.de/', html.includes('<link rel="canonical" href="https://ahmadreza.de/">'));
-check('html lang is de, robots index,follow', html.includes('<html lang="de"') && html.includes('<meta name="robots" content="index,follow">'));
+check('html lang is de, robots index,follow,max-image-preview:large', html.includes('<html lang="de"') && html.includes('<meta name="robots" content="index,follow,max-image-preview:large">'));
 check('h1 is the name; the Persian and English lines are visible text', html.includes('<h1>Ahmadreza Taheri</h1>') && html.includes('احمدرضا طاهری،') && html.includes('IT specialist for system integration in training'));
 const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
 let person;
@@ -49,7 +49,7 @@ check('/sitemap.xml: XML with the three language pages and hreflang alternates',
 for (const [path, lang, dir, title, canonical] of [['/en/', 'en', 'ltr', 'Ahmadreza Taheri – IT System Integration Apprentice, Trier', 'https://ahmadreza.de/en/'], ['/fa/', 'fa', 'rtl', 'احمدرضا طاهری – کارآموز فناوری اطلاعات، تریر', 'https://ahmadreza.de/fa/']]) {
   const page = await get(path);
   const body = page.body ?? '';
-  check(`${path} answers 200 as HTML with lang=${lang} dir=${dir}, its own title, canonical and index,follow`, page.status === 200 && page.type.startsWith('text/html') && body.includes(`<html lang="${lang}" dir="${dir}">`) && body.includes(`<title>${title}</title>`) && body.includes(`<link rel="canonical" href="${canonical}">`) && body.includes('<meta name="robots" content="index,follow">'), `${page.status}`);
+  check(`${path} answers 200 as HTML with lang=${lang} dir=${dir}, its own title, canonical and index,follow,max-image-preview:large`, page.status === 200 && page.type.startsWith('text/html') && body.includes(`<html lang="${lang}" dir="${dir}">`) && body.includes(`<title>${title}</title>`) && body.includes(`<link rel="canonical" href="${canonical}">`) && body.includes('<meta name="robots" content="index,follow,max-image-preview:large">'), `${page.status}`);
   check(`${path} has hreflang de, en, fa, x-default and its own JSON-LD`, ['de', 'en', 'fa', 'x-default'].every((code) => body.includes(`hreflang="${code}"`)) && /"@type":"Person"/.test(body) && body.includes(`"url":"${canonical}"`) && !/{{|@jsonld|@tokens|@alternates/.test(body) && !EMPLOYER.test(body));
 }
 for (const path of ['/impressum/', '/datenschutz/', '/en/impressum/', '/en/datenschutz/', '/fa/impressum/', '/fa/datenschutz/']) {

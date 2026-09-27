@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
+import { eras } from '@/content/eras';
 import { dirForLocale, htmlLang, locales, ogLocale, type Locale } from '@/lib/i18n-config';
 import { lastChangeIso } from '@/lib/last-change';
 import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
@@ -117,8 +118,11 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
     title,
     description,
     // The legal pages carry the home address: kept out of search results for
-    // the name, while their links are still followed (DECISIONS.md 58).
-    ...(legal ? { robots: { index: false, follow: true } } : {}),
+    // the name, while their links are still followed (DECISIONS.md 58). The
+    // indexed pages allow the largest image preview (queue 2026-09-28 A1
+    // item 2): every image on the site is the project's own inline SVG or the
+    // owner's own portrait, so a large preview never surfaces someone else's work.
+    robots: legal ? { index: false, follow: true } : { index: true, follow: true, 'max-image-preview': 'large' },
     // The noindex legal pages keep their canonical but carry no hreflang: a set
     // that points at pages kept out of the index is ignored anyway (queue 7d).
     alternates: {
@@ -187,6 +191,8 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   // Structured data on every indexed page; the noindex legal pages carry none.
   const tSite = await getTranslations({ locale, namespace: 'site' });
+  const tEras = await getTranslations({ locale, namespace: 'eras' });
+  const tOs = await getTranslations({ locale, namespace: 'os' });
   const jsonLd =
     view === 'imprint' || view === 'privacy'
       ? null
@@ -215,6 +221,18 @@ export default async function LocaleLayout({
             ...(view === 'about'
               ? { aboutPage: { name: await viewTitle(locale, view), description: tSite('aboutDescription') } }
               : {}),
+            // Amonel OS and the journey, as hasPart of the Amonel brand
+            // (queue 2026-09-28 A1 item 2): the names, descriptions and the
+            // seven eras' "one truth" are the same words the pages themselves
+            // show - never SoftwareApplication, never rated.
+            amonelOs: { url: `${SITE_URL}${viewHref(locale, 'desktop')}`, name: tOs('brand'), description: tSite('desktopDescription') },
+            journey: {
+              url: `${SITE_URL}${viewHref(locale, 'journey')}`,
+              name: await viewTitle(locale, 'journey'),
+              description: tSite('journeyDescription'),
+              inLanguage: htmlLang[locale],
+              eras: eras.map((era) => ({ index: era.index, name: tEras(era.nameKey), about: tEras(era.descriptionKey) })),
+            },
           }),
         );
 

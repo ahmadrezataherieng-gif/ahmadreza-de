@@ -26,7 +26,7 @@ test('soon SEO: title and description carry the name, the role and the city', ()
   for (const word of ['Ahmadreza Taheri', 'Fachinformatiker für Systemintegration', 'Trier', 'Amonel']) assert.ok(description.includes(word), word);
   assert.match(page, /<html lang="de" dir="ltr">/);
   assert.match(page, /<link rel="canonical" href="https:\/\/ahmadreza\.de\/">/);
-  assert.equal(meta('name', 'robots'), 'index,follow');
+  assert.equal(meta('name', 'robots'), 'index,follow,max-image-preview:large');
 });
 
 test('soon SEO: the name is visible text - h1, a Persian line marked fa and rtl, an English line - never hidden', () => {

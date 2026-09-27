@@ -44,6 +44,25 @@ export interface PersonCopy {
    * reused as-is for an AboutPage node about the Person. Absent elsewhere.
    */
   aboutPage?: { name: string; description: string };
+  /**
+   * Amonel OS, the desktop (queue 2026-09-28 A1 item 2): a CreativeWork the
+   * visible `hasPart` of the Amonel brand points at, never a
+   * SoftwareApplication (nothing is installed) and never rated.
+   */
+  amonelOs?: { url: string; name: string; description: string };
+  /**
+   * The journey (queue 2026-09-28 A1 item 2): a LearningResource, its seven
+   * eras as CreativeWork nodes at their real `#era-N` anchors. `teaches` and
+   * each era's `about` are the same "one truth" sentences the page itself
+   * shows (`EraSection`), never new copy.
+   */
+  journey?: {
+    url: string;
+    name: string;
+    description: string;
+    inLanguage: string;
+    eras: readonly { index: number; name: string; about: string }[];
+  };
 }
 
 const PERSON_ID = `${SITE_URL}/#person`;
@@ -86,14 +105,49 @@ export function structuredData(copy: PersonCopy): JsonLd {
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
   };
+  const amonelOsId = copy.amonelOs ? `${copy.amonelOs.url}#amonelos` : undefined;
+  const journeyId = copy.journey ? `${copy.journey.url}#journey` : undefined;
   const brand: JsonLd = {
     '@type': 'CreativeWork',
     '@id': BRAND_ID,
     name: copy.siteName,
     url: `${SITE_URL}/`,
     creator: { '@id': PERSON_ID },
+    ...(amonelOsId || journeyId
+      ? { hasPart: [...(amonelOsId ? [{ '@id': amonelOsId }] : []), ...(journeyId ? [{ '@id': journeyId }] : [])] }
+      : {}),
   };
   const graph: JsonLd[] = [person, website, brand];
+  if (copy.amonelOs) {
+    graph.push({
+      '@type': 'CreativeWork',
+      '@id': amonelOsId,
+      name: copy.amonelOs.name,
+      description: copy.amonelOs.description,
+      url: copy.amonelOs.url,
+      creator: { '@id': PERSON_ID },
+    });
+  }
+  if (copy.journey) {
+    const eraIds = copy.journey.eras.map((era) => `${copy.journey!.url}#era-${era.index}`);
+    for (const [i, era] of copy.journey.eras.entries()) {
+      graph.push({ '@type': 'CreativeWork', '@id': eraIds[i], name: era.name, url: eraIds[i], about: era.about, isPartOf: { '@id': journeyId } });
+    }
+    graph.push({
+      '@type': 'LearningResource',
+      '@id': journeyId,
+      name: copy.journey.name,
+      description: copy.journey.description,
+      url: copy.journey.url,
+      inLanguage: copy.journey.inLanguage,
+      learningResourceType: 'interactive',
+      educationalLevel: 'beginner',
+      teaches: copy.journey.eras.map((era) => era.about),
+      creator: { '@id': PERSON_ID },
+      isPartOf: { '@id': BRAND_ID },
+      hasPart: eraIds.map((id) => ({ '@id': id })),
+    });
+  }
   if (portrait) {
     // AI-generated (DECISIONS 82): IPTC's term, as schema.org's
     // digitalSourceType expects it, next to the visible label on the page.

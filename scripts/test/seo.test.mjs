@@ -142,6 +142,56 @@ test('JSON-LD: an AboutPage only when asked for, about the Person, with the page
   assert.ok(!graph.some((node) => node['@type'] === 'ProfilePage'), 'the About page is no ProfilePage');
 });
 
+// Queue 2026-09-28 A1 item 2: Amonel OS and the journey as hasPart of the Amonel brand.
+test('JSON-LD: Amonel OS and the journey are hasPart of the Amonel CreativeWork, never a SoftwareApplication or rated', () => {
+  const base = { name: 'Ahmadreza Taheri', jobTitle: 'Job', knowsAbout: [], inLanguage: 'en', siteName: 'Amonel', image: { url: 'https://ahmadreza.de/og/ahmadreza-taheri-en.png', width: 1200, height: 630, alt: 'alt' }, description: 'd', pageUrl: 'https://ahmadreza.de/en/', isProfilePage: false };
+  const graphNoExtra = structuredData(base)['@graph'];
+  assert.ok(!graphNoExtra.some((node) => node['@type'] === 'LearningResource'), 'nothing added without the data');
+  const brandBare = graphNoExtra.find((node) => node['@type'] === 'CreativeWork' && node.name === 'Amonel');
+  assert.ok(!('hasPart' in brandBare), 'no hasPart without amonelOs/journey');
+
+  const copy = {
+    ...base,
+    amonelOs: { url: 'https://ahmadreza.de/en/desktop/', name: 'Amonel OS', description: 'Amonel OS desc' },
+    journey: {
+      url: 'https://ahmadreza.de/en/amonel/',
+      name: 'The Journey – Ahmadreza Taheri | Amonel',
+      description: 'Journey desc',
+      inLanguage: 'en',
+      eras: [
+        { index: 1, name: 'ENIAC', about: 'Text is numbers.' },
+        { index: 2, name: 'Batch', about: 'A computer hates waiting.' },
+      ],
+    },
+  };
+  const graph = structuredData(copy)['@graph'];
+  const person = graph.find((node) => node['@type'] === 'Person');
+  const brand = graph.find((node) => node['@type'] === 'CreativeWork' && node.name === 'Amonel');
+  const amonelOs = graph.find((node) => node['@id'] === 'https://ahmadreza.de/en/desktop/#amonelos');
+  const journey = graph.find((node) => node['@type'] === 'LearningResource');
+  const eraNodes = graph.filter((node) => node['@type'] === 'CreativeWork' && node.about);
+
+  assert.deepEqual(brand.hasPart, [{ '@id': amonelOs['@id'] }, { '@id': journey['@id'] }]);
+  assert.equal(amonelOs.name, 'Amonel OS');
+  assert.equal(amonelOs.url, 'https://ahmadreza.de/en/desktop/');
+  assert.deepEqual(amonelOs.creator, { '@id': person['@id'] });
+  assert.ok(!('aggregateRating' in amonelOs) && !('offers' in amonelOs), 'never rated or sold');
+
+  assert.equal(journey['@id'], 'https://ahmadreza.de/en/amonel/#journey');
+  assert.equal(journey.learningResourceType, 'interactive');
+  assert.equal(journey.educationalLevel, 'beginner');
+  assert.equal(journey.inLanguage, 'en');
+  assert.deepEqual(journey.teaches, ['Text is numbers.', 'A computer hates waiting.']);
+  assert.equal(eraNodes.length, 2);
+  assert.equal(eraNodes[0]['@id'], 'https://ahmadreza.de/en/amonel/#era-1');
+  assert.equal(eraNodes[0].url, 'https://ahmadreza.de/en/amonel/#era-1');
+  assert.equal(eraNodes[0].name, 'ENIAC');
+  assert.equal(eraNodes[0].about, 'Text is numbers.');
+  assert.deepEqual(eraNodes[0].isPartOf, { '@id': journey['@id'] });
+  assert.deepEqual(journey.hasPart, eraNodes.map((node) => ({ '@id': node['@id'] })));
+  assert.ok(!graph.some((node) => ['SoftwareApplication', 'WebApplication', 'Course', 'EducationalOrganization'].includes(node['@type'])), 'never these types');
+});
+
 test('built About pages: one AboutPage each, with the page title and description, no sameAs yet', { skip: !existsSync(new URL('../../out/about/index.html', import.meta.url)) }, () => {
   for (const [folder, lang] of [['about', 'de-DE'], ['en/about', 'en'], ['fa/about', 'fa']]) {
     const html = read(`out/${folder}/index.html`);

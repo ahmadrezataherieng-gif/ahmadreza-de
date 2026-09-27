@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 3 | 2 | 4 | 17.1 / 26 | 66 % |
 | `legal` | 14 | 1 | 4 | 34 / 46 | 74 % |
-| `seo` | 23 | 3 | 4 | 73.2 / 88 | 83 % |
+| `seo` | 24 | 3 | 4 | 75.2 / 90 | 84 % |
 | `launch` | 13 | 2 | 12 | 54.1 / 105 | 52 % |
-| **all** | 80 | 8 | 25 | 331.4 / 431 | **77 %** |
+| **all** | 81 | 8 | 25 | 333.4 / 433 | **77 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 24 | 32 |
-| **total** | **25** | **8** | **80** | **113** |
+| P2 | 7 | 1 | 25 | 33 |
+| **total** | **25** | **8** | **81** | **114** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -125,6 +125,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-18 | **External SEO checklists** (2026-09-26): `ext-seo-audit` and `ext-schema` from coreyhaines31/marketingskills at 5b2c000 (MIT), added under `.claude/skills/` as pinned, read-only Markdown checklists (scanned: no code, no installs); one read-only check of the built `out/` written to TODO.md "External SEO check 2026-09-26". Rules in CLAUDE.md; nothing fixed, no `src/` change. | done | P2 | Claude Code | - | XS | seo |
 | SEO-19 | **Apply the "fits our rules" findings of the external SEO check** (TODO.md "External SEO check 2026-09-26"): `og:locale` as `de_DE`/`en_US`/`fa_IR`, `dateModified` on the ProfilePage from the real last-commit date, optionally drop hreflang from the noindex legal pages; the owner decides the thin desktop pages and any wording (CONTENT_REVIEW entries). Person `image` and `sameAs` stay with OWN-03. **Done 2026-09-26 (queue 7, owner decisions, DECISIONS 81):** og:locale `de_DE`/`en_US`/`fa_IR`; Persian as `fa` everywhere (lang, hreflang, sitemap, JSON-LD, coming-soon); ProfilePage `dateModified` (last-commit date, the coming-soon pages their build date); no hreflang on the legal pages; the desktop pages carry a hidden static text naming every app, distinct de/en titles and fuller descriptions (CR-1119..1121); pinned by `seo-head.test.mjs`. | done | P2 | Claude Code + Ahmadreza | SEO-18 | S | seo |
 | SEO-20 | **dateModified format fix** (live Search Console error "Invalid date/time value for dateModified" on `/` and `/fa/`): the coming-soon page's `dateModified` was date-only (`values.DATE`, a bare `YYYY-MM-DD`), invalid for schema.org's date-time. **Done 2026-09-27 (queue 2026-09-28 A1 item 1):** `src/lib/last-change.ts` gets `toBerlinIso()`/`lastChangeIso()` (a full ISO 8601 date-time with the Europe/Berlin offset, from the last-commit date); the main site's layout and `build-soon.mjs` both use it now, so `dateModified` is the same real value in every language on both builds; the sitemap's `lastmod` stays date-only on purpose. Pinned by `seo-head.test.mjs` and `soon-seo.test.mjs`. | done | P1 | Claude Code | SEO-19 | XS | seo |
+| SEO-21 | **Amonel OS and the journey as hasPart of the Amonel CreativeWork, image previews.** **Done 2026-09-27 (queue 2026-09-28 A1 item 2):** `structuredData()` gains `amonelOs` (CreativeWork, never SoftwareApplication) and `journey` (LearningResource, its seven eras as CreativeWork nodes at their real `#era-N` anchors, `teaches` = the "one truth" sentences `EraSection.tsx` already shows) - both `hasPart` of the Amonel brand; every name/description reused from the page's own title, meta description or `os.brand`/`eras.*` copy, nothing new; no `aggregateRating`/`review`/`offers`, no `Course`/`EducationalOrganization`. Every indexed page (main site and the coming-soon page) now carries `max-image-preview:large` in its robots meta. Pinned by `seo.test.mjs`, `seo-head.test.mjs`, `soon-pages.test.mjs`, `soon-seo.test.mjs`. | done | P2 | Claude Code | SEO-19 | S | seo |
 | SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal

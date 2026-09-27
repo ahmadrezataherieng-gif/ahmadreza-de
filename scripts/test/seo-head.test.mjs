@@ -117,6 +117,18 @@ test('built out/: og:locale, hreflang, no fa-IR, legal pages without hreflang, d
     const lastmod = html('sitemap.xml').match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
     assert.ok(lastmod, 'the sitemap has its own lastmod');
   }
+  // Queue 2026-09-28 A1 item 2: the largest image preview on every indexed page; Amonel OS and the journey as hasPart of the Amonel brand.
+  for (const locale of LOCALES) {
+    for (const view of ['', 'amonel/', 'desktop/', 'about/']) {
+      assert.ok(html(`${prefix[locale]}${view}index.html`).includes('<meta name="robots" content="index, follow, max-image-preview:large"'), `${locale} ${view} max-image-preview`);
+    }
+  }
+  const graph = JSON.parse(html('index.html').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
+  const brand = graph.find((node) => node['@type'] === 'CreativeWork' && node.name === 'Amonel');
+  assert.deepEqual(brand.hasPart, [{ '@id': 'https://ahmadreza.de/desktop/#amonelos' }, { '@id': 'https://ahmadreza.de/amonel/#journey' }]);
+  const journey = graph.find((node) => node['@type'] === 'LearningResource');
+  assert.equal(journey.hasPart.length, 7, 'the seven eras');
+  assert.ok(!graph.some((node) => ['SoftwareApplication', 'WebApplication', 'Course', 'EducationalOrganization', 'AggregateRating'].includes(node['@type'])));
 });
 
 test('built soon/dist/: Persian as fa and a dateModified on every ProfilePage', (context) => {

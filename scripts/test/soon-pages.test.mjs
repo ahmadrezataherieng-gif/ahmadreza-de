@@ -40,7 +40,7 @@ test('soon pages: lang, dir, title, description and canonical are per language',
     assert.equal(description, SEO[locale.id].description);
     assert.ok(description.length >= 100 && description.length <= 160, `${locale.id} description is ${description.length} characters`);
     assert.ok(html.includes(`<link rel="canonical" href="https://ahmadreza.de/${locale.prefix}">`), `${locale.id} canonical`);
-    assert.equal(meta(html, 'name', 'robots'), 'index,follow');
+    assert.equal(meta(html, 'name', 'robots'), 'index,follow,max-image-preview:large');
     assert.doesNotMatch(html, /\{\{|@jsonld|@tokens|@alternates/);
   }
   // The Persian title carries the name in Persian script; the others the Latin name.
