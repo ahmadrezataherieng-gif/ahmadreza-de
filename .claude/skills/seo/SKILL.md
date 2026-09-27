@@ -75,10 +75,10 @@ never sees it.
 
 ### Images
 
-- The portrait file name should carry the name, e.g.
-  `ahmadreza-taheri-trier.webp`, with a full descriptive `alt` text. The owner
-  asked for `public/images/portrait.jpg` (queue B item 1), so that is the name
-  for now; renaming the files is an open owner choice in TODO.md.
+- The portrait's file names carry the name: `public/images/ahmadreza-taheri-portrait.jpg`
+  and its `-800`/`-480` JPEG and `-1200`/`-800`/`-480`/`-240` AVIF widths (renamed
+  2026-09-27, queue item 5; `portrait.test.mjs` pins the pattern), with a full
+  descriptive `alt` text.
 - The Open Graph image is **one** PNG or JPG at exactly **1200 × 630**. This,
   the portrait (see `landing-page` skill) and the brand icons are the only
   raster exceptions in the project - link previews in LinkedIn, WhatsApp and

@@ -37,6 +37,8 @@ test('portrait files: 4:5 progressive JPEGs in every srcset width, the full one 
 
 test('portrait: nothing from Photo/ is tracked, only the generated files are in public/images/', () => {
   const listed = Object.values(PORTRAIT.sources).flat().map((entry) => entry.src.replace('/images/', ''));
+  // The name in the file names, a small help for image search (queue 2026-09-27 item 5).
+  for (const name of listed) assert.match(name, /^ahmadreza-taheri-portrait(-\d+)?\.(jpg|avif)$/, name);
   assert.deepEqual(readdirSync(new URL('public/images/', root)).sort(), listed.sort());
   assert.match(read('.gitignore'), /^\/Photo\/$/m);
 });
@@ -51,7 +53,7 @@ test('portrait: every place that shows it goes through PortraitImage, which alwa
     for (const entry of readdirSync(new URL(dir, root), { withFileTypes: true })) {
       const path = `${dir}${entry.name}`;
       if (entry.isDirectory()) walk(`${path}/`);
-      else if (/\.tsx?$/.test(entry.name) && path !== 'src/components/ui/PortraitImage.tsx' && /PORTRAIT\.src|images\/portrait/.test(read(path)) && path !== 'src/content/profile.ts' && path !== 'src/lib/structured-data.ts') offenders.push(path);
+      else if (/\.tsx?$/.test(entry.name) && path !== 'src/components/ui/PortraitImage.tsx' && /PORTRAIT\.src|images\/(ahmadreza-taheri-)?portrait/.test(read(path)) && path !== 'src/content/profile.ts' && path !== 'src/lib/structured-data.ts') offenders.push(path);
     }
   };
   walk('src/');
@@ -93,7 +95,7 @@ test('JSON-LD: with the portrait, the Person has an image that is an ImageObject
   const person = graph.find((node) => node['@type'] === 'Person');
   const image = graph.find((node) => node['@id'] === person.image['@id']);
   assert.equal(image['@type'], 'ImageObject');
-  assert.equal(image.contentUrl, 'https://ahmadreza.de/images/portrait.jpg');
+  assert.equal(image.contentUrl, 'https://ahmadreza.de/images/ahmadreza-taheri-portrait.jpg');
   assert.equal(image.width, 1200);
   assert.equal(image.height, 1500);
   assert.equal(image.digitalSourceType, `https://cv.iptc.org/newscodes/digitalsourcetype/${AI_TERM}`);
@@ -108,8 +110,9 @@ test('portrait in the built pages: the landing and About pages of every language
   if (!existsSync(new URL('out/index.html', root))) return;
   for (const page of pages) {
     const html = read(`out/${page}`);
-    assert.match(html, /<source type="image\/avif" srcSet="\/images\/portrait-240\.avif 240w/, page);
-    assert.match(html, /<img src="\/images\/portrait\.jpg" srcSet="\/images\/portrait-480\.jpg 480w/, page);
+    assert.match(html, /<source type="image\/avif" srcSet="\/images\/ahmadreza-taheri-portrait-240\.avif 240w/, page);
+    assert.match(html, /<img src="\/images\/ahmadreza-taheri-portrait\.jpg" srcSet="\/images\/ahmadreza-taheri-portrait-480\.jpg 480w/, page);
+    assert.doesNotMatch(html, /\/images\/portrait/, `${page}: no old file name`);
     assert.match(html, /class="ao-portrait-ai/, page);
     assert.match(html, /"image":\{"@id":"https:\/\/ahmadreza\.de\/#portrait"\}/, page);
     assert.ok(html.includes(AI_TERM), page);

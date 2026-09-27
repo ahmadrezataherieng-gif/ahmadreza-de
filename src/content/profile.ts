@@ -18,21 +18,21 @@
  * made by `node scripts/portrait.mjs <source>`; the source is never committed.
  */
 export const PORTRAIT = {
-  src: '/images/portrait.jpg',
+  src: '/images/ahmadreza-taheri-portrait.jpg',
   width: 1200,
   height: 1500,
   /** Every file by format, smallest first; the `<picture>` offers AVIF and falls back to JPEG. */
   sources: {
     avif: [
-      { src: '/images/portrait-240.avif', width: 240 },
-      { src: '/images/portrait-480.avif', width: 480 },
-      { src: '/images/portrait-800.avif', width: 800 },
-      { src: '/images/portrait-1200.avif', width: 1200 },
+      { src: '/images/ahmadreza-taheri-portrait-240.avif', width: 240 },
+      { src: '/images/ahmadreza-taheri-portrait-480.avif', width: 480 },
+      { src: '/images/ahmadreza-taheri-portrait-800.avif', width: 800 },
+      { src: '/images/ahmadreza-taheri-portrait-1200.avif', width: 1200 },
     ],
     jpeg: [
-      { src: '/images/portrait-480.jpg', width: 480 },
-      { src: '/images/portrait-800.jpg', width: 800 },
-      { src: '/images/portrait.jpg', width: 1200 },
+      { src: '/images/ahmadreza-taheri-portrait-480.jpg', width: 480 },
+      { src: '/images/ahmadreza-taheri-portrait-800.jpg', width: 800 },
+      { src: '/images/ahmadreza-taheri-portrait.jpg', width: 1200 },
     ],
   },
   /** IPTC: made by a trained model (schema.org `digitalSourceType`, also in the files' XMP). */

@@ -23,7 +23,7 @@ a recruiter judges in three seconds and Google reads first.
   link, the language switcher, and a restrained timeline hint that does not
   reveal any era.
 - **The portrait** (since 2026-09-26, DECISIONS 82): the owner's AI-generated
-  image, `public/images/portrait.jpg` (4:5, 1200 × 1500) plus smaller JPEG and
+  image, `public/images/ahmadreza-taheri-portrait.jpg` (4:5, 1200 × 1500) plus smaller JPEG and
   AVIF widths from `node scripts/portrait.mjs <source>` - the one allowed raster
   asset. Always rendered through `components/ui/PortraitImage.tsx` (landing
   frame, About header), which draws the AI label inside the frame; nothing

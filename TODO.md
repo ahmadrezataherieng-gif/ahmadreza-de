@@ -34,9 +34,8 @@ ROADMAP.md: 112 items, 79 done, 8 in progress, 25 to do - weighted progress **77
   owner's chosen AI-generated image, with the AI label in every frame. To
   replace it later, run `node scripts/portrait.mjs "<new source>"`; with a real
   photo, remove the label and the AI markings (see the `deployment-legal`
-  skill). **Open choice (SEO, small):** the file names are `portrait*.jpg` as
-  asked; the `seo` skill prefers the name in them (`ahmadreza-taheri-*.jpg`),
-  a slight help for image search. Default taken: `portrait.jpg`.
+  skill). ~~Open choice: file names~~ - done 2026-09-27 (queue 2026-09-27
+  item 5, owner's go): the files are `ahmadreza-taheri-portrait*.jpg/avif`.
 - **Résumé PDF.** Put it at `public/files/ahmadreza-taheri-lebenslauf.pdf`, then
   set `RESUME.available = true` in `src/content/profile.ts`. Until then the
   controls (header corner and under the role) show "Lebenslauf folgt in Kürze"

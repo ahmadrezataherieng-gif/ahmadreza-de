@@ -4,7 +4,7 @@
 //
 // The source stays outside git (Photo/ is ignored; only the outputs are
 // committed). Output, all 4:5 and cropped from the centre:
-// - portrait.jpg at 1200 x 1500 (PORTRAIT.src in src/content/profile.ts, the
+// - ahmadreza-taheri-portrait.jpg at 1200 x 1500 (PORTRAIT.src in src/content/profile.ts, the
 //   JSON-LD image and the fallback) plus 800 and 480 wide, progressive mozjpeg;
 // - AVIF at 240, 480, 800 and 1200 wide, which the <picture> offers first.
 // A phone at DPR 1 fetches the 4 kB AVIF instead of a 23 kB JPEG for its
@@ -42,13 +42,13 @@ const XMP = [
 
 // [width, file name, format]; the heights follow from 4:5.
 const FILES = [
-  [1200, 'portrait.jpg', 'jpeg'],
-  [800, 'portrait-800.jpg', 'jpeg'],
-  [480, 'portrait-480.jpg', 'jpeg'],
-  [1200, 'portrait-1200.avif', 'avif'],
-  [800, 'portrait-800.avif', 'avif'],
-  [480, 'portrait-480.avif', 'avif'],
-  [240, 'portrait-240.avif', 'avif'],
+  [1200, 'ahmadreza-taheri-portrait.jpg', 'jpeg'],
+  [800, 'ahmadreza-taheri-portrait-800.jpg', 'jpeg'],
+  [480, 'ahmadreza-taheri-portrait-480.jpg', 'jpeg'],
+  [1200, 'ahmadreza-taheri-portrait-1200.avif', 'avif'],
+  [800, 'ahmadreza-taheri-portrait-800.avif', 'avif'],
+  [480, 'ahmadreza-taheri-portrait-480.avif', 'avif'],
+  [240, 'ahmadreza-taheri-portrait-240.avif', 'avif'],
 ];
 
 for (const [width, name, format] of FILES) {
