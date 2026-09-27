@@ -19,6 +19,9 @@ const eslintConfig = [
       ".wrangler/**",
       "build/**",
       "next-env.d.ts",
+      // Git-ignored working folders (throwaway generators, never shipped).
+      "Claude outputs/**",
+      "Bearbeitung/**",
     ],
   },
 ];

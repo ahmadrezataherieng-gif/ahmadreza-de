@@ -2,6 +2,11 @@
 // slow line and as a desktop would see them.
 //
 //   node scripts/verify/vitals.mjs [--locale de] [--base URL] [--runs 3] [--quiet]
+//                                  [--profile phone|desktop] [--view journey] [--samples]
+//
+// --profile and --view narrow the run to one profile or view; --samples also
+// prints every run, for interleaved A/B pairs of two exports (DECISIONS 83:
+// on this machine only alternating pairs compare, never runs minutes apart).
 //
 // Two profiles: "phone" (380 x 800, touch, 4x CPU slowdown, 1.6 Mbit/s down,
 // 150 ms latency - Lighthouse's slow-4G shape) and "desktop" (1280 x 800, no
@@ -25,6 +30,9 @@ const LOCALE = args.locale ?? 'de';
 const BASE = args.base ?? 'http://localhost:3001';
 const RUNS = Number(args.runs ?? 3);
 const QUIET = Boolean(args.quiet);
+const ONLY_PROFILE = typeof args.profile === 'string' ? args.profile : null;
+const ONLY_VIEW = typeof args.view === 'string' ? args.view : null;
+const SAMPLES = Boolean(args.samples);
 const PREFIX = LOCALE === 'de' ? '' : `/${LOCALE}`;
 
 const PROFILES = {
@@ -60,7 +68,9 @@ const median = (values) => {
 const results = [];
 let failed = 0;
 for (const [profileName, profile] of Object.entries(PROFILES)) {
+  if (ONLY_PROFILE && profileName !== ONLY_PROFILE) continue;
   for (const [view, path] of VIEWS) {
+    if (ONLY_VIEW && view !== ONLY_VIEW) continue;
     const samples = [];
     for (let run = 0; run < RUNS; run++) {
       const b = await launch({ width: profile.width, height: profile.height, touch: profile.touch, tag: `vitals-${profileName}-${view}-${run}` });
@@ -76,6 +86,7 @@ for (const [profileName, profile] of Object.entries(PROFILES)) {
       const v = await b.evaluate(`window.__vitals`);
       const tbt = (v.longTasks ?? []).filter(([start]) => v.fcp === null || start >= v.fcp).reduce((sum, [, duration]) => sum + Math.max(0, duration - 50), 0);
       samples.push({ fcp: v.fcp ?? NaN, lcp: v.lcp ?? NaN, cls: v.cls, tbt });
+      if (SAMPLES) console.log(`  run ${run + 1} ${profileName} ${view} FCP ${Math.round(v.fcp)} LCP ${Math.round(v.lcp)} CLS ${v.cls.toFixed(3)} TBT ${Math.round(tbt)}`);
       b.close();
     }
     const row = {

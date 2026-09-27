@@ -1,8 +1,19 @@
 # Project state
 
-Last updated: 2026-09-26 (work queue B done: portrait with AI label, logo round 2, journey TBT, docs; nothing deployed - see "Work queue 2026-09-26 B" and TODO.md "Everything still open")
+Last updated: 2026-09-27 (work queue 2026-09-27 in progress, see below; nothing deployed)
 
 **External SEO checklists (2026-09-26, ROADMAP SEO-18/19):** `.claude/skills/ext-seo-audit/` and `ext-schema/` (coreyhaines31/marketingskills at 5b2c000, MIT, plain Markdown, read-only, pinned; CLAUDE.md says they never override our rules); one read-only check of `out/` is in TODO.md "External SEO check 2026-09-26" (1 P1 waiting for the owner's portrait and profiles, 8 P2 fits, the rest skipped as conflicts); nothing fixed, no `src/` change, nothing deployed.
+
+## Work queue 2026-09-27 (resume with "continue the work queue 2026-09-27")
+
+Rules: as queue B (in order; after every item `npm test`, `npm run lint`, `npm run build` if `src/` changed, tick the box, `node scripts/roadmap.mjs --write`, update this file, one commit, push; no questions, open decisions to TODO.md with the safe default; the look must not change - before/after screenshots or pixel comparison). **No deploys of any kind.** Performance is measured only as interleaved A/B pairs (at least 5) against the export of the commit before, served side by side (`vitals.mjs --profile phone --view journey --runs 1 --samples` now narrows a run to one view and prints each run).
+
+- [x] 1. **Done 2026-09-27 (DECISIONS 84).** `components/journey/scroll-engine.ts` loads GSAP and ScrollTrigger once the resolver has set up (two chunks, each its own task); Lenis is a dynamic import on fine pointers only; until ScrollTrigger connects, native scroll and width-changing resize events drive the resolver. New: the first resolve writes only the sections on screen and the rest one per frame (the load's whole-journey restyle, ~85 ms style + 30 ms layout, is gone). Fixed on the way: an `innerWidth` read after the writes forced a 157 ms restyle. **Phone journey TBT, interleaved pairs against the export of 3e9235c:** `vitals.mjs` seven pairs 116/301/236/226/165/224/112 -> 90/228/130/72/71/91/107 ms (median 224 -> 91, mean 197 -> 113; within 200 ms in 6 of 7 runs, was 3 of 7); `load-tasks.mjs --slow` five pairs 150/256/132/194/271 -> 75/77/97/77/88 ms (median 194 -> 77, mean 201 -> 83). LCP, CLS and the desktop profile unchanged. Look: 36 crossing frames (390 and 1280) from both builds, 34 byte-identical, 2 animation-phase noise (a re-shot matches); `journey.mjs` 10, `navigation.mjs` 4, `desktop.mjs` 5 configurations, `boundaries.mjs` 1280/380, `toolbar.mjs` phone/tablet, `apps.mjs` 380 fa all pass; 270 tests; lint clean (eslint now ignores the git-ignored `Claude outputs/` and `Bearbeitung/`). Screenshots `Claude outputs/q927-1/`. `vitals.mjs` got `--profile`, `--view` and `--samples`. Original wording: Journey TBT (PERF-02, TODO.md "Queue B 3"): lazy Lenis on fine pointers only, GSAP after the first frames, and any other safe step; interleaved before/after pairs (at least 5), median and mean. Goal: the 200 ms phone budget met reliably.
+- [ ] 2. Phone desktop LCP (PERF-09): measure again as interleaved pairs; if over 2.5 s, preload or split the shell chunk.
+- [ ] 3. Convergence miniature text under the phone's bottom chrome for two frames (TODO.md "Queue 2"): fix only if the hand-over frame to the desktop stays pixel-identical; otherwise record why not.
+- [ ] 4. Structured data: a WebPage/AboutPage node for the About pages (TODO.md "External SEO check", P2); `sameAs` stays empty until the owner's profiles arrive.
+- [ ] 5. Portrait file names: `ahmadreza-taheri-portrait*.jpg/avif` (TODO.md "Assets Ahmadreza owes"), every reference, JSON-LD and tests updated.
+- [ ] 6. Full final check: `matrix.mjs`, a11y, cross-browser WebKit, vitals; real bugs fixed (one commit each); then ROADMAP, PROJECT_STATE and TODO.md "Everything still open".
 
 ## Work queue 2026-09-26 B (resume with "continue the work queue B")
 

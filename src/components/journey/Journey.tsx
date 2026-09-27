@@ -3,10 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
-
 import { eras, type EraId } from '@/content/eras';
 import { useJourneyStore } from '@/store/journey-store';
 import { useThemeStore } from '@/store/theme-store';
@@ -27,6 +23,7 @@ import { JourneyProgress } from '@/components/journey/JourneyProgress';
 import { SkipToDesktop } from '@/components/journey/SkipToDesktop';
 import { ModeSwitch } from '@/components/journey/ModeSwitch';
 import { leaveForDesktop } from '@/components/journey/hand-over';
+import { loadScrollEngine, loadedScrollEngine, type ScrollEngine } from '@/components/journey/scroll-engine';
 import { JOURNEY_SCENES_ID } from '@/components/puzzles/hold';
 import { gateBottom, isGateActive, measureGates, tickGate } from '@/components/puzzles/gate';
 // Renders nothing on the server (its copy loads lazily), so no hydration risk.
@@ -37,8 +34,6 @@ import { useIntentPrefetch } from '@/lib/intent-prefetch';
 import type { Locale } from '@/lib/i18n-config';
 import { count } from '@/lib/count';
 import { JOURNEY_COMPLETED } from '@/lib/counters';
-
-gsap.registerPlugin(ScrollTrigger);
 
 /** Everything in the eras that scrubs on `--arrival` (globals.css). */
 const ARRIVAL_READERS = '.ao-crt-beam, .ao-crt-screen, .ao-mac-lights, .ao-mac-screen';
@@ -135,32 +130,47 @@ export function Journey() {
     // main thread, and Lenis on a touch device only adds a per-frame loop and
     // class toggles on <html> (PERF-02). ScrollTrigger and the resolver listen
     // to the native scroll event, exactly as under reduced motion.
+    // So Lenis is loaded on fine pointers only, in its own chunk, together with
+    // the GSAP ticker that drives it; until it arrives the wheel scrolls natively.
     if (window.matchMedia('(pointer: coarse)').matches) return;
 
-    // allowNestedScroll: a puzzle card that overflows scrolls natively while it
-    // can, then hands the wheel back to the page. Marking the card's container
-    // data-lenis-prevent instead made the wheel dead over every pinned stage,
-    // because that container covers the stage even while it is invisible.
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true, allowNestedScroll: true });
-    setActiveLenis(lenis);
+    let stop: (() => void) | undefined;
+    let cancelled = false;
+    void Promise.all([import('lenis'), loadScrollEngine()])
+      .then(([{ default: Lenis }, { gsap, ScrollTrigger }]) => {
+        if (cancelled) return;
+        // allowNestedScroll: a puzzle card that overflows scrolls natively while it
+        // can, then hands the wheel back to the page. Marking the card's container
+        // data-lenis-prevent instead made the wheel dead over every pinned stage,
+        // because that container covers the stage even while it is invisible.
+        const lenis = new Lenis({ duration: 1.1, smoothWheel: true, allowNestedScroll: true });
+        setActiveLenis(lenis);
 
-    // Lenis owns the scroll position and does not emit native scroll events, so
-    // ScrollTrigger would never learn that the page moved. Ticking it from the
-    // same rAF that drives Lenis covers every way the page can move - wheel,
-    // touch, in-page anchors, keyboard - with one cheap call per frame.
-    const raf = (time: number) => {
-      lenis.raf(time * 1000);
-      tickerDepth += 1;
-      ScrollTrigger.update();
-      tickerDepth -= 1;
-    };
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
+        // Lenis owns the scroll position and does not emit native scroll events, so
+        // ScrollTrigger would never learn that the page moved. Ticking it from the
+        // same rAF that drives Lenis covers every way the page can move - wheel,
+        // touch, in-page anchors, keyboard - with one cheap call per frame.
+        const raf = (time: number) => {
+          lenis.raf(time * 1000);
+          tickerDepth += 1;
+          ScrollTrigger.update();
+          tickerDepth -= 1;
+        };
+        gsap.ticker.add(raf);
+        gsap.ticker.lagSmoothing(0);
+
+        stop = () => {
+          gsap.ticker.remove(raf);
+          lenis.destroy();
+          setActiveLenis(null);
+        };
+      })
+      // Without Lenis the page scrolls natively, as on a phone.
+      .catch(() => undefined);
 
     return () => {
-      gsap.ticker.remove(raf);
-      lenis.destroy();
-      setActiveLenis(null);
+      cancelled = true;
+      stop?.();
     };
   }, [reducedMotion]);
 
@@ -529,7 +539,7 @@ export function Journey() {
      * states, and a stale value left the resolver - and the theme, the puzzle
      * progress and the crossings - behind the page.
      */
-    const resolve = () => {
+    const resolve = (deferOffScreen = false) => {
       if (bounds.length === 0) return;
       const scrollY = window.scrollY;
       const viewport = viewportHeight;
@@ -562,6 +572,46 @@ export function Journey() {
       }
 
       for (const entry of bounds) {
+        if (deferOffScreen && isOffScreen(entry, scrollY, viewport)) {
+          later.push(entry.key);
+          continue;
+        }
+        applyTo(entry, scrollY, viewport, hit.key, atPageEnd);
+      }
+      if (later.length > 0) writeLater();
+    };
+
+    /**
+     * The first pass after load writes only the sections on screen (PERF-02).
+     * Written all at once, the values of the seven sections below restyled
+     * the whole journey in the next frame (about 85 ms of style and 30 ms of
+     * layout on the phone profile). Off screen they change nothing visible, so
+     * they follow one per frame. Any resolve in between - a scroll, a refresh -
+     * writes every section as usual, which leaves nothing for these to do.
+     */
+    const later: string[] = [];
+    let laterFrame = 0;
+    let laterTimer = 0;
+    const writeLater = () => {
+      laterFrame = requestAnimationFrame(() => {
+        laterTimer = window.setTimeout(() => {
+          const key = later.shift();
+          const entry = bounds.find((candidate) => candidate.key === key);
+          // Read before any write, like resolve(); the frame has just laid out.
+          const scrollY = window.scrollY;
+          if (entry) applyTo(entry, scrollY, viewportHeight, activeKey, false);
+          if (later.length > 0) writeLater();
+        }, 0);
+      });
+    };
+
+    /** Off screen by the measured box, so this reads no layout. */
+    function isOffScreen(entry: EraBounds, scrollY: number, viewport: number) {
+      return entry.top >= scrollY + viewport || entry.top + entry.height <= scrollY;
+    }
+
+    /** Writes one section's values where they are read, each only on change. */
+    function applyTo(entry: EraBounds, scrollY: number, viewport: number, hitKey: string | null, atPageEnd: boolean) {
         const values = progressOf(entry, scrollY, viewport);
         const progress = values.era;
         const { scene, camera, backdrop, bridge, layer } = entry.targets;
@@ -633,7 +683,7 @@ export function Journey() {
         // flicker) are paused (globals.css). Running, they restyled hundreds of
         // elements every frame wherever the visitor was (DECISIONS.md 48). From
         // the measured box, so this reads no layout.
-        const offScreen = entry.top >= scrollY + viewport || entry.top + entry.height <= scrollY;
+        const offScreen = isOffScreen(entry, scrollY, viewport);
         if (offScreen !== entry.last.offScreen) {
           entry.last.offScreen = offScreen;
           entry.section.toggleAttribute('data-off-screen', offScreen);
@@ -650,7 +700,7 @@ export function Journey() {
         }
         // Set once, never cleared: a printout that has begun always finishes.
         if (
-          entry.key === hit.key &&
+          entry.key === hitKey &&
           progress >= entry.startAt &&
           entry.section.dataset.started !== 'true'
         ) {
@@ -673,8 +723,7 @@ export function Journey() {
           container.dataset.handover = '';
           window.setTimeout(() => leaveForDesktop(desktopHref, { replace: true }), HAND_OVER_MS);
         }
-      }
-    };
+    }
 
     // Never write inside a native scroll event (PERF-02, DECISIONS.md 67).
     // ScrollTrigger's listener sits on the document and runs before Lenis's
@@ -699,29 +748,62 @@ export function Journey() {
 
     // Measure once the first frame has settled, so era heights are final. The
     // layout is clean here, so this costs little.
+    // The width is read first: read after resolve()'s writes, innerWidth forced
+    // the restyle of the whole journey into this task (157 ms on the phone profile).
+    let interimWidth = window.innerWidth;
     measure();
-    resolve();
+    resolve(true);
 
-    // Connect the trigger and the observers one frame later. resolve() has
-    // just written the first progress values; ScrollTrigger's first init reads
-    // a computed style, which would force the restyle of the whole journey
-    // into this task (about 70 ms on the phone profile). After a frame the
-    // browser has done that restyle in its own rendering step.
+    // Until ScrollTrigger is connected, native scroll and resize events drive
+    // the resolver, as ScrollTrigger's own listeners do later. Like them, a
+    // phone toolbar's height change (same width) is no reason to re-measure.
+    const interim = () => {
+      if (window.innerWidth === interimWidth) return;
+      interimWidth = window.innerWidth;
+      measure();
+      resolve();
+    };
+    window.addEventListener('scroll', scheduleResolve, { passive: true });
+    window.addEventListener('resize', interim, { passive: true });
+    const stopInterim = () => {
+      window.removeEventListener('scroll', scheduleResolve);
+      window.removeEventListener('resize', interim);
+    };
+
+    // Load GSAP now, after the first frames, and connect the trigger and the
+    // observers a frame after it arrives. resolve() has just written the first
+    // progress values; ScrollTrigger's first init reads a computed style, which
+    // would force the restyle of the whole journey into this task (about 70 ms
+    // on the phone profile). After a frame the browser has done that restyle
+    // in its own rendering step.
     let disconnect: (() => void) | undefined;
     let connectTimer = 0;
-    const connectFrame = requestAnimationFrame(() => {
-      connectTimer = window.setTimeout(() => {
-        disconnect = connect();
-      }, 0);
-    });
+    let connectFrame = 0;
+    let stopped = false;
+    void loadScrollEngine()
+      .then((scrollEngine) => {
+        if (stopped) return;
+        connectFrame = requestAnimationFrame(() => {
+          connectTimer = window.setTimeout(() => {
+            stopInterim();
+            disconnect = connect(scrollEngine);
+          }, 0);
+        });
+      })
+      // No GSAP: the interim listeners keep the journey working.
+      .catch(() => undefined);
     return () => {
+      stopped = true;
+      stopInterim();
       cancelAnimationFrame(connectFrame);
       window.clearTimeout(connectTimer);
       cancelAnimationFrame(resolveFrame);
+      cancelAnimationFrame(laterFrame);
+      window.clearTimeout(laterTimer);
       disconnect?.();
     };
 
-    function connect(): () => void {
+    function connect({ gsap, ScrollTrigger }: ScrollEngine): () => void {
     const context = gsap.context(() => {
       ScrollTrigger.create({
         trigger: container,
@@ -840,8 +922,9 @@ export function Journey() {
   }, [reducedMotion]);
 
   /* --- reduced motion changes whether stages pin, so heights change ------ */
+  // Before GSAP has loaded there is nothing to refresh: connecting measures.
   useEffect(() => {
-    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const frame = requestAnimationFrame(() => loadedScrollEngine()?.ScrollTrigger.refresh());
     return () => cancelAnimationFrame(frame);
   }, [reducedMotion]);
 
