@@ -188,7 +188,7 @@ const about = async () => {
       heading: root.querySelector('h2')?.textContent ?? '',
       sections: [...root.querySelectorAll('h3')].filter((h) => !h.closest('[data-visitor-stats]')).length,
       placeholders: root.querySelectorAll('[data-placeholder]').length,
-      resumeLink: root.querySelectorAll('a[download]').length,
+      resumeLink: root.querySelectorAll('a[data-action="resume-download"]').length,
       resumePending: !!root.querySelector('[data-action="resume-pending"]'),
       mail: root.querySelector('a[href^="mailto:"]')?.getAttribute('href') ?? null,
       dir: getComputedStyle(root).direction,
@@ -521,7 +521,9 @@ async function assistantStaysOutOfStaticHtml() {
   // One name was already there before Phase 8: the mount point's attribute. The teaser adds nothing named so.
   const names = (html.journey.match(/assistant/gi) ?? []).length;
   check('journey: the assistant adds nothing to its HTML', names === 1 && !/gemini/i.test(html.journey), { names });
-  check('landing page and journey: nothing of the quiz in their HTML', !/quiz/i.test(html.landing) && !/quiz/i.test(html.journey));
+  // "Computer-Quiz" is the app's name in the AmonelOS structured-data description on every page; only a bare "quiz" outside that name would leak the interactive quiz.
+  const bareQuiz = (text) => /quiz/i.test(text.replace(/computer-quiz/gi, ''));
+  check('landing page and journey: nothing of the quiz in their HTML', !bareQuiz(html.landing) && !bareQuiz(html.journey));
   check('journey: the teaser box is an empty slot', /data-slot="prompt-line"[^>]*><\/div>/.test(html.journey));
 }
 
