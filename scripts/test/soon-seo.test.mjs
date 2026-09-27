@@ -101,15 +101,17 @@ test('soon SEO: robots.txt welcomes every crawler and names the sitemap; the sit
 test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages with their share images and JSON-LD; the legal pages are noindex', (context) => {
   if (!exists('soon/dist/index.html')) return context.skip('run npm run build:soon first');
   const dist = (path) => read(`soon/dist/${path}`);
-  // The ProfilePage carries the build date as dateModified, the same as the sitemap's lastmod (queue 7c).
-  const built = dist('sitemap.xml').match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+  // The sitemap's lastmod stays a build date; the ProfilePage's dateModified is the last commit date instead (queue 2026-09-28 A1 item 1, seo-head.test.mjs).
   assert.equal(dist('robots.txt'), read('public/robots.txt'));
   assert.deepEqual([...dist('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
   for (const [folder, id, image] of [['', 'de', 'ahmadreza-taheri-de'], ['en/', 'en', 'ahmadreza-taheri-en'], ['fa/', 'fa', 'ahmadreza-taheri-fa']]) {
     assert.ok(exists('soon/dist/og/' + image + '.png'), image);
     const html = dist(folder + 'index.html');
     const inner = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
-    assert.deepEqual(JSON.parse(inner), graphJsonLd(id, built), id);
+    const built = JSON.parse(inner);
+    const dateModified = built['@graph'].find((node) => node['@type'] === 'ProfilePage')?.dateModified;
+    assert.match(dateModified ?? '', /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, `${id} dateModified`);
+    assert.deepEqual(built, graphJsonLd(id, dateModified), id);
     assert.ok(html.includes('<html lang="' + id + '"'), id);
     assert.doesNotMatch(html, /\{\{|@jsonld|@tokens|@alternates/, 'nothing left unfilled');
     assert.doesNotMatch(html, /Momrabadi/);

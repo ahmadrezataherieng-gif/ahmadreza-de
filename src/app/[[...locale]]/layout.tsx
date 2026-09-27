@@ -6,7 +6,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { EraEffectsLayer } from '@/components/theme/EraEffectsLayer';
 import { dirForLocale, htmlLang, locales, ogLocale, type Locale } from '@/lib/i18n-config';
-import { lastChange } from '@/lib/last-change';
+import { lastChangeIso } from '@/lib/last-change';
 import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/routing';
 import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
@@ -206,8 +206,8 @@ export default async function LocaleLayout({
             description: tSite('description'),
             pageUrl: `${SITE_URL}${viewHref(locale, view)}`,
             isProfilePage: view === 'landing',
-            // The same real date as the sitemap's lastmod (queue 7c).
-            dateModified: lastChange()?.toISOString(),
+            // A full ISO 8601 date-time in Europe/Berlin, not the sitemap's date-only value (queue 2026-09-28 A1 item 1).
+            dateModified: lastChangeIso(),
             // The Person's image, marked as AI-made (DECISIONS 82).
             portrait: { caption: (await getTranslations({ locale, namespace: 'landing' }))('portraitAlt') },
             // The About pages: an AboutPage node with the page's own title and

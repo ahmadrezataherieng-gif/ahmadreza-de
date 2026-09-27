@@ -14,6 +14,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
 import { ensureLegalAddress } from './legal-address.mjs';
+import { lastChangeIso } from '../src/lib/last-change.ts';
 import { AREAS } from './roadmap.mjs';
 import { fillPlaceholders, progressValues } from './soon-progress.mjs';
 import { renderLanding } from './soon-pages.mjs';
@@ -146,8 +147,8 @@ const filled = fillPlaceholders(readFileSync(new URL('soon/index.html', root), '
 for (const locale of locales) {
   const folder = new URL(locale.prefix, dist);
   mkdirSync(folder, { recursive: true });
-  // The page changes with every build (the progress and its date), so the build date is its real dateModified.
-  writeFileSync(new URL('index.html', folder), renderLanding(filled, locale.id, undefined, values.DATE));
+  // The last real commit date, not the build date (queue 2026-09-28 A1 item 1): a full ISO 8601 date-time in Europe/Berlin, same source as the main site.
+  writeFileSync(new URL('index.html', folder), renderLanding(filled, locale.id, undefined, lastChangeIso()));
 }
 console.log(`progress: ${values['all.percent']} % (${AREAS.map((area) => `${area} ${values[`${area}.percent`]} %`).join(', ')})`);
 

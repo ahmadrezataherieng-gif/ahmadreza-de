@@ -9,6 +9,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { htmlLang, ogLocale } from '../../src/lib/i18n-config.ts';
+import { toBerlinIso } from '../../src/lib/last-change.ts';
 import { structuredData } from '../../src/lib/structured-data.ts';
 import { graphJsonLd } from '../soon-seo.mjs';
 
@@ -44,12 +45,24 @@ test('7b: Persian is plain `fa` for every Persian speaker - lang, hreflang, inLa
 
 test('7c: the ProfilePage carries dateModified only when a real date is known', () => {
   const page = (extra) => structuredData({ ...copy, ...extra })['@graph'].find((node) => node['@type'] === 'ProfilePage');
-  assert.equal(page({ dateModified: '2026-09-26T10:00:00.000Z' }).dateModified, '2026-09-26T10:00:00.000Z');
+  assert.equal(page({ dateModified: '2026-09-26T10:00:00+02:00' }).dateModified, '2026-09-26T10:00:00+02:00');
   assert.ok(!('dateModified' in page({})), 'no date, no field - never an invented one');
-  assert.equal(graphJsonLd('de', '2026-09-26')['@graph'].find((node) => node['@type'] === 'ProfilePage').dateModified, '2026-09-26');
+  assert.equal(graphJsonLd('de', '2026-09-26T10:00:00+02:00')['@graph'].find((node) => node['@type'] === 'ProfilePage').dateModified, '2026-09-26T10:00:00+02:00');
   const layout = read('src/app/[[...locale]]/layout.tsx');
-  assert.match(layout, /dateModified: lastChange\(\)\?\.toISOString\(\)/);
-  assert.match(read('src/app/sitemap.ts'), /import \{ lastChange \} from '@\/lib\/last-change'/, 'the sitemap and the ProfilePage share one date');
+  assert.match(layout, /dateModified: lastChangeIso\(\)/);
+  assert.match(read('src/app/sitemap.ts'), /import \{ lastChange \} from '@\/lib\/last-change'/, 'the sitemap keeps the date-only lastmod');
+  assert.match(read('scripts/build-soon.mjs'), /renderLanding\(filled, locale\.id, undefined, lastChangeIso\(\)\)/, 'soon/ shares the same date source');
+});
+
+// Queue 2026-09-28 A1 item 1: a live Search Console error ("Invalid date/time
+// value for dateModified") traced to the coming-soon build date-only string;
+// dateModified must be a full ISO 8601 date-time with an offset everywhere.
+const ISO_DATETIME_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/;
+test('1: dateModified is a full ISO 8601 date-time with an offset, never a bare date', () => {
+  assert.match(toBerlinIso(new Date('2026-09-27T08:00:00Z')), ISO_DATETIME_WITH_OFFSET, 'CEST (summer)');
+  assert.equal(toBerlinIso(new Date('2026-09-27T08:00:00Z')), '2026-09-27T10:00:00+02:00');
+  assert.match(toBerlinIso(new Date('2026-01-15T08:00:00Z')), ISO_DATETIME_WITH_OFFSET, 'CET (winter)');
+  assert.equal(toBerlinIso(new Date('2026-01-15T08:00:00Z')), '2026-01-15T09:00:00+01:00');
 });
 
 test('7e: the desktop text for search engines exists in every language, stays on the server, and names every app', () => {
@@ -98,11 +111,11 @@ test('built out/: og:locale, hreflang, no fa-IR, legal pages without hreflang, d
     assert.ok(desktop.includes(seo.heading), `${locale} desktop text is in the HTML`);
   }
   const modified = html('index.html').match(/"dateModified":"([^"]+)"/)?.[1];
-  assert.match(modified ?? '', /^\d{4}-\d{2}-\d{2}T/, 'the ProfilePage carries a dateModified');
-  // The private preview's export has no sitemap on purpose (PROJECT_STATE "Private preview").
+  assert.match(modified ?? '', ISO_DATETIME_WITH_OFFSET, 'the ProfilePage carries a full ISO 8601 dateModified with an offset');
+  // The sitemap's lastmod may stay date-only (queue 2026-09-28 A1 item 1); the two are no longer required to match verbatim.
   if (exists('out/sitemap.xml')) {
     const lastmod = html('sitemap.xml').match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
-    assert.equal(modified, lastmod, `ProfilePage dateModified ${modified} = sitemap lastmod ${lastmod}`);
+    assert.ok(lastmod, 'the sitemap has its own lastmod');
   }
 });
 
@@ -112,6 +125,6 @@ test('built soon/dist/: Persian as fa and a dateModified on every ProfilePage', 
     const page = read(`soon/dist/${folder}index.html`);
     assert.doesNotMatch(page, /fa-IR/, folder || 'de');
     const graph = JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
-    assert.match(graph.find((node) => node['@type'] === 'ProfilePage').dateModified ?? '', /^\d{4}-\d{2}-\d{2}$/, `${folder || 'de'} dateModified`);
+    assert.match(graph.find((node) => node['@type'] === 'ProfilePage').dateModified ?? '', ISO_DATETIME_WITH_OFFSET, `${folder || 'de'} dateModified`);
   }
 });
