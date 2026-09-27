@@ -98,11 +98,14 @@ test('built out/: og:locale, hreflang, no fa-IR, legal pages without hreflang, d
       assert.deepEqual([...page.matchAll(/<link rel="alternate" hrefLang="([^"]+)"/g)].map((match) => match[1]), ['de-DE', 'en', 'fa', 'x-default'], `${locale} ${view} hreflang`);
     }
     assert.ok(html(`${prefix[locale]}index.html`).includes(`<html lang="${htmlLang[locale]}"`), `${locale} lang`);
-    for (const view of ['impressum/', 'datenschutz/']) {
-      const page = html(`${prefix[locale]}${view}index.html`);
-      assert.doesNotMatch(page, /<link rel="alternate" hrefLang/, `${locale} ${view}: no hreflang on a noindex page`);
-      assert.match(page, /<link rel="canonical"/, `${locale} ${view} keeps its canonical`);
-    }
+    // The Impressum is indexable since the owner's go (queue 2026-09-28 A1 item 3, DECISIONS 87): hreflang and max-image-preview; the Datenschutz stays noindex, without hreflang.
+    const imprint = html(`${prefix[locale]}impressum/index.html`);
+    assert.deepEqual([...imprint.matchAll(/<link rel="alternate" hrefLang="([^"]+)"/g)].map((match) => match[1]), ['de-DE', 'en', 'fa', 'x-default'], `${locale} impressum hreflang`);
+    assert.ok(imprint.includes('<meta name="robots" content="index, follow, max-image-preview:large"'), `${locale} impressum robots`);
+    const privacy = html(`${prefix[locale]}datenschutz/index.html`);
+    assert.doesNotMatch(privacy, /<link rel="alternate" hrefLang/, `${locale} datenschutz: no hreflang on a noindex page`);
+    assert.match(privacy, /<meta name="robots" content="noindex, follow"/, `${locale} datenschutz stays noindex`);
+    assert.match(privacy, /<link rel="canonical"/, `${locale} datenschutz keeps its canonical`);
     // React separates adjacent text with <!-- -->; the reader sees one sentence.
     const desktop = html(`${prefix[locale]}desktop/index.html`).replaceAll('<!-- -->', '');
     const seo = messages[locale].desktopSeo;

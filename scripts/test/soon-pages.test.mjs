@@ -125,12 +125,19 @@ test('soon pages: the name is visible in both scripts on every page; JSON-LD and
   }
 });
 
-test('soon pages: the sitemap lists the three pages, each with all alternates; the legal pages stay out', () => {
+test('soon pages: the sitemap lists the three landing pages and the three Impressum pages, each with all alternates; the Datenschutz stays out (DECISIONS 87)', () => {
   const xml = sitemapXml('2026-09-24');
-  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
-  assert.equal(xml.match(/hreflang="x-default"/g)?.length, 3);
-  assert.equal(xml.match(/xhtml:link rel="alternate"/g)?.length, 12);
-  assert.doesNotMatch(xml, /impressum|datenschutz/);
+  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), [
+    'https://ahmadreza.de/',
+    'https://ahmadreza.de/en/',
+    'https://ahmadreza.de/fa/',
+    'https://ahmadreza.de/impressum/',
+    'https://ahmadreza.de/en/impressum/',
+    'https://ahmadreza.de/fa/impressum/',
+  ]);
+  assert.equal(xml.match(/hreflang="x-default"/g)?.length, 6);
+  assert.equal(xml.match(/xhtml:link rel="alternate"/g)?.length, 24);
+  assert.doesNotMatch(xml, /datenschutz/);
 });
 
 test('soon pages: the storage entry the privacy policy describes is the only one, and only a language click writes it', () => {

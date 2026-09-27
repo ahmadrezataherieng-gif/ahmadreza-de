@@ -186,7 +186,7 @@ for (const viewport of VIEWPORTS) {
       writeFileSync(path.join(OUT, `${TAG}-${viewport.name}-${scheme}-${locale}.png`), Buffer.from(shot.result.data, 'base64'));
     }
   }
-  // The legal pages: same look, no horizontal scroll, the same fonts, still noindex.
+  // The legal pages: same look, no horizontal scroll, the same fonts. The Impressum is indexable since the owner's go (queue 2026-09-28 A1 item 3, DECISIONS 87); the Datenschutz stays noindex.
   const origin = new URL(BASE).origin;
   for (const legal of ['impressum', 'en/impressum', 'fa/impressum', 'datenschutz', 'en/datenschutz', 'fa/datenschutz']) {
     await page.goto(`${origin}/${legal}/`, 1500);
@@ -196,7 +196,8 @@ for (const viewport of VIEWPORTS) {
         h1: getComputedStyle(document.querySelector('h1')).fontFamily, bg: getComputedStyle(document.body).backgroundColor,
         loaded: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/"/g, '')) };
     })()`);
-    check(`${viewport.name} /${legal}/: noindex, no horizontal scroll, navy, the old heading face`, info.robots === 'noindex,follow' && info.overflow <= 0 && info.bg === 'rgb(11, 15, 21)' && /"Space Grotesk"/.test(info.h1) && (!legal.startsWith('fa/') || info.loaded.includes('Vazirmatn')), JSON.stringify(info));
+    const expectedRobots = legal.includes('impressum') ? 'index,follow,max-image-preview:large' : 'noindex,follow';
+    check(`${viewport.name} /${legal}/: robots ${expectedRobots}, no horizontal scroll, navy, the old heading face`, info.robots === expectedRobots && info.overflow <= 0 && info.bg === 'rgb(11, 15, 21)' && /"Space Grotesk"/.test(info.h1) && (!legal.startsWith('fa/') || info.loaded.includes('Vazirmatn')), JSON.stringify(info));
   }
   const external = [...new Set(requests.filter((url) => !url.startsWith(origin) && !url.startsWith('data:')))];
   check(`${viewport.name}: no request leaves the domain (${requests.length} requests, all to ${origin})`, external.length === 0, external.join(' | '));

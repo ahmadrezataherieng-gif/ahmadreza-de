@@ -9,10 +9,11 @@ import { views, viewHref, type View } from '@/lib/routing';
 export const dynamic = 'force-static';
 
 /**
- * Pages worth indexing. The legal pages are `noindex` (DECISIONS.md 58) and
- * so never listed here.
+ * Pages worth indexing. The Impressum is indexable since the owner's go
+ * (queue 2026-09-28 A1 item 3, DECISIONS 87); the Datenschutz stays
+ * `noindex` (DECISIONS.md 58) and so is never listed here.
  */
-const INDEXED: readonly View[] = views.filter((view) => view !== 'imprint' && view !== 'privacy');
+const INDEXED: readonly View[] = views.filter((view) => view !== 'privacy');
 
 /**
  * Every indexed page in every locale, each with its hreflang alternates and

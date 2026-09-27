@@ -60,13 +60,23 @@ export function alternateLinks() {
   return links.join('\n');
 }
 
-/** Three indexable URLs, each listing all alternates: the legal pages are noindex and stay out, as on the real site. */
-export function sitemapXml(date) {
-  const alternates = [...LOCALES.map((locale) => [locale.id, pageUrl(locale)]), ['x-default', pageUrl(LOCALES[0])]]
+/** Three URL entries (one per locale) for one path, each listing all alternates. */
+function urlEntries(pathOf, date) {
+  const alternates = [...LOCALES.map((locale) => [locale.id, pathOf(locale)]), ['x-default', pathOf(LOCALES[0])]]
     .map(([hreflang, href]) => `    <xhtml:link rel="alternate" hreflang="${hreflang}" href="${href}"/>`)
     .join('\n');
-  const urls = LOCALES.map((locale) => `  <url>\n    <loc>${pageUrl(locale)}</loc>\n    <lastmod>${date}</lastmod>\n${alternates}\n  </url>\n`).join('');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}</urlset>\n`;
+  return LOCALES.map((locale) => `  <url>\n    <loc>${pathOf(locale)}</loc>\n    <lastmod>${date}</lastmod>\n${alternates}\n  </url>\n`).join('');
+}
+
+/**
+ * Six indexable URLs: the three landing pages and, since the owner made the
+ * Impressum indexable (queue 2026-09-28 A1 item 3, DECISIONS 87), the three
+ * Impressum pages. The Datenschutz pages stay noindex and out of the sitemap.
+ */
+export function sitemapXml(date) {
+  const landing = urlEntries((locale) => pageUrl(locale), date);
+  const imprint = urlEntries((locale) => `${pageUrl(locale)}impressum/`, date);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${landing}${imprint}</urlset>\n`;
 }
 
 /** The share image per language (public/og/, made by scripts/og-image.mjs). */

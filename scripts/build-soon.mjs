@@ -106,6 +106,14 @@ function page(locale, kind, copy, labels) {
   const note = copy.bindingNote ? `<p class="note">${iso(copy.bindingNote, locale.id)} <a href="/${kind.slug}/" hreflang="de" lang="de">${escape(copy.bindingLink)}</a></p>` : '';
   // Back to the coming-soon page in this page's language.
   const home = `/${locale.prefix}`;
+  // The Impressum is indexable since the owner's go (queue 2026-09-28 A1 item 3, DECISIONS 87); the Datenschutz stays noindex, as before.
+  const indexable = kind.id === 'imprint';
+  const alternates = indexable
+    ? locales
+        .map((other) => `<link rel="alternate" hreflang="${other.id}" href="https://ahmadreza.de/${other.prefix}${kind.slug}/">`)
+        .concat(`<link rel="alternate" hreflang="x-default" href="https://ahmadreza.de/${kind.slug}/">`)
+        .join('\n')
+    : '';
   return `<!doctype html>
 <html lang="${locale.id}" dir="${locale.dir}">
 <head>
@@ -113,8 +121,9 @@ function page(locale, kind, copy, labels) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escape(document.title)} – Ahmadreza Taheri</title>
 <meta name="description" content="${escape(document.description)}">
-<meta name="robots" content="noindex,follow">
+<meta name="robots" content="${indexable ? 'index,follow,max-image-preview:large' : 'noindex,follow'}">
 <link rel="canonical" href="https://ahmadreza.de/${locale.prefix}${kind.slug}/">
+${alternates}
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0b0f15">
 ${SCHEME_HEAD}

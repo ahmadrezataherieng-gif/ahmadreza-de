@@ -41,18 +41,18 @@ build time).
 | `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 3 | 2 | 4 | 17.1 / 26 | 66 % |
-| `legal` | 14 | 1 | 4 | 34 / 46 | 74 % |
+| `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
 | `seo` | 24 | 3 | 4 | 75.2 / 90 | 84 % |
 | `launch` | 13 | 2 | 12 | 54.1 / 105 | 52 % |
-| **all** | 81 | 8 | 25 | 333.4 / 433 | **77 %** |
+| **all** | 82 | 8 | 25 | 335.4 / 435 | **77 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 25 | 33 |
-| **total** | **25** | **8** | **81** | **114** |
+| P2 | 7 | 1 | 26 | 34 |
+| **total** | **25** | **8** | **82** | **115** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -150,6 +150,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-16 | **Latin terms in the Persian legal pages** (new 2026-09-24): the Impressum and Datenschutzerklärung in Persian (coming-soon copy and the main site) mix Latin terms (Cloudflare, IP, TDDDG...) into Persian sentences without `<bdi>`, so punctuation next to them can land on the wrong side. Done 2026-09-24: `bidiParts()` in `src/lib/legal-doc.ts` feeds both renderers (`LegalPage.tsx`, `build-soon.mjs`), checked by `legal-bidi.test.mjs`; the wording itself is unchanged, only the markup. Wrap them the way the coming-soon page does; legal copy, so with the owner's proofreading (LEG-07). | done | P2 | Claude Code | LEG-07 | S | legal |
 | LEG-17 | **GitHub Support purge of the cached commits** (new 2026-09-24): ten cached commits on GitHub still contained the old address after the history rewrite. Done 2026-09-25: GitHub Support ticket 4790804 confirmed the cached commits are purged. | done | P0 | Ahmadreza | LEG-12 | XS | legal |
 | LEG-18 | **Verify the purge, then delete the backup** (new 2026-09-24): GitHub confirmed the purge (LEG-17); the owner must still open one old commit SHA URL to check it is gone, then delete the backup bundle outside the repo (LEG-12). | missing | P0 | Ahmadreza | LEG-17 | XS | legal |
+| LEG-19 | **The Impressum is indexable** (owner decision 2026-09-27, DECISIONS 87). **Done 2026-09-27 (queue 2026-09-28 A1 item 3):** the Impressum pages (de/en/fa, main site and `soon/`) lose `noindex`, gain hreflang + `x-default` and a sitemap entry, exactly like every other indexed page; the Datenschutz is unchanged (`noindex, follow`, no hreflang, out of the sitemap). "Momrabadi" still appears only in the legal pages' own address block, never in a title, description, `alternateName` or JSON-LD. Pinned by `seo-head.test.mjs`, `seo.test.mjs`, `soon-pages.test.mjs`, `soon-seo.test.mjs`. | done | P2 | Claude Code + Ahmadreza | - | S | legal |
 
 ## Phase 12 - Performance, accessibility, mobile
 

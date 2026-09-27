@@ -117,17 +117,21 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
     // CONTENT-TODO CR-1044
     title,
     description,
-    // The legal pages carry the home address: kept out of search results for
-    // the name, while their links are still followed (DECISIONS.md 58). The
-    // indexed pages allow the largest image preview (queue 2026-09-28 A1
-    // item 2): every image on the site is the project's own inline SVG or the
-    // owner's own portrait, so a large preview never surfaces someone else's work.
-    robots: legal ? { index: false, follow: true } : { index: true, follow: true, 'max-image-preview': 'large' },
-    // The noindex legal pages keep their canonical but carry no hreflang: a set
-    // that points at pages kept out of the index is ignored anyway (queue 7d).
+    // The Datenschutz page carries no address and is kept out of search
+    // results anyway (DECISIONS.md 58); the Impressum lost that exclusion on
+    // the owner's go (queue 2026-09-28 A1 item 3, DECISIONS 87) - it never
+    // carried the address either (the address sits in `legal.local.ts`
+    // content alone, not in this page's own metadata). The indexed pages
+    // allow the largest image preview (queue 2026-09-28 A1 item 2): every
+    // image on the site is the project's own inline SVG or the owner's own
+    // portrait, so a large preview never surfaces someone else's work.
+    robots: view === 'privacy' ? { index: false, follow: true } : { index: true, follow: true, 'max-image-preview': 'large' },
+    // The noindex Datenschutz page keeps its canonical but carries no
+    // hreflang: a set that points at a page kept out of the index is ignored
+    // anyway (queue 7d).
     alternates: {
       canonical: viewHref(locale, view),
-      ...(legal
+      ...(view === 'privacy'
         ? {}
         : {
             languages: {

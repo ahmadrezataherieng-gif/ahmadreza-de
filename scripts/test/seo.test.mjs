@@ -19,9 +19,10 @@ test('robots.txt: allows everything, names every AI bot the owner chose, points 
   assert.ok(lines.includes('Sitemap: https://ahmadreza.de/sitemap.xml'));
 });
 
-test('sitemap: built from the views, the noindex legal pages left out', () => {
+test('sitemap: built from the views, only the noindex Datenschutz left out (the Impressum is indexable, DECISIONS 87)', () => {
   const source = read('src/app/sitemap.ts');
-  assert.match(source, /view !== 'imprint' && view !== 'privacy'/);
+  assert.match(source, /view !== 'privacy'/);
+  assert.doesNotMatch(source, /view !== 'imprint'/, 'the Impressum belongs in the sitemap now');
   assert.match(source, /'x-default'/);
 });
 

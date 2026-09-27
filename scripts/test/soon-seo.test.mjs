@@ -87,23 +87,37 @@ test('soon SEO: Open Graph and Twitter tags point at the existing share image', 
   assert.equal(png.readUInt32BE(20), 630);
 });
 
-test('soon SEO: robots.txt welcomes every crawler and names the sitemap; the sitemap has the three language pages', () => {
+test('soon SEO: robots.txt welcomes every crawler and names the sitemap; the sitemap has the landing and Impressum pages (DECISIONS 87)', () => {
   const robots = read('public/robots.txt');
   assert.match(robots, /^User-agent: \*\nAllow: \//m);
-  assert.doesNotMatch(robots, /^Disallow:\s*\S/m, 'nothing is disallowed - the noindex legal pages must stay crawlable');
+  assert.doesNotMatch(robots, /^Disallow:\s*\S/m, 'nothing is disallowed - the noindex Datenschutz must stay crawlable');
   assert.ok(robots.includes('Sitemap: https://ahmadreza.de/sitemap.xml'));
   const xml = sitemapXml('2026-09-24');
-  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
-  assert.match(xml, /<lastmod>2026-09-24<\/lastmod>/);
-  assert.doesNotMatch(xml, /impressum|datenschutz/);
+  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), [
+    'https://ahmadreza.de/',
+    'https://ahmadreza.de/en/',
+    'https://ahmadreza.de/fa/',
+    'https://ahmadreza.de/impressum/',
+    'https://ahmadreza.de/en/impressum/',
+    'https://ahmadreza.de/fa/impressum/',
+  ]);
+  assert.equal(xml.match(/<lastmod>2026-09-24<\/lastmod>/g)?.length, 6);
+  assert.doesNotMatch(xml, /datenschutz/);
 });
 
-test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages with their share images and JSON-LD; the legal pages are noindex', (context) => {
+test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages with their share images and JSON-LD; the Impressum is indexable, the Datenschutz stays noindex (DECISIONS 87)', (context) => {
   if (!exists('soon/dist/index.html')) return context.skip('run npm run build:soon first');
   const dist = (path) => read(`soon/dist/${path}`);
   // The sitemap's lastmod stays a build date; the ProfilePage's dateModified is the last commit date instead (queue 2026-09-28 A1 item 1, seo-head.test.mjs).
   assert.equal(dist('robots.txt'), read('public/robots.txt'));
-  assert.deepEqual([...dist('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)].map((match) => match[1]), ['https://ahmadreza.de/', 'https://ahmadreza.de/en/', 'https://ahmadreza.de/fa/']);
+  assert.deepEqual([...dist('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)].map((match) => match[1]), [
+    'https://ahmadreza.de/',
+    'https://ahmadreza.de/en/',
+    'https://ahmadreza.de/fa/',
+    'https://ahmadreza.de/impressum/',
+    'https://ahmadreza.de/en/impressum/',
+    'https://ahmadreza.de/fa/impressum/',
+  ]);
   for (const [folder, id, image] of [['', 'de', 'ahmadreza-taheri-de'], ['en/', 'en', 'ahmadreza-taheri-en'], ['fa/', 'fa', 'ahmadreza-taheri-fa']]) {
     assert.ok(exists('soon/dist/og/' + image + '.png'), image);
     const html = dist(folder + 'index.html');
@@ -117,7 +131,16 @@ test('soon SEO: the built folder has robots.txt, sitemap.xml, the three pages wi
     assert.doesNotMatch(html, /Momrabadi/);
     assert.ok(!leaksAddress(html));
   }
-  for (const path of ['impressum', 'datenschutz', 'en/impressum', 'en/datenschutz', 'fa/impressum', 'fa/datenschutz']) {
-    assert.match(dist(`${path}/index.html`), /<meta name="robots" content="noindex,follow">/, path);
+  for (const path of ['impressum', 'en/impressum', 'fa/impressum']) {
+    const page = dist(`${path}/index.html`);
+    assert.match(page, /<meta name="robots" content="index,follow,max-image-preview:large">/, path);
+    assert.equal(page.match(/<link rel="alternate" hreflang/g)?.length, 4, `${path}: hreflang + x-default`);
+    // "Momrabadi" belongs in the Impressum's own address block (it always has); it must never reach the JSON-LD, the title or the description.
+    assert.doesNotMatch(page.slice(0, page.indexOf('<main>')), /Momrabadi/, `${path}: not in the head`);
+  }
+  for (const path of ['datenschutz', 'en/datenschutz', 'fa/datenschutz']) {
+    const page = dist(`${path}/index.html`);
+    assert.match(page, /<meta name="robots" content="noindex,follow">/, path);
+    assert.doesNotMatch(page, /<link rel="alternate" hreflang/, `${path}: still no hreflang`);
   }
 });
