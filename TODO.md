@@ -2,31 +2,33 @@
 
 Things that need a decision from Ahmadreza before the phase that depends on them.
 
-## Everything still open (2026-09-26, after work queue B)
+## Everything still open (2026-09-27, after work queue 2026-09-27)
 
-ROADMAP.md: 112 items, 79 done, 8 in progress, 25 to do - weighted progress **77 %** (75 % before queue B). Details of each point are in the ROADMAP row or the section of this file named in brackets.
+ROADMAP.md: 112 items, 79 done, 8 in progress, 25 to do - weighted progress **77 %** (330.4 / 430; queue 2026-09-27 moved PERF-02 from 75 to 90 % and closed small parts of SEO-03 and PERF-09, no item changed state). Details of each point are in the ROADMAP row or the section of this file named in brackets. Final check of 2026-09-27: `matrix.mjs` 43/43 configurations, WebKit 66/66 pages, `vitals.mjs` de 8/8 within budget, fa 6/8 (see "Queue 2026-09-27 item 6").
 
 ### Owner (Ahmadreza) - decisions, assets, accounts
 
 1. **Choose the logo** (BR-01): `Claude outputs/logo-proposals-2/overview.png`, one sheet per proposal; Claude's top 3 are Three, Tile, Strata. Then Claude replaces the interim logo, icons, share images and coming-soon page.
-2. **Look at the portrait on the site** (OWN-01 done, CR-045/1122/1123): the AI label's wording and place, the alt text; optional: file names with your name in them (small SEO help, "Assets Ahmadreza owes").
+2. **Look at the portrait on the site** (OWN-01 done, CR-045/1122/1123): the AI label's wording and place, the alt text (the file names now carry your name).
 3. **Résumé PDF** (OWN-02), **profile URLs** for LinkedIn/GitHub/XING (OWN-03, fills `sameAs`), **About/CV facts** (OWN-05: dates, earlier stations, language levels, skills, projects), **GitHub link public or not** (OWN-06), **final e-mail** (OWN-09, DEP-01).
-4. **Proofreading** by native speakers, German and Persian (OWN-04), then the **content review** with Claude, entry by entry (FIN-01, CONTENT_REVIEW.md, about 1,120 entries).
+4. **Proofreading** by native speakers, German and Persian (OWN-04), then the **content review** with Claude, entry by entry (FIN-01, CONTENT_REVIEW.md, 1,125 entries).
 5. **Legal**: read the legal texts, ideally with a lawyer or the Verbraucherzentrale (LEG-07); register search for "Amonel" and the chosen mark (LEG-10); verify the GitHub purge and delete the backup (LEG-18); keep Cloudflare's cookie features off at launch (LEG-11).
 6. **Private preview Worker**: put it behind Cloudflare Access or delete it after your test (it shows the dummy address; "LEG-05 audit refresh").
 7. **Cloudflare, at launch**: create the D1 database (DEP-03) and the rate-limit rule (DEP-04), connect GitHub builds and set the address as a build secret (POST-01, POST-04), move the domains (DEP-06); submit the sitemap in Search Console (SEO-12).
 8. **Real devices** (PERF-01, PERF-06, PERF-08): iPhone, Android, iPad, a touch laptop; Safari and Firefox; the phone keyboard in Terminal and Assistant; a screen-reader walk (NVDA, VoiceOver). Firefox cannot run here ("Queue 4").
 9. **Wording choices left open**: English/Persian dash style and three doubtful lines ("Queue 6"); the landing titles (SEO-14, CR-1095); whether the landing copy grows ("External SEO check", P2).
+10. **Persian pages on the slowest phone profile** ("Queue 2026-09-27 item 6"): fa journey TBT (median ~215 ms, budget 200) and fa desktop LCP (~2.6 s, budget 2.5) stay over; each fix changes what shows while fonts load (a font swap during the desktop's fade-in, or fewer era fonts / `font-display: optional` on the journey). Decide whether that trade is worth it, ideally after the real-phone test.
 
 ### Claude Code - can be done without waiting
 
 1. **After the logo choice**: apply it everywhere (header, `scripts/brand-icons.mjs`, favicon, manifest icons, share images, coming-soon page), then redeploy the coming-soon page only when the owner says so (BR-03).
-2. **Journey TBT** (PERF-02, "Queue B 3"): lazy Lenis on fine pointers only, GSAP after the first frames, measured as interleaved pairs; the 200 ms budget is met in some runs, not reliably.
-3. **Phone desktop LCP** sits on the 2.5 s budget (PERF-09): measure again as interleaved pairs; preload or split the shell chunk if it is over.
-4. **Contact app** (APP-02) and **CV app** (APP-03): build them fully as soon as the owner's profiles and facts arrive; the placeholders stay marked until then.
-5. **Structured data**: `sameAs` fills itself from `content/profiles.ts` once the URLs are there (SEO-03); an optional WebPage/AboutPage node ("External SEO check", P2).
-6. **Post-deploy checks** (DEP-07) and the counters' go-live checks (DEP-05), on the owner's launch day.
-7. **Small leftovers**: the Convergence's miniature scene text passes under the phone's bottom chrome for two frames ("Queue 2"); after launch, the 1977 era (POST-03) and an optional CMS (POST-02).
+2. **Contact app** (APP-02) and **CV app** (APP-03): build them fully as soon as the owner's profiles and facts arrive; the placeholders stay marked until then. `sameAs` fills itself from `content/profiles.ts` then (SEO-03).
+3. **Persian performance**, once the owner has chosen (owner point 10): the font-loading change for the fa desktop and journey, measured as interleaved pairs.
+4. **Post-deploy checks** (DEP-07) and the counters' go-live checks (DEP-05), on the owner's launch day; rebuild `out/` before any deploy (it holds a real build of HEAD now, not the preview build).
+5. **After the real-phone test** (PERF-01): revisit the Convergence miniatures under a shown toolbar (DECISIONS 86, whole-scene translate as the candidate) and anything the test finds.
+6. **After launch**: the 1977 era (POST-03) and an optional CMS (POST-02).
+
+Done in queue 2026-09-27 and removed from this list: journey TBT (PERF-02, DECISIONS 84), phone desktop LCP in German (PERF-09, DECISIONS 85), the Convergence miniatures (looked at, kept, DECISIONS 86), the AboutPage node (CR-1124), the portrait file names.
 
 ## Assets Ahmadreza owes
 
@@ -447,6 +449,14 @@ Read-only check of the built `out/` (build of HEAD d85c75e plus the two new skil
 ## Queue 4 (2026-09-26): Firefox could not be run here
 
 - **`cross-browser.mjs --engines firefox` fails at launch on this machine.** Playwright 1.63's Firefox (build 1543, Firefox 150) starts as "spawn UNKNOWN"; run by hand, `firefox.exe` says the side-by-side configuration is invalid (the executable needs a runtime assembly this Windows 11 does not have registered; the Visual C++ runtime DLLs are in `System32` and in the Firefox folder). Playwright 1.49 (Firefox 132) does not work either: its downloader calls `fs.rmdir(..., { recursive })`, removed in Node 26, and its CDN host (`playwright.azureedge.net`) is retired. Default taken: WebKit only (`--engines webkit`, 66/66 clean); the script reports an unstartable engine as a failure, never a silent skip. To finish PERF-01 for Firefox: run `npx playwright-core install firefox` and `node scripts/verify/cross-browser.mjs --engines firefox` on a machine with the current Visual C++ Redistributable (or in CI on Linux/macOS), or open the site by hand in Firefox (desktop and Android), which the owner has already done for the crossings (DECISIONS 77). Nothing about the site is known to be wrong in Firefox.
+
+## Queue 2026-09-27 item 6: the Persian pages sit over two phone budgets (open, owner's call)
+
+The final check measured `vitals.mjs` in Persian for the first time (earlier queues measured German only). German: 8/8 within budget. Persian: landing, About and every desktop-profile view within budget; two phone views over:
+
+- **fa journey TBT** (budget 200 ms): median of 3 was 499 ms in the full run; six interleaved pairs against the export of the commit before the queue: 133/451/252/422/600/311 -> 298/270/85/160/486/114 ms (median 366 -> 215, mean 362 -> 236), so queue item 1 helped here too and nothing regressed. Why Persian costs more: every font stack on fa pages carries Vazirmatn, so each web font that arrives (Vazirmatn latin and arabic, JetBrains Mono 400/700, Inter, VT323, Press Start 2P) re-lays out all the Persian text ("Fonts changed" on ~2,000 text nodes), and Persian shaping is slow: the relayout right after hydration is 190-230 ms in fa against 26-30 ms in de. Options, none taken because each changes what is shown while fonts load or the fonts themselves: fewer font files on the journey (the eras use four families), `font-display: optional` for the era faces (no swap, no relayout; a slow line would keep the fallback for the visit), or preloading the Persian faces so they arrive before FCP (costs FCP bandwidth; a font preload measured no gain on the static pages, queue 3d). Default: unchanged.
+- **fa desktop LCP** (budget 2.5 s): 2596-2656 ms in five runs (de 2336-2372). The hidden desktop text (queue 7e) is Persian, so both Vazirmatn files (81 kB) load at 0.7 s and, as CSS-initiated fonts, take the 1.6 Mbit/s line ahead of the async scripts: React arrives ~290 ms later than in de, the shell mounts later, and LCP is counted at the end of its 450 ms fade-in. Tried: preloading the two fonts with `fetchpriority="low"` (edited export, five pairs): 2636 -> 2560 ms median, not enough; reverted. What would do it: keep the hidden text off the web fonts (a system face on `.ao-sr-only`; screen readers do not care) so the fonts load with the shell - but then the Persian labels fade in with the fallback face and swap to Vazirmatn during the fade on a cold load, a visible change. Default: unchanged.
+- Both are lab numbers on the slowest profile (4x CPU, slow 4G); the real-phone test (PERF-01) says how they feel.
 
 ## Queue B 3 (2026-09-26): what is left of the journey's TBT after the resolver moved out of the commit (DECISIONS 83) - [answered 2026-09-27, queue 2026-09-27 item 1, DECISIONS 84: ideas (1) and (2) built, plus the first resolve writing only on-screen sections; phone journey TBT median 224 -> 91 ms by `vitals.mjs` (seven interleaved pairs). Idea (3) not needed; the page's own hydration (110-150 ms, as on the landing page) is what is left.]
 
