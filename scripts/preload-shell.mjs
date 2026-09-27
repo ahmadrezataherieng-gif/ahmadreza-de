@@ -25,12 +25,38 @@ if (!existsSync(CHUNKS)) fail('out/ has no chunks folder');
 const matches = readdirSync(CHUNKS).filter((name) => name.endsWith('.js') && readFileSync(new URL(name, CHUNKS), 'utf8').includes(MARKER));
 if (matches.length !== 1) fail(`expected one chunk containing "${MARKER}", found ${matches.length}`);
 const href = `/_next/static/chunks/${matches[0]}`;
-// The shell's message provider and the formatter behind it are the chunk named
-// `intl` (next.config.mjs, queue 3c): the shell cannot start without it, so it
-// is preloaded with it, as it was in the page's own script list before.
-const intl = readdirSync(CHUNKS).filter((name) => /^intl[.-].*.js$/.test(name));
-const intlTag = intl.length === 1 ? `<link rel="preload" as="script" href="/_next/static/chunks/${intl[0]}"/>` : '';
-const tag = `<link rel="preload" as="script" href="${href}"/>${intlTag}`;
+
+// Every chunk the shell's dynamic import waits for, not only the shell's own
+// (queue 2026-09-27 item 2): webpack splits modules the shell shares with the
+// journey (the language switcher, the message helpers) into a chunk of their
+// own, and the formatter is the named chunk `intl` (next.config.mjs, queue 3c).
+// Unpreloaded, the shared chunk cost one more round trip after hydration. The
+// list is the `Promise.all([n.e(A), n.e(B), ...])` in the page chunk that
+// names the shell's id; the ids become files through the runtime's name map.
+const all = readdirSync(CHUNKS, { recursive: true }).map(String).filter((name) => name.endsWith('.js'));
+const read = (name) => readFileSync(new URL(name.replaceAll('\\', '/'), CHUNKS), 'utf8');
+const shellId = matches[0].split('.')[0];
+const importIds =
+  all
+    .filter((name) => /(^|[\\/])page-[^\\/]*\.js$/.test(name))
+    .flatMap((name) => [...read(name).matchAll(/Promise\.all\(\[((?:\w+\.e\(\d+\),?)+)\]\)/g)].map((match) => match[1]))
+    .map((list) => [...list.matchAll(/\.e\((\d+)\)/g)].map((match) => match[1]))
+    .find((ids) => ids.includes(shellId)) ?? [shellId];
+const runtime = all.find((name) => /^webpack-[^\\/]*\.js$/.test(name));
+const fileFor = (id) => {
+  const plain = all.find((name) => name.startsWith(`${id}.`) && !/[\\/]/.test(name));
+  if (plain) return plain;
+  // The runtime maps ids to names and to hashes alike; a name is the one with a file.
+  const values = runtime ? [...read(runtime).matchAll(new RegExp(`[{,]${id}:"([\\w-]+)"`, 'g'))].map((match) => match[1]) : [];
+  return values
+    .map((value) => all.find((name) => name.startsWith(`${value}.`) && !/[\\/]/.test(name)))
+    .find(Boolean);
+};
+const files = importIds.map(fileFor);
+if (files.some((file) => !file)) fail(`a chunk of the shell's import (${importIds.join(', ')}) has no file`);
+// The shell's own chunk first: it is the one the page cannot do without.
+const ordered = [matches[0], ...files.filter((file) => file !== matches[0])];
+const tag = ordered.map((file) => `<link rel="preload" as="script" href="/_next/static/chunks/${file}"/>`).join('');
 
 for (const page of PAGES) {
   const file = new URL(page, OUT);
@@ -41,4 +67,4 @@ for (const page of PAGES) {
   // After the charset and viewport meta tags, before the first stylesheet.
   writeFileSync(file, html.replace('<link rel="stylesheet"', `${tag}<link rel="stylesheet"`));
 }
-console.log(`preload-shell: ${href} preloaded on ${PAGES.length} desktop pages`);
+console.log(`preload-shell: ${ordered.join(', ')} preloaded on ${PAGES.length} desktop pages (the shell: ${href})`);
