@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
+import { BootSequence } from '@/components/os/BootSequence';
 import { DesktopFrame } from '@/components/os/DesktopFrame';
 import { DesktopShellLoader } from '@/components/os/DesktopShellLoader';
 import { LegalLinks } from '@/components/ui/SiteFooter';
@@ -62,6 +63,7 @@ export async function Desktop({ locale }: { locale: Locale }) {
       </div>
       <div className="ao-desktop-screen relative h-dvh w-full bg-background">
         <DesktopFrame seamClassName="ao-desktop-seam" />
+        <BootSequence />
         <DesktopShellLoader locale={locale} messages={messages} />
       </div>
       <noscript>

@@ -78,3 +78,29 @@ export function onTrace(handler: () => void): () => void {
   window.addEventListener(TRACE_EVENT, handler);
   return () => window.removeEventListener(TRACE_EVENT, handler);
 }
+
+/* --- the Terminal's `troubleshoot` command (queue 2026-09-28 B item 2) -------- */
+
+export const TROUBLESHOOT_EVENT = 'amonel:troubleshoot';
+
+let waitingTroubleshoot = false;
+
+/** Open the Network tools app on its Troubleshoot tab. */
+export function openTroubleshoot(): void {
+  waitingTroubleshoot = true;
+  requestApp('network-tools');
+  emit(TROUBLESHOOT_EVENT);
+}
+
+/** Whether the Network app should switch to Troubleshoot once mounted: taking it clears it. */
+export function takeWaitingTroubleshoot(): boolean {
+  const waiting = waitingTroubleshoot;
+  waitingTroubleshoot = false;
+  return waiting;
+}
+
+/** For the Network app: called when Troubleshoot is requested while it may already be open. */
+export function onTroubleshoot(handler: () => void): () => void {
+  window.addEventListener(TROUBLESHOOT_EVENT, handler);
+  return () => window.removeEventListener(TROUBLESHOOT_EVENT, handler);
+}

@@ -5,7 +5,8 @@
     "subnet": "Subnetz",
     "ping": "Ping",
     "dns": "DNS",
-    "ports": "Ports"
+    "ports": "Ports",
+    "troubleshoot": "Fehlersuche"
   },
   "subnet": {
     "explain": "Eine IPv4-Adresse hat 32 Bit. Die Maske teilt sie: Die vorderen Bits nennen das Netz, die hinteren den Rechner darin. Rechner mit demselben Netzteil erreichen sich direkt – alle anderen nur über ein Gateway.",
@@ -210,5 +211,71 @@
     },
     "firewall": "Welche Ports offen sein dürfen, entscheidet die Firewall – das Rätsel der letzten Epoche.",
     "firewallLink": "Zur Firewall in der Reise"
+  },
+  "troubleshoot": {
+    "simulation": "Simulation: Nichts hier verlässt diesen Browser. Kein Befehl fragt wirklich ein Netz – jede Antwort kommt aus dem Fall, den Sie gerade untersuchen.",
+    "objective": "Im Büro geht das Internet nicht. Nutzen Sie die Befehle unten, um herauszufinden, woran es liegt – und dann, wie man es behebt.",
+    "newScenario": "Neuer Fall",
+    "toolLabel": "Befehl wählen",
+    "tools": {
+      "config": "ipconfig / ip addr",
+      "ping": "ping",
+      "traceroute": "traceroute",
+      "nslookup": "nslookup"
+    },
+    "targetLabel": "Ziel",
+    "examplesLabel": "Vorbereitete Ziele",
+    "run": "Ausführen",
+    "placeholder": "z. B. 203.0.113.10",
+    "outputLabel": "Ausgabe",
+    "windowsLabel": "Windows",
+    "linuxLabel": "Linux",
+    "ping": {
+      "usage": "Geben Sie ein Ziel ein oder wählen Sie eines der vorbereiteten Ziele.",
+      "notes": {
+        "gatewayOk": "Das Gateway antwortet: Diese Adresse liegt im eigenen Netz des Büros und ist direkt erreichbar.",
+        "gatewayFail": "Keine Antwort vom Gateway. Entweder ist das nicht der echte Router des Büros, oder die Adresse liegt gar nicht in diesem Netz.",
+        "dnsOk": "Der DNS-Server antwortet: Er liegt im selben Netz wie dieser Rechner.",
+        "dnsFail": "Keine Antwort vom DNS-Server – er ist offenbar ganz aus, nicht nur der DNS-Dienst darauf.",
+        "remoteOk": "Antwort vom entfernten Server. Die Route dorthin funktioniert.",
+        "remoteFail": "Keine Antwort vom entfernten Server. Entweder fehlt die Route, oder der Name ließ sich nicht auflösen.",
+        "noGateway": "Für diesen Rechner ist gar kein Standard-Gateway eingetragen – er kann nichts außerhalb seines eigenen Netzes erreichen.",
+        "unknownHost": "„{host}“: Dieser Name oder diese Adresse ist der Simulation nicht bekannt. Versuchen Sie eines der vorbereiteten Ziele."
+      }
+    },
+    "traceroute": {
+      "usage": "traceroute zeigt jede Station auf dem Weg – und bei welcher es stecken bleibt."
+    },
+    "nslookup": {
+      "usage": "Fragen Sie den Namen des entfernten Servers ab.",
+      "ok": "Aufgelöst zu {ip}.",
+      "fail": "Der Name ließ sich nicht auflösen – der eingetragene DNS-Server hat nicht geantwortet."
+    },
+    "causesLabel": "Woran liegt es?",
+    "fixesLabel": "Und wie beheben Sie es?",
+    "causes": {
+      "dhcpFailure": "Der DHCP-Server hat nicht geantwortet: Der Rechner hat sich selbst eine Link-local-Adresse (APIPA) gegeben – ohne brauchbares Gateway und ohne DNS.",
+      "wrongGateway": "Das Standard-Gateway ist falsch eingetragen: Es zeigt auf eine Adresse außerhalb des eigenen Netzes.",
+      "dnsDown": "Die Route stimmt, aber der DNS-Server antwortet überhaupt nicht – nicht einmal auf einen Ping."
+    },
+    "fixes": {
+      "dhcpFailure": "Die DHCP-Lease erneuern (oder Kabel/WLAN und den DHCP-Server prüfen), damit der Rechner eine echte Adresse bekommt.",
+      "wrongGateway": "Das Standard-Gateway auf die echte Adresse des Büro-Routers korrigieren.",
+      "dnsDown": "Den Rechner auf einen funktionierenden DNS-Server umstellen oder den ausgefallenen neu starten."
+    },
+    "hints": {
+      "dhcpFailure": "Schauen Sie sich die Adresse aus ipconfig an: Beginnt sie mit 169.254?",
+      "wrongGateway": "Pingen Sie Gateway und DNS-Server einzeln an – antworten beide?",
+      "dnsDown": "Pingen Sie den entfernten Server erst über seine Adresse, dann über seinen Namen. Klappt beides?"
+    },
+    "explanations": {
+      "dhcpFailure": "Ein Fachinformatiker prüft zuerst ipconfig: Eine Adresse aus 169.254.x.x bedeutet, dass DHCP nie geantwortet hat, also hat sich der Rechner selbst eine Adresse gegeben (APIPA) – ohne echtes Gateway und ohne DNS ist außerhalb des eigenen Netzes nichts erreichbar.",
+      "wrongGateway": "Der Hinweis war: Der DNS-Server hat geantwortet (er liegt im selben Netz), das Gateway und alles dahinter aber nicht. Der Weg dieses Rechners in die Welt – sein Standard-Gateway – ist falsch eingetragen.",
+      "dnsDown": "Der Hinweis war: Der Ping zur Adresse des entfernten Servers hat funktioniert, der Ping zu seinem Namen nicht. Die Route stimmt also – der Fehler liegt gezielt bei der Namensauflösung: Der DNS-Server selbst antwortet nicht."
+    },
+    "wrongCause": "Das ist es nicht. Vergleichen Sie noch einmal, was geantwortet hat und was nicht.",
+    "wrongFix": "Diese Behebung passt nicht zu der Ursache, die Sie gefunden haben.",
+    "solved": "Gelöst.",
+    "hintLabel": "Hinweis:"
   }
 }

@@ -38,6 +38,23 @@ var wide=innerWidth>=768&&innerHeight>=600;var c=navigator.hardwareConcurrency||
 f=fine&&wide&&c>=4&&m>=4?'full':'light';}d.dataset.tier=f;}catch(e){document.documentElement.dataset.tier='light';}})();`;
 
 /**
+ * The desktop's boot sequence (queue 2026-09-28 B item 1) never plays after
+ * the Convergence hand-over - `leaveForDesktop` marks that one navigation
+ * with `?entry=convergence` (hand-over.ts) - so DesktopFrame's first paint on
+ * /desktop/ stays pixel-identical to its last paint in the journey. Reduced
+ * motion has its own pure-CSS path (globals.css); it is repeated here only as
+ * the fallback for a script that throws, so a boot sequence never plays
+ * broken. Otherwise, any key or pointer press skips it early (BootSequence.tsx
+ * is static HTML; this only ever removes it sooner, never renders it).
+ */
+const BOOT_SKIP_SCRIPT = `(function(){var d=document.documentElement;try{
+if(new URLSearchParams(location.search).get('entry')==='convergence'||matchMedia('(prefers-reduced-motion: reduce)').matches){d.dataset.aoBoot='skip';return;}
+var skip=function(){d.dataset.aoBoot='skip';};
+document.addEventListener('keydown',skip,{once:true});
+document.addEventListener('pointerdown',skip,{once:true});
+}catch(e){d.dataset.aoBoot='skip';}})();`;
+
+/**
  * Only generated routes exist. Without this, any URL under the catch-all -
  * browsers ask for `/favicon.ico` on their own - rendered the layout and threw,
  * which was a 500 in dev. Now such a request is a plain 404.
@@ -278,7 +295,12 @@ export default async function LocaleLayout({
           </>
         ) : null}
         {/* The desktop's apps animate by the same tiers (Traceroute's packet). */}
-        {view === 'desktop' ? <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} /> : null}
+        {view === 'desktop' ? (
+          <>
+            <script dangerouslySetInnerHTML={{ __html: MOTION_TIER_SCRIPT }} />
+            <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
+          </>
+        ) : null}
       </head>
       <body className="antialiased">
         {page}

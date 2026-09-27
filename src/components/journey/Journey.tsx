@@ -721,7 +721,10 @@ export function Journey() {
           finishJourney();
           count(JOURNEY_COMPLETED);
           container.dataset.handover = '';
-          window.setTimeout(() => leaveForDesktop(desktopHref, { replace: true }), HAND_OVER_MS);
+          // `?entry=convergence` tells the desktop's boot sequence to skip
+          // itself (BOOT_SKIP_SCRIPT, layout.tsx), so this one hand-over frame
+          // stays pixel-identical (DECISIONS.md 49) - the only such marker.
+          window.setTimeout(() => leaveForDesktop(`${desktopHref}?entry=convergence`, { replace: true }), HAND_OVER_MS);
         }
     }
 

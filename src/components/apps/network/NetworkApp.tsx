@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type Dispatch, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode, type SetStateAction } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { AppMessages } from '@/components/apps/AppMessages';
 import type { AppProps } from '@/components/apps/types';
 import { eraSectionHash } from '@/components/apps/unlock';
-import { traceHost } from '@/lib/app-handoff';
+import { onTroubleshoot, takeWaitingTroubleshoot, traceHost } from '@/lib/app-handoff';
 import {
   checkGateway,
   formatIPv4,
@@ -26,7 +26,23 @@ import {
   type DnsLookup,
   type PingTarget,
 } from '@/components/apps/network/net';
-import { dnsExamples, dnsRecordTypes, dnsZones, pingExamples, portStories, wellKnownPorts, type DnsRecordType } from '@/content/network';
+import {
+  formatIpconfig,
+  guessCause,
+  guessFix,
+  guessIds,
+  initialGuess,
+  nslookupCommand,
+  pickScenario,
+  pingCommand,
+  tracerouteCommand,
+  type GuessId,
+  type GuessState,
+  type PingOutcome,
+  type ResolveOutcome,
+  type TraceHop,
+} from '@/components/apps/network/troubleshoot';
+import { dnsExamples, dnsRecordTypes, dnsZones, pingExamples, portStories, TROUBLESHOOT_REMOTE_IP, TROUBLESHOOT_REMOTE_NAME, wellKnownPorts, type DnsRecordType, type TroubleshootScenario } from '@/content/network';
 import { eras } from '@/content/eras';
 import { routes } from '@/content/routes';
 import { cn } from '@/lib/cn';
@@ -34,8 +50,8 @@ import type { Locale } from '@/lib/i18n-config';
 import { viewHref } from '@/lib/routing';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
-type Tab = 'subnet' | 'ping' | 'dns' | 'ports';
-const TABS: readonly Tab[] = ['subnet', 'ping', 'dns', 'ports'];
+type Tab = 'subnet' | 'ping' | 'dns' | 'ports' | 'troubleshoot';
+const TABS: readonly Tab[] = ['subnet', 'ping', 'dns', 'ports', 'troubleshoot'];
 
 /** One-click examples: machine text, identical in every language. */
 // CONTENT-TODO CR-1069
@@ -72,7 +88,13 @@ function NetworkTools({ appId }: AppProps) {
   const t = useTranslations('network');
   const [tab, setTab] = useState<Tab>('subnet');
   const baseId = useId();
-  const tabRefs = useRef<Record<Tab, HTMLButtonElement | null>>({ subnet: null, ping: null, dns: null, ports: null });
+  const tabRefs = useRef<Record<Tab, HTMLButtonElement | null>>({ subnet: null, ping: null, dns: null, ports: null, troubleshoot: null });
+
+  // The Terminal's `troubleshoot` command switches to this tab, even if the app was already open (queue 2026-09-28 B item 2).
+  useEffect(() => {
+    if (takeWaitingTroubleshoot()) setTab('troubleshoot');
+    return onTroubleshoot(() => setTab('troubleshoot'));
+  }, []);
 
   const onTabKey = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     const index = TABS.indexOf(tab);
@@ -122,7 +144,17 @@ function NetworkTools({ appId }: AppProps) {
         </div>
 
         <div role="tabpanel" id={`${baseId}-panel-${tab}`} aria-labelledby={`${baseId}-tab-${tab}`} data-network-panel={tab}>
-          {tab === 'subnet' ? <SubnetPanel /> : tab === 'ping' ? <PingPanel /> : tab === 'dns' ? <DnsPanel /> : <PortsPanel />}
+          {tab === 'subnet' ? (
+            <SubnetPanel />
+          ) : tab === 'ping' ? (
+            <PingPanel />
+          ) : tab === 'dns' ? (
+            <DnsPanel />
+          ) : tab === 'ports' ? (
+            <PortsPanel />
+          ) : (
+            <TroubleshootPanel />
+          )}
         </div>
       </div>
     </div>
@@ -722,6 +754,283 @@ function PortsPanel() {
         </a>
       </p>
     </div>
+  );
+}
+
+/* --- troubleshoot --------------------------------------------------------------- */
+
+type Tool = 'config' | 'ping' | 'traceroute' | 'nslookup';
+const TOOLS: readonly Tool[] = ['config', 'ping', 'traceroute', 'nslookup'];
+/** A plausible border router beyond the office's own gateway - one synthetic hop, never checked for reachability on its own. */
+const ISP_HOP_IP = '203.0.113.1';
+
+type ToolResult =
+  | { tool: 'ping'; target: string; outcome: PingOutcome }
+  | { tool: 'traceroute'; target: string; hops: readonly TraceHop[] }
+  | { tool: 'nslookup'; outcome: ResolveOutcome & { name: string } };
+
+function TroubleshootPanel() {
+  const t = useTranslations('network.troubleshoot');
+  const id = useId();
+  const [scenario, setScenario] = useState<TroubleshootScenario>(() => pickScenario());
+  const [tool, setTool] = useState<Tool>('config');
+  const [target, setTarget] = useState('');
+  const [result, setResult] = useState<ToolResult | null>(null);
+  const [guess, setGuess] = useState<GuessState>(initialGuess);
+
+  const newScenario = () => {
+    setScenario(pickScenario());
+    setTool('config');
+    setTarget('');
+    setResult(null);
+    setGuess(initialGuess());
+  };
+
+  const gatewayChip = scenario.config.gateway === '0.0.0.0' ? 'gateway' : scenario.config.gateway;
+  const dnsChip = scenario.config.dns === '0.0.0.0' ? 'dns' : scenario.config.dns;
+  const targets = [gatewayChip, dnsChip, TROUBLESHOOT_REMOTE_IP, TROUBLESHOOT_REMOTE_NAME].filter((value, index, all) => all.indexOf(value) === index);
+
+  const run = (nextTool: Tool, value: string) => {
+    if (nextTool === 'ping') setResult({ tool: 'ping', target: value, outcome: pingCommand(scenario, value) });
+    else if (nextTool === 'traceroute') setResult({ tool: 'traceroute', target: value, hops: tracerouteCommand(scenario, value) });
+    else if (nextTool === 'nslookup') setResult({ tool: 'nslookup', outcome: nslookupCommand(scenario, value) });
+  };
+
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    if (tool !== 'config' && target.trim() !== '') run(tool, target);
+  };
+
+  return (
+    <div className="flex flex-col gap-4" data-troubleshoot-scenario={scenario.id}>
+      <SimulationNote>{t('simulation')}</SimulationNote>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="font-body text-sm leading-relaxed text-ink">{t('objective')}</p>
+        <button type="button" className={chip} onClick={newScenario} data-action="troubleshoot-new">
+          {t('newScenario')}
+        </button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={t('toolLabel')}>
+        {TOOLS.map((option) => (
+          <button
+            key={option}
+            type="button"
+            aria-pressed={tool === option}
+            data-troubleshoot-tool={option}
+            onClick={() => setTool(option)}
+            className={cn(chip, tool === option && 'border-accent bg-accent text-background')}
+          >
+            {t(`tools.${option}`)}
+          </button>
+        ))}
+      </div>
+
+      {tool === 'config' ? (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <p className={label}>{t('windowsLabel')}</p>
+            <pre dir="ltr" className={consoleBox} data-troubleshoot-output="config-windows">
+              {formatIpconfig(scenario.config, 'windows').join('\n')}
+            </pre>
+          </div>
+          <div className="flex flex-col gap-1">
+            <p className={label}>{t('linuxLabel')}</p>
+            <pre dir="ltr" className={consoleBox} data-troubleshoot-output="config-linux">
+              {formatIpconfig(scenario.config, 'linux').join('\n')}
+            </pre>
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={onSubmit} className="flex flex-col gap-1.5">
+          <label htmlFor={`${id}-target`} className={label}>
+            {t('targetLabel')}
+          </label>
+          <div className="flex gap-2">
+            <input
+              id={`${id}-target`}
+              data-troubleshoot-input=""
+              dir="ltr"
+              value={target}
+              onChange={(event) => setTarget(event.target.value)}
+              placeholder={t('placeholder')}
+              autoComplete="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              className={field}
+            />
+            <button type="submit" className={primary} data-action={`troubleshoot-${tool}`}>
+              {t('run')}
+            </button>
+          </div>
+          <Examples
+            items={targets}
+            labelText={t('examplesLabel')}
+            onPick={(value) => {
+              setTarget(value);
+              run(tool, value);
+            }}
+          />
+          <p className="font-body text-xs leading-relaxed text-muted">{t(`${tool}.usage`)}</p>
+        </form>
+      )}
+
+      {result && result.tool === tool ? <ToolOutput t={t} scenario={scenario} result={result} /> : null}
+
+      <GuessSection t={t} scenario={scenario} guess={guess} setGuess={setGuess} />
+    </div>
+  );
+}
+
+function pingReplyAddress(scenario: TroubleshootScenario, outcome: Extract<PingOutcome, { kind: 'gateway' | 'dns' | 'remote' }>): string {
+  if (outcome.kind === 'gateway') return scenario.config.gateway;
+  if (outcome.kind === 'dns') return scenario.config.dns;
+  return TROUBLESHOOT_REMOTE_IP;
+}
+
+function pingLines(scenario: TroubleshootScenario, target: string, outcome: PingOutcome): string[] {
+  if (outcome.kind === 'noGateway') return ['PING: transmit failed. General failure.'];
+  if (outcome.kind === 'unknownHost') return [`Ping request could not find host ${outcome.host}. Please check the name and try again.`];
+  const address = pingReplyAddress(scenario, outcome);
+  const header = target === address ? `Pinging ${address} with 32 bytes of data:` : `Pinging ${target} [${address}] with 32 bytes of data:`;
+  const line = outcome.ok ? `Reply from ${address}: bytes=32 time<1ms TTL=64` : 'Request timed out.';
+  return [header, '', ...Array.from({ length: 4 }, () => line)];
+}
+
+function pingNoteKey(outcome: PingOutcome): string {
+  if (outcome.kind === 'noGateway' || outcome.kind === 'unknownHost') return outcome.kind;
+  return `${outcome.kind}${outcome.ok ? 'Ok' : 'Fail'}`;
+}
+
+function hopAddress(scenario: TroubleshootScenario, hop: TraceHop): string {
+  if (hop.host === 'gateway') return scenario.config.gateway;
+  if (hop.host === 'dns') return scenario.config.dns;
+  if (hop.host === 'isp') return ISP_HOP_IP;
+  return TROUBLESHOOT_REMOTE_IP;
+}
+
+/** Like `ping`'s "Request timed out." (`net.ts`, `formatPingLines`), this is real machine output - English in every locale. */
+function tracerouteLines(scenario: TroubleshootScenario, target: string, hops: readonly TraceHop[]): string[] {
+  if (hops.length === 0) return [`Unable to resolve target system name ${target}.`];
+  const header = `Tracing route to ${target} over a maximum of ${hops.length} hops:`;
+  const lines = hops.map((hop, index) =>
+    hop.ok ? `  ${index + 1}    <1 ms    <1 ms    <1 ms  ${hopAddress(scenario, hop)}` : `  ${index + 1}     *        *        *     Request timed out.`,
+  );
+  return [header, '', ...lines];
+}
+
+function nslookupLines(scenario: TroubleshootScenario, outcome: ResolveOutcome & { name: string }): string[] {
+  const server = scenario.config.dns === '0.0.0.0' ? 'Unknown' : scenario.config.dns;
+  if (outcome.ok) return [`Server:  ${server}`, '', `Name:    ${outcome.name}`, `Address:  ${outcome.ip}`];
+  return [`Server:  ${server}`, '', 'DNS request timed out.', '    timeout was 2 seconds.'];
+}
+
+function ToolOutput({ t, scenario, result }: { t: ReturnType<typeof useTranslations>; scenario: TroubleshootScenario; result: ToolResult }) {
+  if (result.tool === 'ping') {
+    const noteKey = pingNoteKey(result.outcome);
+    return (
+      <div className="flex flex-col gap-2" aria-live="polite" data-troubleshoot-result="ping">
+        <pre dir="ltr" className={consoleBox}>
+          {pingLines(scenario, result.target, result.outcome).join('\n')}
+        </pre>
+        <p className="font-body text-xs leading-relaxed text-ink">
+          {t(`ping.notes.${noteKey}`, result.outcome.kind === 'unknownHost' ? { host: result.outcome.host } : undefined)}
+        </p>
+      </div>
+    );
+  }
+  if (result.tool === 'traceroute') {
+    return (
+      <div className="flex flex-col gap-2" aria-live="polite" data-troubleshoot-result="traceroute">
+        <pre dir="ltr" className={consoleBox}>
+          {tracerouteLines(scenario, result.target, result.hops).join('\n')}
+        </pre>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-2" aria-live="polite" data-troubleshoot-result="nslookup">
+      <pre dir="ltr" className={consoleBox}>
+        {nslookupLines(scenario, result.outcome).join('\n')}
+      </pre>
+      <p className="font-body text-xs leading-relaxed text-ink">{result.outcome.ok ? t('nslookup.ok', { ip: result.outcome.ip ?? '' }) : t('nslookup.fail')}</p>
+    </div>
+  );
+}
+
+function GuessSection({
+  t,
+  scenario,
+  guess,
+  setGuess,
+}: {
+  t: ReturnType<typeof useTranslations>;
+  scenario: TroubleshootScenario;
+  guess: GuessState;
+  setGuess: Dispatch<SetStateAction<GuessState>>;
+}) {
+  return (
+    <section className="ao-themed flex flex-col gap-3 rounded-control border border-edge bg-surface p-3">
+      <div className="flex flex-col gap-1.5">
+        <h3 className="font-display text-sm font-bold text-ink">{t('causesLabel')}</h3>
+        <div className="flex flex-wrap gap-1.5" role="group" aria-label={t('causesLabel')}>
+          {guessIds.map((causeId) => (
+            <button
+              key={causeId}
+              type="button"
+              disabled={guess.cause !== null}
+              aria-pressed={guess.cause === causeId}
+              data-troubleshoot-cause={causeId}
+              onClick={() => setGuess((state) => guessCause(scenario, state, causeId))}
+              className={cn(
+                chip,
+                guess.cause === causeId && 'border-success bg-success text-background',
+                guess.cause !== null && guess.cause !== causeId && 'opacity-50',
+              )}
+            >
+              {t(`causes.${causeId}`)}
+            </button>
+          ))}
+        </div>
+        {guess.cause === null && guess.wrongCauseTries > 0 ? (
+          <p role="alert" className="font-body text-xs text-error" data-troubleshoot-wrong="cause">
+            {t('wrongCause')} <span className="text-muted">{t('hintLabel')} {t(`hints.${scenario.id}`)}</span>
+          </p>
+        ) : null}
+      </div>
+
+      {guess.cause !== null ? (
+        <div className="flex flex-col gap-1.5">
+          <h3 className="font-display text-sm font-bold text-ink">{t('fixesLabel')}</h3>
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label={t('fixesLabel')}>
+            {guessIds.map((fixId: GuessId) => (
+              <button
+                key={fixId}
+                type="button"
+                disabled={guess.fix !== null}
+                aria-pressed={guess.fix === fixId}
+                data-troubleshoot-fix={fixId}
+                onClick={() => setGuess((state) => guessFix(scenario, state, fixId))}
+                className={cn(chip, guess.fix === fixId && 'border-success bg-success text-background', guess.fix !== null && guess.fix !== fixId && 'opacity-50')}
+              >
+                {t(`fixes.${fixId}`)}
+              </button>
+            ))}
+          </div>
+          {guess.fix === null && guess.wrongFixTries > 0 ? (
+            <p role="alert" className="font-body text-xs text-error" data-troubleshoot-wrong="fix">
+              {t('wrongFix')}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {guess.solved ? (
+        <p className="ao-themed rounded-control border border-success/60 px-3 py-2 font-body text-sm text-ink" aria-live="polite" data-troubleshoot-solved="">
+          <strong className="text-success">{t('solved')}</strong> {t(`explanations.${scenario.id}`)}
+        </p>
+      ) : null}
+    </section>
   );
 }
 

@@ -93,6 +93,12 @@
   --ao-bsod-bg: #0a1a8f;
   --ao-bsod-ink: #ffffff;
 
+  /* The desktop's boot sequence (queue 2026-09-28 B item 1): a black
+     systemd-style log, the same in every theme - it plays before the theme
+     (even the Time Machine's) has anything to apply itself to. */
+  --ao-boot-bg: #000000;
+  --ao-boot-ink: #c7d0dc;
+
   /* Standard motion curve and durations. */
   --ao-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ao-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
@@ -110,6 +116,8 @@
   --ao-z-taskbar: 300;
   --ao-z-modal: 400;
   --ao-z-cursor: 500;
+  /* Above everything else: the desktop's boot sequence plays before the shell mounts. */
+  --ao-z-boot: 600;
 
   /* Layout metrics. */
   --ao-taskbar-height: 40px;
@@ -147,6 +155,9 @@
 
   --color-bsod-bg: var(--ao-bsod-bg);
   --color-bsod-ink: var(--ao-bsod-ink);
+
+  --color-boot-bg: var(--ao-boot-bg);
+  --color-boot-ink: var(--ao-boot-ink);
 
   --font-display: var(--ao-font-display);
   --font-body: var(--ao-font-body);
@@ -1575,6 +1586,86 @@ html[data-returning] .ao-mode-section h2 {
 
 .ao-desktop-screen {
   container-type: size;
+}
+
+/* --- The boot sequence (queue 2026-09-28 B item 1) ------------------------
+
+   A direct visit to /desktop/ plays a short systemd-style log over
+   DesktopFrame before the shell fades in; arriving through the Convergence's
+   hand-over must never show it (that frame has to stay pixel-identical), and
+   neither does a reduced-motion visit. Both are decided before the first
+   paint: `html[data-ao-boot="skip"]` (BOOT_SKIP_SCRIPT, layout.tsx) covers
+   the Convergence marker and doubles as the fallback if the script throws;
+   the media query below is its own, pure-CSS path for reduced motion, so it
+   holds even with JavaScript disabled. Static HTML, CSS-timed: nothing here
+   waits for React, so it never delays interactivity. */
+.ao-boot {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ao-z-boot);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2em;
+  padding: 2rem;
+  background: var(--color-boot-bg);
+  font-family: var(--ao-font-jetbrains);
+  font-size: 13px;
+  line-height: 1.6;
+  animation: ao-boot-overlay 1.8s var(--ao-ease-snap) forwards;
+}
+
+html[data-ao-boot='skip'] .ao-boot {
+  display: none;
+}
+
+@keyframes ao-boot-overlay {
+  0%,
+  92% {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.ao-boot-line {
+  /* Always LTR machine text, even in the Persian shell (dir set in JSX). */
+  color: var(--color-boot-ink);
+  opacity: 0;
+  animation: ao-boot-line 220ms ease-out forwards;
+  animation-delay: calc(var(--i) * 110ms);
+}
+
+.ao-boot-ok {
+  color: var(--ao-brand-green);
+}
+
+.ao-boot-welcome {
+  margin-top: 0.6em;
+  color: var(--ao-brand-white);
+  font-weight: 700;
+}
+
+@keyframes ao-boot-line {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ao-boot {
+    display: none;
+  }
 }
 
 /* The journey's last frame is the desktop's first: its chrome fades out just

@@ -5,7 +5,8 @@
     "subnet": "Subnet",
     "ping": "Ping",
     "dns": "DNS",
-    "ports": "Ports"
+    "ports": "Ports",
+    "troubleshoot": "Troubleshoot"
   },
   "subnet": {
     "explain": "An IPv4 address has 32 bits. The mask splits them: the leading bits name the network, the rest the machine in it. Machines with the same network part reach each other directly - everyone else only through a gateway.",
@@ -210,5 +211,71 @@
     },
     "firewall": "Which ports may be open is the firewall's decision - the puzzle of the last era.",
     "firewallLink": "To the firewall in the journey"
+  },
+  "troubleshoot": {
+    "simulation": "Simulation: nothing here leaves this browser. No command really asks a network anything - every answer comes from the case you are looking at.",
+    "objective": "The office's internet is down. Use the commands below to find out why - and then how to fix it.",
+    "newScenario": "New case",
+    "toolLabel": "Choose a command",
+    "tools": {
+      "config": "ipconfig / ip addr",
+      "ping": "ping",
+      "traceroute": "traceroute",
+      "nslookup": "nslookup"
+    },
+    "targetLabel": "Target",
+    "examplesLabel": "Prepared targets",
+    "run": "Run",
+    "placeholder": "e.g. 203.0.113.10",
+    "outputLabel": "Output",
+    "windowsLabel": "Windows",
+    "linuxLabel": "Linux",
+    "ping": {
+      "usage": "Enter a target, or pick one of the prepared targets.",
+      "notes": {
+        "gatewayOk": "The gateway answers: this address is on the office's own network and reachable directly.",
+        "gatewayFail": "No reply from the gateway. Either this is not the office's real router, or the address is not on this network at all.",
+        "dnsOk": "The DNS server answers: it is on the same network as this machine.",
+        "dnsFail": "No reply from the DNS server - it looks like it is off entirely, not just its DNS service.",
+        "remoteOk": "Reply from the remote server. The route there works.",
+        "remoteFail": "No reply from the remote server. Either the route is missing, or the name could not be resolved.",
+        "noGateway": "No default gateway is configured on this machine at all - it cannot reach anything outside its own network.",
+        "unknownHost": "'{host}': this name or address is unknown to the simulation. Try one of the prepared targets."
+      }
+    },
+    "traceroute": {
+      "usage": "traceroute shows every stop along the way - and exactly where it gets stuck."
+    },
+    "nslookup": {
+      "usage": "Look up the remote server's name.",
+      "ok": "Resolved to {ip}.",
+      "fail": "The name could not be resolved - the configured DNS server did not answer."
+    },
+    "causesLabel": "What is wrong?",
+    "fixesLabel": "And how do you fix it?",
+    "causes": {
+      "dhcpFailure": "The DHCP server did not answer: the machine gave itself a link-local (APIPA) address, with no usable gateway and no DNS.",
+      "wrongGateway": "The default gateway is set wrong: it points to an address outside the machine's own network.",
+      "dnsDown": "Routing is fine, but the DNS server does not answer at all - not even to a ping."
+    },
+    "fixes": {
+      "dhcpFailure": "Renew the DHCP lease (or check the cable/Wi-Fi and the DHCP server) so the machine gets a real address.",
+      "wrongGateway": "Correct the default gateway to the office router's real address.",
+      "dnsDown": "Point the machine at a working DNS server, or restart the one that is down."
+    },
+    "hints": {
+      "dhcpFailure": "Look at the address ipconfig shows: does it start with 169.254?",
+      "wrongGateway": "Ping the gateway and the DNS server separately - do both answer?",
+      "dnsDown": "Ping the remote server by its address, then by its name. Do both work?"
+    },
+    "explanations": {
+      "dhcpFailure": "A Fachinformatiker checks ipconfig first: an address from 169.254.x.x means DHCP never answered, so the machine invented its own address (APIPA) - without a real gateway or DNS, nothing beyond the local network is reachable.",
+      "wrongGateway": "The clue was that the DNS server answered fine (it is on the same network) while the gateway and everything beyond it did not: this machine's route to the rest of the world - its default gateway - is set wrong.",
+      "dnsDown": "The clue was that pinging the remote server's address worked but pinging its name did not: routing is fine, so the fault sits specifically with name resolution - the DNS server itself does not answer."
+    },
+    "wrongCause": "That is not the cause here. Compare what answered and what did not.",
+    "wrongFix": "That fix does not match the cause you found.",
+    "solved": "Solved.",
+    "hintLabel": "Hint:"
   }
 }
