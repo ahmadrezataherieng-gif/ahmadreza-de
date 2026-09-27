@@ -2,9 +2,11 @@
 
 Things that need a decision from Ahmadreza before the phase that depends on them.
 
-## Everything still open (2026-09-27, after work queue 2026-09-27)
+## Everything still open (2026-09-28, after work queue 2026-09-28 A2)
 
-ROADMAP.md: 117 items, 84 done, 8 in progress, 25 to do - weighted progress **77 %** (339.4 / 439; queue 2026-09-28 A1's seven items added SEO-20, SEO-21, SEO-22, LEG-19, LAU-01 and closed small parts of OWN-03 and APP-02, no item changed status weight materially). Details of each point are in the ROADMAP row or the section of this file named in brackets. Final check of 2026-09-27: `matrix.mjs` 43/43 configurations, WebKit 66/66 pages, `vitals.mjs` de 8/8 within budget, fa 6/8 (see "Queue 2026-09-27 item 6").
+ROADMAP.md: 122 items, 89 done, 8 in progress, 25 to do - weighted progress **78 %** (354.4 / 454; queue 2026-09-28 A2's five items added LAU-02, LEG-20, APP-18, SEO-23, SEO-24). Details of each point are in the ROADMAP row or the section of this file named in brackets. This queue was a cloud session (no deploys, no Cloudflare - CLAUDE.md "Cloud sessions"); nothing was deployed. Final check of 2026-09-27 (queue 2026-09-27 item 6, still the most recent full run): `matrix.mjs` 43/43 configurations, WebKit 66/66 pages, `vitals.mjs` de 8/8 within budget, fa 6/8.
+
+Queue 2026-09-28 A2, item by item: **0** housekeeping (vCard CRLF, 8 stale `placeholders.mjs` rows) - nothing left open. **1** the source registry (`src/content/sources.ts`) - all seven eras' insider and legend facts were sourced, none dropped; four entries note a secondary source (Wikipedia, Computer Hope) where a search found nothing more primary - worth a better citation if the owner or a later session finds one, not urgent. **2** the second legend per era and four Terminal easter eggs - done; a real regression (an unclickable "try myself" button once the legend note grew every puzzle card) was found and fixed in the same item, not left open. **3** the print stylesheet - done, proved with Playwright PDFs and print-media screenshots for About de/fa and the landing page de; the legal pages' print look was not separately screenshotted (the same `.ao-site-page` rules cover them) - worth a quick look, not urgent. **4** a share image per page - done for journey/desktop/about; the legal pages and 404 keep the landing card on purpose (never shared as links on their own).
 
 ### Owner (Ahmadreza) - decisions, assets, accounts
 
