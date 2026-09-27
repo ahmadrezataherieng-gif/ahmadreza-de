@@ -35,12 +35,35 @@ test('portrait files: 4:5 progressive JPEGs in every srcset width, the full one 
   assert.equal(PORTRAIT.digitalSourceType, `https://cv.iptc.org/newscodes/digitalsourcetype/${AI_TERM}`);
 });
 
-test('portrait: nothing from Photo/ is tracked, only the generated files are in public/images/', () => {
+test('portrait: nothing from Photo/ is tracked, only the generated files (plus the square crop) are in public/images/', () => {
   const listed = Object.values(PORTRAIT.sources).flat().map((entry) => entry.src.replace('/images/', ''));
   // The name in the file names, a small help for image search (queue 2026-09-27 item 5).
   for (const name of listed) assert.match(name, /^ahmadreza-taheri-portrait(-\d+)?\.(jpg|avif)$/, name);
-  assert.deepEqual(readdirSync(new URL('public/images/', root)).sort(), listed.sort());
+  // The square crop for external profiles (queue 2026-09-28 A1 item 4) is generated but never used on the site.
+  assert.deepEqual(readdirSync(new URL('public/images/', root)).sort(), [...listed, 'ahmadreza-taheri-portrait-square.jpg'].sort());
   assert.match(read('.gitignore'), /^\/Photo\/$/m);
+});
+
+test('square portrait: 1:1, at least 800 x 800, the same AI marking, no EXIF or GPS, never referenced by the site', async () => {
+  const file = new URL('public/images/ahmadreza-taheri-portrait-square.jpg', root);
+  assert.ok(existsSync(file));
+  const meta = await sharp(fileURLToPath(file)).metadata();
+  assert.equal(meta.format, 'jpeg');
+  assert.equal(meta.width, meta.height, 'square');
+  assert.ok(meta.width >= 800, `at least 800px, got ${meta.width}`);
+  assert.equal(meta.exif, undefined, 'no EXIF (and so no GPS) from the source');
+  assert.ok(meta.xmp?.toString().includes(AI_TERM), 'the IPTC AI marking is kept');
+  // Not read by PortraitImage.tsx or PORTRAIT.sources: it never gains its own <picture> or ImageObject.
+  const offenders = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(new URL(dir, root), { withFileTypes: true })) {
+      const path = `${dir}${entry.name}`;
+      if (entry.isDirectory()) walk(`${path}/`);
+      else if (/\.tsx?$/.test(entry.name) && read(path).includes('portrait-square')) offenders.push(path);
+    }
+  };
+  walk('src/');
+  assert.deepEqual(offenders, [], 'no component references the square crop');
 });
 
 test('portrait: every place that shows it goes through PortraitImage, which always draws the AI label', () => {

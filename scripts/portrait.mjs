@@ -65,3 +65,14 @@ for (const [width, name, format] of FILES) {
   await image.withXmp(XMP).toFile(file);
   console.log(`${name}: ${width} x ${(width * 5) / 4}, ${(statSync(file).size / 1024).toFixed(1)} kB`);
 }
+
+// A square crop of the same source, for the owner's LinkedIn/XING/GitHub
+// profiles (queue 2026-09-28 A1 item 4) - never referenced by the site (no
+// PORTRAIT.sources entry, no <picture>, no JSON-LD ImageObject of its own).
+const squareFile = join(out, 'ahmadreza-taheri-portrait-square.jpg');
+const square = sharp(source)
+  .resize(1000, 1000, { fit: 'cover', position: 'centre', kernel: 'lanczos3' })
+  .sharpen({ sigma: 0.6 })
+  .jpeg({ quality: 82, progressive: true, mozjpeg: true, chromaSubsampling: '4:2:0' });
+await square.withXmp(XMP).toFile(squareFile);
+console.log(`ahmadreza-taheri-portrait-square.jpg: 1000 x 1000, ${(statSync(squareFile).size / 1024).toFixed(1)} kB`);

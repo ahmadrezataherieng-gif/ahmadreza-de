@@ -200,7 +200,7 @@ PROJECT_STATE.md and DECISIONS.md.
 |---|---|---|---|---|---|---|---|
 | OWN-01 | **Portrait photo**, 1200 x 1500 px, 4:5, `public/images/portrait.jpg`. Done 2026-09-26 (queue B item 1): the owner's chosen AI-generated image, on the landing page, the About page and the About window, with srcset widths 480/800/1200 and the AI label (DECISIONS 82). | done | P1 | Ahmadreza | LEG-09 | S | about |
 | OWN-02 | **Résumé PDF**, `public/files/ahmadreza-taheri-lebenslauf.pdf`; one German PDF or one per language. | missing | P1 | Ahmadreza | - | S | about |
-| OWN-03 | **Tidy LinkedIn, GitHub and XING** and send the profile URLs (for Contact, JSON-LD `sameAs`, the footer). | missing | P1 | Ahmadreza | - | S | about |
+| OWN-03 | **Tidy LinkedIn, GitHub and XING** and send the profile URLs (for Contact, JSON-LD `sameAs`, the footer). **Done 2026-09-27 (queue 2026-09-28 A1 item 4):** a square 1000 x 1000 crop of the chosen portrait is ready for these profiles (`public/images/ahmadreza-taheri-portrait-square.jpg`, also in `Claude outputs/profile-photo/`, `scripts/portrait.mjs`); the profile URLs themselves are still owed. | missing | P1 | Ahmadreza | - | S | about |
 | OWN-04 | **German proofreading by a native speaker** (and Persian); all copy is a draft. | missing | P1 | Ahmadreza | FIN-01 | L | launch |
 | OWN-05 | **About/CV facts**: apprenticeship start and end date, earlier stations, language levels, skill list, projects (TODO.md, Phase 7). | missing | P1 | Ahmadreza | - | S | about |
 | OWN-06 | **Decide the GitHub repo link** is public on the site (Projects). | missing | P2 | Ahmadreza | - | XS | about |
