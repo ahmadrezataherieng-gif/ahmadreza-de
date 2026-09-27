@@ -3929,3 +3929,90 @@ html:has(.ao-site-page) {
     width: auto;
   }
 }
+
+/* ==========================================================================
+   Print (queue 2026-09-28 A2 item 3): the landing page, the static About page
+   and the legal pages (`.ao-site-page`, the wrapper all three already share -
+   never the journey or the desktop, which are never meant to print). Black on
+   white, no chrome, no motion; the portrait's AI label always prints, in its
+   own frame rather than relying on browsers to print its background veil
+   (most do not, by default). `scripts/prune-static-css.mjs` keeps every rule
+   here: each selector's classes are already read by the static pages'
+   own source, so none of them is "exclusive" to the journey/desktop side.
+   -------------------------------------------------------------------------- */
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    min-height: auto !important;
+  }
+
+  .ao-site-page {
+    overflow: visible !important;
+    min-height: auto !important;
+    background: #fff;
+    color: #000;
+  }
+
+  .ao-site-page * {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* No nav, toggles or language bar: the header (brand, language switcher,
+     scheme toggle), every <nav> (the in-page links, the legal links) and the
+     footer that holds them. */
+  .ao-site-page header,
+  .ao-site-page nav,
+  .ao-site-page footer,
+  /* Decorative backgrounds and illustrations: the landing's glow and grain
+     layers, every drawing built from illustrations.css' `.ill` base class -
+     the large scenes (the About page's route) and the small inline icons
+     alike, all `aria-hidden` already - and the "Tip" learning snippets
+     (supplementary, not part of the printed record). */
+  .ao-site-page .ao-landing-glow,
+  .ao-site-page .ao-landing-grain,
+  .ao-site-page .ill,
+  .ao-site-page .ill-tile,
+  .ao-site-page .ill-tip {
+    display: none !important;
+  }
+
+  /* Sections keep their heading and body together across a page break
+     (`print:break-inside-avoid` on the About/legal <section>s does the same
+     via Tailwind; this covers every other block-level section). */
+  .ao-site-page section,
+  .ao-site-page article {
+    break-inside: avoid;
+  }
+
+  /* The AI disclosure must always print, so it draws its own frame instead of
+     depending on the photo's background veil (browsers drop background
+     colours by default; print-color-adjust asks them not to, for this one
+     element that legally has to survive that default). */
+  .ao-portrait-ai {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* An external link's URL prints after it - internal links are always
+     relative (never start with "http"), so this only ever matches a real
+     external address. */
+  .ao-site-page a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+  }
+}

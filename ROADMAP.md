@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 9 | 0 | 0 | 43 / 43 | 100 % |
 | `about` | 4 | 2 | 4 | 19.1 / 28 | 68 % |
 | `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
-| `seo` | 25 | 3 | 4 | 80.2 / 95 | 84 % |
+| `seo` | 26 | 3 | 4 | 82.2 / 97 | 85 % |
 | `launch` | 15 | 2 | 12 | 57.1 / 108 | 53 % |
-| **all** | 87 | 8 | 25 | 350.4 / 450 | **78 %** |
+| **all** | 88 | 8 | 25 | 352.4 / 452 | **78 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 31 | 39 |
-| **total** | **25** | **8** | **87** | **120** |
+| P2 | 7 | 1 | 32 | 40 |
+| **total** | **25** | **8** | **88** | **121** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -128,6 +128,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | SEO-20 | **dateModified format fix** (live Search Console error "Invalid date/time value for dateModified" on `/` and `/fa/`): the coming-soon page's `dateModified` was date-only (`values.DATE`, a bare `YYYY-MM-DD`), invalid for schema.org's date-time. **Done 2026-09-27 (queue 2026-09-28 A1 item 1):** `src/lib/last-change.ts` gets `toBerlinIso()`/`lastChangeIso()` (a full ISO 8601 date-time with the Europe/Berlin offset, from the last-commit date); the main site's layout and `build-soon.mjs` both use it now, so `dateModified` is the same real value in every language on both builds; the sitemap's `lastmod` stays date-only on purpose. Pinned by `seo-head.test.mjs` and `soon-seo.test.mjs`. | done | P1 | Claude Code | SEO-19 | XS | seo |
 | SEO-21 | **Amonel OS and the journey as hasPart of the Amonel CreativeWork, image previews.** **Done 2026-09-27 (queue 2026-09-28 A1 item 2):** `structuredData()` gains `amonelOs` (CreativeWork, never SoftwareApplication) and `journey` (LearningResource, its seven eras as CreativeWork nodes at their real `#era-N` anchors, `teaches` = the "one truth" sentences `EraSection.tsx` already shows) - both `hasPart` of the Amonel brand; every name/description reused from the page's own title, meta description or `os.brand`/`eras.*` copy, nothing new; no `aggregateRating`/`review`/`offers`, no `Course`/`EducationalOrganization`. Every indexed page (main site and the coming-soon page) now carries `max-image-preview:large` in its robots meta. Pinned by `seo.test.mjs`, `seo-head.test.mjs`, `soon-pages.test.mjs`, `soon-seo.test.mjs`. | done | P2 | Claude Code | SEO-19 | S | seo |
 | SEO-22 | **vCard download** (queue 2026-09-28 A1 item 5). `scripts/vcard.mjs` builds `public/files/ahmadreza-taheri-{de,en,fa}.vcf` at build time (wired into `npm run build`) from the single sources: `FN`/`N` "Ahmadreza Taheri" in every language, `TITLE` = `site.jobTitle`, `EMAIL` = the one `EMAIL` constant, `URL` = the site's own per-language home page, `ADR` with only Trier and the country word (never a street, `TEL` or `PHOTO`); vCard 3.0, CRLF line endings, RFC 2426 value escaping. Served with `Content-Type: text/vcard` and a `Content-Disposition` download filename (`public/_headers`). A "Kontakt speichern"/"Save contact"/«ذخیره‌ی مخاطب» button (the existing button style) in the Contact app and on the About pages (CR-1125). Pinned by `vcard.test.mjs` (fields, CRLF, no phone/photo/street, no Momrabadi or employer, wired into the build, linked from the built pages). | done | P2 | Claude Code | - | S | about |
+| SEO-23 | **Print stylesheet.** Done 2026-09-28 (queue 2026-09-28 A2 item 3). A `@media print` block in `globals.css`, scoped to `.ao-site-page` - the wrapper the landing page, the static About page and the legal pages already share, never the journey or the desktop: black on white (`html`/`body`/`.ao-site-page` and every descendant forced to `#000` on `#fff`, backgrounds/shadows/animations/transitions off), every `header`, `nav` and `footer` hidden (no chrome, no toggles, no language bar), every `.ill`/`.ill-tile`/`.ill-tip` hidden (illustrations, section icons, learning snippets), `section`/`article` get `break-inside: avoid` (About's own `<Section>` also carries `print:break-inside-avoid`), `@page { margin: 18mm }`, an external link's `href` prints after it (`a[href^='http']::after`, never matched by the site's own relative links). The portrait's AI label draws its own black-on-white frame instead of depending on browsers printing its background veil (most do not by default; `print-color-adjust: exact` on `.ao-portrait-ai` only); the landing's portrait gets a print-only `max-w-[8rem]` so it prints small, like a résumé photo, not the on-screen hero. `scripts/prune-static-css.mjs` keeps the whole block (every selector's classes are already read by the static pages' own source, so none of it is "exclusive" to the journey/desktop side) - checked in the built `out/`. Proved with Playwright (`chromium`, `page.pdf()` and `page.emulateMedia({media:'print'})` + `page.screenshot()`, since this container has no PDF-to-image tool to inspect a `.pdf` directly): About de, About fa (RTL mirrors correctly, Latin terms such as TCP/IP stay readable) and the landing page de, all looked at as PNGs. | done | P2 | Claude Code | - | S | seo |
 | SEO-15 | **Static /en/ and /fa/ versions of the coming-soon page** (built 2026-09-24: separate pages with hreflang, canonical, JSON-LD and a three-URL sitemap; copy in `soon/copy.mjs`, CR-1086) (new 2026-09-24): today it is one German URL that switches language in the browser, so a crawler that does not run scripts sees German plus the English and Persian lines under the role. Separate pages with hreflang would let the English and Persian texts rank on their own. Only until launch; decide with the owner whether it is worth it. | done | P2 | Claude Code | - | S | seo |
 
 ## Phase 11 - Legal
