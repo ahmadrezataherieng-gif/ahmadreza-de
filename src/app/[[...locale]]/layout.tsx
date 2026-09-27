@@ -12,6 +12,7 @@ import { allRouteSegments, matchSegments, viewHref, type View } from '@/lib/rout
 import { SITE_URL } from '@/lib/constants';
 import { returningRedirectScript } from '@/lib/returning';
 import { loadLegalCopy } from '@/components/legal/LegalPage';
+import { ogImageName } from '@/lib/og-image';
 import { serialiseJsonLd, structuredData } from '@/lib/structured-data';
 import { SCHEME_SCRIPT } from '@/lib/scheme';
 import { VIEWPORT_PIN_SCRIPT } from '@/lib/stable-viewport';
@@ -159,11 +160,16 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
       description,
       siteName: t('brand'),
       url: viewHref(locale, view),
-      // One share image per language (scripts/og-image.mjs, ROADMAP SEO-05).
+      // One share image per language for the landing page (unchanged), and
+      // one more per language for the journey, the desktop and the About
+      // page (scripts/og-image.mjs, ROADMAP SEO-05, SEO-24; queue 2026-09-28
+      // A2 item 4) - every other view (the legal pages, 404) keeps the
+      // landing image, since a card of its own would add nothing for a page
+      // search engines and visitors never share.
       // CONTENT-TODO CR-1050
       images: [
         {
-          url: `/og/ahmadreza-taheri-${locale}.png`,
+          url: `/og/${ogImageName(view, locale)}.png`,
           width: 1200,
           height: 630,
           alt: t('ogAlt'),
@@ -175,7 +181,7 @@ export async function generateMetadata({ params }: { params: Promise<LayoutParam
       card: 'summary_large_image',
       title,
       description,
-      images: [{ url: `/og/ahmadreza-taheri-${locale}.png`, alt: t('ogAlt') }],
+      images: [{ url: `/og/${ogImageName(view, locale)}.png`, alt: t('ogAlt') }],
     },
   };
 }

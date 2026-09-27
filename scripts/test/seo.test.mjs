@@ -94,7 +94,9 @@ test('entity JSON-LD: the primary image is an ImageObject on the ProfilePage, na
 
 test('entity: every locale and the coming-soon pages keep Amonel out of the Person, and og:image / twitter:image use the renamed file', () => {
   const layout = read('src/app/[[...locale]]/layout.tsx');
-  assert.equal([...layout.matchAll(/\/og\/ahmadreza-taheri-\$\{locale\}\.png/g)].length, 3, 'openGraph, twitter and JSON-LD');
+  // openGraph and twitter share one per-view image (queue 2026-09-28 A2 item 4, src/lib/og-image.ts); JSON-LD keeps the landing card.
+  assert.equal([...layout.matchAll(/\/og\/\$\{ogImageName\(view, locale\)\}\.png/g)].length, 2, 'openGraph and twitter');
+  assert.equal([...layout.matchAll(/\/og\/ahmadreza-taheri-\$\{locale\}\.png/g)].length, 1, 'JSON-LD');
   assert.doesNotMatch(layout, /\/og\/og-/);
   const soon = read('soon/index.html');
   assert.match(soon, /property="og:image" content="https:\/\/ahmadreza\.de\/og\/ahmadreza-taheri-de\.png"/);
