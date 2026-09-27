@@ -6,8 +6,6 @@ Things that need a decision from Ahmadreza before the phase that depends on them
 
 ROADMAP.md: 117 items, 84 done, 8 in progress, 25 to do - weighted progress **77 %** (339.4 / 439; queue 2026-09-28 A1's seven items added SEO-20, SEO-21, SEO-22, LEG-19, LAU-01 and closed small parts of OWN-03 and APP-02, no item changed status weight materially). Details of each point are in the ROADMAP row or the section of this file named in brackets. Final check of 2026-09-27: `matrix.mjs` 43/43 configurations, WebKit 66/66 pages, `vitals.mjs` de 8/8 within budget, fa 6/8 (see "Queue 2026-09-27 item 6").
 
-**Queue 2026-09-28 A1's closing instruction asked to "mark items 3, 5, 6, 8 of the original queue 2026-09-28 A as moved to queue A2"** - no such "queue 2026-09-28 A" (with an item 8) exists anywhere in PROJECT_STATE.md; the queue actually received and run was "2026-09-28 A1" with exactly seven items, all seven done (see PROJECT_STATE.md). Default taken: nothing renamed or moved, since there is nothing to move; flagged here rather than guessed at.
-
 ### Owner (Ahmadreza) - decisions, assets, accounts
 
 1. **Choose the logo** (BR-01): `Claude outputs/logo-proposals-2/overview.png`, one sheet per proposal; Claude's top 3 are Three, Tile, Strata. Then Claude replaces the interim logo, icons, share images and coming-soon page.

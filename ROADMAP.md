@@ -43,16 +43,16 @@ build time).
 | `about` | 4 | 2 | 4 | 19.1 / 28 | 68 % |
 | `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
 | `seo` | 24 | 3 | 4 | 75.2 / 90 | 84 % |
-| `launch` | 14 | 2 | 12 | 56.1 / 107 | 52 % |
-| **all** | 84 | 8 | 25 | 339.4 / 439 | **77 %** |
+| `launch` | 15 | 2 | 12 | 57.1 / 108 | 53 % |
+| **all** | 85 | 8 | 25 | 340.4 / 440 | **77 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 28 | 36 |
-| **total** | **25** | **8** | **84** | **117** |
+| P2 | 7 | 1 | 29 | 37 |
+| **total** | **25** | **8** | **85** | **118** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -178,6 +178,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | DEP-05 | **Anonymous puzzle counters** (aggregate counts only, no personal data): built in Phase 9C (Worker + D1, `/api/*`), **not live** until DEP-03, DEP-04 and DEP-06. | partial | P1 | Claude Code | DEP-03, DEP-04, DEP-06 | M 70% | launch |
 | DEP-06 | **Launch**: deploy the `ahmadreza-de` Worker, move both custom domains (apex and www) from the coming-soon Worker `silent-lake-8ae2` to it, then delete `silent-lake-8ae2`; run `node scripts/verify/placeholders.mjs --strict` first and confirm it is clean (LAU-01). Only with the owner's go. | missing | P0 | Ahmadreza + Claude Code | DEP-03, DEP-04, LEG-01..LEG-05, LEG-07, FIN-01, LAU-01 | M | launch |
 | LAU-01 | **Launch gate: no visible placeholder text left.** **Done 2026-09-27 (queue 2026-09-28 A1 item 6):** `scripts/verify/placeholders.mjs` lists every PLACEHOLDER row of CONTENT_REVIEW.md that is visible in the build (a row filed under a "not built yet" section is skipped unless its own text already says "(built ...)"); warn only for now (exit 0), `--strict` fails while any remain - meant for DEP-06, after FIN-01. Today: 1108 of 1116 PLACEHOLDER rows are visible (the rest sit under stale "not built yet" entries that the content review will need to re-file, not a script bug - noted in TODO.md). Added to the DEP-06 launch step in TODO.md. Pinned by `placeholders.test.mjs`. | done | P2 | Claude Code | - | S | launch |
+| LAU-02 | **Housekeeping: vCard CRLF + the 8 stale `placeholders.mjs` rows.** **Done 2026-09-28 (queue 2026-09-28 A2 item 0):** `public/files/*.vcf` had been committed with LF line endings before `.gitattributes` gained `*.vcf -text` (which stops git from ever normalising them again); regenerated with `node scripts/vcard.mjs` (CRLF throughout, `vcard.test.mjs` now genuinely exercises and passes the CRLF assertion instead of skipping). CONTENT_REVIEW.md: CR-1034/1035/1036/1037/1052/1053/1056 marked `(built ...)` in their location cell (portrait, the four Phase-9D-2 bonus apps, `nav.legal`, the coming-soon page and the About meta description all ship; only their copy needs the final review) so `placeholders.mjs` stops filing them under the stale "not built yet"/"not built" sections whose header they were only inheriting because those sections use `**Files:**` (plural) after the last singular `**File:**` line; CR-1033 (the résumé PDF) stays flagged - it genuinely does not exist yet. `placeholders.mjs --quiet`: 8 -> 1 rows filed as not-built-yet, 1108 -> 1115 of 1116 visible. | done | P2 | Claude Code | - | XS | launch |
 | DEP-07 | **Post-deploy checks**: the counter `curl` checks (TODO.md), legal pages, redirects, 404 status, headers. | missing | P1 | Claude Code | DEP-06 | S | launch |
 | DEP-08 | **Cloud-session build mode** (owner, 2026-09-24): `AMONEL_PREVIEW_BUILD=1` builds, lints and tests with the dummy address (`npm run setup:preview`); production and deploys still refuse the dummy, and the flag is refused on Cloudflare's builders. Rules in CLAUDE.md, "Cloud sessions"; pinned by `preview-build.test.mjs`. | done | P2 | Claude Code | - | XS | launch |
 

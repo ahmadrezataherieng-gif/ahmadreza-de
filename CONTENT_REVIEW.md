@@ -1425,10 +1425,10 @@ Nothing to mark in code yet. Registered so they are not forgotten; each gets rea
 | CR-1031 | 404 page: `notFound.*` in `src/messages/{de,en,fa}.json` + the title pattern in `src/app/not-found.tsx` (built 2026-09-23) | short text | de / en / fa | PLACEHOLDER | One page in all three languages (a stray URL has no locale): title, one sentence, links home, journey, desktop; noindex. Now (de): «Seite nicht gefunden» |
 | CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | BUILT 2026-09-23 - see section 29 | Real timeline entries of the career path |
 | CR-1033 | Résumé PDF (`/files/ahmadreza-taheri-lebenslauf.pdf`) - file itself | other | de / en / fa | PLACEHOLDER | The actual CV document, in which languages |
-| CR-1034 | Portrait photo (`/images/portrait.jpg`) - file itself | other | de / en / fa | PLACEHOLDER | Real photo, rights and consent, final alt text |
-| CR-1035 | Network-tools app (bonus, era 6, Phase 9D-2): all copy | long text | de / en / fa | PLACEHOLDER | Title, description and content of the tool |
-| CR-1036 | Time Machine app (bonus, era 7, Phase 9D-2): all copy | long text | de / en / fa | PLACEHOLDER | Title, description and content of the theme switcher |
-| CR-1037 | Scheduler and Filesystem bonus apps (eras 2 and 3): all copy | long text | de / en / fa | PLACEHOLDER | Slots are registered (`os.apps.scheduler`, `os.apps.filesystem`) but the apps do not exist yet |
+| CR-1034 | Portrait photo (`ahmadreza-taheri-portrait*.jpg/avif`) - final review only (built 2026-09-26, OWN-01) | other | de / en / fa | PLACEHOLDER | Real photo shipped (AI-generated, owner's choice); rights and consent, final alt text still to confirm |
+| CR-1035 | Network-tools app (bonus, era 6): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | Title, description and content of the tool |
+| CR-1036 | Time Machine app (bonus, era 7): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | Title, description and content of the theme switcher |
+| CR-1037 | Scheduler and Filesystem bonus apps (eras 2 and 3): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | `os.apps.scheduler`, `os.apps.filesystem` - both apps ship; copy still a draft |
 
 ## 25. SEO and metadata
 
@@ -1478,8 +1478,8 @@ The Impressum and the Datenschutzerklärung are **not placeholders**: they were 
 |---|---|---|---|---|---|
 | CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number - decided by the owner (2026-09-23, confirmed 2026-09-24, ROADMAP LEG-13) |
 | CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the six storage keys (§ 25(2) Nr. 2 TDDDG; `amonel.theme.v1` added 2026-09-24 with the Time Machine), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
-| CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
-| CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
+| CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page (built) | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
+| CR-1053 | `soon/index.html` - the whole live coming-soon page (built; tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
 | CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
 | CR-1055 | Coming-soon legal pages (`soon/dist/` `impressum/` and `datenschutz/` in de, en, fa, built by `scripts/build-soon.mjs` from the same JSON with scope `soon`) | legal | de / en / fa | LEGAL – owner must verify | Same text as CR-1029 and CR-1030 minus the counters, the Assistant and the site's storage table; plus the `ao-lang` storage entry and system fonts |
 
@@ -1491,7 +1491,7 @@ The About app’s own text (section 15) renders server-side as a page at `/about
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1056 | `site.aboutDescription` - the About page’s meta description | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
+| CR-1056 | `site.aboutDescription` - the About page’s meta description (built) | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
 | CR-1057 | The About page’s URL `/about/` (one slug in all three languages) and its title «Über mich – Ahmadreza Taheri \| Amonel» (from `nav.about`, CR-003) | SEO / meta | de / en / fa | PLACEHOLDER | Confirm the slug (e.g. `/ueber-mich/` would suit German search but not en/fa) and the title |
 
 ## 28. Desktop app: Contact
