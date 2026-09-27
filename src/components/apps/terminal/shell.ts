@@ -55,7 +55,7 @@ const ROOT: Node = dir({
 });
 
 export const PORTFOLIO_COMMANDS: readonly PortfolioSection[] = ['about', 'skills', 'projects', 'cv', 'contact'];
-export const SHELL_COMMANDS = ['ask', 'cat', 'cd', 'clear', 'echo', 'exit', 'help', 'history', 'ls', 'pwd', 'sudo', 'uname', 'whoami'] as const;
+export const SHELL_COMMANDS = ['ask', 'cat', 'cd', 'clear', 'echo', 'exit', 'help', 'history', 'ls', 'pwd', 'sudo', 'troubleshoot', 'uname', 'whoami'] as const;
 const COMMANDS: readonly string[] = [...PORTFOLIO_COMMANDS, ...SHELL_COMMANDS].sort();
 
 export type ShellLine =
@@ -126,13 +126,15 @@ export interface ShellState {
   exited: boolean;
   /** Set by `ask`: the question the component hands to the Assistant, then clears (APP-13). */
   asked: string | null;
+  /** Set by `troubleshoot`: the component opens the Network app's Troubleshoot tab, then clears (queue 2026-09-28 B item 2). */
+  troubleshoot: boolean;
 }
 
 /** Enough scrollback to read; old lines drop off like a real terminal's buffer. */
 const MAX_LINES = 400;
 
 export function initialShell(): ShellState {
-  return { cwd: HOME, lines: [{ id: 0, kind: 'message', key: 'motd' }], history: [], nextId: 1, exited: false, asked: null };
+  return { cwd: HOME, lines: [{ id: 0, kind: 'message', key: 'motd' }], history: [], nextId: 1, exited: false, asked: null, troubleshoot: false };
 }
 
 /** The prompt's path: home shows as `~`, like bash. */
@@ -258,6 +260,10 @@ export function runCommand(state: ShellState, input: string): ShellState {
 
     case 'exit':
       return { ...out(), exited: true };
+
+    case 'troubleshoot':
+      // Opens the Network app's Troubleshoot tab (queue 2026-09-28 B item 2), same handoff mechanism as `ask` (APP-13).
+      return { ...out(message('troubleshoot.handoff')), troubleshoot: true };
 
     case 'ls': {
       const flags = args.filter((arg) => arg.startsWith('-') && arg !== '-');

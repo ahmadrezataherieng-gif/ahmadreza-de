@@ -1723,3 +1723,26 @@ A short systemd-style log on a direct visit to `/desktop/` (`BootSequence.tsx`) 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1138 | `LINES` (the ten "Started …"/"Mounted …"/"Reached target …" lines) and the final "Welcome to Amonel OS" | other | all (machine text) | PLACEHOLDER | A systemd-style boot log for Amonel OS; confirm the ten service names read well together and that "Welcome to Amonel OS" is the wanted closing line |
+
+## 45. Troubleshoot mode, the Network app's fault-finding game (queue 2026-09-28 B item 2)
+
+A "Troubleshoot" tab in the Network tools app (`TroubleshootPanel`, `NetworkApp.tsx`), also reachable through the Terminal's new `troubleshoot` command: "the office's internet is down," one of three scenarios at random (DHCP/APIPA failure, a wrong default gateway, a DNS server that is down), diagnosed with simulated `ipconfig`/`ip addr`, `ping`, `traceroute` and `nslookup`, then a two-step guess (the cause, then its fix) with a hint after a wrong try and a short explanation once solved. Every address is RFC 5737 documentation space (198.51.100.0/24 for the office, 203.0.113.10/`files.example` for the remote server) except the one deliberate exception, 169.254.0.0/16 (APIPA, RFC 3927) - that address range *is* the DHCP-failure fault. Scenario logic and its tests: `troubleshoot.ts`, `troubleshoot.test.mjs`.
+
+**File:** `src/messages/apps/network/{de,en,fa}.json` (`troubleshoot.*`, `tabs.troubleshoot`)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1139 | `tabs.troubleshoot`, `troubleshoot.objective`, `.newScenario`, `.toolLabel`, `.tools.*`, `.targetLabel`, `.examplesLabel`, `.run`, `.placeholder`, `.windowsLabel`, `.linuxLabel`, `.ping.usage`, `.traceroute.usage`, `.nslookup.usage`, `.causesLabel`, `.fixesLabel`, `.hintLabel` | short text | de / en / fa | PLACEHOLDER | The tab label, the game's framing sentence, and the chrome around the four simulated commands and the two guess groups |
+| CR-1140 | `troubleshoot.simulation` | short text | de / en / fa | PLACEHOLDER | The honesty note: nothing here leaves the browser, matching the wording already used on the Ping and DNS tabs |
+| CR-1141 | `troubleshoot.ping.notes.*` | short text | de / en / fa | PLACEHOLDER | What each `ping` outcome means (gateway/DNS/remote reached or not, no gateway configured, unknown host) |
+| CR-1142 | `troubleshoot.nslookup.ok`, `.fail` | short text | de / en / fa | PLACEHOLDER | What an `nslookup` outcome means |
+| CR-1143 | `troubleshoot.causes.*`, `.fixes.*` | long text | de / en / fa | PLACEHOLDER | The three causes and their three fixes, in a Fachinformatiker's own words |
+| CR-1144 | `troubleshoot.hints.*` | short text | de / en / fa | PLACEHOLDER | One nudge per scenario, given after a wrong guess, without naming the answer |
+| CR-1145 | `troubleshoot.explanations.*` | long text | de / en / fa | PLACEHOLDER | The solved explanation: which clue pointed at the cause, and what a Fachinformatiker actually checks |
+| CR-1146 | `troubleshoot.wrongCause`, `.wrongFix`, `.solved` | short text | de / en / fa | PLACEHOLDER | The generic wrong-guess and solved lines |
+
+**File:** `src/messages/apps/terminal/{de,en,fa}.json` (`help.commands.troubleshoot`, `troubleshoot.handoff`)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1147 | `help.commands.troubleshoot`, `troubleshoot.handoff` | short text | de / en / fa | PLACEHOLDER | The `help` line for the new `troubleshoot` command, and the one-line handoff message it prints |

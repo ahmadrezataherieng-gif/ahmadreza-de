@@ -128,3 +128,61 @@ export const wellKnownPorts: readonly WellKnownPort[] = [
 
 /** Ports with a story rather than a service (APP-15). Copy: `network.ports.stories.<id>`. */
 export const portStories: readonly { port: number; id: string }[] = [{ port: 31337, id: 'elite' }];
+
+/* --- troubleshoot (APP-20): "the office's internet is down" ------------------- */
+
+export interface TroubleshootConfig {
+  ip: string;
+  mask: string;
+  gateway: string;
+  dns: string;
+}
+
+export const troubleshootScenarioIds = ['dhcpFailure', 'wrongGateway', 'dnsDown'] as const;
+export type TroubleshootScenarioId = (typeof troubleshootScenarioIds)[number];
+
+/** The far end every scenario's player is trying to reach: a file server on a documentation address, under .example. */
+export const TROUBLESHOOT_REMOTE_NAME = 'files.example';
+export const TROUBLESHOOT_REMOTE_IP = '203.0.113.10';
+/** The office LAN, TEST-NET-2 (RFC 5737); its real router is .1, its real DNS server .53. */
+export const TROUBLESHOOT_OFFICE_MASK = '255.255.255.0';
+export const TROUBLESHOOT_OFFICE_GATEWAY = '198.51.100.1';
+export const TROUBLESHOOT_OFFICE_DNS = '198.51.100.53';
+const TROUBLESHOOT_CLIENT_IP = '198.51.100.42';
+
+export interface TroubleshootScenario {
+  id: TroubleshootScenarioId;
+  config: TroubleshootConfig;
+  /** Addresses that never answer in this scenario, even when routing would otherwise reach them (a host that is simply off). */
+  downHosts: readonly string[];
+}
+
+/**
+ * Three faults, one for each scenario, all reachable through the same three
+ * commands (`ipconfig`/`ip addr`, `ping`, `nslookup`) so the symptoms - not the
+ * tool - tell them apart. RFC 3927 (169.254.0.0/16, APIPA) is the one address
+ * range here outside RFC 5737 documentation space, since it is the fault
+ * itself: a DHCP client that got no answer.
+ */
+export const troubleshootScenarios: Readonly<Record<TroubleshootScenarioId, TroubleshootScenario>> = {
+  dhcpFailure: {
+    id: 'dhcpFailure',
+    config: { ip: '169.254.23.87', mask: '255.255.0.0', gateway: '0.0.0.0', dns: '0.0.0.0' },
+    downHosts: [],
+  },
+  wrongGateway: {
+    id: 'wrongGateway',
+    // A typo: the office's real gateway is TROUBLESHOOT_OFFICE_GATEWAY, but this machine was set up with a
+    // documentation address (RFC 5737, TEST-NET-1) that is not even on the office's own subnet.
+    config: { ip: TROUBLESHOOT_CLIENT_IP, mask: TROUBLESHOOT_OFFICE_MASK, gateway: '192.0.2.1', dns: TROUBLESHOOT_OFFICE_DNS },
+    downHosts: [],
+  },
+  dnsDown: {
+    id: 'dnsDown',
+    config: { ip: TROUBLESHOOT_CLIENT_IP, mask: TROUBLESHOOT_OFFICE_MASK, gateway: TROUBLESHOOT_OFFICE_GATEWAY, dns: TROUBLESHOOT_OFFICE_DNS },
+    downHosts: [TROUBLESHOOT_OFFICE_DNS],
+  },
+};
+
+/** The three causes and their fixes, always offered in this order before shuffling. Copy: `network.troubleshoot.causes.<id>`/`.fixes.<id>`. */
+export const troubleshootCauseIds: readonly TroubleshootScenarioId[] = [...troubleshootScenarioIds];
