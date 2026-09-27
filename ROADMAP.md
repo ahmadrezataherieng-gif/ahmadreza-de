@@ -42,17 +42,17 @@ build time).
 | `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
 | `about` | 4 | 2 | 4 | 19.1 / 28 | 68 % |
 | `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
-| `seo` | 24 | 3 | 4 | 75.2 / 90 | 84 % |
+| `seo` | 25 | 3 | 4 | 80.2 / 95 | 84 % |
 | `launch` | 15 | 2 | 12 | 57.1 / 108 | 53 % |
-| **all** | 85 | 8 | 25 | 340.4 / 440 | **77 %** |
+| **all** | 86 | 8 | 25 | 345.4 / 445 | **78 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 29 | 37 |
-| **total** | **25** | **8** | **85** | **118** |
+| P2 | 7 | 1 | 30 | 38 |
+| **total** | **25** | **8** | **86** | **119** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -152,6 +152,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | LEG-17 | **GitHub Support purge of the cached commits** (new 2026-09-24): ten cached commits on GitHub still contained the old address after the history rewrite. Done 2026-09-25: GitHub Support ticket 4790804 confirmed the cached commits are purged. | done | P0 | Ahmadreza | LEG-12 | XS | legal |
 | LEG-18 | **Verify the purge, then delete the backup** (new 2026-09-24): GitHub confirmed the purge (LEG-17); the owner must still open one old commit SHA URL to check it is gone, then delete the backup bundle outside the repo (LEG-12). | missing | P0 | Ahmadreza | LEG-17 | XS | legal |
 | LEG-19 | **The Impressum is indexable** (owner decision 2026-09-27, DECISIONS 87). **Done 2026-09-27 (queue 2026-09-28 A1 item 3):** the Impressum pages (de/en/fa, main site and `soon/`) lose `noindex`, gain hreflang + `x-default` and a sitemap entry, exactly like every other indexed page; the Datenschutz is unchanged (`noindex, follow`, no hreflang, out of the sitemap). "Momrabadi" still appears only in the legal pages' own address block, never in a title, description, `alternateName` or JSON-LD. Pinned by `seo-head.test.mjs`, `seo.test.mjs`, `soon-pages.test.mjs`, `soon-seo.test.mjs`. | done | P2 | Claude Code + Ahmadreza | - | S | legal |
+| LEG-20 | **Source registry for the site's historical facts.** **Done 2026-09-28 (queue 2026-09-28 A2 item 1):** `src/content/sources.ts` - one entry per historical fact (claim, source URL, title, publisher, checked date) for every era's "insider" detail and every era's second fact (item 2's "Legende"), preferring a primary or institutional source (Computer History Museum, IBM's own 1955 manual, the Bell Laboratories Seventh Edition manual, The Open Group's POSIX text, MoMA, W3C, Docker's own blog, UCLA) over a magazine or encyclopedia; three entries note a secondary source where no better one could be found. Claims avoid absolute wording ("the first computer"). `sources.test.mjs` fails if any era's insider or legend fact has no entry. Recorded in CONTENT_REVIEW.md section 42. | done | P2 | Claude Code | - | M | seo |
 
 ## Phase 12 - Performance, accessibility, mobile
 

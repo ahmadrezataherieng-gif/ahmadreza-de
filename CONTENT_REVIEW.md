@@ -1664,3 +1664,26 @@ A new download button in the Contact app and on the About pages: a `.vcf` file p
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1125 | `contact.vcard.label` and `.save` in `src/messages/apps/contact/{de,en,fa}.json`; `about.actions.vcard` in `src/messages/apps/about/{de,en,fa}.json` (the same button text) | button | de / en / fa | PLACEHOLDER | de «Kontakt speichern», en «Save contact», fa «ذخیره‌ی مخاطب» (contact's row label «vCard» / «کارت مخاطب»). Short enough for the existing button style; a native speaker to check the fa form |
+
+## 42. Historical fact sources (queue 2026-09-28 A2 item 1, ROADMAP LEG-20)
+
+`src/content/sources.ts` - one entry per historical fact used anywhere on the site (every era's "insider" detail and, from item 2 of this queue on, every era's second fact, the "Legende"), each with a claim summary, a source URL, a title, a publisher and the date the link was checked (`sources.test.mjs` fails if any insider/legend has no entry). Not new copy - a citation list for facts already on the page or about to land in item 2 - so no PLACEHOLDER row of its own; recorded here as the file's own instruction ("Record the sources in CONTENT_REVIEW") asks. Preference is a primary source (the original paper, a manual, an archived standard) or an institutional one (a museum, a standards body, the company itself); three entries (`eniac-insider`, `dos-insider`, `dos-legend`, `win95-legend`) could only be backed by a well-corroborated secondary source (Wikipedia, Computer Hope) - noted in each entry's `publisher` field, kept rather than dropped because the underlying fact is not in doubt, only its ideal citation.
+
+| Source id | Claim | Publisher | Checked |
+|---|---|---|---|
+| `eniac-insider` | Diagonal pencil/felt-pen line across a punch-card deck to reorder a drop | Wikipedia | 2026-09-28 |
+| `eniac-legend` | ENIAC: decimal, plugboard/switch programming (days to rewire), ~17,000-18,000 tubes, rarely switched off | Computer History Museum | 2026-09-28 |
+| `batch-insider` | IBM 704 sense switches, tested from FORTRAN with `IF (SENSE SWITCH i)` | IBM (1955 manual) | 2026-09-28 |
+| `batch-legend` | "Chad" = the paper bits punched out of a card; a mispunch means wrong data or a jam | University of Iowa (Douglas W. Jones) | 2026-09-28 |
+| `unix-insider` | `chdir` was the directory-change command through the Sixth Edition; `cd` arrived with the Seventh (1979) | Bell Laboratories (Seventh Edition manual) | 2026-09-28 |
+| `unix-legend` | Unix time = seconds since 1970-01-01 UTC; a signed 32-bit counter overflows 2038-01-19 03:14:07 UTC | The Open Group (POSIX.1-2017) | 2026-09-28 |
+| `dos-insider` | F3 retypes the previous MS-DOS command line | Computer Hope | 2026-09-28 |
+| `dos-legend` | The 640 KB limit came from the IBM PC's memory map (384 KB reserved above it); CONFIG.SYS/AUTOEXEC.BAT tuning | Wikipedia (memory map, corroborated by the IBM PC Technical Reference) | 2026-09-28 |
+| `dos-legend-quote` | "640K ought to be enough" is an unverified Gates quote; Gates has denied it | Computerworld | 2026-09-28 |
+| `macintosh-insider` | The ⌘ symbol comes from a Swedish sign for a place of interest, found by Susan Kare in a symbol dictionary | Folklore.org (Andy Hertzfeld) | 2026-09-28 |
+| `macintosh-legend` | Susan Kare drew the first Mac icons on graph paper before digitizing them | Museum of Modern Art (MoMA) | 2026-09-28 |
+| `win95-insider` | `winipcfg` via Start › Run showed a Windows 95 machine's IP configuration | Computer Hope | 2026-09-28 |
+| `win95-legend` | 16 IRQ lines; two devices sharing one could crash the system; Plug and Play nicknamed "Plug and Pray" | Wikipedia | 2026-09-28 |
+| `cloud-insider` | Only root may bind a Linux process to a port below 1024 | W3C | 2026-09-28 |
+| `cloud-legend` | "Works on my machine" - containers (Docker, 2013) ship the app with its environment | Docker, Inc. | 2026-09-28 |
+| `terminal-lo` | The first ARPANET message (1969-10-29, Charley Kline, UCLA) crashed after two letters of LOGIN, leaving "LO" | UCLA (Leonard Kleinrock) | 2026-09-28 |
