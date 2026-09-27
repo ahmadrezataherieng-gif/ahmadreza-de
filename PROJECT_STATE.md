@@ -1,6 +1,12 @@
 # Project state
 
-Last updated: 2026-09-28 (work queue 2026-09-28 B finished, both items done; A2 merged via PR #1 - see below)
+Last updated: 2026-09-27 (local sync: main pulled with PR #1, #2, #3 merged)
+
+## Local sync 2026-09-27
+
+`main` pulled locally with PR #1, #2 and #3 merged (queues A2 and B, plus the `apps.mjs` stale-check fix in commit `306983a`); the remote cloud branches were deleted after merge. 308/308 tests pass, lint clean, build clean (3 locales, 22 pages). `scripts/verify/apps.mjs` 175/175 and `desktop.mjs` 63/63 pass locally - the cloud-session failures noted in the queue B entries below were a headless-only environment quirk (`pointer: fine`/`hover: hover` reporting false), not a real bug; two checks in `scripts/verify/apps.mjs` that had gone stale were fixed in commit `306983a`. Manual checks confirmed OK: the boot sequence (de 1440, fa 390), Troubleshoot mode (de, fa RTL), the era 1 second legend, and the About page's print preview.
+
+Next step: the logo (ROADMAP BR-01) - the owner has rejected all proposals so far; a new logo direction is being worked out in chat.
 
 ## Work queue 2026-09-28 B (resume with "continue the work queue 2026-09-28 B")
 
