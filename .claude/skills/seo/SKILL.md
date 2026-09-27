@@ -95,7 +95,7 @@ never sees it.
   `knowsAbout`, `knowsLanguage`, `email`, `image` (the portrait's ImageObject
   `#portrait`, marked `digitalSourceType` trainedAlgorithmicMedia, main site
   only, DECISIONS 82); add `sameAs` once the owner's profiles are ready.
-- **WebSite** (name = the person, not Amonel) on every indexed page, **Amonel** as its own `CreativeWork` with `creator` = the Person, an **ImageObject** (the share image) as the ProfilePage's `primaryImageOfPage`, **ProfilePage** on the landing page, all
+- **WebSite** (name = the person, not Amonel) on every indexed page, **Amonel** as its own `CreativeWork` with `creator` = the Person, an **ImageObject** (the share image) as the ProfilePage's `primaryImageOfPage`, **ProfilePage** on the landing page, an **AboutPage** on the About pages (`about` and `mainEntity` = the Person, its name and description the page's own title and meta description, the portrait as primary image; queue 2026-09-27), all
   linked by `@id`. The legal pages carry none. Rendered in the locale layout's
   `<head>`; pinned by `scripts/test/seo.test.mjs`.
 

@@ -210,6 +210,11 @@ export default async function LocaleLayout({
             dateModified: lastChange()?.toISOString(),
             // The Person's image, marked as AI-made (DECISIONS 82).
             portrait: { caption: (await getTranslations({ locale, namespace: 'landing' }))('portraitAlt') },
+            // The About pages: an AboutPage node with the page's own title and
+            // description (queue 2026-09-27 item 4). CONTENT-TODO CR-1124
+            ...(view === 'about'
+              ? { aboutPage: { name: await viewTitle(locale, view), description: tSite('aboutDescription') } }
+              : {}),
           }),
         );
 

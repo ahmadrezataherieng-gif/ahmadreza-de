@@ -121,3 +121,42 @@ test('SEO-13: one web manifest per language, each starting in its own language',
   }
   assert.match(read('src/app/[[...locale]]/layout.tsx'), /manifest\.\$\{locale\}\.webmanifest/);
 });
+
+// Queue 2026-09-27 item 4: the About pages carry an AboutPage about the Person.
+test('JSON-LD: an AboutPage only when asked for, about the Person, with the page title and description', () => {
+  const copy = { name: 'Ahmadreza Taheri', jobTitle: 'Job', knowsAbout: [], inLanguage: 'en', siteName: 'Amonel', image: { url: 'https://ahmadreza.de/og/ahmadreza-taheri-en.png', width: 1200, height: 630, alt: 'alt' }, description: 'd', pageUrl: 'https://ahmadreza.de/en/about/', isProfilePage: false };
+  assert.ok(!structuredData(copy)['@graph'].some((node) => node['@type'] === 'AboutPage'));
+  const graph = structuredData({ ...copy, aboutPage: { name: 'About me – Ahmadreza Taheri | Amonel', description: 'About d' }, dateModified: '2026-09-27T00:00:00.000Z' })['@graph'];
+  const page = graph.find((node) => node['@type'] === 'AboutPage');
+  const person = graph.find((node) => node['@type'] === 'Person');
+  const website = graph.find((node) => node['@type'] === 'WebSite');
+  assert.equal(page['@id'], 'https://ahmadreza.de/en/about/#webpage');
+  assert.equal(page.url, 'https://ahmadreza.de/en/about/');
+  assert.equal(page.name, 'About me – Ahmadreza Taheri | Amonel');
+  assert.equal(page.description, 'About d');
+  assert.equal(page.inLanguage, 'en');
+  assert.deepEqual(page.about, { '@id': person['@id'] });
+  assert.deepEqual(page.mainEntity, { '@id': person['@id'] });
+  assert.deepEqual(page.isPartOf, { '@id': website['@id'] });
+  assert.equal(page.dateModified, '2026-09-27T00:00:00.000Z');
+  assert.ok(!graph.some((node) => node['@type'] === 'ProfilePage'), 'the About page is no ProfilePage');
+});
+
+test('built About pages: one AboutPage each, with the page title and description, no sameAs yet', { skip: !existsSync(new URL('../../out/about/index.html', import.meta.url)) }, () => {
+  for (const [folder, lang] of [['about', 'de-DE'], ['en/about', 'en'], ['fa/about', 'fa']]) {
+    const html = read(`out/${folder}/index.html`);
+    const graph = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)[1])['@graph'];
+    const pages = graph.filter((node) => node['@type'] === 'AboutPage');
+    assert.equal(pages.length, 1, `${folder}: one AboutPage`);
+    const title = html.match(/<title>(.*?)<\/title>/)[1].replaceAll('&amp;', '&');
+    const description = html.match(/<meta name="description" content="([^"]*)"/)[1].replaceAll('&amp;', '&');
+    assert.equal(pages[0].name, title, `${folder}: name = <title>`);
+    assert.equal(pages[0].description, description, `${folder}: description = meta description`);
+    assert.equal(pages[0].inLanguage, lang);
+    assert.equal(pages[0].url, `https://ahmadreza.de/${folder}/`);
+    assert.equal(graph.find((node) => node['@type'] === 'Person').sameAs, undefined, `${folder}: sameAs waits for the profiles`);
+  }
+  for (const folder of ['', 'amonel/', 'desktop/']) {
+    assert.ok(!read(`out/${folder}index.html`).includes('"AboutPage"'), `${folder || '/'}: no AboutPage`);
+  }
+});

@@ -1648,3 +1648,11 @@ The owner chose an AI-generated portrait. Every place that shows it (landing, Ab
 |---|---|---|---|---|---|
 | CR-1122 | `landing.portraitAi` in `src/messages/{de,en,fa}.json` and `portraitAi` in `src/messages/apps/about/{de,en,fa}.json`: the label inside the portrait's bottom corner (`PortraitImage.tsx`) | label | de / en / fa | PLACEHOLDER | The owner's words: de «KI-Porträt», en «AI portrait», fa «پرتره‌ی هوش مصنوعی». Short (it sits on a 112 px thumbnail on About), and it must say AI. A native speaker to check the fa form («پرترهٔ» with hamze or «پرتره‌ی») |
 | CR-1123 | `landing.portraitAlt` and the About `portraitAlt` (new) in the same files: the alt text of the portrait, also the JSON-LD ImageObject's caption | alt text | de / en / fa | PLACEHOLDER | de «Porträt von Ahmadreza Taheri, KI-generiert», en «Portrait of Ahmadreza Taheri, AI-generated», fa «پرترهٔ احمدرضا طاهری، ساخته‌شده با هوش مصنوعی» (was «چهرهٔ احمدرضا طاهری»). Name first, then that it is AI-made |
+
+## 40. The About pages in structured data (queue 2026-09-27 item 4)
+
+The About pages' JSON-LD gains an AboutPage node about the Person. It adds no new words: its `name` and `description` are the page's existing title and meta description, so they change whenever those do.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1124 | `structuredData()` `aboutPage` in `src/lib/structured-data.ts`, filled in `src/app/[[...locale]]/layout.tsx` from the About title (`viewTitle`, CR-1044) and `site.aboutDescription` (CR-1051) | SEO / JSON-LD | de / en / fa | PLACEHOLDER | Nothing of its own: confirm the About title and description in their entries; the node follows them. `sameAs` on the Person stays empty until the profile URLs arrive (OWN-03) |

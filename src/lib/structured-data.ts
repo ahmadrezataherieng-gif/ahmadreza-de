@@ -1,7 +1,8 @@
 /**
  * The schema.org graph each indexed page carries as JSON-LD (the `seo` skill,
- * ROADMAP SEO-03): the Person, the WebSite, and on the landing page a
- * ProfilePage whose main entity is the Person. One `@id` per node, so every
+ * ROADMAP SEO-03): the Person, the WebSite, on the landing page a
+ * ProfilePage whose main entity is the Person, and on the About pages an
+ * AboutPage about the Person. One `@id` per node, so every
  * page describes the same person and site rather than new ones.
  *
  * Never the legal name or the postal address: those belong to the Impressum
@@ -38,6 +39,11 @@ export interface PersonCopy {
    * Person gets `image` and the graph an ImageObject marked as AI-made.
    */
   portrait?: { caption: string };
+  /**
+   * On the static About pages: the page's own title and meta description,
+   * reused as-is for an AboutPage node about the Person. Absent elsewhere.
+   */
+  aboutPage?: { name: string; description: string };
 }
 
 const PERSON_ID = `${SITE_URL}/#person`;
@@ -125,6 +131,25 @@ export function structuredData(copy: PersonCopy): JsonLd {
       isPartOf: { '@id': WEBSITE_ID },
       primaryImageOfPage: { '@id': imageId },
       mainEntity: { '@id': PERSON_ID },
+      ...(copy.dateModified ? { dateModified: copy.dateModified } : {}),
+    });
+  }
+  if (copy.aboutPage) {
+    // The About page describes the person, so both `about` and `mainEntity`
+    // name the Person (queue 2026-09-27 item 4, the external SEO check's P2).
+    // Its words are the page's title and description, nothing new.
+    // CONTENT-TODO CR-1124
+    graph.push({
+      '@type': 'AboutPage',
+      '@id': `${copy.pageUrl}#webpage`,
+      url: copy.pageUrl,
+      name: copy.aboutPage.name,
+      description: copy.aboutPage.description,
+      inLanguage: copy.inLanguage,
+      isPartOf: { '@id': WEBSITE_ID },
+      about: { '@id': PERSON_ID },
+      mainEntity: { '@id': PERSON_ID },
+      ...(portrait ? { primaryImageOfPage: { '@id': PORTRAIT_ID } } : {}),
       ...(copy.dateModified ? { dateModified: copy.dateModified } : {}),
     });
   }
