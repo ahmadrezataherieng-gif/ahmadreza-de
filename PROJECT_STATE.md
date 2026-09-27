@@ -2,6 +2,10 @@
 
 Last updated: 2026-09-27 (local sync: main pulled with PR #1, #2, #3 merged)
 
+## Task C2 - phone /desktop/ TBT check (2026-09-27)
+
+Measured the cloud session's finding (TODO.md "Queue 2026-09-28 B item 1") on the owner's own machine: five interleaved `vitals.mjs --profile phone --view desktop` pairs against the export of `784834f` (before APP-19) and current `HEAD`, de and fa. TBT median here is 78-116 ms, well under the 200 ms budget - it does not reproduce; the 344 ms figure was specific to the cloud container's slower CPU under the same "4x" throttle. No code changed (nothing to fix on this hardware); no build, lint or test rerun needed since nothing changed. Finding recorded in TODO.md.
+
 ## Local sync 2026-09-27
 
 `main` pulled locally with PR #1, #2 and #3 merged (queues A2 and B, plus the `apps.mjs` stale-check fix in commit `306983a`); the remote cloud branches were deleted after merge. 308/308 tests pass, lint clean, build clean (3 locales, 22 pages). `scripts/verify/apps.mjs` 175/175 and `desktop.mjs` 63/63 pass locally - the cloud-session failures noted in the queue B entries below were a headless-only environment quirk (`pointer: fine`/`hover: hover` reporting false), not a real bug; two checks in `scripts/verify/apps.mjs` that had gone stale were fixed in commit `306983a`. Manual checks confirmed OK: the boot sequence (de 1440, fa 390), Troubleshoot mode (de, fa RTL), the era 1 second legend, and the About page's print preview.
