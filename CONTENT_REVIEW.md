@@ -1656,3 +1656,11 @@ The About pages' JSON-LD gains an AboutPage node about the Person. It adds no ne
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1124 | `structuredData()` `aboutPage` in `src/lib/structured-data.ts`, filled in `src/app/[[...locale]]/layout.tsx` from the About title (`viewTitle`, CR-1044) and `site.aboutDescription` (CR-1051) | SEO / JSON-LD | de / en / fa | PLACEHOLDER | Nothing of its own: confirm the About title and description in their entries; the node follows them. `sameAs` on the Person stays empty until the profile URLs arrive (OWN-03) |
+
+## 41. The "save contact" (vCard) button (queue 2026-09-28 A1 item 5)
+
+A new download button in the Contact app and on the About pages: a `.vcf` file per language, generated at build time from `EMAIL` and the site's own copy (`scripts/vcard.mjs`), never a phone number, a photo or a street address.
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1125 | `contact.vcard.label` and `.save` in `src/messages/apps/contact/{de,en,fa}.json`; `about.actions.vcard` in `src/messages/apps/about/{de,en,fa}.json` (the same button text) | button | de / en / fa | PLACEHOLDER | de «Kontakt speichern», en «Save contact», fa «ذخیره‌ی مخاطب» (contact's row label «vCard» / «کارت مخاطب»). Short enough for the existing button style; a native speaker to check the fa form |

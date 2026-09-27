@@ -11,3 +11,4 @@
 *.otf binary
 *.pdf binary
 *.bundle binary
+*.vcf -text

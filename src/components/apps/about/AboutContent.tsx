@@ -84,7 +84,7 @@ export function AboutContent({
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <Actions t={t} />
+          <Actions t={t} locale={locale} />
         </header>
 
         <Section page={page} icon="route" title={t('path.title')}>
@@ -208,8 +208,8 @@ function Station({ station, page, t, locale }: { station: CareerStation; page: b
   );
 }
 
-/** The résumé (behind its `available` flag, never a link into a 404) and the email. */
-function Actions({ t: about }: { t: AboutText }) {
+/** The résumé (behind its `available` flag, never a link into a 404), the email and the vCard. */
+function Actions({ t: about, locale }: { t: AboutText; locale: Locale }) {
   const t = (key: string) => about(`actions.${key}`);
   const button =
     'ao-themed inline-flex min-h-10 items-center gap-2 rounded-control border px-3 py-2 font-mono text-xs tracking-wide focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none';
@@ -233,6 +233,10 @@ function Actions({ t: about }: { t: AboutText }) {
           </span>
         </a>
       ) : null}
+      {/* CONTENT-TODO CR-1125 */}
+      <a href={`/files/ahmadreza-taheri-${locale}.vcf`} download data-action="vcard-download" className={cn(button, 'border-edge text-ink hover:border-accent')}>
+        {t('vcard')}
+      </a>
     </div>
   );
 }

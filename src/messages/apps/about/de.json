@@ -13,7 +13,8 @@
     "label": "Kontakt und Lebenslauf",
     "resume": "Lebenslauf herunterladen (PDF)",
     "resumePending": "Lebenslauf folgt in Kürze",
-    "email": "E-Mail schreiben"
+    "email": "E-Mail schreiben",
+    "vcard": "Kontakt speichern"
   },
   "path": {
     "title": "Werdegang",

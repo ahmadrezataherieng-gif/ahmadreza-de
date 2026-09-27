@@ -80,6 +80,13 @@ function Contact({ appId }: AppProps) {
             )}
           </Row>
 
+          {/* CONTENT-TODO CR-1125 */}
+          <Row label={t('vcard.label')}>
+            <a href={`/files/ahmadreza-taheri-${locale}.vcf`} download data-action="vcard-download" className={cn(BUTTON, 'border-edge text-ink hover:border-accent')}>
+              {t('vcard.save')}
+            </a>
+          </Row>
+
           <Row label={t('location.label')}>
             <p className="font-body text-ink">{t('location.value')}</p>
           </Row>

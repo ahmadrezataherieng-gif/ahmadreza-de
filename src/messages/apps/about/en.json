@@ -13,7 +13,8 @@
     "label": "Contact and résumé",
     "resume": "Download résumé (PDF)",
     "resumePending": "Résumé coming soon",
-    "email": "Send an email"
+    "email": "Send an email",
+    "vcard": "Save contact"
   },
   "path": {
     "title": "Path",

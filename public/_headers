@@ -47,3 +47,18 @@
   Cache-Control: public, max-age=86400
 /images/*
   Cache-Control: public, max-age=86400
+
+# The vCard downloads (queue 2026-09-28 A1 item 5): a real MIME type and a
+# save name, so a click always offers to save a contact, never opens as text.
+/files/ahmadreza-taheri-de.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Content-Disposition: attachment; filename="ahmadreza-taheri-de.vcf"
+  Cache-Control: public, max-age=86400
+/files/ahmadreza-taheri-en.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Content-Disposition: attachment; filename="ahmadreza-taheri-en.vcf"
+  Cache-Control: public, max-age=86400
+/files/ahmadreza-taheri-fa.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Content-Disposition: attachment; filename="ahmadreza-taheri-fa.vcf"
+  Cache-Control: public, max-age=86400

@@ -13,6 +13,10 @@
     "download": "Download résumé (PDF)",
     "pending": "Résumé coming soon"
   },
+  "vcard": {
+    "label": "vCard",
+    "save": "Save contact"
+  },
   "location": {
     "label": "Location",
     "value": "Trier, Germany"

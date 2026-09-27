@@ -13,6 +13,10 @@
     "download": "Lebenslauf herunterladen (PDF)",
     "pending": "Lebenslauf folgt in Kürze"
   },
+  "vcard": {
+    "label": "vCard",
+    "save": "Kontakt speichern"
+  },
   "location": {
     "label": "Ort",
     "value": "Trier, Deutschland"
