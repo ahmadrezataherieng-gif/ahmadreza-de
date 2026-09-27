@@ -1713,3 +1713,13 @@ Every era keeps its existing "insider" fact and gains a second one, the "Legende
 | CR-1135 | `eggs.bsod.title`, `.message`, `.dismiss` | short text | de / en / fa | PLACEHOLDER | The joke blue screen's own words - light, in the site's voice, no real error, states how to leave |
 | CR-1136 | `eggs.lo.explain` | long text | de / en / fa | PLACEHOLDER | The ARPANET story after "LO" - sourced, section 42 |
 | CR-1137 | `eggs.legends.header`, `.insiderLabel`, `.legendLabel`, `.sourceLabel` | short text | de / en / fa | PLACEHOLDER | The `legends` command's own header and column labels |
+
+## 44. The desktop's boot sequence (queue 2026-09-28 B item 1)
+
+A short systemd-style log on a direct visit to `/desktop/` (`BootSequence.tsx`) - never after the Convergence hand-over, whose last frame must stay pixel-identical (`?entry=convergence` in `hand-over.ts`/`Journey.tsx` skips it). Machine text, English and LTR in every locale, like the Terminal's own shell output (CLAUDE.md's machine-text exception) - the whole thing is `aria-hidden`, so nothing here is read aloud or narrated.
+
+**File:** `src/components/os/BootSequence.tsx`
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1138 | `LINES` (the ten "Started …"/"Mounted …"/"Reached target …" lines) and the final "Welcome to Amonel OS" | other | all (machine text) | PLACEHOLDER | A systemd-style boot log for Amonel OS; confirm the ten service names read well together and that "Welcome to Amonel OS" is the wanted closing line |
