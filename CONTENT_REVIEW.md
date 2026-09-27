@@ -1687,3 +1687,29 @@ A new download button in the Contact app and on the About pages: a `.vcf` file p
 | `cloud-insider` | Only root may bind a Linux process to a port below 1024 | W3C | 2026-09-28 |
 | `cloud-legend` | "Works on my machine" - containers (Docker, 2013) ship the app with its environment | Docker, Inc. | 2026-09-28 |
 | `terminal-lo` | The first ARPANET message (1969-10-29, Charley Kline, UCLA) crashed after two letters of LOGIN, leaving "LO" | UCLA (Leonard Kleinrock) | 2026-09-28 |
+
+## 43. Second legend per era, and four Terminal easter eggs (queue 2026-09-28 A2 item 2)
+
+Every era keeps its existing "insider" fact and gains a second one, the "Legende" - same place and look as the insider note in the puzzle card (`PuzzleShell.tsx`), reusing APP-10's badge style, always shown (unlike the insider note, which some eras gate behind the puzzle). Also in the static SEO list (`page.tsx`). All seven are sourced in section 42 (`src/content/sources.ts`); none was dropped. Four new Terminal easter eggs, hidden as the others are (never in `help`, never offered by Tab): `legends` (every era's insider and legend fact with its source's title, `terminal.eggs.legends.*`), `bsod` (a joke blue screen in the site's own words, dismissed by any key/click/Esc, no motion), `man amonel` (a placeholder man page - CR-1134 - and `man <anything else>` answers like real `man`), `LO` (prints "LO", then the ARPANET story - sourced in section 42's `terminal-lo`).
+
+**File:** `src/messages/{de,en,fa}.json` (`eras.<id>.legend`, `puzzles.common.legendLabel`)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1126 | `eras.eniac.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 1). Now (de): «ENIAC rechnete dezimal, nicht binär. Programmier…» |
+| CR-1127 | `eras.batch.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 2). Now (de): «„Chad” heißen die kleinen Papierschnipsel, die b…» |
+| CR-1128 | `eras.unix.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 3). Now (de): «Unix-Zeit zählt Sekunden seit dem 1.1.1970, 00:0…» |
+| CR-1129 | `eras.dos.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 4). Now (de): «Die Grenze von 640 KB kam von der Speicherbelegu…» |
+| CR-1130 | `eras.macintosh.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 5). Now (de): «Susan Kare zeichnete die ersten Mac-Symbole auf …» |
+| CR-1131 | `eras.win95.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 6). Now (de): «Ein PC hatte 16 IRQ-Leitungen; teilten sich zwei…» |
+| CR-1132 | `eras.cloud.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 7). Now (de): «„Bei mir läuft's” beantworten Container: Docker,…» |
+| CR-1133 | `puzzles.common.legendLabel` | single word / label | de / en / fa | PLACEHOLDER | Accessible label: legend (shared puzzle chrome, reuses the Timeline's «Legende»/«Legend»/«افسانه») |
+
+**File:** `src/messages/apps/terminal/{de,en,fa}.json` (`eggs.legends`, `eggs.bsod`, `eggs.man`, `eggs.lo` - duplicates the era copy above verbatim, since the Terminal is part of the desktop view and does not load the journey's `eras` namespace; kept in sync by hand until both read one source)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1134 | `eggs.man.name`, `.synopsis`, `.description`, `.seeAlso`, `.usage`, `.notFound` | long text | de / en / fa | PLACEHOLDER | A placeholder man page for `amonel` (name, one-line synopsis, one-paragraph description, "see also"); `man` with no or an unknown page answers like real `man` |
+| CR-1135 | `eggs.bsod.title`, `.message`, `.dismiss` | short text | de / en / fa | PLACEHOLDER | The joke blue screen's own words - light, in the site's voice, no real error, states how to leave |
+| CR-1136 | `eggs.lo.explain` | long text | de / en / fa | PLACEHOLDER | The ARPANET story after "LO" - sourced, section 42 |
+| CR-1137 | `eggs.legends.header`, `.insiderLabel`, `.legendLabel`, `.sourceLabel` | short text | de / en / fa | PLACEHOLDER | The `legends` command's own header and column labels |

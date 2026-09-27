@@ -39,20 +39,20 @@ build time).
 |---|---|---|---|---|---|
 | `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
 | `desktop` | 13 | 0 | 0 | 66 / 66 | 100 % |
-| `puzzles` | 8 | 0 | 0 | 38 / 38 | 100 % |
+| `puzzles` | 9 | 0 | 0 | 43 / 43 | 100 % |
 | `about` | 4 | 2 | 4 | 19.1 / 28 | 68 % |
 | `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
 | `seo` | 25 | 3 | 4 | 80.2 / 95 | 84 % |
 | `launch` | 15 | 2 | 12 | 57.1 / 108 | 53 % |
-| **all** | 86 | 8 | 25 | 345.4 / 445 | **78 %** |
+| **all** | 87 | 8 | 25 | 350.4 / 450 | **78 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
 | P1 | 10 | 6 | 42 | 58 |
-| P2 | 7 | 1 | 30 | 38 |
-| **total** | **25** | **8** | **86** | **119** |
+| P2 | 7 | 1 | 31 | 39 |
+| **total** | **25** | **8** | **87** | **120** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -92,6 +92,7 @@ PROJECT_STATE.md and DECISIONS.md.
 | APP-06 | **Scheduler app** (1956 bonus, slot `scheduler`): a batch/CPU scheduling sandbox (FCFS, SJF, round robin) that extends the era's one truth. Built 2026-09-24: `apps/scheduler/sched.ts` (pure, 7 tests: the puzzle's 115 vs 31 minutes, hand-worked round robin, invariants), `SchedulerApp.tsx` (edit up to six jobs, the sequence drawn to scale, waiting and turnaround per job, the three averages side by side, the best marked; nothing stored), copy `messages/apps/scheduler/`; CR-1097; `bonus.mjs` and `a11y.mjs` (eight themes) check it. | done | P2 | Claude Code | - | M | desktop |
 | APP-07 | **Filesystem app** (1971 bonus, slot `filesystem`): a file-tree explorer over the Terminal's in-memory tree, paths shown as you click. Built 2026-09-24: `apps/filesystem/paths.ts` (pure, 5 tests, reads the Terminal's own tree through the new `readDir`/`readFile` in `terminal/shell.ts`), `FilesystemApp.tsx` (click through the tree; the selected path from the root step by step, in the short `~` form, and as the Terminal commands that reach it; dot files behind a switch like `ls -a`; file contents); copy `messages/apps/filesystem/`; CR-1098; `bonus.mjs`, `desktop.mjs` and `a11y.mjs` check it. The stand-in `BonusApp` and `AppPlaceholder` are gone. | done | P2 | Claude Code | - | M | desktop |
 | APP-08 | **Easter eggs** through `HIDDEN_COMMANDS` in `terminal/shell.ts` (empty today). Done 2026-09-24 (DECISIONS.md 68): moth, sl, coffee (HTTP 418), rm -rf, vim/vi/nano/emacs, hire, fortune (seven sourced facts), uptime, ping - own ASCII drawings, copy under `eggs` (CR-1078), tested in `terminal-shell.test.mjs` and `apps.mjs`. | done | P2 | Claude Code | - | S | puzzles |
+| APP-18 | **Second legend per era, and four more Terminal easter eggs.** Done 2026-09-28 (queue 2026-09-28 A2 item 2): every era keeps its insider fact and gains a second, sourced one (`eras.<id>.legend`, LEG-20), shown next to the insider note in the puzzle card with the same gating, reusing APP-10's "Legende" badge style (`puzzles.common.legendLabel`); also in the static SEO list. New hidden commands: `legends` (every era's two facts with their source titles), `bsod` (a joke blue screen overlay, dismissed by any key/click/Esc, no motion, its own fixed colour tokens `--ao-bsod-bg`/`-ink`), `man amonel` (a placeholder page; `man` otherwise answers like real `man`), `LO` (prints "LO", then - after a CSS-only pause skipped under reduced motion - the ARPANET story, sourced `terminal-lo`). Copy under `terminal.eggs.{legends,bsod,man,lo}` (CR-1126..1137), duplicated from the era copy since the Terminal (desktop view) does not load the journey's `eras` namespace. Tested by the existing generic hidden-command test in `terminal-shell.test.mjs` (every new command answered, no `command not found`, every message key present in all three languages, never offered by Tab). `journey.mjs` 73/73 (play, 1280/de and 390/fa touch) and 44/44 (watch, 1280/de) after fixing a regression the always-visible legend note caused (a puzzle card's "try myself" button became unclickable once solved; fixed by gating the legend note the same way as the insider note). | done | P2 | Claude Code | LEG-20 | M | puzzles |
 | APP-09 | **Line-drawing effects** (was: GSAP DrawSVG, free plugin; never ScrollSmoother). Done 2026-09-24 in CSS instead of the plugin (DECISIONS.md 71): `.ao-draw` scrubs `stroke-dashoffset` over `--era-progress`, no plugin, no per-frame JS; used for the four links of the 2024 region map. | done | P2 | Claude Code | - | S | journey |
 | APP-10 | **"Legende" badges** are recorded (`selectLegendEras`) but never displayed. Done 2026-09-24: the Timeline app shows the earned badges (a "Legende" mark on the era, and a count once one exists; nothing before); `apps.mjs` checks both states; CR-1092. | done | P2 | Claude Code | - | S | puzzles |
 | APP-11 | **Quiz result links** its missed eras to `/amonel/#era-N` (the journey honours the hash since 9D-1). Done 2026-09-24: each missed era in the result has a button that opens the journey at its section (through `replayJourney`, like the locked-app notice); `apps.mjs` checks the hashes; CR-1091. | done | P2 | Claude Code | - | XS | puzzles |

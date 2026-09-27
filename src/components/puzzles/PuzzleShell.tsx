@@ -25,6 +25,8 @@ interface PuzzleShellProps {
   nextSectionId: string;
   /** The era's insider detail, already translated. */
   insider: string;
+  /** The era's second fact ("Legende"), already translated - always shown, unlike the insider trick. */
+  legendFact: string;
 }
 
 /** What the dialog is doing: the visitor plays, or the solution plays itself. */
@@ -43,7 +45,7 @@ type Run = { kind: 'play' } | { kind: 'reveal'; progress: number };
  * The mode is read here and nowhere below: the puzzle receives a presentation,
  * and the era visual never learns either. See DECISIONS.md 33 and 37.
  */
-export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleShellProps) {
+export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider, legendFact }: PuzzleShellProps) {
   const t = useTranslations(`puzzles.${eraId}`);
   const tc = useTranslations('puzzles.common');
   const Puzzle = puzzleComponents[eraId];
@@ -182,6 +184,16 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
       {insider}
     </p>
   );
+  // The era's second fact: same place and look on every era, never gated behind
+  // the puzzle (unlike the insider trick above, APP-10's badge style reused).
+  const legendNote = (
+    <p className="font-body text-sm leading-relaxed text-muted">
+      <span className="ao-themed me-1.5 rounded-control border border-accent px-1.5 font-mono text-[11px] tracking-wide text-accent uppercase">
+        {tc('legendLabel')}
+      </span>
+      {legendFact}
+    </p>
+  );
 
   const status = guided ? tc('optional') : solved ? tc('solved') : passed ? tc('revealed') : null;
 
@@ -230,7 +242,12 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
         </>
       )}
 
-      {insiderEarned ? insiderNote : null}
+      {insiderEarned ? (
+        <>
+          {insiderNote}
+          {legendNote}
+        </>
+      ) : null}
 
       {/* The way on must stay visible: when the card is taller than its panel,
           the actions stick to the panel's bottom edge. */}
@@ -335,7 +352,12 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
                   {t('answer')}
                 </p>
               ) : null}
-              {hasTrick ? insiderNote : null}
+              {hasTrick ? (
+                <>
+                  {insiderNote}
+                  {legendNote}
+                </>
+              ) : null}
               <div className="flex flex-wrap gap-2">
                 <Button
                   ref={continueRef}
@@ -353,7 +375,10 @@ export function PuzzleShell({ eraId, eraIndex, nextSectionId, insider }: PuzzleS
               <SolvedCount eraId={eraId} observe={outcomeRef} />
             </div>
           ) : legend && hasTrick ? (
-            insiderNote
+            <>
+              {insiderNote}
+              {legendNote}
+            </>
           ) : null}
         </HeldDialog>
       ) : null}

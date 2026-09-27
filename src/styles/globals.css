@@ -87,6 +87,12 @@
   --ao-brand-muted: #8e9bb0;
   --ao-brand-white: #ffffff;
 
+  /* The Terminal's `bsod` easter egg: a fixed parody of the classic blue
+     screen, the same in every theme and in light or dark mode - the joke
+     depends on that exact blue, not on whichever theme is active. */
+  --ao-bsod-bg: #0a1a8f;
+  --ao-bsod-ink: #ffffff;
+
   /* Standard motion curve and durations. */
   --ao-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ao-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
@@ -138,6 +144,9 @@
   --color-brand-night: var(--ao-brand-night);
   --color-brand-muted: var(--ao-brand-muted);
   --color-brand-white: var(--ao-brand-white);
+
+  --color-bsod-bg: var(--ao-bsod-bg);
+  --color-bsod-ink: var(--ao-bsod-ink);
 
   --font-display: var(--ao-font-display);
   --font-body: var(--ao-font-body);
@@ -699,6 +708,24 @@ html[data-tier='light'] .ao-lamp {
   }
 }
 
+/* --- Terminal: the `LO` easter egg (queue 2026-09-28 A2 item 2) ----------- */
+
+/* "LO", a pause, then the explanation - a fixed-duration fade stands in for
+   the pause; reduced motion skips the animation entirely (TerminalApp.tsx). */
+@keyframes ao-lo-explain {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.ao-lo-explain {
+  animation: ao-lo-explain 1.4s ease-out both;
+}
+
 /* --- 1981: IBM PC POST ---------------------------------------------------- */
 
 /* The memory counter is a column of values in a one-line window, stepped
@@ -824,6 +851,11 @@ html[data-tier='light'] .ao-lamp {
     animation: none;
     /* Land on the final value, not the first. */
     transform: translateY(calc(var(--post-steps) * -1lh));
+  }
+
+  .ao-lo-explain {
+    animation: none;
+    opacity: 1;
   }
 
   .ao-beep,

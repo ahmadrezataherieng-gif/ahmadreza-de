@@ -37,8 +37,8 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
         Static text layer (ROADMAP SEO-10). Act 1 hydrates client-side, so this
         is what crawlers and screen readers get before any JavaScript runs: per
         era its year and name, its one truth, the era's own paragraph and
-        figures, and the insider detail - the same sentences the scenes show,
-        never a second version of them. The puzzles' copy stays out: it loads
+        figures, and its two facts (insider, legend) - the same sentences the
+        scenes show, never a second version of them. The puzzles' copy stays out: it loads
         with the puzzle chunk, and the page budget depends on that.
       */}
       <div className="ao-sr-only">
@@ -63,6 +63,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
                 </ul>
               ) : null}
               <p>{tEras(`${era.id}.insider`)}</p>
+              <p>{tEras(`${era.id}.legend`)}</p>
             </section>
           );
         })}

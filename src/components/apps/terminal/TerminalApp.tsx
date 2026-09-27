@@ -25,8 +25,10 @@ import { closeWindow } from '@/components/os/window-actions';
 import { askAssistant } from '@/lib/app-handoff';
 import { AmonelOsLockup } from '@/components/ui/Brand';
 import { skillAreas } from '@/content/about';
+import { eraIds } from '@/content/eras';
 import { EMAIL, RESUME } from '@/content/profile';
 import { projects } from '@/content/projects';
+import { getSource } from '@/content/sources';
 import { asStringList } from '@/lib/message-shapes';
 import { cn } from '@/lib/cn';
 
@@ -68,6 +70,16 @@ function Terminal({ appId }: AppProps) {
   }, [shell.lines, inset]);
 
   useFocusOnFinePointer(inputRef);
+
+  // `bsod`: the newest such line opens the overlay; dismissing it records that
+  // line's id, so a later `bsod` (a new id) can open it again.
+  const lastBsodId = shell.lines.reduce<number | null>((id, line) => (line.kind === 'bsod' ? line.id : id), null);
+  const [dismissedBsodId, setDismissedBsodId] = useState<number | null>(null);
+  const bsodOpen = lastBsodId !== null && lastBsodId !== dismissedBsodId;
+  const dismissBsod = () => {
+    setDismissedBsodId(lastBsodId);
+    inputRef.current?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     if (!shell.exited) return;
@@ -153,9 +165,10 @@ function Terminal({ appId }: AppProps) {
       ref={rootRef}
       data-app-content={appId}
       dir="ltr"
-      className="ao-terminal flex h-full min-h-0 flex-col bg-background font-mono text-[13px] leading-relaxed text-ink"
+      className="ao-terminal relative flex h-full min-h-0 flex-col bg-background font-mono text-[13px] leading-relaxed text-ink"
       style={inset > 0 ? { paddingBottom: inset } : undefined}
     >
+      {bsodOpen ? <Bsod onDismiss={dismissBsod} /> : null}
       <div
         ref={outputRef}
         role="log"
@@ -256,7 +269,7 @@ function Line({ line, onRun }: { line: ShellLine; onRun: (command: string) => vo
       return (
         <div className="my-1 flex flex-col gap-2">
           {line.key === 'motd' ? <AmonelOsLockup label={tOs('brand')} className="self-start text-base" /> : null}
-          <Prose className="text-muted">{t(line.key)}</Prose>
+          <Prose className="text-muted">{t(line.key, line.params)}</Prose>
           {line.key === 'motd' ? (
             <p className="flex flex-wrap items-center gap-2">
               <span dir="auto" className="font-body text-xs text-muted">
@@ -282,6 +295,15 @@ function Line({ line, onRun }: { line: ShellLine; onRun: (command: string) => vo
       return <Help />;
     case 'section':
       return <Section section={line.section} />;
+    case 'legends':
+      return <Legends />;
+    case 'man':
+      return <Man />;
+    case 'lo':
+      return <Lo />;
+    // The overlay itself is rendered by `Terminal`, above the output; nothing prints inline.
+    case 'bsod':
+      return null;
   }
 }
 
@@ -411,4 +433,104 @@ function Section({ section }: { section: PortfolioSection }) {
         </div>
       );
   }
+}
+
+/** `legends`: every era's insider and legend fact, each labelled with its source's title (`src/content/sources.ts`). */
+function Legends() {
+  const t = useTranslations('terminal.eggs.legends');
+  return (
+    <div className="my-1 flex flex-col gap-3">
+      <Prose className="text-muted">{t('header')}</Prose>
+      {eraIds.map((eraId) => (
+        <div key={eraId} className="flex flex-col gap-1">
+          <p className="text-accent">[{eraId}]</p>
+          <p className="font-body text-sm leading-relaxed text-ink">
+            <span className="me-1.5 font-mono text-[11px] tracking-wide text-accent uppercase">{t('insiderLabel')}</span>
+            {t(`${eraId}.insider`)}
+          </p>
+          <p dir="auto" className="font-mono text-[11px] text-muted">
+            {t('sourceLabel')}: {getSource(`${eraId}-insider`)?.title}
+          </p>
+          <p className="font-body text-sm leading-relaxed text-ink">
+            <span className="ao-themed me-1.5 rounded-control border border-accent px-1.5 font-mono text-[11px] tracking-wide text-accent uppercase">
+              {t('legendLabel')}
+            </span>
+            {t(`${eraId}.legend`)}
+          </p>
+          <p dir="auto" className="font-mono text-[11px] text-muted">
+            {t('sourceLabel')}: {getSource(`${eraId}-legend`)?.title}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** `man amonel`: a placeholder man page, in the classic layout. */
+function Man() {
+  const t = useTranslations('terminal.eggs.man');
+  return (
+    <div className="my-1 flex flex-col gap-2">
+      <p className="text-accent">{t('name')}</p>
+      <div>
+        <p className="text-muted uppercase">SYNOPSIS</p>
+        <p className="ps-4">{t('synopsis')}</p>
+      </div>
+      <div>
+        <p className="text-muted uppercase">DESCRIPTION</p>
+        <Prose className="ps-4">{t('description')}</Prose>
+      </div>
+      <p className="text-muted">{t('seeAlso')}</p>
+    </div>
+  );
+}
+
+/** `LO`: the two letters that got through, then (after a beat the CSS holds - skipped under reduced motion, globals.css) the ARPANET story. */
+function Lo() {
+  const t = useTranslations('terminal.eggs.lo');
+  return (
+    <div className="my-1 flex flex-col gap-2">
+      <p className="text-accent">LO</p>
+      <Prose className="ao-lo-explain text-muted">{t('explain')}</Prose>
+    </div>
+  );
+}
+
+/**
+ * `bsod`: a joke blue screen, covering this window's own content only - never
+ * the whole page. No motion at all (nothing to skip under reduced motion);
+ * any key, a click anywhere on it, or Esc (one of "any key") dismisses it.
+ */
+function Bsod({ onDismiss }: { onDismiss: () => void }) {
+  const t = useTranslations('terminal.eggs.bsod');
+  const titleId = 'ao-terminal-bsod-title';
+  const dismissRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    dismissRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  return (
+    <div
+      data-terminal-bsod=""
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      onClick={onDismiss}
+      onKeyDown={(event) => {
+        event.preventDefault();
+        onDismiss();
+      }}
+      className="absolute inset-0 z-[var(--ao-z-modal)] flex flex-col items-center justify-center gap-4 bg-bsod-bg px-6 text-center text-bsod-ink"
+    >
+      <p className="font-mono text-4xl">:(</p>
+      <h2 id={titleId} className="font-display text-lg font-bold">
+        {t('title')}
+      </h2>
+      <Prose className="max-w-sm text-bsod-ink/80">{t('message')}</Prose>
+      <button ref={dismissRef} type="button" className="font-mono text-xs underline underline-offset-2 outline-none">
+        {t('dismiss')}
+      </button>
+    </div>
+  );
 }
