@@ -1425,10 +1425,10 @@ Nothing to mark in code yet. Registered so they are not forgotten; each gets rea
 | CR-1031 | 404 page: `notFound.*` in `src/messages/{de,en,fa}.json` + the title pattern in `src/app/not-found.tsx` (built 2026-09-23) | short text | de / en / fa | PLACEHOLDER | One page in all three languages (a stray URL has no locale): title, one sentence, links home, journey, desktop; noindex. Now (de): «Seite nicht gefunden» |
 | CR-1032 | Timeline app content (`os.apps.timeline.*` is a placeholder, app is not built) | long text | de / en / fa | BUILT 2026-09-23 - see section 29 | Real timeline entries of the career path |
 | CR-1033 | Résumé PDF (`/files/ahmadreza-taheri-lebenslauf.pdf`) - file itself | other | de / en / fa | PLACEHOLDER | The actual CV document, in which languages |
-| CR-1034 | Portrait photo (`/images/portrait.jpg`) - file itself | other | de / en / fa | PLACEHOLDER | Real photo, rights and consent, final alt text |
-| CR-1035 | Network-tools app (bonus, era 6, Phase 9D-2): all copy | long text | de / en / fa | PLACEHOLDER | Title, description and content of the tool |
-| CR-1036 | Time Machine app (bonus, era 7, Phase 9D-2): all copy | long text | de / en / fa | PLACEHOLDER | Title, description and content of the theme switcher |
-| CR-1037 | Scheduler and Filesystem bonus apps (eras 2 and 3): all copy | long text | de / en / fa | PLACEHOLDER | Slots are registered (`os.apps.scheduler`, `os.apps.filesystem`) but the apps do not exist yet |
+| CR-1034 | Portrait photo (`ahmadreza-taheri-portrait*.jpg/avif`) - final review only (built 2026-09-26, OWN-01) | other | de / en / fa | PLACEHOLDER | Real photo shipped (AI-generated, owner's choice); rights and consent, final alt text still to confirm |
+| CR-1035 | Network-tools app (bonus, era 6): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | Title, description and content of the tool |
+| CR-1036 | Time Machine app (bonus, era 7): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | Title, description and content of the theme switcher |
+| CR-1037 | Scheduler and Filesystem bonus apps (eras 2 and 3): all copy - final review only (built Phase 9D-2) | long text | de / en / fa | PLACEHOLDER | `os.apps.scheduler`, `os.apps.filesystem` - both apps ship; copy still a draft |
 
 ## 25. SEO and metadata
 
@@ -1478,8 +1478,8 @@ The Impressum and the Datenschutzerklärung are **not placeholders**: they were 
 |---|---|---|---|---|---|
 | CR-1029 | Impressum: `imprint.*` in `messages/legal/*.json` + `LEGAL_CONTACT` (`/impressum/`, `/en/impressum/`, `/fa/impressum/`) | legal | de / en / fa | LEGAL – owner must verify | § 5 DDG and § 18 Abs. 2 MStV: legal name Ahmadreza Taheri Momrabadi, address, e-mail; private, non-commercial site; no phone number - decided by the owner (2026-09-23, confirmed 2026-09-24, ROADMAP LEG-13) |
 | CR-1030 | Datenschutzerklärung: `privacy.*` in `messages/legal/*.json` (`/datenschutz/`, en, fa) | legal | de / en / fa | LEGAL – owner must verify | Cloudflare hosting (Art. 6(1)(f), DPF + SCC), no cookies or external requests, the six storage keys (§ 25(2) Nr. 2 TDDDG; `amonel.theme.v1` added 2026-09-24 with the Time Machine), anonymous counters, the local Assistant, e-mail via Gmail (Google), rights, LfDI RLP |
-| CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
-| CR-1053 | `soon/index.html` - the whole live coming-soon page (tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
+| CR-1052 | `nav.legal` (`src/messages/{de,en,fa}.json`), the accessible name of the legal-link group on every page (built) | single word / label | de / en / fa | PLACEHOLDER | Now (de): «Rechtliches». The link labels themselves are CR-007 and CR-008 («Impressum», «Datenschutz» - keep those two exactly) |
+| CR-1053 | `soon/index.html` - the whole live coming-soon page (built; tag, status, role, lede, facts, terminal lines, footer, legal links) | long text | de / en / fa | PLACEHOLDER | Rebranded to «Amonel» on 2026-09-24 (ROADMAP BR-02), progress now generated (CR-1066); the role line still names the employer (LEG-08) |
 | CR-1054 | Legal page chrome: `updated`, `bindingNote`, `bindingLink`, `backHome`, `country`, `emailLabel` in `messages/legal/*.json` | legal | de / en / fa | LEGAL – owner must verify | «Stand: 23. September 2026», the note that only German is binding, the back link |
 | CR-1055 | Coming-soon legal pages (`soon/dist/` `impressum/` and `datenschutz/` in de, en, fa, built by `scripts/build-soon.mjs` from the same JSON with scope `soon`) | legal | de / en / fa | LEGAL – owner must verify | Same text as CR-1029 and CR-1030 minus the counters, the Assistant and the site's storage table; plus the `ao-lang` storage entry and system fonts |
 
@@ -1491,7 +1491,7 @@ The About app’s own text (section 15) renders server-side as a page at `/about
 
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
-| CR-1056 | `site.aboutDescription` - the About page’s meta description | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
+| CR-1056 | `site.aboutDescription` - the About page’s meta description (built) | SEO / meta | de / en / fa | PLACEHOLDER | Snippet for /about/ (134-153 characters). Now (de): «Über Ahmadreza Taheri: Ausbildung zum Fachinformatiker…» |
 | CR-1057 | The About page’s URL `/about/` (one slug in all three languages) and its title «Über mich – Ahmadreza Taheri \| Amonel» (from `nav.about`, CR-003) | SEO / meta | de / en / fa | PLACEHOLDER | Confirm the slug (e.g. `/ueber-mich/` would suit German search but not en/fa) and the title |
 
 ## 28. Desktop app: Contact
@@ -1664,3 +1664,52 @@ A new download button in the Contact app and on the About pages: a `.vcf` file p
 | ID | Location | Type | Languages | Status | What the real text should cover |
 |---|---|---|---|---|---|
 | CR-1125 | `contact.vcard.label` and `.save` in `src/messages/apps/contact/{de,en,fa}.json`; `about.actions.vcard` in `src/messages/apps/about/{de,en,fa}.json` (the same button text) | button | de / en / fa | PLACEHOLDER | de «Kontakt speichern», en «Save contact», fa «ذخیره‌ی مخاطب» (contact's row label «vCard» / «کارت مخاطب»). Short enough for the existing button style; a native speaker to check the fa form |
+
+## 42. Historical fact sources (queue 2026-09-28 A2 item 1, ROADMAP LEG-20)
+
+`src/content/sources.ts` - one entry per historical fact used anywhere on the site (every era's "insider" detail and, from item 2 of this queue on, every era's second fact, the "Legende"), each with a claim summary, a source URL, a title, a publisher and the date the link was checked (`sources.test.mjs` fails if any insider/legend has no entry). Not new copy - a citation list for facts already on the page or about to land in item 2 - so no PLACEHOLDER row of its own; recorded here as the file's own instruction ("Record the sources in CONTENT_REVIEW") asks. Preference is a primary source (the original paper, a manual, an archived standard) or an institutional one (a museum, a standards body, the company itself); three entries (`eniac-insider`, `dos-insider`, `dos-legend`, `win95-legend`) could only be backed by a well-corroborated secondary source (Wikipedia, Computer Hope) - noted in each entry's `publisher` field, kept rather than dropped because the underlying fact is not in doubt, only its ideal citation.
+
+| Source id | Claim | Publisher | Checked |
+|---|---|---|---|
+| `eniac-insider` | Diagonal pencil/felt-pen line across a punch-card deck to reorder a drop | Wikipedia | 2026-09-28 |
+| `eniac-legend` | ENIAC: decimal, plugboard/switch programming (days to rewire), ~17,000-18,000 tubes, rarely switched off | Computer History Museum | 2026-09-28 |
+| `batch-insider` | IBM 704 sense switches, tested from FORTRAN with `IF (SENSE SWITCH i)` | IBM (1955 manual) | 2026-09-28 |
+| `batch-legend` | "Chad" = the paper bits punched out of a card; a mispunch means wrong data or a jam | University of Iowa (Douglas W. Jones) | 2026-09-28 |
+| `unix-insider` | `chdir` was the directory-change command through the Sixth Edition; `cd` arrived with the Seventh (1979) | Bell Laboratories (Seventh Edition manual) | 2026-09-28 |
+| `unix-legend` | Unix time = seconds since 1970-01-01 UTC; a signed 32-bit counter overflows 2038-01-19 03:14:07 UTC | The Open Group (POSIX.1-2017) | 2026-09-28 |
+| `dos-insider` | F3 retypes the previous MS-DOS command line | Computer Hope | 2026-09-28 |
+| `dos-legend` | The 640 KB limit came from the IBM PC's memory map (384 KB reserved above it); CONFIG.SYS/AUTOEXEC.BAT tuning | Wikipedia (memory map, corroborated by the IBM PC Technical Reference) | 2026-09-28 |
+| `dos-legend-quote` | "640K ought to be enough" is an unverified Gates quote; Gates has denied it | Computerworld | 2026-09-28 |
+| `macintosh-insider` | The ⌘ symbol comes from a Swedish sign for a place of interest, found by Susan Kare in a symbol dictionary | Folklore.org (Andy Hertzfeld) | 2026-09-28 |
+| `macintosh-legend` | Susan Kare drew the first Mac icons on graph paper before digitizing them | Museum of Modern Art (MoMA) | 2026-09-28 |
+| `win95-insider` | `winipcfg` via Start › Run showed a Windows 95 machine's IP configuration | Computer Hope | 2026-09-28 |
+| `win95-legend` | 16 IRQ lines; two devices sharing one could crash the system; Plug and Play nicknamed "Plug and Pray" | Wikipedia | 2026-09-28 |
+| `cloud-insider` | Only root may bind a Linux process to a port below 1024 | W3C | 2026-09-28 |
+| `cloud-legend` | "Works on my machine" - containers (Docker, 2013) ship the app with its environment | Docker, Inc. | 2026-09-28 |
+| `terminal-lo` | The first ARPANET message (1969-10-29, Charley Kline, UCLA) crashed after two letters of LOGIN, leaving "LO" | UCLA (Leonard Kleinrock) | 2026-09-28 |
+
+## 43. Second legend per era, and four Terminal easter eggs (queue 2026-09-28 A2 item 2)
+
+Every era keeps its existing "insider" fact and gains a second one, the "Legende" - same place and look as the insider note in the puzzle card (`PuzzleShell.tsx`), reusing APP-10's badge style, always shown (unlike the insider note, which some eras gate behind the puzzle). Also in the static SEO list (`page.tsx`). All seven are sourced in section 42 (`src/content/sources.ts`); none was dropped. Four new Terminal easter eggs, hidden as the others are (never in `help`, never offered by Tab): `legends` (every era's insider and legend fact with its source's title, `terminal.eggs.legends.*`), `bsod` (a joke blue screen in the site's own words, dismissed by any key/click/Esc, no motion), `man amonel` (a placeholder man page - CR-1134 - and `man <anything else>` answers like real `man`), `LO` (prints "LO", then the ARPANET story - sourced in section 42's `terminal-lo`).
+
+**File:** `src/messages/{de,en,fa}.json` (`eras.<id>.legend`, `puzzles.common.legendLabel`)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1126 | `eras.eniac.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 1). Now (de): «ENIAC rechnete dezimal, nicht binär. Programmier…» |
+| CR-1127 | `eras.batch.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 2). Now (de): «„Chad” heißen die kleinen Papierschnipsel, die b…» |
+| CR-1128 | `eras.unix.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 3). Now (de): «Unix-Zeit zählt Sekunden seit dem 1.1.1970, 00:0…» |
+| CR-1129 | `eras.dos.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 4). Now (de): «Die Grenze von 640 KB kam von der Speicherbelegu…» |
+| CR-1130 | `eras.macintosh.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 5). Now (de): «Susan Kare zeichnete die ersten Mac-Symbole auf …» |
+| CR-1131 | `eras.win95.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 6). Now (de): «Ein PC hatte 16 IRQ-Leitungen; teilten sich zwei…» |
+| CR-1132 | `eras.cloud.legend` | long text | de / en / fa | PLACEHOLDER | Second fact, sourced (era 7). Now (de): «„Bei mir läuft's” beantworten Container: Docker,…» |
+| CR-1133 | `puzzles.common.legendLabel` | single word / label | de / en / fa | PLACEHOLDER | Accessible label: legend (shared puzzle chrome, reuses the Timeline's «Legende»/«Legend»/«افسانه») |
+
+**File:** `src/messages/apps/terminal/{de,en,fa}.json` (`eggs.legends`, `eggs.bsod`, `eggs.man`, `eggs.lo` - duplicates the era copy above verbatim, since the Terminal is part of the desktop view and does not load the journey's `eras` namespace; kept in sync by hand until both read one source)
+
+| ID | Location | Type | Languages | Status | What the real text should cover |
+|---|---|---|---|---|---|
+| CR-1134 | `eggs.man.name`, `.synopsis`, `.description`, `.seeAlso`, `.usage`, `.notFound` | long text | de / en / fa | PLACEHOLDER | A placeholder man page for `amonel` (name, one-line synopsis, one-paragraph description, "see also"); `man` with no or an unknown page answers like real `man` |
+| CR-1135 | `eggs.bsod.title`, `.message`, `.dismiss` | short text | de / en / fa | PLACEHOLDER | The joke blue screen's own words - light, in the site's voice, no real error, states how to leave |
+| CR-1136 | `eggs.lo.explain` | long text | de / en / fa | PLACEHOLDER | The ARPANET story after "LO" - sourced, section 42 |
+| CR-1137 | `eggs.legends.header`, `.insiderLabel`, `.legendLabel`, `.sourceLabel` | short text | de / en / fa | PLACEHOLDER | The `legends` command's own header and column labels |

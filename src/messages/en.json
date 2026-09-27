@@ -69,7 +69,8 @@
         "cardLabel": "IBM punch card, 80 columns",
         "cardCaption": "Punched: {text}"
       },
-      "insider": "Anyone programming with punch cards drew a diagonal line across the top of the deck with a felt-tip pen. If the deck was dropped, the line showed which card went where."
+      "insider": "Anyone programming with punch cards drew a diagonal line across the top of the deck with a felt-tip pen. If the deck was dropped, the line showed which card went where.",
+      "legend": "ENIAC computed in decimal, not binary. It was programmed by plugging cables and setting switches – rewiring for a new problem could take days. Of its roughly 17,500 tubes, most failed right at power-on or power-off, so the machine was rarely switched off."
     },
     "batch": {
       "name": "Mainframes and batch processing",
@@ -95,7 +96,8 @@
           "operating system."
         ]
       },
-      "insider": "The IBM 704 had sense switches: toggle switches on the console that a running program could read. In FORTRAN that was IF (SENSE SWITCH 3) — the operator could steer a program without stopping it."
+      "insider": "The IBM 704 had sense switches: toggle switches on the console that a running program could read. In FORTRAN that was IF (SENSE SWITCH 3) — the operator could steer a program without stopping it.",
+      "legend": "\"Chad\" is the term for the small paper bits punched out of a card. A mispunched hole meant wrong data – or a jammed card reader."
     },
     "unix": {
       "name": "UNIX",
@@ -118,7 +120,8 @@
         ],
         "prompt": "$"
       },
-      "insider": "Up to the Sixth Edition, the command for changing directory was called chdir. The short cd only arrived in 1979 with the Seventh Edition."
+      "insider": "Up to the Sixth Edition, the command for changing directory was called chdir. The short cd only arrived in 1979 with the Seventh Edition.",
+      "legend": "Unix time counts seconds since 1970-01-01, 00:00 UTC. Stored in a signed 32-bit counter, it overflows on 2038-01-19 at 03:14:07 UTC."
     },
     "dos": {
       "name": "IBM PC and MS-DOS",
@@ -192,7 +195,8 @@
         "dirFooter": "8 File(s)        942,080 Bytes",
         "body": "Computers arrive on desks. One program at a time, one screen, everything typed. 640 kilobytes of memory — which, contrary to the famous quote nobody can actually source, everyone knew would not be enough for long."
       },
-      "insider": "In MS-DOS, F3 brought back the last command line you typed. If you knew that, you never typed a long command twice."
+      "insider": "In MS-DOS, F3 brought back the last command line you typed. If you knew that, you never typed a long command twice.",
+      "legend": "The 640 KB limit came from the IBM PC's memory map: the upper 384 KB of its 1 MB address space were reserved for video memory and ROM. The quote \"640K ought to be enough for anybody\" is unverified – Bill Gates has denied ever saying it. People tuned CONFIG.SYS and AUTOEXEC.BAT to reclaim what they could."
     },
     "macintosh": {
       "name": "Macintosh",
@@ -222,7 +226,8 @@
         ],
         "pointerCaption": "For the first time: point, not type."
       },
-      "insider": "The ⌘ symbol on the Command key is Susan Kare's. She found it in a book of symbols: in Sweden it marks places of interest on signs."
+      "insider": "The ⌘ symbol on the Command key is Susan Kare's. She found it in a book of symbols: in Sweden it marks places of interest on signs.",
+      "legend": "Susan Kare drew the first Mac icons on graph paper, one square per pixel, before digitizing them."
     },
     "win95": {
       "name": "Windows 95 and dial-up",
@@ -268,7 +273,8 @@
         "counter": "Visitors: 000042",
         "status": "Document: Done"
       },
-      "insider": "To see your IP address on Windows 95, you typed winipcfg into Start › Run. Today's ipconfig did not exist there."
+      "insider": "To see your IP address on Windows 95, you typed winipcfg into Start › Run. Today's ipconfig did not exist there.",
+      "legend": "A PC had 16 IRQ lines; two devices sharing one could crash the system. Windows 95's Plug and Play earned the nickname \"Plug and Pray\" for it."
     },
     "cloud": {
       "name": "Cloud, containers and AI",
@@ -330,7 +336,8 @@
         ]
       },
       "yearLabel": "Today",
-      "insider": "On Linux, only root may open ports below 1024. That is why so many containers listen on port 8080 instead of 80."
+      "insider": "On Linux, only root may open ports below 1024. That is why so many containers listen on port 8080 instead of 80.",
+      "legend": "\"Works on my machine\" is answered by containers: Docker, launched publicly in 2013, ships an app together with its whole runtime environment."
     }
   },
   "languages": {
@@ -530,6 +537,7 @@
       "revealed": "Solution shown",
       "revealing": "Playing the solution …",
       "insiderLabel": "Insider",
+      "legendLabel": "Legend",
       "gateNote": "The journey continues once you solve the puzzle or choose to see the solution.",
       "solvedBy": "Solved {count, number} times so far."
     },

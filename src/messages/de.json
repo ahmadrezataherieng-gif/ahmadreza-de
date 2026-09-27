@@ -69,7 +69,8 @@
         "cardLabel": "IBM-Lochkarte, 80 Spalten",
         "cardCaption": "Gestanzt: {text}"
       },
-      "insider": "Wer mit Lochkarten programmierte, zog mit dem Filzstift eine schräge Linie über die Oberkante des Stapels. Fiel er herunter, zeigte die Linie, welche Karte wohin gehörte."
+      "insider": "Wer mit Lochkarten programmierte, zog mit dem Filzstift eine schräge Linie über die Oberkante des Stapels. Fiel er herunter, zeigte die Linie, welche Karte wohin gehörte.",
+      "legend": "ENIAC rechnete dezimal, nicht binär. Programmiert wurde er, indem man Kabel steckte und Schalter stellte – für ein neues Problem konnte das Umverkabeln Tage dauern. Von den rund 17.500 Röhren fielen die meisten genau beim Ein- oder Ausschalten aus, deshalb blieb die Maschine fast immer eingeschaltet."
     },
     "batch": {
       "name": "Großrechner und Stapel­verarbeitung",
@@ -96,7 +97,8 @@
           "Betriebssystem ueberhaupt."
         ]
       },
-      "insider": "Die IBM 704 hatte Sense Switches: Kippschalter an der Konsole, die ein laufendes Programm abfragen konnte. In FORTRAN hieß das IF (SENSE SWITCH 3) – so steuerte der Operator ein Programm, ohne es anzuhalten."
+      "insider": "Die IBM 704 hatte Sense Switches: Kippschalter an der Konsole, die ein laufendes Programm abfragen konnte. In FORTRAN hieß das IF (SENSE SWITCH 3) – so steuerte der Operator ein Programm, ohne es anzuhalten.",
+      "legend": "„Chad” heißen die kleinen Papierschnipsel, die beim Lochen aus der Karte fallen. Ein falsch gelochtes Loch bedeutete falsche Daten – oder einen Kartenleser, der sich verklemmte."
     },
     "unix": {
       "name": "UNIX",
@@ -119,7 +121,8 @@
         ],
         "prompt": "$"
       },
-      "insider": "Bis zur Sixth Edition hieß der Befehl zum Verzeichniswechsel chdir. Das kurze cd kam erst 1979 mit der Seventh Edition."
+      "insider": "Bis zur Sixth Edition hieß der Befehl zum Verzeichniswechsel chdir. Das kurze cd kam erst 1979 mit der Seventh Edition.",
+      "legend": "Unix-Zeit zählt Sekunden seit dem 1.1.1970, 00:00 UTC. In einem vorzeichenbehafteten 32-Bit-Zähler läuft dieser Wert am 19.1.2038 um 03:14:07 UTC über."
     },
     "dos": {
       "name": "IBM PC und MS-DOS",
@@ -193,7 +196,8 @@
         "dirFooter": "8 Datei(en)      942.080 Bytes",
         "body": "Computer kommen auf die Schreibtische. Ein Programm zur Zeit, ein Bildschirm, alles getippt. 640 Kilobyte Arbeitsspeicher – von denen, entgegen dem berühmten Zitat, das niemand wirklich belegen kann, jeder wusste, dass sie nicht lange reichen würden."
       },
-      "insider": "F3 holte in MS-DOS die zuletzt getippte Befehlszeile zurück. Wer das wusste, tippte einen langen Befehl nie zweimal."
+      "insider": "F3 holte in MS-DOS die zuletzt getippte Befehlszeile zurück. Wer das wusste, tippte einen langen Befehl nie zweimal.",
+      "legend": "Die Grenze von 640 KB kam von der Speicherbelegung des IBM PC: Die oberen 384 KB des 1-MB-Adressraums waren für Bildschirmspeicher und ROM reserviert. Das Zitat „640K sollten für jeden reichen” ist nicht belegt – Bill Gates hat bestritten, es je gesagt zu haben. Wer mehr herausholen wollte, feilte an CONFIG.SYS und AUTOEXEC.BAT."
     },
     "macintosh": {
       "name": "Macintosh",
@@ -223,7 +227,8 @@
         ],
         "pointerCaption": "Zum ersten Mal: zeigen statt tippen."
       },
-      "insider": "Das Zeichen ⌘ auf der Befehlstaste stammt von Susan Kare. Sie fand es in einem Symbolbuch: In Schweden markiert es auf Schildern Sehenswürdigkeiten."
+      "insider": "Das Zeichen ⌘ auf der Befehlstaste stammt von Susan Kare. Sie fand es in einem Symbolbuch: In Schweden markiert es auf Schildern Sehenswürdigkeiten.",
+      "legend": "Susan Kare zeichnete die ersten Mac-Symbole auf Millimeterpapier, ein Kästchen pro Pixel, bevor sie sie digitalisierte."
     },
     "win95": {
       "name": "Windows 95 und Einwahl",
@@ -269,7 +274,8 @@
         "counter": "Besucher: 000042",
         "status": "Dokument: Übermittelt"
       },
-      "insider": "Wer unter Windows 95 seine IP-Adresse sehen wollte, tippte unter Start › Ausführen winipcfg. Das heutige ipconfig gab es dort nicht."
+      "insider": "Wer unter Windows 95 seine IP-Adresse sehen wollte, tippte unter Start › Ausführen winipcfg. Das heutige ipconfig gab es dort nicht.",
+      "legend": "Ein PC hatte 16 IRQ-Leitungen; teilten sich zwei Geräte dieselbe, konnte das System abstürzen. Windows 95s „Plug and Play” bekam deshalb den Spitznamen „Plug and Pray”."
     },
     "cloud": {
       "name": "Cloud, Container und KI",
@@ -331,7 +337,8 @@
         ]
       },
       "yearLabel": "Heute",
-      "insider": "Ports unter 1024 darf unter Linux nur root öffnen. Deshalb lauschen so viele Container auf Port 8080 statt auf 80."
+      "insider": "Ports unter 1024 darf unter Linux nur root öffnen. Deshalb lauschen so viele Container auf Port 8080 statt auf 80.",
+      "legend": "„Bei mir läuft's” beantworten Container: Docker, 2013 vorgestellt, liefert eine Anwendung zusammen mit ihrer ganzen Laufzeitumgebung aus."
     }
   },
   "languages": {
@@ -531,6 +538,7 @@
       "revealed": "Lösung gezeigt",
       "revealing": "Die Lösung wird vorgeführt …",
       "insiderLabel": "Insider",
+      "legendLabel": "Legende",
       "gateNote": "Weiter geht es, sobald Sie das Rätsel lösen oder sich die Lösung zeigen lassen.",
       "solvedBy": "Bisher {count, number}-mal selbst gelöst."
     },

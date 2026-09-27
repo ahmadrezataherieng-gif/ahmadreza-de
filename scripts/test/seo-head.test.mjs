@@ -10,6 +10,7 @@ import { join } from 'node:path';
 
 import { htmlLang, ogLocale } from '../../src/lib/i18n-config.ts';
 import { toBerlinIso } from '../../src/lib/last-change.ts';
+import { ogImageName } from '../../src/lib/og-image.ts';
 import { structuredData } from '../../src/lib/structured-data.ts';
 import { graphJsonLd } from '../soon-seo.mjs';
 
@@ -132,6 +133,47 @@ test('built out/: og:locale, hreflang, no fa-IR, legal pages without hreflang, d
   const journey = graph.find((node) => node['@type'] === 'LearningResource');
   assert.equal(journey.hasPart.length, 7, 'the seven eras');
   assert.ok(!graph.some((node) => ['SoftwareApplication', 'WebApplication', 'Course', 'EducationalOrganization', 'AggregateRating'].includes(node['@type'])));
+});
+
+test('ogImageName: journey/desktop/about get their own card, every other view keeps the landing card', () => {
+  for (const locale of LOCALES) {
+    for (const view of ['journey', 'desktop', 'about']) assert.equal(ogImageName(view, locale), `ahmadreza-taheri-${view}-${locale}`, `${locale} ${view}`);
+    for (const view of ['landing', 'imprint', 'privacy']) assert.equal(ogImageName(view, locale), `ahmadreza-taheri-${locale}`, `${locale} ${view}`);
+  }
+});
+
+test('share images (queue 2026-09-28 A2 item 4): one 1200x630 PNG per language for the journey, the desktop and the About page, under 300 kB, referenced by og:image and twitter:image; every other view keeps the landing card', () => {
+  for (const locale of LOCALES) {
+    for (const view of ['journey', 'desktop', 'about']) {
+      const relative = `public/og/ahmadreza-taheri-${view}-${locale}.png`;
+      assert.ok(exists(relative), `${locale} ${view} png exists`);
+      const file = new URL(relative, root);
+      const size = statSync(file).size;
+      assert.ok(size < 300 * 1024, `${locale} ${view} png is under 300 kB (${(size / 1024).toFixed(1)} kB)`);
+      const buffer = readFileSync(file);
+      assert.equal(buffer.readUInt32BE(16), 1200, `${locale} ${view} png is 1200 wide`);
+      assert.equal(buffer.readUInt32BE(20), 630, `${locale} ${view} png is 630 tall`);
+    }
+  }
+});
+
+test('built out/: og:image and twitter:image name the journey/desktop/About page\'s own card; every other view keeps the landing card', (context) => {
+  if (!exists('out/index.html')) return context.skip('run npm run build first');
+  const html = (path) => read(`out/${path}`);
+  const prefix = { de: '', en: 'en/', fa: 'fa/' };
+  const ogNameFor = { '': 'ahmadreza-taheri-de', 'amonel/': 'ahmadreza-taheri-journey-de', 'desktop/': 'ahmadreza-taheri-desktop-de', 'about/': 'ahmadreza-taheri-about-de' };
+  for (const locale of LOCALES) {
+    for (const view of ['', 'amonel/', 'desktop/', 'about/']) {
+      const page = html(`${prefix[locale]}${view}index.html`);
+      const name = ogNameFor[view].replace(/-de$/, `-${locale}`);
+      assert.match(page, new RegExp(`property="og:image" content="https://ahmadreza\\.de/og/${name}\\.png"`), `${locale} ${view || 'landing'} og:image`);
+      assert.match(page, new RegExp(`name="twitter:image" content="https://ahmadreza\\.de/og/${name}\\.png"`), `${locale} ${view || 'landing'} twitter:image`);
+    }
+    // The legal pages and 404 keep the landing card - no card of their own (never shared as links).
+    for (const legal of ['impressum/', 'datenschutz/']) {
+      assert.match(html(`${prefix[locale]}${legal}index.html`), new RegExp(`property="og:image" content="https://ahmadreza\\.de/og/ahmadreza-taheri-${locale}\\.png"`), `${locale} ${legal} keeps the landing card`);
+    }
+  }
 });
 
 test('built soon/dist/: Persian as fa and a dateModified on every ProfilePage', (context) => {

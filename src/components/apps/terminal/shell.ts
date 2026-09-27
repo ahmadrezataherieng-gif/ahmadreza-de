@@ -62,9 +62,17 @@ export type ShellLine =
   | { kind: 'input'; cwd: string; text: string }
   | { kind: 'text'; text: string; tone?: 'error' | 'muted' }
   | { kind: 'list'; entries: readonly { name: string; dir: boolean }[] }
-  | { kind: 'message'; key: string }
+  | { kind: 'message'; key: string; params?: Readonly<Record<string, string | number>> }
   | { kind: 'section'; section: PortfolioSection }
-  | { kind: 'help' };
+  | { kind: 'help' }
+  /** `legends` (item 2, queue 2026-09-28 A2): every era's insider and legend fact, with its source's title. */
+  | { kind: 'legends' }
+  /** `man amonel`: a placeholder man page, rendered by the component from `eggs.man.*`. */
+  | { kind: 'man' }
+  /** `LO`: prints "LO", then (after a pause the component controls) the ARPANET explanation. */
+  | { kind: 'lo' }
+  /** `bsod`: a joke blue screen; the component renders it as a full-window overlay. */
+  | { kind: 'bsod' };
 
 /**
  * Hidden commands: answered like any other, but never listed by `help` and
@@ -82,7 +90,8 @@ const ENIAC_YEAR = 1946;
 const FORTUNES = 7;
 
 const say = (text: string, tone?: 'error' | 'muted'): ShellLine => ({ kind: 'text', text, ...(tone ? { tone } : {}) });
-const message = (key: string): ShellLine => ({ kind: 'message', key });
+const message = (key: string, params?: Readonly<Record<string, string | number>>): ShellLine =>
+  params ? { kind: 'message', key, params } : { kind: 'message', key };
 
 // CONTENT-TODO CR-508, CR-1078 (the words are in messages/apps/terminal/ under `eggs`)
 export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map<string, HiddenCommand>([
@@ -98,6 +107,14 @@ export const HIDDEN_COMMANDS: ReadonlyMap<string, HiddenCommand> = new Map<strin
   ['fortune', (_args, state) => [message(`eggs.fortune.${state.history.length % FORTUNES}`)]],
   ['uptime', () => [say(` up ${new Date().getFullYear() - ENIAC_YEAR} years, 7 eras, 1 user, load average: 0.19, 0.46, 0.71`), message('eggs.uptime')]],
   ['ping', () => [message('eggs.ping')]],
+  // `legends` (item 2, queue 2026-09-28 A2): every era's insider and legend fact, with its source. The component (not this pure module) reads `eras.*` and `sources.ts`.
+  ['legends', () => [{ kind: 'legends' }]],
+  // `bsod`: a joke blue screen, rendered as a full-window overlay by the component.
+  ['bsod', () => [{ kind: 'bsod' }]],
+  // `LO`: the ARPANET easter egg. Case-sensitive on purpose - those were the two letters that got through.
+  ['LO', () => [{ kind: 'lo' }]],
+  // `man <page>`: only `amonel` has a page; anything else answers like real `man`.
+  ['man', (args) => (args.length === 0 ? [message('eggs.man.usage')] : args[0] === 'amonel' ? [{ kind: 'man' }] : [message('eggs.man.notFound', { name: args[0] ?? '' })])],
 ]);
 
 export interface ShellState {

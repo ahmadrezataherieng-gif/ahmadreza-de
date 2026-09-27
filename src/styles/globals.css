@@ -87,6 +87,12 @@
   --ao-brand-muted: #8e9bb0;
   --ao-brand-white: #ffffff;
 
+  /* The Terminal's `bsod` easter egg: a fixed parody of the classic blue
+     screen, the same in every theme and in light or dark mode - the joke
+     depends on that exact blue, not on whichever theme is active. */
+  --ao-bsod-bg: #0a1a8f;
+  --ao-bsod-ink: #ffffff;
+
   /* Standard motion curve and durations. */
   --ao-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ao-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
@@ -138,6 +144,9 @@
   --color-brand-night: var(--ao-brand-night);
   --color-brand-muted: var(--ao-brand-muted);
   --color-brand-white: var(--ao-brand-white);
+
+  --color-bsod-bg: var(--ao-bsod-bg);
+  --color-bsod-ink: var(--ao-bsod-ink);
 
   --font-display: var(--ao-font-display);
   --font-body: var(--ao-font-body);
@@ -699,6 +708,24 @@ html[data-tier='light'] .ao-lamp {
   }
 }
 
+/* --- Terminal: the `LO` easter egg (queue 2026-09-28 A2 item 2) ----------- */
+
+/* "LO", a pause, then the explanation - a fixed-duration fade stands in for
+   the pause; reduced motion skips the animation entirely (TerminalApp.tsx). */
+@keyframes ao-lo-explain {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.ao-lo-explain {
+  animation: ao-lo-explain 1.4s ease-out both;
+}
+
 /* --- 1981: IBM PC POST ---------------------------------------------------- */
 
 /* The memory counter is a column of values in a one-line window, stepped
@@ -824,6 +851,11 @@ html[data-tier='light'] .ao-lamp {
     animation: none;
     /* Land on the final value, not the first. */
     transform: translateY(calc(var(--post-steps) * -1lh));
+  }
+
+  .ao-lo-explain {
+    animation: none;
+    opacity: 1;
   }
 
   .ao-beep,
@@ -3895,5 +3927,92 @@ html:has(.ao-site-page) {
 
   .ao-bridge[data-shots] .ao-shot-card {
     width: auto;
+  }
+}
+
+/* ==========================================================================
+   Print (queue 2026-09-28 A2 item 3): the landing page, the static About page
+   and the legal pages (`.ao-site-page`, the wrapper all three already share -
+   never the journey or the desktop, which are never meant to print). Black on
+   white, no chrome, no motion; the portrait's AI label always prints, in its
+   own frame rather than relying on browsers to print its background veil
+   (most do not, by default). `scripts/prune-static-css.mjs` keeps every rule
+   here: each selector's classes are already read by the static pages'
+   own source, so none of them is "exclusive" to the journey/desktop side.
+   -------------------------------------------------------------------------- */
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    min-height: auto !important;
+  }
+
+  .ao-site-page {
+    overflow: visible !important;
+    min-height: auto !important;
+    background: #fff;
+    color: #000;
+  }
+
+  .ao-site-page * {
+    background: transparent !important;
+    color: #000 !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* No nav, toggles or language bar: the header (brand, language switcher,
+     scheme toggle), every <nav> (the in-page links, the legal links) and the
+     footer that holds them. */
+  .ao-site-page header,
+  .ao-site-page nav,
+  .ao-site-page footer,
+  /* Decorative backgrounds and illustrations: the landing's glow and grain
+     layers, every drawing built from illustrations.css' `.ill` base class -
+     the large scenes (the About page's route) and the small inline icons
+     alike, all `aria-hidden` already - and the "Tip" learning snippets
+     (supplementary, not part of the printed record). */
+  .ao-site-page .ao-landing-glow,
+  .ao-site-page .ao-landing-grain,
+  .ao-site-page .ill,
+  .ao-site-page .ill-tile,
+  .ao-site-page .ill-tip {
+    display: none !important;
+  }
+
+  /* Sections keep their heading and body together across a page break
+     (`print:break-inside-avoid` on the About/legal <section>s does the same
+     via Tailwind; this covers every other block-level section). */
+  .ao-site-page section,
+  .ao-site-page article {
+    break-inside: avoid;
+  }
+
+  /* The AI disclosure must always print, so it draws its own frame instead of
+     depending on the photo's background veil (browsers drop background
+     colours by default; print-color-adjust asks them not to, for this one
+     element that legally has to survive that default). */
+  .ao-portrait-ai {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* An external link's URL prints after it - internal links are always
+     relative (never start with "http"), so this only ever matches a real
+     external address. */
+  .ao-site-page a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
   }
 }

@@ -154,7 +154,7 @@ function Heading({ level, ...props }: { level: 1 | 2 | 3 | 4 } & HTMLAttributes<
 function Section({ title, page, icon, children }: { title: string; page: boolean; icon: IconName; children: ReactNode }) {
   const id = useId();
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
+    <section aria-labelledby={id} className="flex flex-col gap-3 print:break-inside-avoid">
       <Heading level={page ? 2 : 3} id={id} className="flex items-center gap-3 font-display text-lg font-bold text-ink">
         {page ? <IconTile name={icon} /> : null}
         {title}

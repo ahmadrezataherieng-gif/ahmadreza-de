@@ -125,6 +125,7 @@ export function EraSection({ era, sectionId, nextSectionId, previous }: EraSecti
                 eraIndex={era.index}
                 nextSectionId={nextSectionId}
                 insider={t(`${era.id}.insider`)}
+                legendFact={t(`${era.id}.legend`)}
               />
             </div>
           </div>
