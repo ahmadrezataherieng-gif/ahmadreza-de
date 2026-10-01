@@ -72,7 +72,7 @@ export function resolvePath(cwd: string, path: string): string {
 function lookup(absolute: string): Node | null {
   let node: Node = ROOT;
   for (const part of absolute.split('/').filter(Boolean)) {
-    if (node.kind !== 'dir') return null;
+    if (node.kind !== 'dir' || !Object.hasOwn(node.children, part)) return null;
     const child: Node | undefined = node.children[part];
     if (!child) return null;
     node = child;

@@ -79,6 +79,25 @@ test('cat prints files, and fails like cat', () => {
   assert.equal(printed(run('cat .bash_history')).length, 4);
 });
 
+for (const name of ['__proto__', 'constructor', 'toString']) {
+  test(`prototype name ${name} behaves like a missing path in Terminal commands and completion`, () => {
+    for (const path of [name, `/${name}`, `projects/${name}`, `projects/${name}/amonel.md`, `/home/${name}/ahmadreza`]) {
+      for (const [command, expected] of [
+        ['ls', `ls: cannot access '${path}': No such file or directory`],
+        ['cat', `cat: ${path}: No such file or directory`],
+        ['cd', `bash: cd: ${path}: No such file or directory`],
+      ]) {
+        const state = run(`${command} ${path}`);
+        assert.deepEqual(texts(state), [expected], `${command} ${path}`);
+        assert.equal(printed(state)[0].tone, 'error');
+        assert.equal(state.cwd, HOME, 'a missing path does not change the directory');
+      }
+      const input = `cat ${path}/`;
+      assert.deepEqual(complete(initialShell(), input), { input, candidates: [] });
+    }
+  });
+}
+
 test('an unknown command fails the way bash does', () => {
   const lines = printed(run('foo --bar'));
   assert.equal(lines[0].text, 'bash: foo: command not found');
