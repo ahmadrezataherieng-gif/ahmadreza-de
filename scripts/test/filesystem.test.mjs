@@ -48,6 +48,18 @@ test('the tree is the Terminal\'s own: what ls prints is what the app lists, and
   assert.equal(readDir('/etc/motd'), null);
 });
 
+for (const name of ['__proto__', 'constructor', 'toString']) {
+  test(`filesystem helpers reject inherited entry ${name} at every path depth`, () => {
+    for (const path of [`/${name}`, `${HOME}/${name}`, `${HOME}/projects/${name}`, `${HOME}/projects/${name}/amonel.md`]) {
+      assert.equal(readDir(path), null, path);
+      assert.equal(readFile(path), null, path);
+      assert.equal(entries(path, false), null, path);
+      assert.equal(entries(path, true), null, path);
+      assert.equal(reach(path), null, path);
+    }
+  });
+}
+
 test('reach: the Terminal commands that get to a path, with ls -a only where something is hidden', () => {
   assert.deepEqual(reach(HOME), { kind: 'dir', commands: [`cd ${HOME}`, 'ls -a'], short: '~' });
   assert.deepEqual(reach('/etc'), { kind: 'dir', commands: ['cd /etc', 'ls'], short: '/etc' });
