@@ -35,7 +35,7 @@ export async function AboutPage({ locale }: { locale: Locale }) {
       {/* One container for header, text, buttons and footer, padded like the article inside it, so they all share its left edge. */}
       <div className="@container mx-auto w-full max-w-3xl">
         <UseTheme id="modern" />
-        <header className="flex items-center justify-between gap-3 px-4 pt-5 @min-[480px]:px-6 @min-[720px]:px-8">
+        <header data-site-chrome="" className="flex items-center justify-between gap-3 px-4 pt-5 @min-[480px]:px-6 @min-[720px]:px-8">
           <a href={viewHref(locale, 'landing')} aria-label={tNav('home')} className="rounded-control">
             <AmonelLogo uid="ao-about-logo" label={tSite('brand')} className="h-7 w-auto" />
           </a>

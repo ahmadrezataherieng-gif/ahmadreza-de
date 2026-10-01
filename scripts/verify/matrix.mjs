@@ -1,6 +1,6 @@
 // The whole verification matrix, quietly: one line per configuration.
 //
-//   node scripts/verify/matrix.mjs [--only apps|bonus|desktop|navigation|journey|a11y]
+//   node scripts/verify/matrix.mjs [--only apps|bonus|desktop|navigation|journey|a11y|about-print]
 //        [--base http://localhost:3001] [--verbose]
 //
 // Needs the export served (npm run build, then node scripts/verify/serve.mjs).
@@ -81,6 +81,8 @@ const MATRIX = [
   // Queue 5: every sound rendered offline; the sun/moon toggle's storage promise.
   ['sound', []],
   ['scheme', []],
+  // About print regression: one run covers de/en/fa.
+  ['about-print', []],
 ];
 
 try {

@@ -146,7 +146,7 @@ export async function LegalPage({ locale, kind }: { locale: Locale; kind: LegalK
   return (
     <div className="ao-site-page min-h-dvh bg-background text-ink">
       <UseTheme id="modern" />
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
+      <header data-site-chrome="" className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
         <a href={viewHref(locale, 'landing')} aria-label={copy.backHome} className="rounded-control">
           <AmonelLogo uid={`ao-legal-logo-${kind}`} label={tSite('brand')} className="h-7 w-auto" />
         </a>
