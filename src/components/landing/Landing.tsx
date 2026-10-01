@@ -59,7 +59,7 @@ export async function Landing() {
         aria-hidden="true"
       />
 
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
+      <header data-site-chrome="" className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 pt-5 sm:px-8">
         {/* The brand leads the header; the name leads the page (the h1 below). */}
         <p className="flex items-center gap-3 font-mono text-xs tracking-[0.3em] text-muted uppercase">
           <AmonelLogo uid="ao-landing-logo" label={tSite('brand')} className="h-7 w-auto sm:h-8" />

@@ -4060,10 +4060,9 @@ html:has(.ao-site-page) {
     transition: none !important;
   }
 
-  /* No nav, toggles or language bar: the header (brand, language switcher,
-     scheme toggle), every <nav> (the in-page links, the legal links) and the
-     footer that holds them. */
-  .ao-site-page header,
+  /* Hide explicitly marked site chrome, not semantic content headers.
+     Navigation and the footer remain omitted from the printed record. */
+  .ao-site-page [data-site-chrome],
   .ao-site-page nav,
   .ao-site-page footer,
   /* Decorative backgrounds and illustrations: the landing's glow and grain
