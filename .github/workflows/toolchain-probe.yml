@@ -1,0 +1,133 @@
+name: Temporary Node 24 toolchain validation
+
+on:
+  push:
+    branches:
+      - probe/toolchain-node24
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  toolchain-probe:
+    if: github.ref == 'refs/heads/probe/toolchain-node24'
+    name: ${{ matrix.label }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node: '24.21.0'
+            npm: '11.19.0'
+            label: canonical-candidate
+          - node: '24.18.0'
+            npm: '10.9.2'
+            label: cloudflare-default
+          - node: '24.21.0'
+            npm: '10.9.2'
+            label: node-override-npm10-safety
+    env:
+      LEGAL_STREET: ''
+      LEGAL_POSTCODE_CITY: ''
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPECTED_NODE: ${{ matrix.node }}
+      EXPECTED_NPM: ${{ matrix.npm }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout the exact probe branch commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Verify authoritative base and capture manifest hashes
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/probe/toolchain-node24
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = fdb3c4bbb4b54a63424c846504aa518015f90ea5
+          mapfile -t changed < <(git diff --name-only fdb3c4bbb4b54a63424c846504aa518015f90ea5 HEAD)
+          test "${#changed[@]}" -eq 1
+          test "${changed[0]}" = .github/workflows/toolchain-probe.yml
+          printf '%s\n' \
+            '7430f957d4769b6772ffb29bb1a66efccc6733978674a8f371af483915d7e042  package.json' \
+            'd5ee24a076c05a4e1a941cfd6f4fc4611637a6c177c0ea2fdcb05ff3f8a4eb0a  package-lock.json' \
+            > "$RUNNER_TEMP/toolchain-manifests.sha256"
+          sha256sum package.json package-lock.json
+          sha256sum --check "$RUNNER_TEMP/toolchain-manifests.sha256"
+          git diff --exit-code -- package.json package-lock.json
+          test ! -e src/content/legal.local.ts
+
+      - name: Set up exact Node x64
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: ${{ matrix.node }}
+          architecture: x64
+          package-manager-cache: false
+
+      - name: Establish and assert exact Node and npm
+        run: |
+          set -euo pipefail
+          node --version
+          test "$(node --version)" = "v$EXPECTED_NODE"
+          npm install --global "npm@$EXPECTED_NPM" --ignore-scripts --no-audit --no-fund
+          node --version
+          npm --version
+          test "$(node --version)" = "v$EXPECTED_NODE"
+          test "$(npm --version)" = "$EXPECTED_NPM"
+          test "$(node -p 'process.arch')" = x64
+          sha256sum --check "$RUNNER_TEMP/toolchain-manifests.sha256"
+
+      - name: Fresh npm ci and manifest verification
+        run: |
+          set -euo pipefail
+          rm -rf -- node_modules
+          test ! -e node_modules
+          npm ci --no-audit --no-fund
+          sha256sum --check "$RUNNER_TEMP/toolchain-manifests.sha256"
+          git diff --exit-code -- package.json package-lock.json
+
+      - name: Canonical candidate tests
+        if: matrix.label == 'canonical-candidate'
+        run: npm test
+
+      - name: Canonical candidate lint
+        if: matrix.label == 'canonical-candidate'
+        run: npm run lint
+
+      - name: Set up dummy legal preview
+        env:
+          AMONEL_PREVIEW_BUILD: '1'
+        run: npm run setup:preview
+
+      - name: Build dummy legal preview
+        env:
+          AMONEL_PREVIEW_BUILD: '1'
+        run: |
+          set -euo pipefail
+          npm run build
+          printf 'Exported HTML files: '
+          find out -type f -name '*.html' | wc -l
+
+      - name: Canonical candidate pixel font check
+        if: matrix.label == 'canonical-candidate'
+        run: npm run check:pixel-font
+
+      - name: Validate complete installed dependency graph
+        run: npm ls --all
+
+      - name: Final manifest durability and repository check
+        if: always()
+        run: |
+          set -euo pipefail
+          node --version
+          npm --version
+          sha256sum package.json package-lock.json
+          sha256sum --check "$RUNNER_TEMP/toolchain-manifests.sha256"
+          git diff --exit-code -- package.json package-lock.json
+          git diff --exit-code
