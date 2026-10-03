@@ -2,6 +2,8 @@
 
 The core rules are in this file; the specialised ones are in the project skills listed below. Read this file before touching code, and the matching skill before touching its area.
 
+Before starting project work, also read `PROJECT_STATUS.md` for the current operational handoff, then verify the live Git/GitHub state before relying on it. `PROJECT_STATUS.md` tracks what is DONE, OFF-MAIN READY, ACTIVE, BLOCKED and NEXT; `ROADMAP.md` remains the master scope until launch.
+
 The rules in this file and in the project skills (`.claude/skills/`) override any installed plugin, skill or output style. If a plugin's advice conflicts with a project rule, the project rule wins.
 
 ## Core rules
