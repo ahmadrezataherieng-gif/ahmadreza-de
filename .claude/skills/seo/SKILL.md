@@ -7,11 +7,11 @@ description: "Read before touching titles, meta tags, headings, structured data,
 
 - Display name everywhere: **"Ahmadreza Taheri"**.
 - Persian spelling: **"احمدرضا طاهری"**.
-- Legal full name: **"Ahmadreza Taheri Momrabadi"** (first name Ahmadreza,
-  family name Taheri Momrabadi). This appears **only** in the Impressum (and
-  the Datenschutzerklärung's controller block) - never anywhere else on the
-  site, **not in structured data either** (Ahmadreza, 2026-09-23; this
-  replaces the earlier `alternateName` plan).
+- Read the full legal identity from `src/content/legal.ts`; do not repeat it
+  in documentation. It appears **only** in the Impressum and the
+  Datenschutzerklärung's controller block — never elsewhere on the site,
+  never in metadata or structured data (owner decision 2026-09-23;
+  this replaces the earlier `alternateName` plan).
 
 ### Canonical host
 
@@ -19,7 +19,7 @@ description: "Read before touching titles, meta tags, headings, structured data,
 apex by a Cloudflare Redirect Rule the owner has set up outside this repo -
 nothing in the codebase needs to implement that redirect.
 
-### robots.txt (Phase 10, not built yet)
+### robots.txt (built; ROADMAP SEO-01)
 
 Allow **all** crawlers, by the owner's explicit decision:
 
@@ -33,9 +33,14 @@ without asking first - this was a deliberate choice, not an oversight.
 
 ### Every page
 
-- The legal pages (`/impressum/`, `/datenschutz/`, en, fa) are the exception:
-  `noindex, follow` and never in the sitemap, so a search for the name does
-  not surface a home address (DECISIONS.md 58).
+- **Impressum is indexable** in de/en/fa on the main and coming-soon sites,
+  with hreflang (including x-default) and sitemap entries (DECISIONS.md 87,
+  ROADMAP LEG-19). **Datenschutz remains `noindex, follow`**, has no hreflang
+  and stays out of the sitemap. This supersedes entry 58 for Impressum only.
+  Neither legal page carries JSON-LD; the private street is never metadata.
+  Indexing can still allow body text into search snippets. The bounded
+  address-snippet improvement is queued as LEG-21 in REVIEW_INTAKE.md;
+  it does not change the owner's indexing or legal-name policy.
 - One `<h1>`.
 - A `<title>` that starts with the name for identity pages.
 - A meta description.
@@ -44,12 +49,11 @@ without asking first - this was a deliberate choice, not an oversight.
   is never the only carrier of meaning - a crawler that does not run the
   scroll machinery must still get the full sentence.
 
-### Static About pages (Phase 10, decided, not built yet)
+### Static About pages (built; ROADMAP SEO-09)
 
-Static, indexable About pages in all three locales are planned. The About
-*app* on the desktop is not enough for SEO: its text loads only once a
-visitor clicks the icon, so a crawler that does not execute the desktop shell
-never sees it.
+Static, indexable About pages exist at `/about/`, `/en/about/` and
+`/fa/about/`. They server-render the shared About content. Keep them: the About
+*app* loads its text only after a visitor opens it.
 
 ### Brand and the journey route (Phase 9A, done)
 
@@ -105,8 +109,9 @@ never sees it.
   the Person JSON-LD and `sitemap.xml` from `scripts/soon-seo.mjs` (facts from
   `messages/de.json` `site`, `EMAIL`, `PROFILES`; a city and country only, never the
   street, the legal name or the employer), `robots.txt` copied from `public/`,
-  the share image `og/og-de.png`. The sitemap holds the one indexable URL; the
-  legal pages are `noindex,follow` and stay crawlable (robots.txt disallows nothing).
+  the share images, and per-locale sitemap entries. All three landing pages
+  and the three Impressum pages are indexable; the Datenschutz pages remain
+  `noindex,follow`. All stay crawlable (robots.txt disallows nothing).
 - Head text is placeholder (CR-1084, CR-1085); `soon-seo.test.mjs` pins it.
 - Redeploy whenever the progress figures change noticeably (BR-03).
 

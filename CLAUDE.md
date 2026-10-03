@@ -102,7 +102,7 @@ The canonical machine-readable version of this table is `src/content/eras.ts`; k
 | Smooth scroll | Lenis |
 | State | zustand (+ `persist` for unlocks) |
 | Fonts | `@fontsource*` packages, **self-hosted** |
-| Hosting | **Cloudflare Workers with static assets**, GitHub-connected |
+| Hosting | **Cloudflare Workers with static assets**; Workers Builds integration planned (POST-01) |
 | Assistant | local search over `src/content/`, runs in the browser, no external AI service |
 
 ## Folder structure — what belongs where
@@ -208,7 +208,7 @@ all three locales generated. That is the definition of done for every phase.
 
 When this conversation is compacted, keep:
 
-- the current phase and what is left in it (PROJECT_STATE.md, TODO.md);
+- the current phase and active handoff (PROJECT_STATUS.md, verified against live Git), relevant ROADMAP rows and owner questions in TODO.md;
 - every decision made in this session, with its reason;
 - any failing check or test, with its command and output.
 

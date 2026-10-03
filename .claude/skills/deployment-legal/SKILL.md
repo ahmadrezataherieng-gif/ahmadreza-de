@@ -5,11 +5,10 @@ description: "Read before changing deployment (Cloudflare Workers, wrangler.json
 
 ### Deployment — Cloudflare, not a VPS
 
-The site deploys to **Cloudflare Workers with static assets**, connected to the
-public GitHub repo through Workers Builds. It is **not** a Cloudflare Pages
-project: Cloudflare folded Pages into Workers during 2026, and while Pages is
-still supported, all new investment goes to Workers and a new account may not
-show a Pages tab at all.
+The project uses **Cloudflare Workers with static assets**, not Cloudflare
+Pages. The full application has not launched. GitHub Workers Builds integration
+is planned in ROADMAP POST-01; it is not established by the GitHub repository
+or by a successful GitHub Actions run. Current deployment remains owner-gated.
 
 Earlier drafts of this project specified nginx on a self-managed VPS. That is
 reversed. **Do not reintroduce nginx, systemd or server backups** anywhere.
@@ -132,8 +131,11 @@ transfer basis.
   or writes it from `LEGAL_STREET` / `LEGAL_POSTCODE_CITY` in the build
   environment (a Cloudflare build secret once POST-01 is set up, POST-04). Never
   write the address into code, tests, docs or a commit message; tests read it
-  from the local file (`scripts/test/private-address.mjs`). `noindex, follow`. German is
-  binding. Status in CONTENT_REVIEW.md: **LEGAL – owner must verify** - never
+  from the local file (`scripts/test/private-address.mjs`). The Impressum is
+  indexable, with hreflang and sitemap entries (DECISIONS 87, LEG-19);
+  Datenschutz remains `noindex, follow`, without hreflang or sitemap entries.
+  LEG-21 queues address snippet control; public visibility is unchanged.
+  German is binding. Status in CONTENT_REVIEW.md: **LEGAL – owner must verify** - never
   CONTENT-TODO, never marked final without Ahmadreza.
 - **Any change to what the site stores, sends or loads changes the
   Datenschutzerklärung in the same change** - all three languages; the storage
@@ -166,8 +168,8 @@ transfer basis.
 
 ### Impressum (built)
 
-- Full legal name: **Ahmadreza Taheri Momrabadi** (see the `seo` skill for
-  where this name may and may not appear).
+- Full legal identity comes from `src/content/legal.ts`; do not duplicate it
+  in documentation or non-legal site content (see the `seo` skill).
 - A real postal address and a working e-mail. **No phone number**, by
   Ahmadreza's choice (2026-09-23) - never add a contact form instead.
 - Reachable in **one click from every page**, labelled exactly
@@ -226,7 +228,8 @@ and are served from our own domain. Never add a `fonts.googleapis.com` link, a
 
 Installed families:
 
-- `@fontsource/jetbrains-mono` — OS chrome, terminal, UI labels
+- `@fontsource/space-grotesk` — approved headings on the site's own pages
+- `@fontsource/jetbrains-mono` — technical text and historical terminal contexts
 - `@fontsource/inter` — prose in German and English
 - `@fontsource-variable/vazirmatn` — all Persian text
 - `@fontsource/vt323` — retro terminal eras

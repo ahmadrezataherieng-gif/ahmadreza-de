@@ -37,22 +37,22 @@ build time).
 <!-- progress:start -->
 | Area | done | in progress | to do | weight done / total | progress |
 |---|---|---|---|---|---|
-| `journey` | 6 | 0 | 1 | 49 / 62 | 79 % |
-| `desktop` | 15 | 0 | 0 | 76 / 76 | 100 % |
-| `puzzles` | 9 | 0 | 0 | 43 / 43 | 100 % |
-| `about` | 4 | 2 | 4 | 19.1 / 28 | 68 % |
-| `legal` | 15 | 1 | 4 | 36 / 48 | 75 % |
+| `journey` | 6 | 0 | 3 | 49 / 66 | 74 % |
+| `desktop` | 15 | 0 | 4 | 76 / 84 | 90 % |
+| `puzzles` | 9 | 0 | 1 | 43 / 48 | 90 % |
+| `about` | 4 | 2 | 5 | 19.1 / 30 | 64 % |
+| `legal` | 15 | 1 | 5 | 36 / 50 | 72 % |
 | `seo` | 27 | 3 | 4 | 84.2 / 99 | 85 % |
-| `launch` | 15 | 3 | 12 | 58.1 / 110 | 53 % |
-| **all** | 91 | 9 | 25 | 365.4 / 466 | **78 %** |
+| `launch` | 15 | 3 | 13 | 58.1 / 112 | 52 % |
+| **all** | 91 | 9 | 35 | 365.4 / 489 | **75 %** |
 <!-- progress:end -->
 
 | | missing | partial | done | total |
 |---|---|---|---|---|
 | P0 | 8 | 1 | 14 | 23 |
-| P1 | 10 | 7 | 42 | 59 |
-| P2 | 7 | 1 | 35 | 43 |
-| **total** | **25** | **9** | **91** | **125** |
+| P1 | 19 | 7 | 42 | 68 |
+| P2 | 8 | 1 | 35 | 44 |
+| **total** | **35** | **9** | **91** | **135** |
 
 ## Built before the audit (phases 0 to 9D-1)
 
@@ -232,3 +232,57 @@ PROJECT_STATE.md and DECISIONS.md.
 | ID | Description | Status | Priority | Owner | Depends on | Effort | Area |
 |---|---|---|---|---|---|---|---|
 | FIN-01 | **Content review with the owner**: go through CONTENT_REVIEW.md one entry at a time, from the first to the last, and mark each FINAL only with his explicit approval. | missing | P0 | Ahmadreza + Claude Code | everything above that adds content | XL | launch |
+
+## Review intake — 2026-10-03
+
+The four-source review is [REVIEW_INTAKE.md](REVIEW_INTAKE.md). It records
+source evidence, accepted scope, acceptance criteria and rejected advice.
+Its proposals do not replace owner decisions or duplicate the active CI task.
+Every runtime finding below must be reproduced on the accepted current baseline
+before a fix; no fresh browser QA was performed during this documentation task.
+
+| ID | Description | Status | Priority | Owner | Depends on | Effort | Area |
+|---|---|---|---|---|---|---|---|
+| QA-01 | **Finding B: mobile bonus-app launch consistency.** Revalidate locked/unlocked Terminal handoff and shared launch decisions; keep base apps available. Gameplay consistency, not authorization security. Acceptance in REVIEW_INTAKE.md. | missing | P2 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | desktop |
+| QA-02 | **Finding C: explicit Journey navigation for returning users.** Revalidate About/Timeline/quiz hash links, replay, Back/Forward and blocked storage; preserve the deliberate default returning policy. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | journey |
+| QA-03 | **Finding E: hidden Journey focus.** Fresh keyboard reproduction first; hidden controls cannot receive focus while active controls and gate restoration work. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | journey |
+| QA-04 | **Finding I: narrow Punch Card.** Revalidate 320/360/390 px, touch, toolbar and de/en/fa; fix confirmed overlap/reachability without vertical-scroll traps or visual redesign. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | M | puzzles |
+| QA-05 | **Finding H: Scheduler radio keyboard behavior.** Revalidate arrows, wrapping, selected focus and one Tab stop; use native radios or the proper APG radio pattern. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | desktop |
+| QA-06 | **Finding J: latest Paint change lost on quick close.** Revalidate draw-close-reopen before 600 ms; safely persist latest dirty state without writes on initial open or stale cleanup overwrites. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | desktop |
+| QA-07 | **Finding K: Binary/Morse input survives tab changes.** Revalidate per-tab input/config, stop inactive audio and preserve accessible tab relationships; add no storage. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 and accepted Cloudflare preview | S | desktop |
+| UX-01 | **Visible early link to static About.** One locale-aware link near landing identity/actions to the existing /about/; keep Journey/Desktop paths and disabled PDF behavior until OWN-02. Any new copy follows FIN-01. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09 | S | about |
+| LEG-21 | **Address snippet control.** Add supported data-nosnippet wrappers for street/postcode in both legal renderers, all locales, tested with dummy data; keep Impressum indexable and legal text visible. This is not scraping protection. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer | DEP-09, LEG-19 | S | legal |
+| DEP-10 | **Coming Soon output security headers.** Emit dedicated compatible _headers in soon/dist and verify under them; owner verifies actual responses after a deploy. No Cloudflare mutation in cloud sessions. Acceptance in REVIEW_INTAKE.md. | missing | P1 | Codex + independent reviewer; Ahmadreza deploys | DEP-09 | S | launch |
+
+The existing task descriptions retain historical evidence. Recounted progress
+includes these newly registered tasks; a lower percentage is a scope correction,
+not a regression or a measurement of release readiness.
+
+### Conditional and future candidates
+
+These are registered here so they are not lost. They are **candidates**, not
+assigned/approved launch requirements, and are not included in weighted progress.
+Promote a candidate to a stable task row only after its stated gate is resolved;
+reuse an existing row when it already covers the work. Details, costs, privacy
+limits and acceptance gates are in REVIEW_INTAKE.md.
+
+- Existing-task follow-through: DEP-09 CI/required checks; DEP-06/LAU-01 check-only
+  release preflight; LEG-05 preview exposure and legal audit; PERF-01/02/06/08
+  devices/RTL/audio/screen readers; OWN-02/03/04/05/09 CV/PDF/profiles/proofreading/
+  optional email; BR-01 final logo; LEG-20 source quality; DEP-03/04/05/07 D1 and
+  API fail-soft/rate-limit checks; LEG-18 owner purge/backup verification.
+- Conditional before launch: A11Y-SKIP (skip link/landmarks), A11Y-TABS (other tab
+  targets/state), A11Y-WINDOW (focus/close), PERF-DEPENDENCIES (unused dependency/
+  import boundaries), PERF-FA (font-arrival cost), TEST-BROWSER (isolated smoke
+  CI), SEO-GRAPH (actual schema validation), DOC-LAUNCH (runbook sequencing),
+  SECURITY-HSTS (owner header verification), CONTENT-FAMILY (consent if retained).
+- After launch, optional: EVIDENCE-MAP (skills linked to honest evidence),
+  SITE-ARCH (site architecture explanation), LAB-CASE (sanitized actual case),
+  SUPPORT-CASES (new sourced Linux/VLAN exercises), LAB-NOTES (maintainable learning
+  log), PWA-OFFLINE (offline interview demo), WASM-SHELL (sandbox experiment),
+  ERA-EXPANSION/CMS (existing POST-02/03), CSP-HASHES (validated tighter policy),
+  DOC-ARCHIVE (linked archive of completed material).
+- Owner decisions parked, not adopted: staged profile-only release, counters-off
+  launch, GitHub account rename, employer-history rewrite or changed preview
+  access. No runtime, account, history or deployment action follows merely from
+  registering them here.
