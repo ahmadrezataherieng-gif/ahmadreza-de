@@ -10,6 +10,9 @@
 > - `TODO.md` — detailed owner questions and operational follow-ups;
 > - `CONTENT_REVIEW.md` — final owner approval of user-facing copy.
 >
+> Review suggestions and acceptance criteria: [REVIEW_INTAKE.md](REVIEW_INTAKE.md).
+> `ROADMAP.md` remains master scope; this appendix is not another status authority.
+>
 > **Never put secrets, private postal address data, tokens, API keys, credentials, or unredacted private legal data in this file.**
 
 ## Status metadata
@@ -17,12 +20,12 @@
 - Last updated: **2026-10-03**
 - Current phase: **pre-launch stabilization / infrastructure hardening**
 - Authoritative public repository: `ahmadrezataherieng-gif/ahmadreza-de`
-- Status baseline verified against `main` before this file update: `c266c723c3de9bee0f8d355c9be282528ad99ccf`
+- Status baseline verified against `main` before this file update: `7578b009d9f98b947d506502233605fe5172845a`
 - **Do not treat any SHA written in this file as the live current `main`.** Merging a status-file update necessarily creates a newer commit. Always read live Git/GitHub first.
 - Open PR count and branch list are live state and must be checked from GitHub before acting.
 - Retained evidence branch known at this baseline: `probe/toolchain-node24`.
 - Public site state last verified in the project review: **Coming Soon**, not the full production site.
-- ROADMAP on current `main`: **91 done / 9 partial / 25 missing / 125 total; 78% weighted progress**.
+- ROADMAP scope including this review intake: **91 done / 9 partial / 35 missing / 135 total; 75% weighted progress**.
 - Important: ROADMAP progress is **not** the same as launch readiness.
 
 ## Status vocabulary
@@ -95,14 +98,14 @@ Never mark an item DONE without concrete evidence such as:
 
 This status content was verified against `main` at:
 
-`c266c723c3de9bee0f8d355c9be282528ad99ccf`
+`7578b009d9f98b947d506502233605fe5172845a`
 
 That SHA is a **baseline**, not a claim about the live current HEAD. Every AI must query live Git/GitHub before acting.
 
 Latest integration completed before this baseline:
 
-- PR #9 — living project status control room and agent pointer;
-- commit at the verified baseline: `c266c723c3de9bee0f8d355c9be282528ad99ccf`.
+- PR #10 — baseline-safe project status model;
+- commit at the verified baseline: `7578b009d9f98b947d506502233605fe5172845a`.
 
 Recent merged fixes:
 
@@ -114,8 +117,9 @@ Recent merged fixes:
 | Exclude local Impeccable vendor tooling from project lint scope | DONE | PR #7 |
 | Pin the validated Node 24/npm toolchain policy | DONE | PR #8 |
 | Add the living project status control room and agent pointer | DONE | PR #9 |
+| Make the status baseline safe | DONE | PR #10 |
 
-At baseline `c266c72`, no pull request was open. **Do not rely on that count later; check GitHub live.**
+At baseline `7578b00`, no pull request was open. **Do not rely on that count later; check GitHub live.**
 
 ---
 
@@ -294,13 +298,16 @@ Rules:
 
 ### Exact next action
 
-Build **permanent GitHub Actions CI** as a separate PR, then attach stable required status checks to `main`.
+Finish the separate **permanent GitHub Actions CI** task, then attach stable required status checks to `main`. Confirm the existing writer before duplicating work.
 
 ---
 
 # 5. Permanent CI and repository protection
 
-Status: **NEXT / OPEN — toolchain merge complete**
+Status: **ACTIVE per supplied local-work handoff; not merged in observed GitHub state**
+
+The local CI writer/ref was not inspected in this review. Confirm its actual
+worktree before starting or duplicating implementation.
 
 Current main ruleset already enforces:
 
@@ -398,7 +405,7 @@ Additional QA notes:
 - an old CDP pointer/layout observation was an environment issue and must not be promoted to a confirmed product bug.
 
 Important:
-- these seven items are not yet represented cleanly as their own ROADMAP rows;
+- these seven items are registered as ROADMAP QA-01..QA-07; acceptance criteria and evidence limits are in REVIEW_INTAKE.md;
 - when the permanent CI/toolchain work is closed, revalidate them on current `main` before batching fixes.
 
 ---
@@ -564,7 +571,7 @@ The public domain was still serving the Coming Soon site in the most recent proj
 Known documentation drift:
 
 - `PROJECT_STATE.md` and `LAUNCH.md` still contain older snapshot assumptions in places;
-- ROADMAP does not yet cleanly represent the seven QA findings as distinct work items;
+- seven QA findings are registered as QA-01..QA-07 in this intake; runtime reproduction/fixes remain open;
 - DEP-09 is now updated on `main` to the validated toolchain policy and permanent CI is its remaining half;
 - launch/cloud-build sequencing needs to remain consistent between LAUNCH/POST-01/POST-04 and actual owner choice.
 
@@ -586,7 +593,7 @@ Status: **DONE**
 
 ## Step 2 — permanent GitHub Actions CI
 
-Status: **NEXT**
+Status: **ACTIVE per supplied handoff; confirm the separate writer/ref**
 
 - canonical Node/npm lane;
 - Cloudflare compatibility lane;
@@ -609,15 +616,14 @@ After CI names are stable:
 
 ## Step 5 — current-main QA bug revalidation and fixes
 
-Recommended order after fresh reproduction:
+Proposed triage after fresh reproduction (REVIEW_INTAKE.md):
 
-1. B;
-2. C;
-3. E;
-4. I;
-5. H;
-6. J;
-7. K.
+1. C / E — explicit navigation and hidden keyboard focus;
+2. I / H / J — mobile reachability, radio keyboard behavior and data loss;
+3. K / B — input continuity and consistent bonus-app launch.
+
+Escalate a newly reproduced blocker; these priorities do not imply every finding
+was confirmed in a fresh browser run.
 
 Use small independent PRs when reasonable.
 
@@ -684,7 +690,7 @@ Update this table whenever a task is assigned or completed.
 | Toolchain policy implementation | Codex writer | DONE | PR #8 / main | merged as `4f7467c30ad595671393f172294e2646712a3914` |
 | Toolchain independent implementation review | Claude Sonnet Thinking | DONE | review gate | APPROVE WITH NON-BLOCKING NOTES |
 | npm 10 optional artifact review | Claude Sonnet Thinking | DONE | no code change | harmless known optional artifacts |
-| Permanent CI | unassigned | NEXT | future PR | canonical + Cloudflare-compatibility lanes |
+| Permanent CI | separate local writer per supplied owner handoff; local ref not inspected here | ACTIVE per handoff; not merged in observed GitHub state | separate future PR | confirm writer/ref before duplicating; canonical + Cloudflare-compatibility lanes |
 | Required status checks | owner + GitHub | OPEN | repository settings | begins after stable CI |
 | Seven QA findings | unassigned | OPEN | small future PRs | fresh reproduction first |
 
@@ -744,7 +750,7 @@ Research and validation are already complete.
 
 The next engineering action is:
 
-**build permanent GitHub Actions CI as a separate task, then attach stable required checks to `main`.**
+**finish the existing permanent GitHub Actions CI task, then attach stable required checks to `main`.**
 
 
 ## Handoff 2026-10-03 — Toolchain policy integration
@@ -779,3 +785,24 @@ The next engineering action is:
 - Deployment: none
 - Final state: DONE
 - Remaining follow-up: permanent GitHub Actions CI
+
+## Handoff 2026-10-03 — Four-source review intake
+
+- Verified remote baseline: `7578b009d9f98b947d506502233605fe5172845a`.
+- Feature branch: `docs/review-intake-2026-10-03`.
+- Writer: command-center documentation task; independent review pending.
+- Inputs: Go.txt, Ge.txt, C.txt and old 01.txt; all 6069 lines read.
+- Applied on this branch: AGENTS entry pointer, README/skill/rules drift fixes,
+  REVIEW_INTAKE appendix, ROADMAP tasks QA-01..07 / UX-01 / LEG-21 / DEP-10.
+- ROADMAP recount: 91 done / 9 partial / 35 missing / 135 total, 75% weighted.
+  New tasks correct the tracked scope; no completed runtime work was reverted.
+- Runtime additions: OPEN, queued after the existing CI work; not implemented.
+- Verification: documentation/ROADMAP checks recorded in the PR; no fresh app
+  build or browser/device QA claimed for this documentation-only change.
+- Security/privacy: no raw chats, private postal data, credentials, workflow,
+  runtime, dependency or Cloudflare configuration changes.
+- Merge/deployment: owner-gated; not performed by this task.
+- Next: finish the separate permanent CI PR, stable required check, actual
+  Cloudflare acceptance, then reproduce/fix QA and the bounded intake items.
+- Parallel CI integration: preserve intake IDs/links and regenerate ROADMAP
+  summary after rebasing; do not replace either task's status edits wholesale.
