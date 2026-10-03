@@ -17,11 +17,10 @@
 - Last updated: **2026-10-03**
 - Current phase: **pre-launch stabilization / infrastructure hardening**
 - Authoritative public repository: `ahmadrezataherieng-gif/ahmadreza-de`
-- Authoritative `main` at this snapshot: `4f7467c30ad595671393f172294e2646712a3914`
-- Current open PRs at this snapshot: **0**
-- Current non-main evidence branch retained at this snapshot:
-  - `probe/toolchain-node24`
-- Status-file integration branch is intentionally omitted from the operational branch list.
+- Status baseline verified against `main` before this file update: `c266c723c3de9bee0f8d355c9be282528ad99ccf`
+- **Do not treat any SHA written in this file as the live current `main`.** Merging a status-file update necessarily creates a newer commit. Always read live Git/GitHub first.
+- Open PR count and branch list are live state and must be checked from GitHub before acting.
+- Retained evidence branch known at this baseline: `probe/toolchain-node24`.
 - Public site state last verified in the project review: **Coming Soon**, not the full production site.
 - ROADMAP on current `main`: **91 done / 9 partial / 25 missing / 125 total; 78% weighted progress**.
 - Important: ROADMAP progress is **not** the same as launch readiness.
@@ -56,6 +55,7 @@ Every AI working on this repository must follow this order.
    - clean/dirty status;
    - open PRs when integration status matters.
 7. If live Git evidence conflicts with this file, **live Git wins** and this file must be corrected in the integration step.
+8. Never try to make this file encode its own current merge SHA. Record the last verified baseline and PR/merge evidence instead; otherwise every status-file merge makes the file stale by construction.
 
 ### While working
 
@@ -91,15 +91,18 @@ Never mark an item DONE without concrete evidence such as:
 
 ---
 
-# 1. Current authoritative `main`
+# 1. Last verified baseline and recent integrations
 
-Current `main`:
+This status content was verified against `main` at:
 
-`4f7467c30ad595671393f172294e2646712a3914`
+`c266c723c3de9bee0f8d355c9be282528ad99ccf`
 
-Latest merged change:
+That SHA is a **baseline**, not a claim about the live current HEAD. Every AI must query live Git/GitHub before acting.
 
-`chore: pin validated Node 24 toolchain`
+Latest integration completed before this baseline:
+
+- PR #9 — living project status control room and agent pointer;
+- commit at the verified baseline: `c266c723c3de9bee0f8d355c9be282528ad99ccf`.
 
 Recent merged fixes:
 
@@ -109,9 +112,10 @@ Recent merged fixes:
 | Preserve About identity/contact information in print/PDF | DONE | PR #5 |
 | Stabilize `npm ci` dependency graph with Candidate A | DONE | PR #6 |
 | Exclude local Impeccable vendor tooling from project lint scope | DONE | PR #7 |
-| Pin the validated Node 24/npm toolchain policy | DONE | PR #8 / `4f7467c30ad595671393f172294e2646712a3914` |
+| Pin the validated Node 24/npm toolchain policy | DONE | PR #8 |
+| Add the living project status control room and agent pointer | DONE | PR #9 |
 
-No open PR exists at this snapshot.
+At baseline `c266c72`, no pull request was open. **Do not rely on that count later; check GitHub live.**
 
 ---
 
@@ -758,3 +762,20 @@ The next engineering action is:
 - Deployment: none
 - Final state: DONE
 - Remaining follow-up: permanent GitHub Actions CI, then required checks
+
+
+## Handoff 2026-10-03 — Project status control room integration
+
+- Baseline main before status integration: `4f7467c30ad595671393f172294e2646712a3914`
+- Feature branch: `docs/project-status-control-room-v2`
+- Writer: command center
+- Reviewer: command-center GitHub diff verification
+- Files changed: `PROJECT_STATUS.md`, `CLAUDE.md`
+- Tests: documentation-only; no runtime test required
+- Browser/visual QA: not applicable
+- Security/privacy checks: no secrets/private legal data added
+- PR: #9
+- Verified post-merge baseline: `c266c723c3de9bee0f8d355c9be282528ad99ccf`
+- Deployment: none
+- Final state: DONE
+- Remaining follow-up: permanent GitHub Actions CI
