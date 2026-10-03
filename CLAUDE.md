@@ -187,6 +187,10 @@ Rules of thumb:
 
 ## Commands
 
+Use Node **24.21.0** for this repository; `.node-version` is authoritative.
+Canonical development/CI npm is **11.19.0**; npm **10.9.2** remains intentionally
+supported for Cloudflare compatibility (DECISIONS.md 89).
+
 ```bash
 npm run dev     # dev server on :3000
 npm run build   # type-check + static export to ./out

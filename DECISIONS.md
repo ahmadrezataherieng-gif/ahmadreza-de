@@ -2401,3 +2401,10 @@ The owner approved the coming-soon page's style after five review rounds
 - **Validation:** Candidate A was validated on Windows and native Ubuntu, including npm 10.9.2, 11.4.2 and 11.18.0. The direct helper is an intentional compatibility bridge; the exact pin preserves the tested graph. The canonical lock is generated with Node 24 LTS / npm 11.18.0 and retains the six generated Tailwind WASM bundle records.
 - **Removal condition:** remove the direct root `@swc/helpers` dependency ONLY when an upstream Next / next-intl / @swc/core dependency graph no longer requires this compatibility bridge AND the full old/current npm install compatibility checks remain green.
 - **Follow-up:** investigate the npm 11.18.0 `allow-scripts` warning before selecting a permanent toolchain or adding toolchain pins, CI or Cloudflare build settings (ROADMAP DEP-09). Candidate A does not depend on toolchain pinning.
+
+## 89. Validated Node 24 toolchain policy (2026-10-02, DEP-09)
+
+- **Decision:** canonical project Node is **24.21.0**, pinned by `.node-version`; canonical development/CI npm is **11.19.0**. npm **10.9.2** remains intentionally supported for Cloudflare compatibility. `package.json` declares `engines.node = ^24.18.0` and `engines.npm = >=10.9.2 <12`, preserving the validated compatibility range.
+- **Policy:** no `.nvmrc`, `packageManager`, `devEngines` or `allowScripts` policy. Name-wide script denial was explicitly rejected. This resolves entry 88's pending toolchain investigation without changing dependencies or regenerating its lockfile.
+- **Validation:** completed on Windows x64 and native Ubuntu 24.04 x64. [GitHub Actions matrix run 37002658467](https://github.com/ahmadrezataherieng-gif/ahmadreza-de/actions/runs/37002658467) passed all three lanes: Node 24.21.0 / npm 11.19.0, Node 24.18.0 / npm 10.9.2, and Node 24.21.0 / npm 10.9.2.
+- **Acceptance boundary:** GitHub Actions compatibility testing does not perfectly reproduce the entire Cloudflare image. An actual Cloudflare preview/build remains a separate acceptance gate before production. Permanent GitHub Actions CI is the next infrastructure step (ROADMAP DEP-09).
